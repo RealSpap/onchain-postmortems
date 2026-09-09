@@ -1,0 +1,37 @@
+~/Library/Python/3.9/lib/python/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+=== Step 1: enumerate every pool from the documented factory ===
+224 pools found from 0x6146DD43C5622bB6D12A5240ab9CF4de14eDC625 (the address on Ajna's own docs page)
+
+=== Step 2: confirm block 25854888 matches the press's cited timestamp ===
+block 25854888 timestamp: 2026-08-28 16:19:11 UTC
+(cryptoticker.io reported "August 28, 16:19 UTC: First extraction through cbETH pool (block 25854888)" - exact match)
+
+=== Step 3: that block has ZERO logs from any pool of the documented factory ===
+this is the first sign a second, undocumented factory deployed the pool actually hit
+
+=== Step 4: broad, address-unfiltered search for Ajna's Kick/AuctionSettle event ===
+signatures in a window around the incident surfaces pools from BOTH factories at once
+13 distinct pool addresses show Kick/AuctionSettle activity in this window
+7 of those do NOT belong to the documented factory:
+   0x1C50ce3550D1846134F3B7c09785e7005F6A1566: WETH/USDC
+   0x37d3a44C905663d7B77C9b574b941D4FbF713A91: wstETH/WETH
+   0x42d3f9C4dF0b98c3974Fd539A7EA9d0847F37Ef5: rETH/DAI
+   0xa2fFdC7EFeF98469d11370d91c0A17DC83EC2BDA: rETH/WETH
+   0xad24FC773e125Edb223C38a39657cB64bc7C178e: cbETH/WETH
+   0xdB30a08Ebc49af1BaF87f57824f85056cEd33d5F: WBTC/DAI
+   0xf4ab415e00FF0Ed4f25D31d7E9140f3C75B69E7D: sDAI/USDC
+
+=== Step 5: the cbETH/WETH pool (the one the press cited by exact block) ===
+WETH balance of 0xad24FC773e125Edb223C38a39657cB64bc7C178e: 49.3440 (block 25,850,000) -> 0.4630 (block 25,870,000), delta 48.8810 WETH
+
+=== Step 6: trace the exact attacker and its flashloan-funded first extraction ===
+tx 0x8a8793963c0ef443b9a396665c3c185ded132d5f99daf7c99e87125597016e64
+  from (attacker EOA): 0x6F2f5236b10FE7162Da077A2779f8b5f04b7827e
+  to (exploit contract): 0x80AD419C4783A09252Ad6a576ce059f51Cc53D47
+  attacker EOA nonce at block 25,858,000: 10 (a fresh, purpose-built wallet, not a long-running bot)
+  Balancer V2 flashloan borrowed: 105.0000 WETH
+  captured by exploit contract: 49.3191 WETH (from 0xad24fc773e125edb223c38a39657cb64bc7c178e)
+  captured by exploit contract: 49.3191 WETH (from 0x02d329ebb1da079a89988366b777af300db96f5f)
+
+See README.md for the full reconstruction, the other 6 pools, and every caveat.

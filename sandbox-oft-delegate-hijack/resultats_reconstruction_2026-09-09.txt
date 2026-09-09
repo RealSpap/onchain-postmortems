@@ -1,0 +1,64 @@
+=== Step 1: current on-chain state of the shared OFT address, all 3 chains ===
+  Base (OFTSand): totalSupply=327,574,531,179,830.687500  getEnabled()=False  owner()=0x18987794f808eE72Ae9127058F1C7d079736Ca45
+  BSC (OFTSand): totalSupply=11,976,071,028,505.968750  getEnabled()=False  owner()=0x47032F58129341B90c83E312eE22d2e74D584B4A
+  Ethereum (OFTAdapterForSand): (adapter, no totalSupply of its own)  getEnabled()=False  owner()=0x6ec4090d0F3cB76d9f3D8c4D5BB058A225E560a1
+
+=== Step 2: is the LayerZero delegate still hijacked today? ===
+  Base: EndpointV2.delegates(OFTSand) = 0xa467CD7b1200AEFeBf823B1e56FD557432b37952
+    real owner() on this chain           = 0x18987794f808eE72Ae9127058F1C7d079736Ca45
+    delegate == owner (i.e. remediated)? False  (delegate contract bytecode: 6970 bytes)
+  BSC: EndpointV2.delegates(OFTSand) = 0x88cD1E826A7134b595eD7f2cF5A9C54607f532c6
+    real owner() on this chain           = 0x47032F58129341B90c83E312eE22d2e74D584B4A
+    delegate == owner (i.e. remediated)? False  (delegate contract bytecode: 4816 bytes)
+
+=== Step 3: the genesis transaction (delegate hijack) ===
+  tx: 0x149eb0eec5f1c793b094b46889059b510281a7eff3c1597bb262777a5cfaa237
+  block: 50283177  timestamp: 2026-08-21 23:41:41 UTC
+  from: 0x67624BFadee937c9281B4f98Ce18aF1bee01257e  (nonce 1)  to: 0xac531Eb26Ca1d21b85126De8FB87E80E09002DcF  gasUsed: 40170
+  input selector: cae9ca5100 (approveAndCall, confirmed via 4byte.directory)
+  logs: 2
+    contract=0xac531Eb26Ca1d21b85126De8FB87E80E09002DcF  topic0=8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925
+    contract=0x1a44076050125825900e736c501f859c50fE728c  topic0=6ee10e9ed4d6ce9742703a498707862f4b00f1396a87195eb93267b3d7983981
+
+=== Step 4: the calibrated mint (block-exact, not hardcoded) ===
+  block 50283228 (2026-08-21 23:43:23 UTC) tx dd45bdb03e3205a528d2316fd5ab28129c5eaeafdf1e7c2af41f64721be7318c
+    mint_to=0x67624bfadee937c9281b4f98ce18af1bee01257e  amount=14,743,364.210048 SAND
+
+=== Step 5: the final drain, SAND leaving the Ethereum adapter (block-range search, not hardcoded) ===
+  block 25807119 (2026-08-22 00:32:11 UTC) tx 468d7438c58cb28df28f48a548ca479fc56f1493903024d42d5f744409a6f338 to=0x53eda2e80e46b804c5a47260ce04642e82d004ca amount=2,400,000.000000 SAND
+  block 25807119 (2026-08-22 00:32:11 UTC) tx 3617940c8a28978a23a717e93305298a6decdee4cf66aa02d7428118012ab7f0 to=0x53eda2e80e46b804c5a47260ce04642e82d004ca amount=2,400,000.000000 SAND
+  block 25807119 (2026-08-22 00:32:11 UTC) tx 2fbde0f46a34d081b3962dbb434cc293156ff9d8e8d5cb742664ed8dd5793ae3 to=0x53eda2e80e46b804c5a47260ce04642e82d004ca amount=2,400,000.000000 SAND
+  block 25807120 (2026-08-22 00:32:23 UTC) tx 6abe08955b1d8cc63cdebe0710eff2889bb8e71588cfd1c1c2347100a437f6ef to=0x53eda2e80e46b804c5a47260ce04642e82d004ca amount=2,400,000.000000 SAND
+  block 25807120 (2026-08-22 00:32:23 UTC) tx a3ec04aeb988b99f55096ef5cb199441f68d21bde75264c7eb84c66c4022076e to=0x53eda2e80e46b804c5a47260ce04642e82d004ca amount=2,400,000.000000 SAND
+  block 25807121 (2026-08-22 00:32:35 UTC) tx b4a661df02b1c6c7655cf3ef4adc454c1cfdd067c7ca8f4ee725c8b89a3b89fc to=0x53eda2e80e46b804c5a47260ce04642e82d004ca amount=2,095,483.660582 SAND
+  TOTAL: 14,095,483.660582 SAND across 6 transfers, all to 0x53eda2e80E46B804C5a47260cE04642e82d004cA
+
+=== Step 6: the MEV bot delivery that landed before the attacker's own drain ===
+  block 25806879 (2026-08-21 23:44:11 UTC) tx a7d48611455b840cb8c832550bab45ac437d744ebf5ff632dc82d8837c639085 to=0xd7ca08ec1aee9cce8a8eda9365343ef197674e1a amount=642,471.515074 SAND <- MEV_BOT
+  block 25806882 (2026-08-21 23:44:47 UTC) tx d819a1bde7fa17d496d57e8e6baf71ab9e9af40a8cedea3f770c8db7a8dde510 to=0x84a260fd2be522f1384fba4a678555b99cbb288a amount=5,307.175651 SAND
+
+=== Step 7: the on-chain whitehat/ransom message, decoded directly ===
+  tx: 0xde26ad2e26dee314879ba257ccd73c3c810fa8e09be3704e87ded29151137969
+  block: 25812880  timestamp: 2026-08-22 19:48:47 UTC
+  from (Safe signer): 0x913488977ca55d2dF46934B8417f15BAb1cf516c
+  to (The Sandbox owner Safe, 171-byte contract): 0x6ec4090d0F3cB76d9f3D8c4D5BB058A225E560a1
+  value: 0 wei (0.0 ETH)
+  calldata: 2340 bytes (4682 hex characters including 0x prefix)
+  decoded message (readable portion):
+  We are The Sandbox. We want to resolve this directly with you rather than through a prolonged pursuit.
+  OUR OFFER
+  Return 356.603 ETH, and keep 40 ETH as a whitehat bounty. That is 10% of the total. Send the returned amount to 0xC99853A0559CD3acc7C3e87EC575886D6a555b56.
+  If you complete the return within 72 hours of this message, The Sandbox will bring no civil claim against you, and we will formally report your cooperation to the relevant authorities as a mitigating factor. We will state publicly that the funds were returned voluntarily. We will not seek to identify you further.
+  
+  WHAT HAPPENS OTHER
+
+=== Step 8: the consolidation wallet's current balance ===
+  0xaC76B04397c9296dfc00e25c96D8e51b4edFaF29: 396.60405378273 ETH, nonce 3
+  The Sandbox's own ransom message asked for 356.603 ETH + offered 40 ETH bounty = 396.603 ETH
+  independently observed balance: 396.604054 ETH (matches to within gas spent after consolidation)
+
+=== Step 9: does the adapter's current dust balance match the claimed lifetime ledger? ===
+  adapter's current SAND balance (eth_call): 0.005559718748018388 SAND
+  claimed lifetime-ledger closing dust        : 0.005559718748018388 SAND
+  MATCH: True
+

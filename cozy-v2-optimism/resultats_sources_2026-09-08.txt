@@ -1,0 +1,66 @@
+Primary sources for the Cozy V2 (Optimism) incident, collected 2026-09-08.
+
+1. DefiLlama hacks API (https://api.llama.fi/hacks), record for defillamaId
+   "2964" (Cozy Finance), the most recent of two entries for this protocol:
+   {
+     "date": 1788739200,
+     "name": "Cozy V2",
+     "classification": "Protocol Logic",
+     "technique": "Unknown",
+     "amount": 163326,
+     "chain": ["Optimism"],
+     "bridgeHack": false,
+     "targetType": "DeFi Protocol",
+     "source": "",
+     "returnedFunds": null,
+     "defillamaId": "2964",
+     "parentProtocolId": "parent#cozy-finance",
+     "language": "Solidity"
+   }
+   date 1788739200 = 2026-09-07 UTC. "source" is empty: DefiLlama itself
+   cites nothing for this entry. "technique": "Unknown".
+
+   The OLDER entry for the same protocol, for contrast (not the subject of
+   this project, a separate incident a year earlier):
+   {"date": 1756512000 (2025-08-30), "technique": "Missing Input Validation",
+    "amount": 427000, "chain": ["Optimism"]}
+
+2. Cozy Finance's own account, posted on X (@cozyfinance), 2026-09-07,
+   read directly from the post (https://x.com/cozyfinance/status/2097085271867118062):
+
+   "What happened, in brief:
+
+   On September 2, an attacker bought protection in three Cozy v2 markets
+   (Aave v2, Curve, Rabbithole Quests) and, in the same transactions,
+   submitted false "YES" answers to the UMA Optimistic Oracle requests
+   those markets rely on.
+
+   The proposals were not disputed during the five-day challenge period.
+   Early on September 7 they settled, the three markets triggered, and the
+   attacker claimed 170,186 USDC.e from the Sets' collateral, bridged it to
+   Ethereum, and deposited it into Tornado Cash within about 90 minutes.
+   Attacker address: 0x003FE7359A4E03C85Ac2f521eC699ED84C7c5ccB
+
+   A full account will be posted by Thursday, September 10, 18:00 UTC."
+
+   A quoted, earlier post from the same account (2026-09-07, machine
+   auto-translated to French in the browser, original presumed English):
+   "We are aware of an exploit affecting Cozy v2 protection markets on
+   Optimism. Funds were drained from the Cozy v2 Main Set and the
+   Rabbithole Set. We are investigating with our security partners and
+   will share details as they become available."
+
+3. DefiLlama-Adapters GitHub repo (DefiLlama/DefiLlama-Adapters), the
+   maintained TVL adapter for this exact product, confirming the real
+   factory address independently of anything DefiLlama's hacks feed says:
+   projects/cozy-v2/index.js:
+     optimism: {factory: '0xdebe19b57e8b7eb6ea6ebea67b12153e011e6447',
+                fromBlock: 96818459}
+
+4. News coverage found via web search, consistent with #2 on the broad
+   strokes (amount ~$170,000, Optimism, UMA Optimistic Oracle): Yahoo
+   Finance, Binance/PANews, The Cryptonomist, KuCoin/RootData (the latter
+   two citing Blockaid's monitoring and, at least in KuCoin's summary,
+   describing it as a "reentrancy attack" - a characterization this
+   project could not confirm and that does not match Cozy's own,
+   more detailed account of an oracle-dispute-window exploit; see caveats).

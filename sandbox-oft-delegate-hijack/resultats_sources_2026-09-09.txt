@@ -1,0 +1,87 @@
+SOURCES, fetched 2026-09-09
+============================
+
+1. DefiLlama hacks feed, verbatim record
+-----------------------------------------
+Fetched fresh with:
+  curl -s "https://api.llama.fi/hacks"
+Record filtered on defillamaId == "1065", quoted verbatim below (no numbers
+paraphrased, no field renamed):
+
+{
+  "date": 1787356800,
+  "name": "The Sandbox",
+  "classification": "Access Control",
+  "technique": "Improper Access Control",
+  "amount": 675000,
+  "chain": [
+    "Base",
+    "BSC",
+    "Ethereum"
+  ],
+  "bridgeHack": true,
+  "targetType": "DeFi Protocol",
+  "source": "",
+  "returnedFunds": null,
+  "defillamaId": "1065",
+  "language": "Solidity"
+}
+
+Note: "date": 1787356800 is a Unix timestamp that converts to 2026-08-22
+00:00:00 UTC, consistent with the on-chain timeline reconstructed below
+(genesis tx at 2026-08-21 23:41:41 UTC, drain completing 2026-08-22 00:32 to
+00:58 UTC). The feed's own "source" field is empty, so DefiLlama itself does
+not point to a press writeup, on-chain explorer link, or protocol postmortem
+for this record.
+
+2. Press coverage, summarized
+-------------------------------
+This reconstruction did not itself re-read press articles. It relies on a
+summary produced by a prior research pass, which reported 8 or more outlets
+converging on the following claims:
+
+- Mechanism described only as "approveAndCall abuse of LayerZero delegate
+  permissions on Base". No outlet named the specific composition with
+  EndpointV2.setConfig, ReceiveUln302.verify and commitVerification.
+- Phantom SAND minted: about 329 trillion SAND (some outlets instead cited
+  14.9 billion SAND) across roughly 400 to 700 transactions over about 5
+  hours.
+- Amount reported as actually drained from the Ethereum OFT Adapter: about
+  14.75 million SAND, about 80 ETH, about 675,000 USD.
+- Bridging halted on Base and BSC after the incident.
+- PeckShield and Blockaid credited with detecting the activity on August 21
+  to 22.
+- No attacker address or transaction hash was disclosed in any article.
+- One outlet (crypto.news) described a funding wallet as "dormant for 313
+  days" before the incident.
+
+Claims from that press summary that this reconstruction could NOT
+independently confirm from primary on-chain text:
+- PeckShield's and Blockaid's specific involvement. No on-chain trace of
+  either firm's tooling or wallet activity was found; this is a press claim
+  taken at face value, not verified here.
+- The "wallet dormant for 313 days" detail. The attacker's own Ethereum EOA
+  (0x53eda2e80E46B804C5a47260cE04642e82d004cA) was freshly created the same
+  day (first inbound transaction 2026-08-21 18:42:59 UTC, 10 lifetime
+  transactions total), so it does not fit that description, and it could
+  not be determined which wallet the claim actually referred to.
+- The alternative "14.9 billion SAND" phantom-mint figure. It matches no
+  number produced by the eth_getLogs reconstruction of Base mint events
+  (which totals 329,243,083,813,775.775083 SAND across 637 distinct
+  transactions in the scanned window).
+- Any USD valuation. No price source for 2026-08-21/22 was checked in this
+  pass; the only USD-adjacent figure used anywhere in this repo is a
+  same-day sanity check against a live Blockscout ETH/USD display rate,
+  explicitly marked as such, never as a historical valuation.
+- Whether the Sandbox's own on-chain whitehat/ransom message (tx
+  0xde26ad2e26dee314879ba257ccd73c3c810fa8e09be3704e87ded29151137969) was
+  covered anywhere in press. No coverage of it was found in this pass.
+
+Everything else in this repo, all addresses, transaction hashes, block
+numbers, timestamps and token amounts, was derived from primary sources:
+The Sandbox's own GitHub deployment files (thesandboxgame/sandbox-smart-contracts)
+for contract addresses and owners, and direct eth_call / eth_getLogs queries
+against public RPC endpoints (Ethereum via gateway.tenderly.co/public/mainnet,
+Base via mainnet.base.org and gateway.tenderly.co/public/base, BSC via
+bsc-dataseed.bnbchain.org) for all on-chain state and event data. No number in
+this repo was taken from a press article.

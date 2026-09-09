@@ -1,0 +1,68 @@
+DefiLlama hacks feed record for this incident (api.llama.fi/hacks, queried
+2026-09-09):
+
+{
+  "date": 1788480000,
+  "name": "Notional V2",
+  "classification": "Token & Share Accounting",
+  "technique": "Arithmetic Error",
+  "amount": 1727782,
+  "chain": ["Ethereum"],
+  "bridgeHack": false,
+  "targetType": "DeFi Protocol",
+  "source": "",
+  "returnedFunds": null,
+  "defillamaId": "234",
+  "parentProtocolId": "parent#notional",
+  "language": "Solidity"
+}
+
+Note: "source" is empty, same as every other record checked in this
+research program - DefiLlama's own hacks feed never links a primary
+source directly.
+
+Press coverage found (web search, 2026-09-09), none of which publishes
+any on-chain address, transaction hash, or block number beyond the two
+timestamps used to locate blocks 25900220/25900234 in this project:
+
+- SlowMist (Medium), "The Vanishing Debt: An Analysis of the Notional
+  Finance Hack": the most technical writeup found, describing the
+  uint128 downcast in free-collateral valuation and the two
+  mintfCashPair() calls engineered to sum to exactly 2^128. Not
+  independently fetchable by this project's tools (HTTP 403), summarized
+  here via search-result excerpts only.
+- CryptoRank.io / BeInCrypto, "Notional Finance Hit by $1.7 Million
+  Exploit From Integer Overflow Bug": corroborates the ~$1.7M figure and
+  "integer overflow" framing.
+- Blockfence.io, "Notional Finance V1 Exploited for $1.7M Through
+  Integer-Overflow Bug": confirms ~69,000 DAI and ~1.66 million USDC,
+  later swapped to ETH and "routed through Tornado Cash"; explicitly
+  calls the exploited version "V1". References QuillAudits and CertiK
+  analyses without embedding their findings.
+- shattered.io, "$1.73M Notional Finance Hack: Integer Bug Exposed":
+  describes the exploit as "a deliberately engineered edge case... a
+  pair of transactions that would produce" a liability of exactly 2^128.
+- Cryptotimes.io, "Notional Finance Escrow Contract Faces Reported $1.7M
+  Exploit": corroborates the Escrow-contract framing directly in its
+  headline.
+- Timeline consistently reported across sources: preparatory transaction
+  23:58 UTC 2026-09-03 (block 25,900,220 per this project's own lookup),
+  extraction three minutes later, 00:01 UTC 2026-09-04 (block 25,900,234).
+
+Notional Finance's own official V1 mainnet deployment record
+(raw.githubusercontent.com/notional-finance/contracts/master/mainnet.json,
+fetched 2026-09-09, committed to that repository well before this
+incident):
+
+  escrow:        0x9abd0b8868546105F6F48298eaDC1D9c82f7f683
+  portfolios:    0x0A4721117040ABF319b954aBF13F654505C34920
+  erc1155:       0x3a31b8121D810B1D7b3004f94f205E6DFC1bf8d9
+  erc1155trade:  0xBbA899578bd3fA3DAa863A340f5600797993eF08
+  proxyAdmin:    0x09DbA4Fa1826f7d0E284513333FE71867b324261
+  directory:     0xdce848258dFB1bBf34C346Fbe40F10F8a42d2526
+  startBlock:    11003692
+
+This is the "V1" repository by Notional's own naming; separate
+repositories notional-finance/contracts-v2 and notional-finance/contracts-v3
+exist for later generations, confirming the version-number discrepancy
+with DefiLlama's own "Notional V2" label for this specific incident.

@@ -1,0 +1,87 @@
+DefiLlama hacks feed record for this incident (api.llama.fi/hacks, queried
+2026-09-09):
+
+{
+  "date": 1787443200,
+  "name": "TermFinance Vaults",
+  "classification": "Governance",
+  "technique": "Malicious Proposal",
+  "amount": 8500000,
+  "chain": ["Ethereum"],
+  "bridgeHack": false,
+  "targetType": "DeFi Protocol",
+  "source": "",
+  "returnedFunds": null,
+  "defillamaId": "5946",
+  "parentProtocolId": "parent#termfinance",
+  "language": "Solidity"
+}
+
+date 1787443200 = 2026-08-23. Note: "source" is empty, same as every other
+record checked in this research program - DefiLlama's own hacks feed never
+links a primary source directly.
+
+Note: this feed also lists an OLDER, unrelated "Term Finance" incident
+(2025-04-26, ~$1.65M, oracle misconfiguration, defillamaId null) which
+press coverage of the August 2026 incident sometimes references in passing
+as "a prior incident." That older incident is out of scope for this
+project.
+
+Press coverage found (web search, 2026-09-09), none of which publishes any
+on-chain address, transaction hash, or block number:
+
+- Yahoo Finance, "Another DeFi Hack: Term Labs Loses $8.5 Million in
+  Governance Exploit": attacker "cheaply accumulated a majority position
+  in a sparsely held governance token", proposal "submitted on August 17"
+  and "executed after roughly six days" against a nominal seven-day delay
+  with LP veto rights; ~2,843 ETH (~$6.87M) + ~1.68M USDC drained, ~68% of
+  $12.45M in Term's Meta Vaults, "nearly all of its Ethereum deposits."
+- CrowdfundInsider, "Ethereum Based DeFi Lending Protocol Term Finance
+  Suffers Setback...": corroborates the ~2,843 ETH / ~1.68M USDC figures
+  and the Yearn V3 + custom-governance-layer framing; explicitly states no
+  on-chain identifiers were disclosed in the piece.
+- w3rooster.com, "When Governance Becomes the Attack Surface...": gives a
+  competing account of the delay mechanism - "a queued proposal executed
+  after the voting period ended on August 23 with no vetoes" (i.e. the
+  normal delay ran its course, nobody vetoed), transferring "approximately
+  2,841.74 WETH from the ETH Meta Vault" and "about 1.68 million USDC from
+  several USDC vaults." Explicitly states Term "has not disclosed which
+  role the attacker used or why the timelock and LP veto did not prevent
+  the exploit transactions."
+- shattered.io, "Term Finance DeFi Hack: $8.5M Gone in Minutes": gives yet
+  another account of the delay mechanism - the attacker "self-approved a
+  governance proposal that reset that seven-day delay down to zero";
+  states exact amounts "2,841.74 WETH and 1,679,639 USDC."
+- CoinDesk, "Ethereum lending app Term Finance loses $8.5 million after
+  attacker buys voting power": WebFetch's summary of this article named an
+  attacker address, 0xD5183d8BfC65a50863C62aF2538198A8288FFc13, attributed
+  to "PeckShield." Independently re-fetching the same URL directly with
+  curl returned a "Vercel Security Checkpoint" bot-challenge page
+  containing zero 0x-prefixed strings, not the article - so this
+  project could NOT independently confirm that attribution from the
+  primary article text. A separate WebSearch call's own synthesis of
+  unrelated search-result snippets also produced the exact same address,
+  attributed instead to "CertiK." Given the address matched between two
+  independent tool calls, and later matched this project's own on-chain
+  trace exactly (see resultats_reconstruction_2026-09-09.txt lines 21-22
+  and 79-80), it was almost certainly a genuine quote from real press
+  text that one or both tool calls did access successfully, not a
+  coincidence - but this project treats the PeckShield/CertiK
+  attribution itself as unconfirmed, since it was never independently
+  verified against readable primary article text. See README's
+  dedicated section on this.
+- General/day-of coverage (The Block, FXStreet, CryptoNomist, MoneyCheck,
+  CryptoRank, spotedcrypto, coingabbar, cryptobreaking, thecoinrepublic,
+  bitcoinethereumnews): corroborate the ~$8.5M figure, the Yearn V3 +
+  custom governance wrapper framing, and that Term Labs shut down all
+  Meta Vaults, revoked DAO governance roles, and preserved withdrawals.
+  One outlet reports Yearn itself issued a statement clarifying the
+  vulnerability was in Term Labs' custom governance wrapper, not in
+  standard Yearn V3 vault contracts.
+- Term Finance's own GitHub organization (github.com/term-finance, fetched
+  2026-09-09) confirmed the TERM token repository name
+  (term-token-contracts), the Yearn V3 strategy source
+  (yearn-v3-term-vault-contracts), and separately hosts an Aragon-style
+  optimistic-token-voting-plugin-hardhat repository and a Gnosis Guild
+  zodiac-modifier-delay repository, both suggestive of (but not proof of)
+  the specific governance architecture used by the Meta Vaults.

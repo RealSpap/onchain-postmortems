@@ -1,0 +1,54 @@
+DefiLlama hacks feed record for this incident (api.llama.fi/hacks, queried 2026-09-09):
+
+{
+  "date": 1787875200,
+  "name": "Ajna V2",
+  "classification": "Protocol Logic",
+  "technique": "Liquidation Logic Flaw",
+  "amount": 775400,
+  "chain": ["Ethereum"],
+  "bridgeHack": false,
+  "targetType": "DeFi Protocol",
+  "source": "",
+  "returnedFunds": null,
+  "defillamaId": "4019",
+  "parentProtocolId": "parent#ajna",
+  "language": "Solidity"
+}
+
+Note: DefiLlama's own "source" field is empty for this record - no link
+of any kind is provided by DefiLlama itself. Every fact below the DefiLlama
+record was gathered from independent secondary reporting (web search) and
+then independently re-verified on-chain, per this project's own reconstruction
+script, not taken from any single article.
+
+Press coverage found (web search, 2026-09-09), none of which publishes any
+on-chain address:
+
+- cryptoticker.io, "Ajna Exploit: $775,400 From Seven ETH Pools": per-pool
+  breakdown (syrupUSDC ~$173,700, wstETH ~$159,800, rETH ~$143,000, cbETH
+  ~$136,900, WBTC ~$101,800, WETH/USDC ~$42,000, sDAI ~$18,000), timeline
+  (attack contracts deployed 15:16 UTC, first extraction via cbETH pool
+  16:19 UTC block 25854888, team's public notice 04:58 UTC next day),
+  mechanism description ("liquidation math rather than an oracle... how
+  the protocol books the residual quantities").
+- cryptotimes.io, "Ajna v2 Loses $775K on Ethereum After Attacker Exploits
+  Liquidation Math, With No Oracle and No Governance": corroborates the
+  ~$775K figure and the "no pause button, contract is immutable" framing.
+- Cryptopolitan, "Avici pledges full refunds as hackers hit Ajna next":
+  corroborates the ~$775,000 figure (rounded) and that Ajna was hit
+  shortly after an unrelated Avici Solana incident.
+- Defimon Alerts is cited by multiple outlets as the security firm that
+  flagged the attack in progress more than an hour before the first
+  extraction transaction, and as the source of the per-pool breakdown.
+  No independent Defimon publication (X/Twitter post, dashboard) was
+  found directly; all Defimon figures here are as relayed by the press
+  outlets above.
+
+Ajna's own official Ethereum mainnet addresses (faqs.ajna.finance/info/
+deployment-addresses-and-bridges, fetched 2026-09-09):
+  ERC20 factory:  0x6146DD43C5622bB6D12A5240ab9CF4de14eDC625
+  ERC721 factory: 0x27461199d3b7381De66a85D685828E967E35AF4c
+  PoolInfoUtils:  0x30c5eF2997d6a882DE52c4ec01B6D0a5e5B4fAAE
+This page lists only the two factory contracts and the utility contract,
+no individual pool addresses.

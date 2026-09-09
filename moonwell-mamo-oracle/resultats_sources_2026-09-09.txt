@@ -1,0 +1,94 @@
+DefiLlama hacks feed records for this protocol (api.llama.fi/hacks, queried
+2026-09-09) - THREE separate incidents share the same defillamaId "1853"
+(parentProtocolId "parent#moonwell"):
+
+{
+  "date": 1787788800,  // 2026-08-27, THIS incident
+  "name": "Moonwell Lending",
+  "classification": "Oracle Manipulation",
+  "technique": "Spot Price Manipulation",
+  "amount": 8700000,
+  "chain": ["Base"],
+  "defillamaId": "1853"
+}
+{
+  "date": 1762214400,  // 2025-11-04
+  "amount": 1000000,
+  "chain": ["Base", "Optimism"],
+  "technique": "Spot Price Manipulation"
+}
+{
+  "date": 1771113600,  // 2026-02-15
+  "amount": 1780000,
+  "chain": ["Base"],
+  "technique": "Oracle Misconfiguration"
+}
+
+Independently confirms press's "third failure in 11 months" framing directly
+from DefiLlama's own dataset, not just from the press claim itself: three
+oracle-related incidents against the same protocol ID in under 10 months.
+
+Press coverage found (web search, delegated to a research agent then
+independently re-verified, 2026-09-09): 15+ outlets (The Block, Crowdfund
+Insider, crypto.news, Cryptopolitan, KuCoin News, TechTimes, Yahoo
+Finance/wire, News.Bitcoin.com, ForkLog, Cryptonomist, Blockonomi,
+CryptoTimes, CryptoDaily, shattered.io, cryptoticker.io,
+bitcoinethereumnews.com) all describe the same mechanism (MAMO, an illiquid
+Base collateral asset, price-pumped then borrowed against) and the same
+~$8.7M headline figure attributed to PeckShield/CertiK. The research agent
+re-fetched Moonwell's own forum post twice with a strict "quote verbatim or
+say none exist" instruction and got DIFFERENT transaction hashes each time,
+one containing a non-hex character - a demonstrated fetch-tool fabrication,
+not a theoretical risk, and the same failure mode already documented
+elsewhere in this research program (Term Finance, Balancer V1 postmortems).
+Two addresses surfaced by that same unreliable fetch nonetheless turned out
+to be correct once this project re-derived them independently on-chain (see
+README) - a fourth instance of that specific nuance in this program.
+
+Moonwell's own governance-forum post-mortem (a genuine primary source,
+fetched directly via the Discourse JSON API, forum.moonwell.fi/t/post-mortem
+-mamo-market-incident-on-base/2208.json, 2026-09-09), read AFTER this
+project's own independent on-chain reconstruction (resultats_reconstruction
+_2026-09-09.txt) was already complete - used here to cross-check, not to
+source, this project's own numbers:
+
+- Names the same two addresses this project found independently: "Principal
+  account: 0x719e...919D" and "Linked operational account: 0xD71d...C384".
+- States the principal account "formally supplied 15,089,595 MAMO" - matches
+  this project's own independently-computed total (15,089,595.2298 MAMO
+  across 3 Mint transactions) to the token.
+- States gross borrows of 71.35549505 cbBTC, 623.600287604679454542 WETH,
+  2,560,000 USDC, 368 wstETH - matches this project's own independently
+  computed per-market totals exactly, to the last decimal, across all four
+  markets.
+- Adds a SECOND mechanism this project did not independently search for:
+  the principal account also transferred 53,393,290.31 MAMO directly to the
+  mMAMO contract's balance WITHOUT calling mint (two transfers, 09:19:59 and
+  09:21:09 UTC), inflating the mMAMO exchange rate ~3.68x without touching
+  the market's mint-path supply cap - a donation-style accounting exploit
+  layered on top of the oracle manipulation, thematically similar to the
+  "Donation Attack" classification this research program already
+  encountered on Tectonic (Cronos, separate incident).
+- Documents the funding chain (800.098 ETH received from Tornado Cash on
+  21 and 23 August, split 99 ETH via Stargate/LayerZero to Cronos and back,
+  700 ETH and 99 ETH sold via CoW Swap for 1,947,391.33 USDC total) and the
+  cash-out path (assets converted, 8,729,454 USDC burned on Base via Circle
+  CCTP V2 / Wormhole's Executor helper, 8,728,319 USDC received on Ethereum,
+  converted via Velora into DAI, sent to the linked operational account).
+- Documents 595 liquidation events across 594 transactions beginning 32
+  seconds after the principal account's final successful borrow, and
+  approximately $9.131 million of borrower obligations remaining
+  unliquidated at their evidence cutoff (28 August 2026).
+- Records the MAMO/USD price sequence directly: $0.01059700 (09:06:11 UTC)
+  rising to a peak of $0.43127363 (09:28:43 UTC), with Moonwell's
+  highest-accepted price at $0.40248571; the Aerodrome MAMO/USDC pool
+  recorded an even higher transaction VWAP of $0.458621073364.
+- MAMO market context: listed via governance proposal MIP-B48 on 15 October
+  2025, collateral factor 50%, supply cap 20,000,000 MAMO, borrow cap
+  3,000,000 MAMO, reserve factor 30%.
+
+This project's own on-chain reconstruction (see reconstruct_exploit.py)
+independently found the EIP-7702 nature of the principal account (its
+bytecode is the 0xef0100 delegation designator pointing at MetaMask's own
+official EIP-7702 Delegator contract) - a detail not found in the portion
+of Moonwell's own forum post-mortem this project read.

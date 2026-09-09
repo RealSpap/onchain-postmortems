@@ -1,0 +1,40 @@
+The two addresses that called Kick on the other 6 pools (all pools except
+cbETH/WETH), found via eth_getLogs on the Kick(address,uint256,uint256,uint256)
+topic per pool, blocks 25852000-25858000, then resolving each log's
+transaction to its `from` address:
+
+  0xcccc640018f8c2b00fa45F456017AD2378Eb3447
+    Pools: WETH/USDC, wstETH/WETH, WBTC/DAI, sDAI/USDC (4 of 6)
+    eth_getCode at block 25858000: 23 bytes (a contract, not an EOA;
+      23 bytes is small enough to be a minimal proxy, e.g. an EIP-1167 clone)
+    Transaction count (nonce) at block 25858000: 242
+
+  0xc213145EF56c0f162E0c3d79e6E107b25Cb8c453
+    Pools: rETH/WETH, rETH/DAI, syrupUSDC/USDC (3 of 6, one of which,
+      syrupUSDC, is on the DOCUMENTED factory, unlike the other two)
+    eth_getCode at block 25858000: 0 bytes (a plain EOA)
+    Transaction count (nonce) at block 25858000: 103
+
+Neither address matches the confirmed cbETH attacker
+(0x6F2f5236b10FE7162Da077A2779f8b5f04b7827e, nonce 10, plain EOA) or its
+exploit contracts. Both have substantially higher transaction counts than
+the confirmed attacker's fresh wallet.
+
+Two readings, both plausible, neither confirmed:
+  1. Unrelated liquidation-keeper bots. A high nonce and a tiny
+     minimal-proxy contract are exactly the signature of automated
+     liquidation infrastructure that has been running across many
+     protocols for a while; Ajna's own Kick function is permissionless
+     and incentivized (pays a bond/reward to whoever calls it), so a
+     routine keeper bot calling Kick on multiple pools in the same hour
+     is not inherently suspicious on its own.
+  2. Copycat exploiters. Once the first pool's Kick/AuctionSettle
+     transactions landed on-chain (public mempool and/or block explorers),
+     the same broken accounting pattern would have been visible to anyone
+     inspecting the transaction, and a second or third opportunist could
+     have redeployed a similar exploit against other pools within
+     minutes to hours, which is consistent with the timing observed here.
+
+This project did not trace either address's history on other protocols
+deeply enough to settle which reading is correct, and reports both rather
+than asserting one as fact. See README caveats.

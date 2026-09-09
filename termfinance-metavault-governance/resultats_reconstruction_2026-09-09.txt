@@ -1,0 +1,88 @@
+=== Step 1: confirm the TERM governance token on-chain ===
+address: 0xC3d21f79C3120A4fFda7A535f8005a7c297799bF
+name: Term Finance
+symbol: TERM
+decimals: 18
+totalSupply: 100000000.0 TERM
+
+=== Step 2: locate the Aug 2026 block window ===
+block @ Aug1 00:00 UTC: 25656293
+block @ Aug17 00:00 UTC: 25771074
+block @ Aug22 00:00 UTC: 25806959
+block @ Aug23 00:00 UTC: 25814127
+block @ Aug24 00:00 UTC: 25821306
+block @ Sep1 00:00 UTC: 25878705
+
+=== Step 3: does the press-attributed 'attacker' address show any on-chain
+    activity at all in August 2026? (independent check, not assumed) ===
+  incoming TERM transfers to 0xD5183d8BfC65a50863C62aF2538198A8288FFc13: 0
+  incoming WETH transfers to 0xD5183d8BfC65a50863C62aF2538198A8288FFc13: 0
+  incoming USDC transfers to 0xD5183d8BfC65a50863C62aF2538198A8288FFc13: 0
+  incoming DAI transfers to 0xD5183d8BfC65a50863C62aF2538198A8288FFc13: 1
+    block 25816168 tx f91371b001a15fb31bbad7090b0af6190b32b3cf1efe77efff4c8fd086436898 from 0x686457a7468b9b31c5dba43b1b16077b48520691 amount 1679642.454089
+
+=== Step 4: ETH Meta Vault side - narrow WETH search to ~2841-2842 ETH band ===
+  block 25816049 tx d354a15b15cb73d30908f411aee3f795ec86737a4d080e9a818ac4d6d3014129 from 0x26fcb50eec367ddab060ccf5e7394cecd95f7db2 to 0x184f2e57b4ce135181fa2a2166ac394339016338 amt 2841.7435357919617
+  block 25816049 tx d354a15b15cb73d30908f411aee3f795ec86737a4d080e9a818ac4d6d3014129 from 0x184f2e57b4ce135181fa2a2166ac394339016338 to 0xa908b3472d76e7744bab0a5911768a4a6300612b amt 2841.7435357919617
+  block 25819640 tx f48047058657b36efb593f55f6991e3a95104843166b53cb064e3e1f19b6bc0d from 0xbbbbbbbbbb9cc5e90e3b3af64bdaf62c37eeffcb to 0xb8a451107a9f87fde481d4d686247d6e43ed715e amt 2804.771981179413
+  block 25819640 tx f48047058657b36efb593f55f6991e3a95104843166b53cb064e3e1f19b6bc0d from 0xb8a451107a9f87fde481d4d686247d6e43ed715e to 0xbbbbbbbbbb9cc5e90e3b3af64bdaf62c37eeffcb amt 2804.771981179413
+
+  ETH Meta Vault identity check:
+   address: 0x26fCb50eEC367ddAB060ccf5E7394Cecd95F7Db2
+   name: ETH Meta Vault
+   symbol: tmvETH
+   asset: 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2
+
+  drain tx: 0xd354a15b15cb73d30908f411aee3f795ec86737a4d080e9a818ac4d6d3014129
+   block: 25816049  timestamp: 2026-08-23 06:25:47 UTC
+   tx.from (operator wallet): 0xa908b3472d76e7744baB0A5911768a4a6300612B
+   tx.to (per-proposal executor): 0x64E477800051EFb06Ae4086f4b258b270668b4dF
+
+   ETH Meta Vault totalAssets() one block before drain: 2926.2159 WETH
+   ETH Meta Vault totalAssets() now (latest):            84.4709 WETH
+   => 2841.7450 WETH removed = 97.1% of pre-drain TVL
+
+=== Step 5: full transaction timeline of the ETH-side operator wallet ===
+  wallet: 0xa908b3472d76e7744baB0A5911768a4a6300612B
+  nonce  0  2026-08-17 05:19:11 UTC  (+0:00:00)  contract creation  [0x595fe9559f6a14fade1b9521a95825030379406ec892b8fae9f09da18a343c60]
+  nonce  1  2026-08-17 05:19:23 UTC  (+0:00:12)  contract creation  [0x397cfc3d084045c84025078aea5ecc5543b6b57c5c2eda42756176de3a023ae0]
+  nonce  2  2026-08-17 05:19:47 UTC  (+0:00:36)  contract creation  [0x8631981b75e6980e89c94aeb4214835a13230fe606522666bf0463021918a775]
+  nonce  3  2026-08-17 05:21:47 UTC  (+0:02:36)  swapAndForwardEth (0.5 ETH)  [0x724e377f0523898061b9e2f504ab7792e06846c3cb728a6d5b19a2fa58d2ca0e]
+  nonce  4  2026-08-17 05:22:59 UTC  (+0:03:48)  selector 0x0edade10  [0x7876693645d08038b7072bfd206f8c1aeb7d0a445b87a8b27b78786ed2ae8cc2]
+  nonce  5  2026-08-17 05:25:35 UTC  (+0:06:24)  propose()  [0x284fc544f39c21388e17ca9669970dda9fe0f31921c38676f56073573f73a8b8]
+  nonce  6  2026-08-17 05:26:47 UTC  (+0:07:36)  voteFor() - self-vote  [0x6e73533304c28686928bf274ec89e8baedbccaed6e8b9211ef54ca90a54e2a8d]
+  nonce  7  2026-08-23 06:25:47 UTC  (+6 days, 1:06:36)  executeProposal() - drains ETH Meta Vault  [0xd354a15b15cb73d30908f411aee3f795ec86737a4d080e9a818ac4d6d3014129]
+  nonce  8  2026-08-23 06:27:23 UTC  (+6 days, 1:08:12)  WETH.withdraw() - unwrap to native ETH  [0x0b4fb183badfe5d60d4f20e214363bd35d5364edae9282ab5a0bab22d2dc7ff2]
+  nonce  9  2026-08-23 06:30:23 UTC  (+6 days, 1:11:12)  send 1 ETH to final address  [0x020d950793a153c8917ff7b1f82a3e952e74f8f8622ccc055a6acf7da8c807ab]
+  nonce 10  2026-08-23 06:31:47 UTC  (+6 days, 1:12:36)  send 2841.237 ETH to final address  [0xb3971dcb761ff0044c7d3752e5856af253768a42c32659b857c36250e49fc479]
+
+  delay between propose() and executeProposal(): 6 days, 1:00:12
+  nonce 0 deployed 0x184f2E57b4cE135181FA2A2166AC394339016338  (2497 bytes bytecode)
+  nonce 1 deployed 0x3e30DDF30172F54C50cB490fF56E10f1a4737cF1  (12318 bytes bytecode)
+  nonce 2 deployed 0x64E477800051EFb06Ae4086f4b258b270668b4dF  (145 bytes bytecode)
+
+=== Step 6: USDC vaults side - the second operator wallet ===
+  wallet: 0x686457a7468B9B31c5dbA43b1b16077B48520691
+  nonce at Aug23 00:00 UTC: 13  (NOT a fresh/nonce-0 wallet, unlike the ETH-side operator)
+
+  USDC sweep tx: 0x9f273f9a5a20c2fc957b06bbfa45db486390eede4a7f44fbe1a2eb6744c2e8a0
+   block: 25816159  timestamp: 2026-08-23 06:47:47 UTC  total logs: 159
+   5 distinct source contracts paid USDC directly into the operator wallet in this one tx:
+     0x0b9f12962207d5fa344131f1ddc547ea62c61c3b  (833 bytes)  14,132.487797 USDC
+     0x4874eed7cd07cfa2ac9826df8a0d68f3fa5dca55  (833 bytes)  14,172.392508 USDC
+     0xb33153fcfbe71686ceb45465f7e9773c688d8637  (833 bytes)  348,877.201080 USDC
+     0x0d149c53e588b6337965a78c2dc5d7052f87bc44  (833 bytes)  848,410.947690 USDC
+     0x1c731c75c40ca22920957e5260d959d96c259027  (833 bytes)  454,046.261367 USDC
+   total swept: 1,679,639.290442 USDC
+
+  DAI forwarding tx: 0xf91371b001a15fb31bbad7090b0af6190b32b3cf1efe77efff4c8fd086436898
+   block: 25816168  timestamp: 2026-08-23 06:49:35 UTC
+   1,679,642.454089 DAI forwarded from 0x686457a7468B9B31c5dbA43b1b16077B48520691 to 0xd5183d8bfc65a50863c62af2538198a8288ffc13
+
+=== Step 7: was TERM accumulated via one large, easily-traced transfer? ===
+  TERM transfers >= 1,000,000 TERM (1% of 100M supply), Aug1-Aug17: 0
+  (zero hits means no single large accumulation transfer - consistent with a slow,
+   below-threshold accumulation, OR with an optimistic/low-quorum voting scheme where
+   a modest TERM position is enough when few holders actively vote or veto. This
+   project did not trace the exact accumulation path further - see README caveats.)
+

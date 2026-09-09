@@ -1,0 +1,74 @@
+DefiLlama hacks feed record for this incident (api.llama.fi/hacks, queried
+2026-09-09):
+
+{
+  "date": 1788048000,
+  "name": "Balancer V1",
+  "classification": "Token & Share Accounting",
+  "technique": "Rounding Error",
+  "amount": 234000,
+  "chain": ["Ethereum"],
+  "bridgeHack": false,
+  "targetType": "DeFi Protocol",
+  "source": "",
+  "returnedFunds": null,
+  "defillamaId": "116",
+  "parentProtocolId": "parent#balancer",
+  "language": "Solidity"
+}
+
+date 1788048000 = 2026-08-30.
+
+Note: "source" is empty, same as every other record checked in this
+research program. This single $234,000 figure covers only ONE of the four
+pools this project independently found were drained by the same operator
+wallet in the same overnight window - see README. DefiLlama's own hacks
+feed materially understates the scope of this incident.
+
+Press coverage found (web search, delegated to a research agent, 2026-09-09
+then independently spot-checked), none of which publishes any on-chain
+address, transaction hash, or block number that this project could confirm
+directly from the cited article's own raw text:
+
+- news.bitcoin.com, cryptobriefing.com, blockfence.io, crypto-economy.com,
+  cryptotimes.io, KuCoin news flash, PrimeXBT, ground.news, cryptoticker.io:
+  all describe the same mechanism (nested flash loans across Aave, Spark,
+  Morpho and Uniswap V3 used to compress a legacy Balancer V1 BPool's WBTC
+  reserves toward zero via public swaps, then joinswapPoolAmountOut's
+  reverse calculation - calcSingleInGivenPoolOut - rounding the required
+  WBTC input down to 1 satoshi while still minting real BPT), attribute the
+  underlying vulnerability class to the same bug family as the ~$116M
+  Balancer V2 hack of November 2025, and report Balancer Labs as having
+  shut down in March 2026 following that earlier incident. Nearly all of
+  these outlets appear to be syndicating a single SlowMist writeup rather
+  than reporting independently.
+- coinedition.com: reports Balancer gave the attacker a deadline of
+  2026-09-08 21:00 UTC to return funds via an on-chain message, or face
+  "technical, on-chain, and legal" escalation.
+- cryptotimes.io's fetched summary named a specific attacker address
+  (0x338c7ec9befbb451d66fd8a468c32184f5689a41), attack contract
+  (0x9caa8d0e44b22f50057d2f4ce0d1446529e11be3), and pool address
+  (0x2257aaac34bcb27900291f7b84ee2565a6cbac57). Two OTHER independently
+  re-fetched articles covering the identical event (blockfence.io,
+  crypto-economy.com), asked explicitly to quote any address verbatim or
+  say none exist, returned no addresses at all - so this project could not
+  confirm from readable primary text that cryptotimes.io's own article
+  genuinely contains these values, as opposed to a fetch-tool
+  fabrication (the same failure mode flagged in this program's Term
+  Finance postmortem). All three of these addresses were nonetheless
+  independently re-derived and confirmed correct by this project's own
+  on-chain trace (resultats_reconstruction_2026-09-09.txt), starting only
+  from Balancer's own primary-source BFactory address, before this
+  project ever compared them back to the press-suggested values.
+- No press source found by this project's search reports that FOUR
+  separate pools were drained by the same wallet in the same window, or
+  decodes the on-chain whitehat negotiation message directly (see README).
+
+Balancer's own primary sources (fetched 2026-09-09):
+- github.com/balancer/docs-v1/blob/master/smart-contracts/addresses.md:
+  the official V1 mainnet deployment addresses list, still live even
+  though the core contracts repository is archived.
+- github.com/balancer/balancer-core: confirmed "archived": true via the
+  GitHub API, and the balancer-labs GitHub org itself now holds only 2
+  unrelated repos - independently corroborating the "Balancer Labs shut
+  down" claim from press without relying on the press claim itself.

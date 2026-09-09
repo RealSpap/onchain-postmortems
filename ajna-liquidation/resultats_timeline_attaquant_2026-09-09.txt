@@ -1,0 +1,66 @@
+Full transaction history of the confirmed attacker EOA
+0x6F2f5236b10FE7162Da077A2779f8b5f04b7827e, retrieved from Blockscout's
+public API (eth.blockscout.com/api/v2/addresses/.../transactions?filter=from,
+no API key), 2026-09-09. 25 transactions total, chronological order:
+
+2026-08-28T15:15:35Z  -> WETH (deposit, wrapping ETH)
+2026-08-28T15:16:23Z  -> [contract creation]
+2026-08-28T15:16:35Z  -> [contract creation]
+2026-08-28T15:16:47Z  -> [contract creation]
+2026-08-28T15:16:59Z  -> [contract creation]
+2026-08-28T15:17:11Z  -> [contract creation]
+2026-08-28T15:17:35Z  -> WETH (transfer)
+2026-08-28T15:17:47Z  -> 0x80AD419C4783A09252Ad6a576ce059f51Cc53D47  selector 0x84aef632
+2026-08-28T15:18:35Z  -> 0x80AD419C4783A09252Ad6a576ce059f51Cc53D47  selector 0xac00ffb0   [tx 0x8a879396...]
+2026-08-28T16:19:11Z  -> 0x80AD419C4783A09252Ad6a576ce059f51Cc53D47  selector 0xf1cd0d25   [tx 0x12dfde52..., block 25854888]
+2026-08-29T03:18:59Z  -> 0x80AD419C4783A09252Ad6a576ce059f51Cc53D47  selector 0x01681a62   [tx 0x503f7fb0...]
+2026-08-29T03:19:59Z  -> 0xF0D1Bf3C09dB0bAfFa6ff638579Fef44056C68Ce  selector 0x84aef632   [tx 0x8aaf6817...]
+2026-08-29T03:20:23Z  -> 0xF0D1Bf3C09dB0bAfFa6ff638579Fef44056C68Ce  selector 0x84aef632
+2026-08-29T03:20:35Z  -> 0xF0D1Bf3C09dB0bAfFa6ff638579Fef44056C68Ce  selector 0x9a325b22   [tx 0x6ae58df4...]
+2026-08-29T04:20:47Z  -> 0xF0D1Bf3C09dB0bAfFa6ff638579Fef44056C68Ce  selector 0xf1cd0d25   [tx 0xc0683b4a...]
+2026-08-29T15:20:35Z  -> 0xF0D1Bf3C09dB0bAfFa6ff638579Fef44056C68Ce  selector 0x84aef632
+2026-08-29T15:22:59Z  -> [contract creation]
+2026-08-29T15:23:11Z  -> 0xF0D1Bf3C09dB0bAfFa6ff638579Fef44056C68Ce  selector 0x01681a62   [tx 0x52f6c23c...]
+2026-08-29T15:23:23Z  -> 0x112616Fe7209FEA053D2d558F2Ba76ae651ff7B9  selector 0x84aef632   [tx 0x6e20ea45...]
+2026-08-29T15:43:59Z  -> 0x112616Fe7209FEA053D2d558F2Ba76ae651ff7B9  selector 0x01681a62   [tx 0xb4cc8ac2...]
+2026-08-29T15:44:23Z  -> cbETH token (approve)
+2026-08-29T15:59:23Z  -> 0x00c9027573295cE079aA3B33F2f5c28ed62C9a77  selector 0x3b002510
+2026-08-29T15:59:35Z  -> WETH (withdraw, unwrapping to ETH)
+2026-08-29T16:01:47Z  -> 0xA60e1a120D076F650e7E3F5f79A8fEd18b05bb48  [final transfer, not traced further]
+
+Three exploit-contract instances used in sequence, each deployed shortly
+before its first use, reusing the same 4 function selectors across
+instances (0x84aef632, 0x01681a62, 0x9a325b22, 0xf1cd0d25):
+  1. 0x80AD419C4783A09252Ad6a576ce059f51Cc53D47 (deployed ~15:17 UTC 08-28, 24,328 bytes)
+  2. 0xF0D1Bf3C09dB0bAfFa6ff638579Fef44056C68Ce  (first used 03:19 UTC 08-29)
+  3. 0x112616Fe7209FEA053D2d558F2Ba76ae651ff7B9  (deployed ~15:22 UTC 08-29)
+
+WETH Transfer events decoded directly from each transaction's receipt
+(threshold >0.01 WETH, flashloan borrow/repay pairs against the Balancer
+V2 Vault 0xBA12222222228d8Ba445958a75a0704d566BF2C8 noted separately from
+net captured amounts):
+
+  tx 0x8a879396... (Kick, 15:18 UTC 08-28):
+    Balancer Vault -> exploit contract: 105.0000 WETH (flashloan borrowed)
+    pool cbETH/WETH -> exploit contract (net, via internal hops): 49.3191 WETH captured
+    exploit contract -> Balancer Vault: 105.0000 WETH (flashloan repaid, same tx)
+
+  tx 0x12dfde52... (AuctionSettle #1, 16:19 UTC 08-28, block 25854888):
+    Balancer Vault -> exploit contract: 4.0000 WETH (flashloan borrowed)
+    intermediate contract -> attacker EOA directly: 1.7194 WETH
+    pool-side net to exploit contract: ~3.26 WETH (largely offset by 3.474 WETH sent back to the pool the same tx)
+    exploit contract -> Balancer Vault: 4.0000 WETH (flashloan repaid, same tx)
+
+  tx 0x503f7fb0... / 0xc4f8d2ad... / 0xc0683b4a... / 0x1e78f290... / 0x6ae58df4... (03:19-04:20 UTC 08-29, via the 2nd exploit contract instance):
+    Smaller rounds, sub-1-WETH to ~10-WETH flashloans each, net captured
+    amounts per round in the range of a few tenths of a WETH up to ~4.78
+    WETH depending on the round; several rounds' internal transfers net
+    close to zero once every hop is followed, consistent with the
+    attacker probing for a shrinking residual after the first, much
+    larger extraction. Not fully reconciled to the last decimal - see
+    README caveats.
+
+Final leg: a WETH `withdraw` call (15:59:35 UTC 08-29) converts remaining
+WETH to native ETH, followed two minutes later by a transfer to
+0xA60e1a120D076F650e7E3F5f79A8fEd18b05bb48. This address was not traced
+further in this project.

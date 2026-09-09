@@ -1,0 +1,45 @@
+=== Step 1: confirm MAMO / mMAMO / oracle identity from Moonwell's own registry ===
+MAMO token 0x7300B37DfdfAb110d83290A29DfB31B1740219fE: name='Mamo' symbol='MAMO'
+mMAMO market 0x2F90Bb22eB3979f5FfAd31EA6C3F0792ca66dA32:
+  underlying() = 0x7300B37DfdfAb110d83290A29DfB31B1740219fE  (matches MAMO token above)
+  comptroller() = 0xfBb21d0380beE3312B33c4353c8936a0F13EF26C
+Oracle 0xeF7541b388a77C1709a3d44BfBfC5c1ED3F0Ac94: description() = 'MAMO / USD'
+
+=== Step 2: locate the 2026-08-27 block window on Base ===
+block @ 2026-08-27 05:00 UTC: 50508727
+block @ 2026-08-27 11:00 UTC: 50519527  (span: 10800 blocks, ~2s/block on Base)
+
+=== Step 3: who supplied large MAMO as collateral in this window? ===
+Mint events on mMAMO: 8
+  block 50512452 (2026-08-27 07:04:11 UTC) tx a39954a6db8b7b5c94cb9b44f438767d23a88ef802953295d9ec788746632778 minter=0x719eae70d4a83f35bf82a2740699f5db84be919d amount=99,986.9214 MAMO
+  block 50514959 (2026-08-27 08:27:45 UTC) tx f1af776b596e7adc1745df1ddf9ab20b5192ff7fc5ac08d9525d99302b272afd minter=0x719eae70d4a83f35bf82a2740699f5db84be919d amount=7,889,608.3085 MAMO
+  block 50516316 (2026-08-27 09:12:59 UTC) tx 4cf9f1a10b416729fc55f264534efd170d2763cb114d6fa93d7023296b38cb55 minter=0x719eae70d4a83f35bf82a2740699f5db84be919d amount=7,100,000.0000 MAMO
+  block 50517378 (2026-08-27 09:48:23 UTC) tx 9fda3b86de07c7eb83c8470c10c1cd763a50c167a47a8206a0f9ce64f9dbfd1c minter=0xcca0a99b94529493ddffe7c61a3ae454828cd3bb amount=101.5000 MAMO
+  block 50517410 (2026-08-27 09:49:27 UTC) tx dd63eeb9bbbf630c48d2fe69a337e6f1ef9e7d7d9802d7aa89840665321a68f7 minter=0xdb0a05dc5e6377fe90b945123e5233f473e6cb5e amount=69.1202 MAMO
+  block 50517558 (2026-08-27 09:54:23 UTC) tx 72589042e475353230f0130e1959c59a597bc0f45ca23d9ab3f7244059d2f5ec minter=0x396f0e55fa33513441d556f84a6ea5c6fd7d217b amount=1,719.6762 MAMO
+  block 50518214 (2026-08-27 10:16:15 UTC) tx f8d3bf2dd9258f3e68d69ac3487f4a58f51198b0a442ae8f1c67a53c242a57ae minter=0xbde1e1d731986c8030b15ad476d6831ada8d0b54 amount=1.0000 MAMO
+  block 50519409 (2026-08-27 10:56:05 UTC) tx c0866bc06a26275ef69fcb4449c01352a4e2e4edcec0f509a4535fcb3c40a2c0 minter=0x475d9a118b0dc931bb5411c2e5fa3a516bece681 amount=50.0000 MAMO
+
+Total MAMO formally supplied per address:
+  0x719eae70d4a83f35bf82a2740699f5db84be919d: 15,089,595.2298 MAMO
+  0x396f0e55fa33513441d556f84a6ea5c6fd7d217b: 1,719.6762 MAMO
+  0xcca0a99b94529493ddffe7c61a3ae454828cd3bb: 101.5000 MAMO
+  0xdb0a05dc5e6377fe90b945123e5233f473e6cb5e: 69.1202 MAMO
+  0x475d9a118b0dc931bb5411c2e5fa3a516bece681: 50.0000 MAMO
+  0xbde1e1d731986c8030b15ad476d6831ada8d0b54: 1.0000 MAMO
+
+=== Step 4: every borrow by the principal account (0x719eae70d4a83f35bf82a2740699f5db84be919d) across all 4 markets ===
+  cbBTC: 12 borrows by the principal account, total 71.35549505 cbBTC
+  WETH: 2 borrows by the principal account, total 623.60028760 WETH
+  USDC: 3 borrows by the principal account, total 2,560,000.00000000 USDC
+  wstETH: 1 borrows by the principal account, total 368.00000000 wstETH
+
+=== Step 5: what kind of account is the principal account? ===
+bytecode: ef010063c0c19a282a1b52b07dd5a65b58948a07dae32b  (23 bytes)
+This is an EIP-7702 delegation designator (0xef0100 + 20-byte address).
+The account is a plain EOA that delegated its execution to: 0x63c0c19a282a1B52b07dD5a65b58948A07DAE32B
+  implementation contract bytecode length: 11185 bytes
+  (identified via web search as MetaMask's own official EIP-7702 Delegator
+   contract, the same address used across multiple chains for MetaMask's
+   native smart-account upgrade feature - not a bespoke exploit contract)
+

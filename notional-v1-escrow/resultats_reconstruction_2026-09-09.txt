@@ -1,0 +1,24 @@
+~/Library/Python/3.9/lib/python/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+=== Step 1: confirm both press-cited blocks, independently ===
+block 25900220: 2026-09-03 23:58:47 UTC (283 tx) - press claim: "23:58 UTC, September 3, 2026 - preparatory transaction"
+block 25900234: 2026-09-04 00:01:35 UTC (251 tx) - press claim: "00:01 UTC, September 4, 2026 - fund extraction, three minutes later"
+
+=== Step 2: find the attacker's only transaction in the prep block ===
+attacker EOA: 0xDaCC235a494750193695A111D715c2ca12b5Ce38 (nonce 0)
+tx e1589a19fe742f0d553889214abade69551fe944acffac014c28cc07b325d60a: deploys the exploit contract AND calls ERC1155Trade (0xBbA899578bd3fA3DAa863A340f5600797993eF08) in the same transaction - the two mintfCashPair() calls the press describes happen inside the constructor
+exploit contract deployed at: 0xEc434A2f9B7b93AAD1beD77d6Bc512A75aE90d78
+
+=== Step 3: the extraction transaction, exact amounts ===
+tx c3f3e318f7ab2d0daaba59e6ec901d25d1fe8a89aafe2b2b62e3b9aee1a24efa
+  from (attacker EOA): 0xDaCC235a494750193695A111D715c2ca12b5Ce38
+  to (exploit contract): 0xEc434A2f9B7b93AAD1beD77d6Bc512A75aE90d78
+  DAI Transfer: 0x9abd0b8868546105f6f48298eadc1d9c82f7f683 -> 0x265ccff3673bcab03867988081cd51bfd919c03c : 69,257.3727
+  DAI Transfer: 0x265ccff3673bcab03867988081cd51bfd919c03c -> 0xdacc235a494750193695a111d715c2ca12b5ce38 : 69,257.3727
+  USDC Transfer: 0x9abd0b8868546105f6f48298eadc1d9c82f7f683 -> 0x4a3508c5ac0677325932f3bc786ae7a1c3e9caff : 1,658,524.8641
+  USDC Transfer: 0x4a3508c5ac0677325932f3bc786ae7a1c3e9caff -> 0xdacc235a494750193695a111d715c2ca12b5ce38 : 1,658,524.8641
+
+=== Step 4: is the attacker EOA a fresh, purpose-built wallet? ===
+nonce at block 25900234: 2 (its very first transaction, at 25900220, deployed the exploit contract)
+
+See README.md for the full reconstruction and every caveat.

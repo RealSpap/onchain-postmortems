@@ -1,0 +1,58 @@
+On-chain verification, Optimism (via https://mainnet.optimism.io) and
+Optimistic Etherscan, 2026-09-08. Independent of the sources in
+resultats_sources_2026-09-08.txt: everything below was checked directly
+against the chain or against Etherscan's own contract metadata, not
+copied from Cozy's account or DefiLlama.
+
+1. Factory contract (0xdebe19b57e8b7eb6ea6ebea67b12153e011e6447):
+   Optimistic Etherscan's own page for this address, checked directly,
+   labels it "Cozy Protocol" (no manual name tag added by this project).
+   Deployed 3 years 123 days before this check (long before the incident,
+   ruling out a fresh/malicious redeploy).
+
+2. Attacker address (0x003FE7359A4E03C85Ac2f521eC699ED84C7c5ccB), full
+   transaction history read directly on Optimistic Etherscan: exactly 21
+   transactions total, first one 6 days before this check (matching
+   Cozy's stated September 2 date), funded by "Relay: Solver" (a bridge
+   relay), followed by Uniswap V3 / Metamask swaps, two Contract Creation
+   transactions, then function calls 0x67a6b2c0 and 0xcf4afd0e (6 days
+   ago, matching September 2), then 0xf0f529ff (36 hours before this
+   check, matching "early on September 7"), then a USDC.e Approve and a
+   Metamask Meta Bridge transaction (also 36 hours ago).
+
+3. The two contracts called via 0xf0f529ff (0x9E47C805587362eF36F2cAB9d1E4E7D546f953d4
+   and 0xeF9886f4C8823Dc9457267A7b76A55Db2C2f5F8d): both confirmed via
+   eth_getCode to be real contracts, both exactly 6703 bytes of bytecode
+   (the same size, consistent with being two deployments of identical
+   attacker-authored code). 0x9E47C805...'s own Etherscan page lists
+   CONTRACTCREATOR as the attacker's own address. The contract is
+   unverified (no source), but its raw bytecode contains the attacker's
+   own address and the address in item 4 below as literal 32-byte
+   constants (pushed directly in the disassembly), consistent with a
+   purpose-built exploit/claim helper rather than a generic contract.
+
+4. One of the two contracts these helpers call (0x17705474203F7ff7ba8a940c433AB43D1F58E249):
+   Optimistic Etherscan's own TOKENTRACKER field on this address reads
+   "ERC-20: Cozy Set (CSET)" - an independent confirmation that this really
+   is one of "the Sets" Cozy's own account refers to, not assumed from the
+   exploit transaction alone. Deployed 3 years 123 days before this check,
+   same age as the factory. Token holdings now $4,167.84 (a small residual
+   left after the drain).
+
+5. Cash-out address (0xeb2d41bcb3c3Be8Be5D74942Fa2deB601448E240): confirmed
+   via eth_getCode to be a plain EOA (0 bytes), not a contract, despite an
+   initial assumption in this project's own draft notes that it was a
+   third helper contract - corrected before publishing (see
+   reconstruct_exploit.py, "Classifying the addresses involved" section).
+   The same address received a further 0.08894469 ETH transfer from the
+   attacker's own EOA on Ethereum mainnet 36 hours before this check
+   (etherscan.io, native ETH "Transactions" tab), consistent with it being
+   the attacker's own cash-out wallet reused across both chains, though
+   this project could not independently confirm the specific claim that
+   the funds reached Tornado Cash (see caveats).
+
+6. The exact stolen total: see reconstruct_exploit.py / example_output.txt.
+   Every USDC.e Transfer event landing in the two claim transactions was
+   read directly from each transaction's receipt, and cross-checked with
+   an independent direct log filter on the destination address across the
+   full block window: both methods agree exactly, 174,311.006968 USDC.e.

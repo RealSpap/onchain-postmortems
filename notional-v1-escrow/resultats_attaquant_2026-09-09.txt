@@ -1,0 +1,47 @@
+Full transaction history of the attacker EOA
+0xDaCC235a494750193695A111D715c2ca12b5Ce38, retrieved from Blockscout's
+public API (eth.blockscout.com/api/v2/addresses/.../transactions?filter=from,
+no API key), 2026-09-09. 5 transactions total, chronological order:
+
+2026-09-03T23:58:47Z  -> [contract creation]                                bloc 25900220  value 0
+2026-09-04T00:01:35Z  -> 0xEc434A2f9B7b93AAD1beD77d6Bc512A75aE90d78          bloc 25900234  value 0.07 ETH   selector 0xe5fca7b6
+2026-09-04T00:03:35Z  -> USDC token (transfer)                              bloc 25900244  value 0
+2026-09-04T00:04:11Z  -> DAI token (transfer)                               bloc 25900247  value 0
+2026-09-04T00:04:35Z  -> 0x8aaf01B6F9AcC973274B8718BE4D1C1be10E3be6         bloc 25900249  value 1.105701960350961564 ETH
+
+This wallet's transaction count (nonce) was 0 going into block 25900220:
+the contract-creation transaction there is this wallet's first-ever
+transaction on Ethereum.
+
+Transaction 1 (block 25900220, contract creation): the deployed contract's
+constructor itself calls Notional V1's ERC1155Trade contract
+(0xBbA899578bd3fA3DAa863A340f5600797993eF08), the address committed in
+Notional's own mainnet.json - the two mintfCashPair() calls the press
+describes happen inside this single constructor call, not as separate
+top-level transactions. The exploit contract this deploys:
+0xEc434A2f9B7b93AAD1beD77d6Bc512A75aE90d78 (6,425 bytes of bytecode).
+
+Transaction 2 (block 25900234, the extraction): calls the exploit contract
+again, sending 0.07 ETH along with the call (likely gas/fee provisioning
+for an internal swap or a Notional-side ETH requirement, not itself part
+of the stolen funds). This transaction's receipt contains the two DAI/USDC
+Transfer events decoded in reconstruct_exploit.py, moving 69,257.3727 DAI
+and 1,658,524.8641 USDC from Notional's Escrow contract, through one
+intermediate address per token, directly into this attacker wallet.
+
+Transactions 3-4 (blocks 25900244, 25900247): plain `transfer` calls on
+the USDC and DAI contracts themselves - the attacker moving its own,
+already-received balances, most likely consolidating or routing them
+onward (e.g., to a DEX for the swap to ETH the press describes). This
+project did not decode the exact recipients or amounts of these two calls.
+
+Transaction 5 (block 25900249, ~5 minutes after the first): sends
+1.105701960350961564 ETH to 0x8aaf01B6F9AcC973274B8718BE4D1C1be10E3be6, a
+contract with exactly 23 bytes of bytecode (small enough to be a minimal
+proxy) and no name or metadata in Blockscout's index. This is the last
+transaction found from this wallet. It was not identified as a
+recognizable Tornado Cash pool or router by any means this project
+checked, and 1.11 ETH does not by itself account for anything close to
+the ~689 ETH the press reports was ultimately laundered - the full path
+from ~$1.73M in stablecoins to that reported ETH total and its final
+destination was not traced further in this project. See README caveats.

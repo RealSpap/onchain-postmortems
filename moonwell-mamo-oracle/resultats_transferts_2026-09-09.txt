@@ -1,0 +1,31 @@
+Attempt to trace the principal account's (0x719eae70d4A83f35bF82A2740699F5db84BE919D)
+outgoing token transfers directly on Base, searching USDC/WETH/cbBTC/wstETH
+Transfer events with this address as sender, block range 50516500-50519527
+(covering the post-borrow period of the incident window), via
+gateway.tenderly.co/public/base, 2026-09-09.
+
+Result: 403 separate USDC transfers found in a SINGLE transaction, to over
+100 distinct recipient addresses, in small/irregular amounts (examples
+below, full list omitted for length):
+
+USDC outgoing from 0x719eae70d4A83f35bF82A2740699F5db84BE919D: 403 transfers
+  block 50516508 (2026-08-27 09:19:23) tx 0xb11122d2932e811aabbaab1f29f11a8c1c471072194d9af13558de5471dd3776 to=0x529d2863a1521d0b57db028168fde2e97120017c amt=2195.232274
+  block 50516508 (2026-08-27 09:19:23) tx 0xb11122d2932e811aabbaab1f29f11a8c1c471072194d9af13558de5471dd3776 to=0xf39b7c34be147f5dc1bc374f27af2e9f03ad3113 amt=1144.282102
+  block 50516508 (2026-08-27 09:19:23) tx 0xb11122d2932e811aabbaab1f29f11a8c1c471072194d9af13558de5471dd3776 to=0xfbb6eed8e7aa03b138556eedaf5d271a5e1e43ef amt=1467.552389
+  block 50516508 (2026-08-27 09:19:23) tx 0xb11122d2932e811aabbaab1f29f11a8c1c471072194d9af13558de5471dd3776 to=0x3f53f1fd5b7723ddf38d93a584d280b9b94c3111 amt=227.357695
+  block 50516508 (2026-08-27 09:19:23) tx 0xb11122d2932e811aabbaab1f29f11a8c1c471072194d9af13558de5471dd3776 to=0x6c561b446416e1a00e8e93e221854d6ea4171372 amt=19548.878379
+  [... 398 more transfers in the same single transaction, omitted ...]
+
+This single block (50516508, 2026-08-27 09:19:23 UTC) falls BEFORE this
+project's own confirmed exploit-specific borrows for this address (which
+start at 09:24:51 UTC per resultats_reconstruction_2026-09-09.txt), and the
+per-recipient amounts (tens to thousands of USDC, irregular, hundreds of
+distinct addresses) do not match any obvious exploit-proceeds distribution
+pattern. This confirms the principal account was already a busy, general-
+purpose actor on Base independent of the exploit, consistent with it being
+an EIP-7702-upgraded EOA (see reconstruct_exploit.py Step 5) rather than a
+purpose-built exploit contract. This project did not further separate this
+address's routine activity from any exploit-specific fund movement on Base;
+Moonwell's own governance-forum post-mortem resolves the real cash-out path
+as a cross-chain bridge to Ethereum (see resultats_sources_2026-09-09.txt),
+which a Base-only search such as this one would not have found regardless.

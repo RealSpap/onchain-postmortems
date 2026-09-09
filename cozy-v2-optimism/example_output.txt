@@ -1,0 +1,28 @@
+~/Library/Python/3.9/lib/python/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+Attacker: 0x003FE7359A4E03C85Ac2f521eC699ED84C7c5ccB
+Cash-out EOA (final destination of both claims): 0xeb2d41bcb3c3Be8Be5D74942Fa2deB601448E240
+Confirmed Cozy Set contract: 0x17705474203F7ff7ba8a940c433AB43D1F58E249
+
+--- Classifying the addresses involved, by eth_getCode, not by assumption ---
+  Cash-out address (0xeb2d41bcb3c3Be8Be5D74942Fa2deB601448E240): 0 bytes -> a plain EOA, not a contract
+
+--- 0xf7a270480f9d457bddc2c8cb4f16669ef01f185cf6bda338351a71e704c79b4b (status=1) ---
+  distinct USDC.e source addresses touched: 3
+  USDC.e that reached the cash-out address in this tx: 10984.663268
+--- 0x8761164b8947a0690b57896a8e7370dd69fe8e9137ce61e0b21ff08581a2ce60 (status=1) ---
+  distinct USDC.e source addresses touched: 3
+  USDC.e that reached the cash-out address in this tx: 163326.3437
+
+Total USDC.e that reached 0xeb2d41bcb3c3Be8Be5D74942Fa2deB601448E240 across both claim transactions:
+  174311.006968
+
+--- Cross-checking against the wider window, via a direct log filter on the destination ---
+  2 USDC.e transfer(s) found TO the cash-out address, blocks 156355000-156582000
+  distinct transactions: 2 (matches the 2 already checked: True)
+  total: 174311.006968 USDC.e
+
+--- Comparison with the two public figures for this incident ---
+  This script, full on-chain total  : 174311.006968 USDC.e
+  Cozy's own account (@cozyfinance)  : 170186 USDC.e
+  DefiLlama hacks tracker            : 163326 (matches ONE of the two claim tx alone: 163326.3437)

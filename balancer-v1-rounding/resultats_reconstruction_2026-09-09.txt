@@ -1,0 +1,102 @@
+=== Step 1: confirm BFactory on-chain ===
+address: 0x9424B1412450D0f8Fc2255FAf6046b98213B76Bd
+bytecode length: 24407
+Balancer GitHub org check: balancer/balancer-core is archived (confirmed via
+  GitHub API 'archived': true) - independently corroborates 'Balancer Labs
+  shut down' reporting; only 2 repos remain in the org.
+
+=== Step 2: confirm the DefiLlama-tracked pool (the $234k one) ===
+BFactory.isBPool(0x2257aaac34BcB27900291f7B84eE2565A6cbaC57) = True
+getCurrentTokens():
+  0x1494CA1F11D487c2bBe4543E90080AeBa4BA3C2b  DPI  current_balance=0.02052270
+  0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48  USDC  current_balance=1.17778300
+  0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2  WETH  current_balance=0.00047190
+  0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599  WBTC  current_balance=0.00001504
+
+=== Step 3: the exploit transaction for this pool ===
+tx: 0x72510b257cc09bde8435b83ac1636f9498ffc353583330600b5b8da43d0d1aff
+block: 25872274  timestamp: 2026-08-31 02:28:23 UTC
+tx.from (operator EOA): 0x338C7Ec9BefbB451d66Fd8A468c32184f5689a41
+tx.to (per-pool attack contract): 0x9cAa8d0E44b22f50057d2F4ce0D1446529e11be3
+gasUsed: 11377828  total logs: 1496
+LOG_JOIN events: 100  (sample amt_raw values, should all be 1 = 1 satoshi WBTC):
+    tokenIn=0x2260fac5e5542a773aa44fbcfedf7c193bc2c599 amt_raw=1
+    tokenIn=0x2260fac5e5542a773aa44fbcfedf7c193bc2c599 amt_raw=1
+    tokenIn=0x2260fac5e5542a773aa44fbcfedf7c193bc2c599 amt_raw=1
+LOG_EXIT events: 108
+
+Net extraction to attack contract 0x9cAa8d0E44b22f50057d2F4ce0D1446529e11be3 (excluding the pool's own BPT share token):
+  WETH: +11.44838131
+  USDC: +27714.72484500
+  DPI: +544.76510327
+  WBTC: +0.35710736
+
+=== Step 4: the operator wallet's full history - one wallet, four pools ===
+operator EOA: 0x338C7Ec9BefbB451d66Fd8A468c32184f5689a41
+nonce 0 (first-ever tx): 2026-08-30 21:12:59 UTC - a fresh wallet, same
+  pattern as this research program's Ajna and Notional postmortems, just
+  ~5 hours before the specific exploit tx decoded above (nonce 6).
+
+Across its full history (verified via Blockscout, eth.blockscout.com, no
+API key), this ONE operator wallet deployed FOUR separate attack contracts
+between 2026-08-30 22:13 UTC and 2026-08-31 06:31 UTC, one per exploited
+pool - a scope no press source reported (all coverage found named a single
+$234,000 incident against a single pool):
+
+  Pool A: attack contract 0x0359E5006f83E8c2CaBDd434494354Be835f3450 -> pool 0x9b208194acc0a8ccb2a8dcafeacfbb7dcc093f81  (BFactory.isBPool = True)
+  Pool D (the DefiLlama-tracked one): attack contract 0x9cAa8d0E44b22f50057d2F4ce0D1446529e11be3 -> pool 0x2257aaac34bcb27900291f7b84ee2565a6cbac57  (BFactory.isBPool = True)
+  Pool B: attack contract 0x5d0583cB69df5C3602292263FcA6700Cf273E2c9 -> pool 0x1373e57f764a7944bdd7a4bd5ca3007d496934da  (BFactory.isBPool = True)
+  Pool C: attack contract 0xed1A1379fDc6A7A0D2a6A3E290B059469825975e -> pool 0xa751a143f8fe0a108800bfb915585e4255c2fe80  (BFactory.isBPool = True)
+
+=== Step 5: each pool's loot went to a DIFFERENT cash-out wallet ===
+  Pool A: attack contract 0x0359E5006f83E8c2CaBDd434494354Be835f3450 swept to 0x9d0d918644c057b29538eb5567f9b48befb65f33 (EOA, 0 bytes bytecode):
+      WBTC: 0.07554759
+      USDC: 10,191.65740700
+      DAI: 13,445.88434193
+      UNI-V2: 5,278.43210424
+      renBTC: 0.15373323
+      LINK: 406.70901731
+      UNI: 457.52886055
+      BLZ: 126,986.89671717
+      WSTA: 869,118.27720949
+      SNX: 10,416.49994978
+  Pool B: attack contract 0x5d0583cB69df5C3602292263FcA6700Cf273E2c9 swept to 0xa86e7d84bf2d1de9497d0e8eb46a90f7e99551cc (EOA, 0 bytes bytecode):
+      DAI: 8,473.42023999
+      USDC: 8,496.58934300
+      MKR: 5.34635385
+      UMA: 23,293.50428481
+      LINK: 764.15104458
+      SNX: 40,539.03461042
+  Pool C: attack contract 0xed1A1379fDc6A7A0D2a6A3E290B059469825975e swept to 0x0437fa52a192590440f885cf8e596aaa5e697ce5 (EOA, 0 bytes bytecode):
+      AMPL: 18,892.16598241
+      WBTC: 0.42845429
+  Pool D: attack contract 0x9cAa8d0E44b22f50057d2F4ce0D1446529e11be3 swept to 0xade439ade910a20854d4270d645b8a982d8f273b (EOA, 0 bytes bytecode):
+      DPI: 544.76510327
+      USDC: 27,714.72484500
+      WBTC: 0.35710736
+
+=== Step 6: an on-chain whitehat negotiation message, decoded directly ===
+tx: 0xd4858faf506dd7164b5fa84a244ebc3657dcf9c7af671ec1329d7d4d084ccd4f  block: 25898022  2026-09-03 16:37:23 UTC
+from (unlabeled EOA, self-describes as representing Balancer DAO): 0x3877188e9e5DA25B11fDb7F5E8D4fDDDCE2d2270
+to (the operator EOA): 0x338C7Ec9BefbB451d66Fd8A468c32184f5689a41  value: 0
+decoded calldata (UTF-8):
+Balancer DAO — Notice to wallet owner:
+
+We understand this wallet is linked to the exploit of Balancer V1 on Aug 31st, 2026. We are treating this as an opportunity for cooperation and would prefer to resolve this without escalation.
+
+If you are willing to cooperate, reply to this message and begin contact procedures before September 8th, 21:00 UTC. If we do not hear from you by that time, we will assume you are unwilling to help make the liquidity providers whole and will escalate our response.
+
+We would like to extend you an offer: return the funds to the DAO multisig address in exchange for a bounty. The details of this offer shall be arranged privately. Upon verification that the returned funds meet the criterias, Balancer will not pursue legal action or investigative steps aimed at identifying or prosecuting the owner of the returning wallet that are based solely on the fact of the return. 
+
+If you do not accept this offer or do not respond in time, we will use all technical, on-chain, and legal measures to identify and pursue the attacker. In that case, any bounty will instead be used to reward verified informants who help identify and lead to prosecution of the attacker.
+
+To proceed, respond to this message privately via Blockscan (https://chat.blockscan.com). After successful verification, all communications will be coordinated with SEAL911, Hypernative, and Balancer’s legal team.
+
+=== Step 7: was there a resolution? ===
+Operator wallet's current transaction count: 40
+Its last-ever outgoing transaction (nonce 39) is dated 2026-09-01 07:09:11 UTC,
+TWO DAYS BEFORE the whitehat message above even arrived (2026-09-03), and no
+further activity was found up to this project's research date (2026-09-09),
+one day after the message's own 2026-09-08 21:00 UTC deadline. No fund return
+was found on any of the 4 cash-out wallets either. As of this research: no
+on-chain evidence of cooperation, response, or fund return.

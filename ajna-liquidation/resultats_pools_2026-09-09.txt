@@ -1,0 +1,52 @@
+The 7 pools matching the press's 7 named categories, independently located
+on-chain (2026-09-09). None of these addresses appear in any press source
+found; all were derived by the method in reconstruct_exploit.py (broad,
+address-unfiltered eth_getLogs search on Ajna's Kick/AuctionSettle event
+signatures, blocks 25852000-25858000).
+
+From the SECOND, undocumented Ajna factory (7 pools, all confirmed real
+via direct collateralAddress()/quoteTokenAddress() calls):
+
+  0x1C50ce3550D1846134F3B7c09785e7005F6A1566  WETH/USDC
+  0x37d3a44C905663d7B77C9b574b941D4FbF713A91  wstETH/WETH
+  0xa2fFdC7EFeF98469d11370d91c0A17DC83EC2BDA  rETH/WETH
+  0x42d3f9C4dF0b98c3974Fd539A7EA9d0847F37Ef5  rETH/DAI
+  0xad24FC773e125Edb223C38a39657cB64bc7C178e  cbETH/WETH  <- press's "first extraction" pool, block 25854888 confirmed
+  0xdB30a08Ebc49af1BaF87f57824f85056cEd33d5F  WBTC/DAI
+  0xf4ab415e00FF0Ed4f25D31d7E9140f3C75B69E7D  sDAI/USDC
+
+One more pool from this same undocumented factory, sUSDe/DAI
+(0x34bC3D3d274A355f3404c5dEe2a96335540234de), was located during the
+initial factory-identification pass but showed NO Kick/AuctionSettle
+activity in the 25852000-25858000 window and is not counted as one of
+the seven; it is not named in any press coverage found either.
+
+From the DOCUMENTED factory (0x6146DD43C5622bB6D12A5240ab9CF4de14eDC625):
+
+  0xbCda8EE352778071fc7f09B8bfBcD832aa09CeE9  syrupUSDC/USDC  (created at block 20421260)
+
+This is the only pool of the 224 belonging to the documented factory that
+shows Kick/AuctionSettle activity in the same window, and it is the only
+"syrupUSDC" pool that factory has ever created (a unique collateral symbol
+across all 224 pools checked), making the match to the press's "syrupUSDC"
+line unambiguous.
+
+Together: WETH/USDC, wstETH, rETH, cbETH, WBTC, sDAI (6, undocumented
+factory) + syrupUSDC (1, documented factory) = the same 7 categories the
+press named, each covered exactly once.
+
+Balance-drop confirmation (WETH/USDC-quoted pools priced directly in
+their own quote token; DAI/USDC-quoted pools already in USD-equivalent
+units), blocks 25,850,000 -> 25,870,000, direct balanceOf calls:
+
+  WETH/USDC   quote(USDC): 28,770.27 -> 5,685.50   (-23,084.77 USDC)
+  wstETH/WETH quote(WETH): 50.89 -> 2.27            (-48.62 WETH)
+  rETH/WETH   quote(WETH): 6.97 -> 1.82             (-5.15 WETH)
+  rETH/DAI    quote(DAI):  40,137.88 -> 8,128.54    (-32,009.34 DAI)
+  cbETH/WETH  quote(WETH): 49.34 -> 0.46            (-48.88 WETH)
+  WBTC/DAI    quote(DAI):  34,847.81 -> 6,244.01    (-28,603.80 DAI)
+  sDAI/USDC   quote(USDC): 13,228.52 -> 1,443.98    (-11,784.54 USDC)
+  syrupUSDC/USDC quote(USDC): 92,357.69 -> 5,326.72 (-87,030.97 USDC)
+
+These are net balance deltas over a fixed window (a weaker signal than a
+fully-traced transaction), reported as such - see README caveats.
