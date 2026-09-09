@@ -38,7 +38,7 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parent
 README_PATH = REPO_ROOT / "README.md"
 
-INDEX_HEADER = "| Protocole | Date | Perte ($) | Chaîne | Type/Mécanisme | Lien |"
+INDEX_HEADER = "| Protocol | Date | Loss ($) | Chain | Type/Mechanism | Link |"
 INDEX_SEPARATOR = "|---|---|---|---|---|---|"
 
 ROW_RE = re.compile(
@@ -47,7 +47,7 @@ ROW_RE = re.compile(
 )
 
 # Pulls the leading numeric amount out of a loss cell like
-# "≈ 9 131 000 [^moonwell]" or "≥ 675 000 [^sandbox]" or "174 311 [^cozy]".
+# "≈ 9,131,000 [^moonwell]" or "≥ 675,000 [^sandbox]" or "174,311 [^cozy]".
 LOSS_NUM_RE = re.compile(r"([≈≥]?)\s*([\d][\d\s,]*)")
 
 
@@ -65,12 +65,12 @@ def parse_loss_cell(cell: str) -> float:
 
 def format_loss_cell(loss_usd: float, slug: str, partial: bool) -> str:
     prefix = "≥" if partial else "≈"
-    return f"{prefix} {loss_usd:,.0f}".replace(",", " ") + f" [^{slug}]"
+    return f"{prefix} {loss_usd:,.0f}" + f" [^{slug}]"
 
 
 def read_readme() -> str:
     if not README_PATH.exists():
-        sys.exit(f"README introuvable a {README_PATH}, ce script doit tourner a la racine du repo.")
+        sys.exit(f"README not found at {README_PATH}, this script must run from the repo root.")
     return README_PATH.read_text(encoding="utf-8")
 
 
@@ -80,12 +80,12 @@ def find_index_table(content: str):
         header_i = lines.index(INDEX_HEADER)
     except ValueError:
         sys.exit(
-            "Impossible de trouver l'en-tete du tableau d'index dans README.md. "
-            "Le format attendu est:\n" + INDEX_HEADER
+            "Could not find the index table header in README.md. "
+            "Expected format:\n" + INDEX_HEADER
         )
     sep_i = header_i + 1
     if lines[sep_i] != INDEX_SEPARATOR:
-        sys.exit("La ligne separatrice du tableau d'index ne correspond pas au format attendu.")
+        sys.exit("The index table's separator line doesn't match the expected format.")
     row_start = sep_i + 1
     row_end = row_start
     while row_end < len(lines) and lines[row_end].startswith("|"):
@@ -107,27 +107,27 @@ def insert_row_sorted(lines, row_start, row_end, new_row: str, new_loss: float):
 
 
 def update_at_a_glance(lines, total_incidents: int, total_loss: float, has_partial: bool):
-    total_str = f"{total_loss:,.0f}".replace(",", " ")
+    total_str = f"{total_loss:,.0f}"
     total_m = round(total_loss / 100_000) / 10  # nearest 0.1M
     floor_note = (
-        " Au moins une entree est un plancher connu, le vrai cumul est donc plus eleve."
+        " At least one entry is a known floor, so the real total is higher."
         if has_partial
         else ""
     )
     new_incidents_line = (
-        f"| Incidents couverts | {total_incidents}, reconstruit independamment on-chain, "
-        f"voir le tableau d'index pour le detail |"
+        f"| Incidents covered | {total_incidents}, independently reconstructed on-chain, "
+        f"see the index table for detail |"
     )
     new_loss_line = (
-        f"| Perte cumulee, recalculee | Environ {total_m:.1f} M$ sur les {total_incidents} "
-        f"incidents ({total_str} $ exactement, somme des chiffres du tableau ci-dessous)."
+        f"| Cumulative loss, recomputed | About ${total_m:.1f}M across the {total_incidents} "
+        f"incidents (${total_str} exactly, sum of the figures in the table below)."
         f"{floor_note} |"
     )
     out = []
     for line in lines:
-        if line.startswith("| Incidents couverts |"):
+        if line.startswith("| Incidents covered |"):
             out.append(new_incidents_line)
-        elif line.startswith("| Perte cumulée, recalculée |") or line.startswith("| Perte cumulee, recalculee |"):
+        elif line.startswith("| Cumulative loss, recomputed |"):
             out.append(new_loss_line)
         else:
             out.append(line)
@@ -197,7 +197,7 @@ REGISTRE_HEADER = "cle;hypothese;locator;test_falsification;confiance_preuve\n"
 def scaffold_subfolder(slug: str, name: str, date: str, chain: str):
     folder = REPO_ROOT / slug
     if folder.exists():
-        sys.exit(f"{folder} existe deja, choisis un autre --slug ou complete-le a la main.")
+        sys.exit(f"{folder} already exists, pick a different --slug or edit it by hand.")
     folder.mkdir(parents=True)
     (folder / "README.md").write_text(
         README_STUB.format(name=name, chain=chain, date=date), encoding="utf-8"
@@ -207,26 +207,26 @@ def scaffold_subfolder(slug: str, name: str, date: str, chain: str):
     )
     (folder / "registre_hypotheses.csv").write_text(REGISTRE_HEADER, encoding="utf-8")
     (folder / ".gitignore").write_text("__pycache__/\n*.pyc\n.venv/\nvenv/\n.env\n.DS_Store\n", encoding="utf-8")
-    print(f"Scaffold cree dans {folder}")
+    print(f"Scaffold created in {folder}")
     return folder
 
 
 def main():
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    p.add_argument("--slug", required=True, help="nom de dossier, ex. new-protocol-incident")
-    p.add_argument("--name", required=True, help="nom lisible du protocole, ex. 'New Protocol'")
-    p.add_argument("--date", required=True, help="date ISO ou plage, ex. 2026-10-01 ou 2026-10-01/02")
-    p.add_argument("--loss-usd", required=True, type=float, help="perte en dollars, chiffre nu, ex. 1234567")
-    p.add_argument("--chain", required=True, help="chaine, ex. Ethereum, Base, 'Ethereum + Base'")
-    p.add_argument("--mechanism", required=True, help="type/mecanisme reel, pas le nom de l'incident")
-    p.add_argument("--link", help="lien du sous-dossier dans le tableau, par defaut '<slug>/'")
-    p.add_argument("--readme-url", default="", help="URL externe optionnelle a noter dans le stub de README")
+    p.add_argument("--slug", required=True, help="folder name, e.g. new-protocol-incident")
+    p.add_argument("--name", required=True, help="human-readable protocol name, e.g. 'New Protocol'")
+    p.add_argument("--date", required=True, help="ISO date or range, e.g. 2026-10-01 or 2026-10-01/02")
+    p.add_argument("--loss-usd", required=True, type=float, help="loss in dollars, bare number, e.g. 1234567")
+    p.add_argument("--chain", required=True, help="chain, e.g. Ethereum, Base, 'Ethereum + Base'")
+    p.add_argument("--mechanism", required=True, help="real type/mechanism, not the incident's name")
+    p.add_argument("--link", help="subfolder link in the table, defaults to '<slug>/'")
+    p.add_argument("--readme-url", default="", help="optional external URL to note in the README stub")
     p.add_argument(
         "--loss-known-partial",
         action="store_true",
-        help="la vraie perte depasse ce chiffre mais la source ne permet pas d'en affirmer plus (comme Sandbox, Balancer V1)",
+        help="the real loss exceeds this figure but the source doesn't support claiming more (like Sandbox, Balancer V1)",
     )
-    p.add_argument("--skip-scaffold", action="store_true", help="ne cree pas le sous-dossier, met seulement a jour le README")
+    p.add_argument("--skip-scaffold", action="store_true", help="don't create the subfolder, only update the README")
     args = p.parse_args()
 
     link = args.link or f"{args.slug}/"
@@ -236,7 +236,7 @@ def main():
         if args.readme_url:
             readme_path = REPO_ROOT / args.slug / "README.md"
             text = readme_path.read_text(encoding="utf-8")
-            text += f"\n<!-- source externe: {args.readme_url} -->\n"
+            text += f"\n<!-- external source: {args.readme_url} -->\n"
             readme_path.write_text(text, encoding="utf-8")
 
     content = read_readme()
@@ -279,8 +279,8 @@ def main():
         lines = lines[:i] + [footnote_text] + lines[i:]
 
     README_PATH.write_text("\n".join(lines) + "\n", encoding="utf-8")
-    print(f"README.md mis a jour: {total_incidents} incidents, perte cumulee {total_loss:,.0f} $.")
-    print(f"Complete le TODO dans {args.slug}/README.md, {args.slug}/reconstruct_exploit.py et la note de bas de page [^{args.slug}] avant de publier.")
+    print(f"README.md updated: {total_incidents} incidents, cumulative loss ${total_loss:,.0f}.")
+    print(f"Fill in the TODO in {args.slug}/README.md, {args.slug}/reconstruct_exploit.py, and the [^{args.slug}] footnote before publishing.")
 
 
 if __name__ == "__main__":
