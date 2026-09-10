@@ -1,0 +1,67 @@
+=== Step 1: confirm contract addresses from MORE Markets' own GitHub deployment docs ===
+MORE-Markets/docs/DEPLOYED_CONTRACTS.md -> Pool (Proxy): 0xbC92aaC2DBBF42215248B5688eB3D3d2b32F2c8d
+MORE-Markets/docs/MARKETS_CONFIGURATION.md -> WFLOW underlying: 0xd3bF53DAC106A0290B0483EcBC89d40FcC961f3e, aToken: 0x02BF4bd075c1b7C8D85F54777eaAA3638135c059
+MORE-Markets/docs/MARKETS_CONFIGURATION.md -> ankrFLOW underlying: 0x1b97100eA1D7126C4d60027e231EA4CB25314bdb
+
+=== Step 2: confirm these are live, real contracts on Flow EVM mainnet (chain 747) ===
+eth_chainId: 0x2eb (747)
+  eth_getCode(Pool 0xbC92aaC2DBBF42215248B5688eB3D3d2b32F2c8d): 2333 bytes
+  eth_getCode(WFLOW 0xd3bF53DAC106A0290B0483EcBC89d40FcC961f3e): 1717 bytes
+  eth_getCode(ankrFLOW 0x1b97100eA1D7126C4d60027e231EA4CB25314bdb): 1159 bytes
+  WFLOW.symbol() live = 'WFLOW'
+  ankrFLOW.symbol() live = 'ankrFLOWEVM'
+
+=== Step 3: locate the exploit block by binary-searching live block timestamps ===
+chain head: block 78081403 @ 2026-09-10 14:52:56 UTC
+binary search: block 76861162 is first at/after 2026-08-30T00:00:00Z (actual ts 2026-08-30 00:00:01)
+binary search: block 77059202 is first at/after 2026-09-01T00:00:00Z (actual ts 2026-09-01 00:00:00)
+
+=== Step 4: scan the Pool's own event log for the WFLOW/ankrFLOW reserve, 10k blocks at a time ===
+Pool events touching WFLOW or ankrFLOW as reserve, across the full 2026-08-30/09-01 window: 7 distinct transaction(s) (routine Supply/Borrow/Withdraw traffic on these two reserves plus the exploit itself)
+  0x13060eb7debc618dd4987fdd1ee54841ae728eba3a72dd449f6ac0e364f5c942
+  0x25906ce646117d45f8297507e290ba7041f3591d55eb7f264d5c28aac5649f07
+  0x25ac4554c04f37e679c17ef2380ff360cb2bfa78fe59497e6e3df68cd51a7fdd
+  0x2b2e6ea6cc7dabeec83941abfdc22dd7fa53a58f327af0fccb73a0ed8a3f66c9
+  0x2b647a25bd521e8c851423234bbe6debc872795e0124b8e487c6a560fbe02b7e
+  0xe69df2fb0e8e859629ed9dce65373e51270119033323ad8349be08fb5d9fa071
+  0xe820b38c18db84d88ec654c329bdc0b340880361c0511eb5d4acff6eb75cc52e
+
+Narrowing to the one transaction with an outsized Borrow on the WFLOW reserve (> 100,000 WFLOW in a single Borrow event, well above routine market activity):
+  0x2b2e6ea6cc7dabeec83941abfdc22dd7fa53a58f327af0fccb73a0ed8a3f66c9: Borrow of 5,668,483.096790 WFLOW -> flagged as the exploit transaction
+  0x2b2e6ea6cc7dabeec83941abfdc22dd7fa53a58f327af0fccb73a0ed8a3f66c9: Borrow of 9,819,641.048249 WFLOW -> flagged as the exploit transaction
+
+=== Step 5: decode transaction 0x2b2e6ea6cc7dabeec83941abfdc22dd7fa53a58f327af0fccb73a0ed8a3f66c9 ===
+block 76986328, timestamp 1788157132 = 2026-08-31 06:18:52 UTC
+from (attacker EOA): 0xa1e4b05f9a0425136045d8fc8a4978b25bb6a7cc
+to (attacker contract): 0xa0c2fe72ad9b640994a9c4252f25fb058ddb3702
+total logs in this single transaction: 613
+
+--- Borrow events on the Pool, reserve = WFLOW ---
+  Borrow amount (word[1] of event data): 5,668,483.096790 WFLOW
+  Borrow amount (word[1] of event data): 9,819,641.048249 WFLOW
+TOTAL borrowed from Pool's WFLOW reserve (decoded from the Pool's own Borrow event): 15,488,124.145039 WFLOW
+
+--- cross-check: underlying WFLOW's own Transfer events, aToken -> attacker contract ---
+(Aave-style Pools pay out a Borrow by having the aToken contract call transfer() on the
+ underlying itself, so this event's own address is WFLOW, not the aToken)
+  WFLOW Transfer, aToken -> attacker contract: 5,668,483.096790 WFLOW
+  WFLOW Transfer, aToken -> attacker contract: 9,819,641.048249 WFLOW
+TOTAL from independent WFLOW-Transfer cross-check: 15,488,124.145039 WFLOW
+Borrow-event total vs aToken-Transfer total match: True
+
+=== Step 6: current on-chain state of the attacker addresses ===
+  attacker EOA (0xa1e4b05f9a0425136045d8fc8a4978b25bb6a7cc): 0.000000 WFLOW, 101.200207 native FLOW, live-queried
+  attacker contract (0xa0c2fe72ad9b640994a9c4252f25fb058ddb3702): 0.000000 WFLOW, 0.000000 native FLOW, live-queried
+
+=== Step 7: USD total, CoinGecko's own theft-day snapshot, vs. DefiLlama's own tracked figure ===
+CoinGecko FLOW price on 31-08-2026: $0.0268204505
+15,488,124.145039 WFLOW x $0.0268204505 = $415,398.47
+
+api.llama.fi/hacks entries matching name=Ankr, chain=[Flow]: 1
+  date=2026-08-31 amount=$410,000 classification=Token & Share Accounting technique=Unbacked Mint
+  independently-derived $415,398.47 vs DefiLlama's tracked $410,000: +1.32%
+
+See README.md for the full reconstruction, the press-vs-reality Blockaid $9.3M discrepancy,
+and every caveat (the geometric ankrFLOW-inflation loop's exact internal mechanism inside
+Ankr's own contracts, and the attacker's downstream, later, separate conversion of the
+borrowed WFLOW, are both reported as sourced from press, not independently re-derived here).

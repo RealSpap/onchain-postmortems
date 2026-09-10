@@ -4,6 +4,25 @@ One entry per addition or correction to this repo. Each incident added
 with `add_new_entry.py` gets tagged as a matching GitHub release, see
 "Get notified of new postmortems" in `README.md`.
 
+## 2026-09-10 (5)
+
+- Added a 17th incident: MORE Markets (Ankr ankrFLOW E-Mode), Flow EVM,
+  2026-08-31. Started from MORE Markets' own GitHub deployment docs
+  (Pool, WFLOW, and ankrFLOW addresses), confirmed all three live on Flow
+  EVM mainnet, then located the exploit by scanning the Pool's own event
+  log for the WFLOW/ankrFLOW reserve across the full incident window
+  rather than starting from a transaction hash found in press. Found
+  exactly one transaction standing apart from routine activity: 2 Borrow
+  events on the WFLOW reserve totaling 15,488,124.145039 WFLOW,
+  independently cross-checked against the underlying token's own Transfer
+  events (a different event on a different contract, same total to the
+  wei). At CoinGecko's own theft-day price this is $415,398.47, within
+  1.32% of DefiLlama's own tracked $410,000 for this incident (tracked as
+  "Ankr", not "MORE Markets"). This also corrects a widely-repeated
+  Blockaid "$9.3M" press estimate: no other Pool activity on either
+  reserve anywhere in the full incident window comes close to that
+  figure, roughly 22x the reconstructed total.
+
 ## 2026-09-10 (4)
 
 - Added a 16th incident: Avici (Rain Card Collateral), Solana, 2026-08-28.
