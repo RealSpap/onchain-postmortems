@@ -10,7 +10,7 @@ wrong, this repo says so and shows the on-chain proof.
 
 By the same author: [@RealSpap on X](https://x.com/RealSpap), [Dune
 profile](https://dune.com/s_pap), and
-[[private-repo-name-redacted]](https://github.com/RealSpap/[private-repo-name-redacted]),
+[multisig-overlap-showcase](https://github.com/RealSpap/multisig-overlap-showcase),
 on-chain research into who actually controls DeFi admin keys.
 
 Get notified of new postmortems: click Watch, then Custom, then Releases
