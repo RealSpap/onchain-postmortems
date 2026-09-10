@@ -1,0 +1,77 @@
+=== Step 1: fetch Summer.fi's own post-mortem, raw HTML, not an AI paraphrase ===
+fetched 52,438 bytes from https://blog.summer.fi/lazy-summer-usdc-vault-exploit-post-mortem-what-happened-and-what-comes-next/
+  beneficiary EOA (regex-extracted from blog's own etherscan link): 0x7BF716167B48CF527725722C6d79494b45B3BDCa
+  executor contract (regex-extracted from blog's own etherscan link): 0x0514F827C129C16418a0933E03C99A6AF982FC61
+  exploit tx hash (regex-extracted from blog's own etherscan link): 0x0db528c44f23fc7fa4544684a2fab81096450a14aae8bc89f42cd0592d43da12
+  LowerRisk vault, as printed (truncated) in the blog itself: 0x98C49e13…EcF17
+  HigherRisk vault, as printed (truncated) in the blog itself: 0xE9cDA459…cB06
+
+=== Step 2: confirm this is live Ethereum mainnet (chain ID 1) ===
+eth_chainId via https://eth.drpc.org: 0x1 (1)
+
+=== Step 3: pull the exploit transaction's own receipt, live ===
+tx 0x0db528c44f23fc7fa4544684a2fab81096450a14aae8bc89f42cd0592d43da12 via https://eth.drpc.org
+  status: 0x1 (success)
+  block: 25471348
+  from:  0x7bf716167b48cf527725722c6d79494b45b3bdca
+  to:    0x0514f827c129c16418a0933e03c99a6af982fc61
+  gasUsed: 14,989,254
+  logs:  305
+  block timestamp (live): 1783315079 = 2026-07-06T05:17:59Z
+
+=== Step 4: recover the two vaults' FULL addresses from the tx's own USDC Transfer log ===
+(the blog only ever prints these truncated, e.g. "0x98C49e13\u2026EcF17")
+USDC Transfer events in this transaction: 69
+  0x98c49e13bf99d7cad8069faa2a370933ec9ecf17: executor deposited 64,828,534.992005 USDC, redeemed 70,959,584.459769 USDC (redemption - deposit = 6,131,049.467764)
+  0xbbbbbbbbbb9cc5e90e3b3af64bdaf62c37eeffcb: executor deposited 65,419,171.879990 USDC, redeemed 65,419,171.879990 USDC (redemption - deposit = 0.000000)
+  0xe9cda459bed6dcfb8ac61cd8ce08e2d52370cb06: executor deposited 29,517,258.144045 USDC, redeemed 29,916,430.381787 USDC (redemption - deposit = 399,172.237742)
+
+Full LowerRisk vault address:  0x98c49e13bf99d7cad8069faa2a370933ec9ecf17
+Full HigherRisk vault address: 0xe9cda459bed6dcfb8ac61cd8ce08e2d52370cb06
+Both match the blog's own truncated hints (prefix+suffix) exactly.
+
+=== Step 5: cross-confirm the HigherRisk vault a SECOND, independent way: ===
+Summer.fi's own GitHub governance-proposal JSON, same-day Safe batch
+  GitHub proposal file: deployment/proposals/prod_remove_arks_phase1_sweep_mainnet_2026-07-06T13-45-17-049Z.json
+  meta.name: Remove arks — phase 1: sweep stuck assets
+  meta.description (first 140 chars): Recovers stuck receipt tokens from ark(s) 0xfD899321B1FD8d75e255119766D9097C98568519 to 0xB0F53Fc4e15301147de9b3e49C3DB942E3F118F2 via Raft....
+  fleetCommanderAddress named in this governance JSON: 0xE9cDA459bED6dcfb8AC61CD8cE08E2D52370cB06
+  MATCH: independently confirms the HigherRisk vault address via a completely
+  separate primary source (Summer.fi's own GitHub, not the blog).
+
+=== Step 6: same-day GitHub commit history confirms this is 'the Summer.fi exploit' ===
+  commit b77fe629cc  2026-07-06T13:46:13Z
+  message: chore(deployment): Safe batches to sweep + remove Term_Summer_USDC ark from LazyVault_HigherRisk_USDC (mainnet)
+    file: packages/deployment/proposals/prod_remove_arks_phase1_sweep_mainnet_2026-07-06T13-45-17-049Z.json (added)
+    file: packages/deployment/proposals/prod_remove_arks_phase2_remove_mainnet_2026-07-06T13-45-17-049Z.json (added)
+
+=== Step 7: decode the attacker's own final realized payout from the tx's own event log ===
+DAI Transfer events in this transaction: 7
+  0x0000000000000000000000000000000000000000 -> 0xa188eec8f81263234da3622a406892f3d630f98c  114,808.834350 DAI
+  0xa188eec8f81263234da3622a406892f3d630f98c -> 0xf6e72db5454dd049d0788e411b06cfaf16853042  114,808.834350 DAI
+  0x0000000000000000000000000000000000000000 -> 0xa188eec8f81263234da3622a406892f3d630f98c  25,835.626746 DAI
+  0xa188eec8f81263234da3622a406892f3d630f98c -> 0xf6e72db5454dd049d0788e411b06cfaf16853042  25,835.626746 DAI
+  0xbebc44782c7db0a1a60cb6fe97d0b483032ff1c7 -> 0x45312ea0eff7e09c83cbe249fa1d7598c4c8cd4e  6,016,754.998121 DAI
+  0x45312ea0eff7e09c83cbe249fa1d7598c4c8cd4e -> 0x0514f827c129c16418a0933e03c99a6af982fc61  6,016,754.998121 DAI
+  0x0514f827c129c16418a0933e03c99a6af982fc61 -> 0x7bf716167b48cf527725722c6d79494b45b3bdca  6,016,754.998121 DAI  <-- lands on the beneficiary EOA
+
+Total DAI landing on the beneficiary EOA (0x7bf716167b48cf527725722c6d79494b45b3bdca) in this transaction: 6,016,754.998121 DAI
+
+=== Step 8: price that DAI payout at CoinGecko's own theft-day (2026-07-06) rate ===
+CoinGecko DAI/USD, 2026-07-06: 0.999979560645277
+Independently reconstructed loss: 6,016,754.998121 DAI x 0.999979560645277 = $6,016,632.02
+
+=== Step 9: current on-chain state of the beneficiary EOA ===
+as of block 25948898 (live, today):
+  beneficiary DAI balance: 0.000000
+  beneficiary ETH balance: 0.000087
+
+=== Step 10: cross-check against DefiLlama's own tracked figure ===
+api.llama.fi/hacks entries matching name='Lazy Summer Protocol': 1
+  date=2026-07-05T00:00:00Z  amount=$6,040,000  chain=['Ethereum']  classification=Token & Share Accounting / Donation Attack
+  this reconstruction vs DefiLlama: -23,367.98 (-0.387%)
+  DefiLlama's tracked date vs this transaction's own live block timestamp: 29.30 hours later
+
+See README.md for the full writeup: the donation mechanism itself (per Summer.fi's
+own blog, not independently re-derived from Solidity here), the Guardian multisig's
+response timeline, and every caveat.
