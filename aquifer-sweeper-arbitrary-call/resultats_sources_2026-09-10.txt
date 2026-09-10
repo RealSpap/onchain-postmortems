@@ -1,0 +1,40 @@
+=== DefiLlama hacks feed (api.llama.fi/hacks), record matching name==Aquifer, fetched live 2026-09-10 ===
+{
+  "date": 1788134400,
+  "name": "Aquifer",
+  "classification": "Access Control",
+  "technique": "Arbitrary External Call",
+  "amount": 2469729,
+  "chain": [
+    "Solana"
+  ],
+  "bridgeHack": false,
+  "targetType": "DeFi Protocol",
+  "source": "",
+  "returnedFunds": null,
+  "defillamaId": "6884",
+  "language": "Rust"
+}
+
+=== Aquifer program on-chain identity (Solana), fetched live 2026-09-10 ===
+Program: AQU1FRd7papthgdrwPTTq5JacJh8YtwEXaBfKU3bTz45
+bpf-upgradeable-loader programData account: GrHYWjuGETV5pZgUZLfzvvQEugYk6SutwHUPxFjrHda6
+
+=== Sweeper contract, verified source on Blockscout, fetched live 2026-09-10 ===
+name: Sweeper
+is_verified: True
+compiler_version: v0.8.24+commit.e11b9ed9
+verified_at: 2026-09-08T12:36:20.477506Z
+
+=== Aquifer's own X account (@Aquiferdotsite), most recent post text, fetched live 2026-09-10 ===
+'We are still here. Still shipping. Since mainnet, we have shipped the router,
+web terminal, keyless API, Android app, and this week, an iOS build. [...]
+The team holds zero AQU.' -- links to aquifer.site, now positioned as a
+tokenized-equities pricing tool on 'Robinhood Chain' (chain id 4663),
+a different product surface than the Solana AMM exploited on 2026-08-31.
+
+=== DefimonAlerts repost of the on-chain whitehat memo, x.com/DefimonAlerts/status/2094467984030826622 ===
+Indexed title: 'Onchain Message: AQUIFER WHITEHAT OFFER -- 31 AUG 2026
+This is an official Aquifer communication regarding the exploit of...'
+(confirms third-party trackers also read the on-chain memo in Step 1 as
+Aquifer's own official communication, independent of this reconstruction)

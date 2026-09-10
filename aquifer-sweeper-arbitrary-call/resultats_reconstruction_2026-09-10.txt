@@ -1,0 +1,73 @@
+=== Step 1: the reference transaction Aquifer's own whitehat message points to ===
+Slot: 443199618 | blockTime (UTC): 2026-08-31T16:43:27Z
+Memo program payload:
+AQUIFER WHITEHAT OFFER
+
+From the upgrade authority of
+AQU1FRd7papthgdrwPTTq5JacJh8YtwEXaBfKU3bTz45
+to the controller of
+7fTe9pvrwXJRBHq9MaSyVPR4PgEuhqLiA93Dxf4gRk7J
+and 0x2Dfe9e969796e2797278b02761dd9Ad6aE922746
+
+RECOVERY
+SOL 8af8RnAgyKzNt4fjDaP8w8pBekYVux1ja4AofavRyjox
+ETH 0xb7EAA8cd5dFAD8021d9fB19c8a21613679f268F5
+
+CONTACT (ref this tx)
+ETH 0x09dA08045830492B24b3b8A0022375e662bbE91d
+
+Return >=80% of exploited value to RECOVERY above by
+3 Sep 2026, 14:00 UTC; retain up to 20% as bounty.
+Subject to applicable law and full compliance Aquifer will
+not pursue civil claims from this incident
+
+  log: Program SQDS4ep65T869zMMBKyuUq6aD6EgTu8psMjkvj52pCf invoke [1]
+  log: Program log: Instruction: VaultTransactionExecute
+  log: Program SQDS4ep65T869zMMBKyuUq6aD6EgTu8psMjkvj52pCf consumed 249746 of 259746 compute units
+  log: Program SQDS4ep65T869zMMBKyuUq6aD6EgTu8psMjkvj52pCf success
+
+=== Step 2: is the memo's claimed signer really Aquifer's on-chain upgrade authority? ===
+Aquifer program: AQU1FRd7papthgdrwPTTq5JacJh8YtwEXaBfKU3bTz45
+Its ProgramData account: GrHYWjuGETV5pZgUZLfzvvQEugYk6SutwHUPxFjrHda6
+Real on-chain upgrade authority: 8pJhHxPQRiUGdtVSCNPyP9AH994zeyYEBGb5yZRzheSA
+Claimed signer in the whitehat memo: 8pJhHxPQRiUGdtVSCNPyP9AH994zeyYEBGb5yZRzheSA
+MATCH: True -> the whitehat offer is authentically signed by Aquifer's real upgrade authority, not an impersonator
+
+=== Step 3: the attacker's Solana wallet - is this a fresh, purpose-built address? ===
+Total signatures ever seen for 7fTe9pvrwXJRBHq9MaSyVPR4PgEuhqLiA93Dxf4gRk7J : 379
+Earliest: 2026-08-31T01:21:22Z
+Latest: 2026-08-31T16:43:27Z
+-> entire on-chain history fits inside a single calendar day
+
+=== Step 4: the Ethereum-side drain - real internal transactions, not assumed ===
+  0x5085bbe50677e41d1d395e9063b358efb6008c70dd3c08fd33770d728d91396b  block 25872809  2026-08-31T04:16:11Z  871.860173070678342810 ETH
+  0x3a3465bf96c6cd858902f19f1c13eabc347414ef8921249c12b99f4c5fe4cb16  block 25872841  2026-08-31T04:22:35Z  122.509397867786333336 ETH
+  0xad8e66e13c6222ead08d952126c00f93539780ebfee9f0fd77577ace32964097  block 25872888  2026-08-31T04:31:59Z  6.425998663351236928 ETH
+Total received by attacker's Ethereum address: 1000.7955696018159 ETH
+
+=== Step 5: decoding the exploited call itself (sweepAndExecute) ===
+Sweeper contract owner(): 0x0e1193712111dbff9fb25cb1e3460ddae71a61b7
+Sweeper contract executor(): 0x067cb62f4dcc0a45edcb6b7c018d4077abd10c67 == EXECUTOR constant: True
+Decoded method: sweepAndExecute
+Method signature: sweepAndExecute((bytes32,bytes32,address,uint256) request, (bytes32,address,uint256,address,uint256,address,bytes32,(byt ...
+execution.token (should be real USDC): 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48
+execution.amount: 2119478923113 -> 2119478.923113 USDC (6 decimals)
+execution.recipient (should be attacker's ETH address): 0x2Dfe9e969796e2797278b02761dd9Ad6aE922746
+
+=== Step 6: the final consolidation - did the attacker move the funds out? ===
+Final sweep tx: 0x728294f756bf1f2f35fb32d9c5a18b5f65f9e78cdc2fae72544a64ffb8004800
+Status: 0x1 (0x1 = success)
+Amount moved: 1000.7955471888082 ETH
+Destination: 0x200e52350fbc579c96bad87b6ef782c1f962dffd
+
+=== Step 7: did the attacker honor the whitehat deadline? (checked live, today) ===
+Recovery Solana address 8af8RnAgyKzNt4fjDaP8w8pBekYVux1ja4AofavRyjox balance: 0.980001878 SOL
+Recovery Ethereum address 0xb7EAA8cd5dFAD8021d9fB19c8a21613679f268F5 balance: 0.001550501933366716 ETH
+-> no meaningful funds have arrived at either recovery address as of this run
+
+=== Step 8: USD conversion, from CoinGecko's own historical snapshot ===
+ETH/USD, CoinGecko daily snapshot 2026-08-31 (theft day): 2416.2418165172735
+ETH/USD, CoinGecko daily snapshot 2026-09-01 (consolidation day): 2466.565659094493
+1000.7955696018159 ETH @ 2026-08-31 price -> $2,418,164.11
+1000.7955696018159 ETH @ 2026-09-01 price -> $2,468,527.98
+DefiLlama's own tracked figure for this incident: $2,469,729
