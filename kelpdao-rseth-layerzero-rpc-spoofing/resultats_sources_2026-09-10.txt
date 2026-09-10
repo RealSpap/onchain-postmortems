@@ -1,0 +1,132 @@
+Primary-source and cross-reference material fetched live on 2026-09-10 for
+the Kelp DAO (rsETH / LayerZero DVN) reconstruction. Raw excerpts, not
+paraphrased through any search-synthesis tool.
+
+=== 1. DefiLlama hacks feed (api.llama.fi/hacks), fetched live, entry name=="Kelp" ===
+{
+  "date": 1776470400,
+  "name": "Kelp",
+  "classification": "Bridge & Cross-Chain",
+  "technique": "Cross-Chain Message Spoofing",
+  "amount": 293000000,
+  "chain": ["Ethereum", "Arbitrum"],
+  "bridgeHack": true,
+  "targetType": "DeFi Protocol",
+  "source": "",
+  "returnedFunds": null,
+  "defillamaId": "3946",
+  "parentProtocolId": "parent#kelp-dao",
+  "language": "Solidity"
+}
+(date 1776470400 == 2026-04-18T00:00:00Z. "source" is empty for every one of
+the 1,263 entries in this feed as served by the public API, not only this
+one; DefiLlama's own dollar figure and classification are the only fields
+trusted from this feed, and both are independently checked below.)
+
+=== 2. LayerZero's own official incident statement (layerzero.network/blog/kelpdao-incident-statement), fetched live, raw HTML, script/style tags stripped, HTML entities unescaped ===
+
+"On April 18, 2026, KelpDAO was exploited for approximately $290M.
+Preliminary indicators suggest attribution to a highly-sophisticated state
+actor, likely DPRK's Lazarus Group, more specifically TraderTraitor. This
+incident was isolated to KelpDAO's rsETH configuration as a direct
+consequence of their single-DVN setup."
+
+"The affected application was rsETH, issued by KelpDAO. Their OApp
+configuration at the time of this incident relied on a 1-of-1 DVN setup,
+with LayerZero Labs as the sole verifier [...] Operating a
+single-point-of-failure configuration meant there was no independent
+verifier to catch and reject a forged message."
+
+"On April 18, 2026, LayerZero Labs' DVN became the target of a highly
+sophisticated attack [...] The attack was specifically engineered to
+manipulate or poison downstream RPC infrastructure by compromising a
+quorum of the RPCs the LayerZero Labs DVN relied upon to verify
+transactions. It was not done through an exploit to the protocol, DVN, key
+management or other means."
+
+"Rather, the attacker was able to gain access to the list of RPCs our DVN
+uses, compromise two of them - which were independent nodes running on
+separate clusters without direct connection to each other - and swap out
+binaries running the op-geth nodes. [...] they used this pivot point to
+execute an RPC-spoofing attack. Their malicious node used a custom payload
+designed explicitly to forge a message to the DVN with minimal warnings."
+
+"However, even this was insufficient to forge a message. [...] In order to
+complete the attack they performed DDoS attacks on the uncompromised RPCs.
+The DDoS triggered the failover to the poisoned RPCs."
+
+"DDoS of external RPC. Attack took place between 10:20a and 11:40a PT"
+(== 17:20-18:40 UTC on 2026-04-18, PDT being in effect; the exploit
+transaction's own live-confirmed block timestamp, 17:35:35 UTC, falls
+inside this window.)
+
+"As a result of this manipulation, the LayerZero Labs-operated DVN instance
+confirmed transactions that never in fact took place."
+
+"We want to be unambiguous on this point: the LayerZero protocol itself
+functioned exactly as intended throughout this event. No vulnerability was
+identified in the protocol."
+
+"There is zero contagion to any other cross-chain assets or applications."
+
+=== 3. DarkNavy technical writeup (darknavy.org/web3/exploits/kelpdao-rseth-layerzero-packet-drain/), fetched live via curl (raw HTML, not WebFetch's summarizer) ===
+Used only as a lead to the exploit transaction hash and contract addresses;
+every one of the following addresses/hash was found by grep on the raw
+downloaded HTML (confirming they are really printed on the page, not
+invented by a summarization step) and then independently re-derived from
+the raw transaction receipt in Step 3-4 of reconstruct_exploit.py:
+  0x1ae232da212c45f35c1525f851e4c41d529bf18af862d9ce9fd40bf709db4222 (tx hash)
+  0x85d456b2dff1fd8245387c0bfb64dfb700e98ef3 (OFTAdapter)
+  0x1a44076050125825900e736c501f859c50fe728c (EndpointV2)
+  0xa1290d69c65a6fe4df752f95823fae25cb99e5a7 (rsETH token)
+  0x8b1b6c9a6db1304000412dd21ae6a70a82d60d3b (attacker recipient)
+  0x4966260619701a80637cdbdac6a6ce0131f8575e (caller/executor)
+  0x000000000000000000000000c3eacf0612346366db554c991d7858716db09f58 (claimed source-chain sender, padded)
+
+=== 4. LayerZero-Labs' own official GitHub address book (github.com/LayerZero-Labs/lz-address-book), fetched live via gh api ===
+README.md line 103: "assertEq(endpoint, 0x1a44076050125825900e736c501f859c50fE728c);"
+-- confirms the EndpointV2 address independently of any block explorer.
+
+src/generated/LZWorkers.sol, fetched live via gh api:
+  line 2492-2493: `_chainNameToEid["unichain-mainnet"] = 30320;`
+                   `_eidToChainName[30320] = "unichain-mainnet";`
+-- confirms EID 30320 (the source EID decoded from the exploit tx's own
+Endpoint log, Step 3 of reconstruct_exploit.py) maps to Unichain, matching
+DarkNavy's claim that the forged message purported to originate there.
+
+=== 5. Sourcify public verification API (sourcify.dev/server/v2), fetched live ===
+GET /v2/contract/1/0x85d456b2dff1fd8245387c0bfb64dfb700e98ef3?fields=all
+  "creationMatch": "exact_match"
+  "runtimeMatch": "exact_match"
+  "verifiedAt": "2024-08-08T14:25:17Z"
+  compilation.name: "RSETH_OFTAdapter"
+  compilation.compiler: "solc 0.8.22+commit.4fc1097e"
+-- an independent, decentralized verification service (not Etherscan)
+confirms this address's deployed bytecode exactly matches published,
+compiled Solidity source named "RSETH_OFTAdapter", verified more than a
+year before the exploit (rules out a post-hoc relabeling).
+
+=== 6. DefiLlama/dimension-adapters (github.com/DefiLlama/dimension-adapters, fees/kelp.ts), fetched live via gh api ===
+  const rsETHMaps: any = {
+    [CHAIN.ETHEREUM]: "0xA1290d69c65A6Fe4DF752f95823fae25cB99e5A7",
+    ...
+  };
+-- the fee/TVL adapter DefiLlama runs for Kelp DAO's own protocol page
+independently names the same rsETH token address the exploit tx's own
+Transfer log shows.
+
+=== 7. Etherscan address labels, fetched live via curl (raw HTML, not an API key or AI summary) ===
+GET https://etherscan.io/address/0x8b1b6c9a6db1304000412dd21ae6a70a82d60d3b
+  grep -io "kelp[^<\"]*" -> "Kelp DAO Exploiter 13" (repeated tag/tooltip text)
+GET (same page) for 0xa1290d69c65a6fe4df752f95823fae25cb99e5a7
+  -> "Kelp DAO: rsETH Token" with "Implementation: 0x7159107483e623707c18c6e06cbc095bd0717783"
+-- Etherscan's own community/team address tags independently corroborate
+both the attacker attribution and the token identity; treated here as a
+third-party corroboration, not as the basis for any claim this
+reconstruction could not otherwise support from the raw receipt.
+
+=== 8. CoinGecko historical price API, fetched live ===
+GET /coins/kelp-dao-restaked-eth/history?date=18-04-2026
+  market_data.current_price.usd = 2346.5856193419986
+GET /coins/ethereum/history?date=18-04-2026
+  market_data.current_price.usd = 2421.2905710664027

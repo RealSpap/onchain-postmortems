@@ -1,0 +1,49 @@
+=== Step 1: the exploit transaction, confirmed on 2 independent RPC providers ===
+  [drpc.org] status=0x1 block=24908285 logs=3 to=0x1a44076050125825900e736c501f859c50fe728c
+  [publicnode.com] status=0x1 block=24908285 logs=3 to=0x1a44076050125825900e736c501f859c50fe728c
+Both providers agree on blockHash: True
+
+=== Step 2: the block timestamp, confirmed on 3 independent RPC providers ===
+  [drpc.org] block 24908285  hash=0x48cbf7328277c6a4c57479b25574f5e052c9f4f22d5ea59b65fb8293ac0a0630  timestamp=1776533735  (2026-04-18T17:35:35Z)
+  [publicnode.com] block 24908285  hash=0x48cbf7328277c6a4c57479b25574f5e052c9f4f22d5ea59b65fb8293ac0a0630  timestamp=1776533735  (2026-04-18T17:35:35Z)
+  [blastapi.io] block 24908285  hash=0x48cbf7328277c6a4c57479b25574f5e052c9f4f22d5ea59b65fb8293ac0a0630  timestamp=1776533735  (2026-04-18T17:35:35Z)
+
+=== Step 3: decoding the Transfer + OFTReceived logs from the raw receipt ===
+  address=0xa1290d69c65a6fe4df752f95823fae25cb99e5a7  topic0=0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef
+  address=0x85d456b2dff1fd8245387c0bfb64dfb700e98ef3  topic0=0xefed6d3500546b29533b128a29e3a94d70788727f0507505ac12eaf2e578fd9c
+  address=0x1a44076050125825900e736c501f859c50fe728c  topic0=0x3cd5e48f9730b129dc7550f0fcea9c767b7be37837cd10e55eb35f734f4bca04
+Transfer: from=0x85d456b2dff1fd8245387c0bfb64dfb700e98ef3  to=0x8b1b6c9a6db1304000412dd21ae6a70a82d60d3b  amount=116500.000000000000000000 rsETH
+from == OFT_ADAPTER constant: True
+to == ATTACKER constant: True
+Endpoint log data decodes a source EID field of: 30320
+
+=== Step 4: is the destination endpoint really LayerZero's Ethereum-mainnet EndpointV2? ===
+  [drpc.org] eth_getCode length: 48012 chars (non-trivial contract)
+  [drpc.org] live eid() call -> 30101 (LayerZero's documented Ethereum-mainnet EID is 30101)
+  [publicnode.com] eth_getCode length: 48012 chars (non-trivial contract)
+  [publicnode.com] live eid() call -> 30101 (LayerZero's documented Ethereum-mainnet EID is 30101)
+
+=== Step 5: is the OFTAdapter a genuine, independently-verified contract? ===
+Sourcify creationMatch: exact_match  runtimeMatch: exact_match
+Sourcify verifiedAt: 2024-08-08T14:25:17Z  (well before the 2026-04-18 exploit)
+Contract name (from Sourcify compilation metadata): RSETH_OFTAdapter
+
+=== Step 6: the rsETH token address, from Kelp/DefiLlama's own maintained adapter (not press) ===
+Line found in fees/kelp.ts: [CHAIN.ETHEREUM]: "0xA1290d69c65A6Fe4DF752f95823fae25cB99e5A7",
+RSETH_TOKEN constant used in this script: 0xa1290d69c65a6fe4df752f95823fae25cb99e5a7
+Matches transfer_log.address: True
+
+=== Step 7: current state of the attacker's receiving address (checked live, today) ===
+  [drpc.org] current rsETH balance: 0.0 rsETH | current ETH balance: 0.0975260878903386 ETH
+  [publicnode.com] current rsETH balance: 0.0 rsETH | current ETH balance: 0.0975260878903386 ETH
+
+=== Step 8: USD conversion, from CoinGecko's own historical daily snapshot ===
+rsETH/USD, CoinGecko daily snapshot 2026-04-18: 2346.5856193419986
+116500.0 rsETH @ that price -> $273,377,224.65
+DefiLlama's own tracked figure for this incident: $293,000,000
+LayerZero's own stated figure: "approximately $290M"
+
+=== Step 9: cross-check via the LRTOracle's own rsETH:ETH backing rate (independent method) ===
+LRTOracle.rsETHPrice() at block 24908284: 1.069610361882844 ETH per rsETH
+ETH/USD, CoinGecko daily snapshot 2026-04-18: 2421.2905710664027
+116500.0 rsETH -> 124609.60715935133 ETH-equivalent -> $301,716,066.88
