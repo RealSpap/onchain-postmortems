@@ -4,6 +4,30 @@ One entry per addition or correction to this repo. Each incident added
 with `add_new_entry.py` gets tagged as a matching GitHub release, see
 "Get notified of new postmortems" in `README.md`.
 
+## 2026-09-10 (8)
+
+- Added a 20th incident: Ostium (PrivatePriceUpKeep Compromise), Arbitrum,
+  2026-07-15. Started from Ostium's own Immunefi bug-bounty scope page
+  (immunefi.com/bug-bounty/ostium/scope/), whose embedded, self-maintained
+  contract registry names the Vault and PrivatePriceUpKeep addresses
+  directly and states verbatim that registered keepers/forwarders are
+  "assumed to be trusted and operating correctly", independently
+  confirming the trust model a compromised forwarder signer defeated. One
+  candidate address from a secondary Ostium documentation page (with a
+  single wrong hex digit) was caught and discarded after `eth_getCode`
+  showed it had no bytecode, a caution about AI-assisted page
+  summarization inventing plausible-looking hex strings. Scanning the
+  Vault's own USDC Transfer log across the full incident window
+  (block range located by binary search on live timestamps) independently
+  found the same 8 transactions a third-party forensic writeup (rekt.news)
+  separately names, spanning exactly 329 seconds, matching that writeup's
+  stated duration to the second. 7 of the 8 (excluding a small "test"
+  cycle) sum to $23,752,641.68, within 0.0004% of Ostium's own final
+  $23,752,746 figure, reconciling three earlier, conflicting press
+  estimates ("$18M", "~$22M", "~$24M") down to essentially Ostium's own
+  number, independently derived from the Vault's own event log, not
+  copied from any of them.
+
 ## 2026-09-10 (7)
 
 - Added a 19th incident: Across Protocol (Solana Event Spoofing), Solana +

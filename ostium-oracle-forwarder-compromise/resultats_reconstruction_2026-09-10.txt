@@ -1,0 +1,66 @@
+=== Step 1: confirm contract identity from Ostium's own Immunefi bug-bounty registry ===
+fetched 210,155 bytes from https://immunefi.com/bug-bounty/ostium/scope/
+  Vault              0x20D419a8e12C45f88fDA7c5760bb6923Cee27F98  (added 2026-03-16T17:14:23.390Z)  "Vault - Vault for liquidity providers"
+  PrivatePriceUpKeep 0xB71ec9eBD8145daCaCF6724363143cb5667A3d36  (added 2026-03-16T17:14:23.390Z)  "PrivatePriceUpKeep - Permissioned price update keeper"
+  PriceUpKeep        0x52B2a78E12b09B66C6c8ce291D653D40bAb77f0c  (added 2026-03-16T17:14:23.390Z)  "PriceUpKeep - Automated price update keeper"
+  TradingStorage     0xccd5891083a8acd2074690f65d3024e7d13d66e7  (added 2026-03-16T17:14:23.390Z)  "TradingStorage - Central storage for trades and orders"
+  Trading            0x6D0bA1f9996DBD8885827e1b2e8f6593e7702411  (added 2026-03-16T17:14:23.390Z)  "Trading - Entry point for market and limit orders"
+  TradingCallbacks   0x7720fC8c8680bF4a1Af99d44c6c265a74e9742a9  (added 2026-03-16T17:14:23.390Z)  "TradingCallbacks - Order execution and trade settlement"
+  Verifier           0xd456939e54F68Ef9B0BE62aBB2EC4A37397Cb814  (added 2026-03-16T17:14:23.390Z)  "Verifier - Price data signature verification"
+
+Ostium's own bug-bounty scope text (verbatim, regex-extracted from the fetched page):
+  "All registered keepers (PriceUpKeep, PrivatePriceUpKeep, TradesUpKeep) and their forwarders are assumed to    be trusted and operating correctly. Issues requiring a compromised or malicious keeper are out of scope."
+
+=== Step 2: confirm these are live, real contracts on Arbitrum One (chain 42161) ===
+eth_chainId: 0xa4b1 (42161)
+  eth_getCode(Vault 0x20D419a8e12C45f88fDA7c5760bb6923Cee27F98): 2227 bytes
+  eth_getCode(PrivatePriceUpKeep 0xB71ec9eBD8145daCaCF6724363143cb5667A3d36): 2227 bytes
+  eth_getCode(TradingStorage 0xccd5891083a8acd2074690f65d3024e7d13d66e7): 2227 bytes
+
+=== Step 3: locate the incident window by binary-searching live block timestamps ===
+chain head: block 503764887 @ 2026-09-10 16:23:36 UTC
+binary search: block 484132589 is first at/after 2026-07-15T14:00:00Z (actual ts 2026-07-15 14:00:00)
+binary search: block 484139806 is first at/after 2026-07-15T14:30:00Z (actual ts 2026-07-15 14:30:00)
+
+=== Step 4: scan the Vault's own USDC outflow log across the full window ===
+USDC Transfer events with Vault (0x20D419a8e12C45f88fDA7c5760bb6923Cee27F98) as sender, blocks 484132589-484139806: 36 events
+
+distinct transactions paying the exploiter address (0x321df194646029e7a6193ea05573d4b9c398bfd9) directly from the Vault: 8
+  0x359f8c05b86a4409d60cfba02084334313fd94b19f74a294fb7fc4ea7d4870e0  block 484137113  2026-07-15 14:18:48 UTC  11,862,840.7820 USDC
+  0x397daa6c23c87670f949a970961b1014e966cc40301a99b55c3c1908dd61418e  block 484137852  2026-07-15 14:21:52 UTC  13,479.6064 USDC
+  0x3b04639ab9b40760b2138e7bfa7eccc9657f3a767a5c414dbb1b3632ed71f3bf  block 484138104  2026-07-15 14:22:55 UTC  3,594,800.7004 USDC
+  0x4b7ff5de823dd7af29cf1a6602a84d7b6eee354edcbaf0427fd5e691d3d80951  block 484137016  2026-07-15 14:18:23 UTC  897.8008 USDC
+  0x56e4139a2f51e99933479becee21812dd2ec656128f6f3593a7fa225e2f24adc  block 484137308  2026-07-15 14:19:37 UTC  13,479.6064 USDC
+  0x6c254483fa47a14622662e792bc3728ab3c408a33d3cbb5712434ba96f5ecdc2  block 484138206  2026-07-15 14:23:21 UTC  2,696,100.3004 USDC
+  0xd9f91cc3eaec695f45bffad3a068fa52e1625ed44bfcc47d6ac3938f78d9061d  block 484137984  2026-07-15 14:22:25 UTC  4,493,501.1004 USDC
+  0xfaf6d3d4d7f1a75bfc11fb4d36d0525791546267fda1cdd371703ce03ae8ba8c  block 484138330  2026-07-15 14:23:52 UTC  1,078,439.5804 USDC
+
+TOTAL, Vault -> exploiter, every transaction in the scanned window: 23,753,539.4772 USDC
+Vault outflow to 39+ OTHER recipients in the same window (routine LP/trader activity, unrelated to the exploiter address): 130.05 USDC across 9 distinct addresses
+First exploiter-directed payout: 2026-07-15 14:18:23 UTC
+Last exploiter-directed payout:  2026-07-15 14:23:52 UTC
+Span: 329 seconds
+
+--- Reconciling against the smallest transaction in the set ---
+Smallest single transaction: 0x4b7ff5de823dd7af29cf1a6602a84d7b6eee354edcbaf0427fd5e691d3d80951, 897.8008 USDC
+Total EXCLUDING that one transaction: 23,752,641.6764 USDC
+
+=== Step 5: current on-chain state of the exploiter address ===
+exploiter (0x321df194646029e7a6193ea05573d4b9c398bfd9) current USDC balance: 0.000160
+exploiter (0x321df194646029e7a6193ea05573d4b9c398bfd9) current native ETH balance: 0.000589
+
+=== Step 6: USD total vs DefiLlama's own tracked figure and Ostium's own stated figure ===
+api.llama.fi/hacks entries matching name=Ostium: 1
+  date=2026-07-15 chain=['Arbitrum'] amount=$23,750,000 classification=Key Compromise technique=Private Key Compromised
+
+Ostium's own stated figure (per press paraphrase of its X post, X itself not independently fetchable): $23,752,746
+This reconstruction, ALL exploiter-directed Vault payouts in the window: $23,753,539.4772  (diff +793.4772, +0.0033%)
+This reconstruction, EXCLUDING the smallest transaction: $23,752,641.6764  (diff -104.3236, -0.0004%)
+
+=== Step 7: decode PriceRequestedV2 events inside the single largest transaction ===
+largest transaction (0x359f8c05b86a4409d60cfba02084334313fd94b19f74a294fb7fc4ea7d4870e0):
+  PriceRequestedV2 events on PrivatePriceUpKeep: 10, order IDs [2157484, 2157485, 2157486, 2157487, 2157488, 2157489, 2157490, 2157491, 2157492, 2157493]
+  Vault->exploiter USDC payouts inside this same transaction: ['8,986.10', '80,882.14', '718,959.42', '6,290,901.90', '4,763,111.22']
+  10 price requests / 5 payouts = 2.0 price requests per payout cycle
+
+See README.md for the full reconstruction, the exploiter-contract detail (the tx sender and the batching contract it called are both plain-code-free / small-code addresses, decoded live, not press-sourced), and every caveat (the exact fixed-point price values inside the signed price report are not independently decoded, since Ostium's OstiumVerifier report format is not public; the downstream Kyber-swap / Tornado Cash laundering route is reported as press-sourced, not independently retraced here).
