@@ -1,0 +1,39 @@
+=== Step 1: confirm the Aave V3 Base Pool and find the exact flash loan ===
+Aave V3 Pool on Base (from aave-dao/aave-address-book, AaveV3Base.sol): 0xA238Dd80C259a72e81d7e4664a9801593F98d1c5
+Largest single USDC flash loan on Base that day: 808,844.023607 USDC, tx 0x9f906fcd8fceaa6745e8d1c004861dcfa9b5e6a893fe1e8c5d0013a4e982e6a8, block 50157345
+
+=== Step 2: decode the full attack transaction, live ===
+tx 0x9f906fcd8fceaa6745e8d1c004861dcfa9b5e6a893fe1e8c5d0013a4e982e6a8
+block 50157345, 2026-08-19 01:47:17 UTC
+status: success
+from (attacker EOA): 0x2419432344b0b892e592b2601b98eae702ba360e
+to (attack contract): 0xb6fbdfa5f3cbeb139d4cce86d92f4ac8687b16c0
+  USDC Transfer: 0x4e65fe4dba92790696d040ac24aa414708f5c0ab -> 0xb6fbdfa5f3cbeb139d4cce86d92f4ac8687b16c0 : 808,844.023607
+  USDC Transfer: 0xb6fbdfa5f3cbeb139d4cce86d92f4ac8687b16c0 -> 0xaa119f7442ecc28b9a8f236707ada8362cff24ff : 808,844.023607
+  USDC Transfer: 0xaa119f7442ecc28b9a8f236707ada8362cff24ff -> 0xb6fbdfa5f3cbeb139d4cce86d92f4ac8687b16c0 : 999,000.000000
+  USDC Transfer: 0xb6fbdfa5f3cbeb139d4cce86d92f4ac8687b16c0 -> 0x4e65fe4dba92790696d040ac24aa414708f5c0ab : 809,248.445619
+
+Router contract (drained): 0xaa119f7442ecc28b9a8f236707ada8362cff24ff
+Attack contract: 0xb6fbdfa5f3cbeb139d4cce86d92f4ac8687b16c0
+Flash loan principal: 808,844.023607 USDC
+Flash loan fee: 404.422012 USDC
+Router payout to attacker: 999,000.000000 USDC
+Attacker net profit (payout - principal - fee): 189,751.554381 USDC
+
+=== Step 3: Router's own USDC balance, one block before and one block after ===
+Router USDC balance at block 50157344 (before): 191,155.976393
+Router USDC balance at block 50157345 (after):     1,000.000000
+Total drop in Router balance (real loss to Allbridge depositors): 190,155.976393 USDC
+  of which kept by the attacker: 189,751.554381 USDC
+  of which paid to Aave as flash loan fee: 404.422012 USDC
+
+=== Step 4: the Polygon setup transaction, a day before SlowMist's stated date ===
+tx 0x2a88d79756b4547b33fea7b3c1420793680e2b8952bef4c65e99879e16b22140
+block 90871052, 2026-07-25 20:32:55 UTC
+from: 0x2419432344b0b892e592b2601b98eae702ba360e  to (MessageTransmitterV2): 0x81d40f21f12a8f0e3252bccb954d722d4c464b64
+source_domain=7 (7 = Polygon), dest_domain=6 (6 = Base)
+header recipient (called back on Base): 0xb6fbdfa5f3cbeb139d4cce86d92f4ac8687b16c0
+header destinationCaller: 0xf9b710e427bf4d93598e0f80a84de22c7ad9b577
+forged amount found in the message body at byte offset 68: 1,000,000.000000 USDC
+
+See README.md for the full reconstruction, the SlowMist source, and every caveat.

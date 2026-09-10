@@ -1,0 +1,121 @@
+DefiLlama hacks feed record for this incident (api.llama.fi/hacks, queried
+2026-09-10):
+
+{
+  "date": "2026-08-19",
+  "name": "Allbridge",
+  "amount": 191000,
+  "chain": ["Base"],
+  "classification": "Bridge & Cross-Chain"
+}
+
+Note: this feed record lists Base only. It does not mention Polygon, the
+chain the forged message actually originated on, and does not mention
+that the $191,000 figure is close to the Router's gross balance right
+before the attack, not the attacker's realized profit (see below).
+
+Primary source: SlowMist security team's own published post-mortem,
+"A Cross-Chain Attack Spanning One Month: Analysis of the Allbridge Hack"
+(slowmist.medium.com, published 2026-08-22, fetched 2026-09-10 via a
+read-only mirror after Medium returned HTTP 403 to a direct fetch - the
+mirrored text was cross-checked against every number below and nothing
+in it depended on formatting that a mirror could alter). Key claims:
+
+- "On August 19, 2026, the well-known cross-chain bridge project
+  Allbridge was attacked, resulting in a loss of approximately $190,000.
+  However, the attack itself took nearly a month to complete."
+- "On July 26, 2026, the attacker first directly called the sendMessage
+  function of Circle's MessageTransmitterV2 contract on Polygon... The
+  source domain was Polygon, the destination domain was Base, and the
+  declared amount was 1,000,000 USDC... destinationCaller pointing to
+  Allbridge's CCTPTokenMessenger contract... recipient in the message
+  header to their own contract."
+- "It was not until August 19, 2026, when the Allbridge relayer had just
+  minted approximately 191,112 USDC from a genuine CCTP deposit... the
+  Router's balance reached approximately 191,156 USDC... The attacker
+  first used an Aave flash loan to provide 808,844 USDC to the Router...
+  directly transferred the remaining 999,000 USDC to the attack
+  contract... repaid Aave 808,844 USDC in principal and approximately
+  404.422012 USDC in flash loan fees. This left approximately
+  189,751.554381 USDC as profit."
+- "Interestingly, the 1,000 USDC fee collected by the Router mentioned
+  above was later taken by other attackers who replicated the same
+  attack method."
+
+Root cause, as stated by SlowMist: Allbridge's CCTPTokenMessenger
+contract does not check that the CCTP message's `sender` header field
+equals the real remote TokenMessenger, nor that `recipient` equals
+Circle's own TokenMessengerV2, and its Router pays out based on an
+internal "receivedTokenAmount" ledger entry keyed by a `messageHash` the
+attacker could precompute and control, never re-checking that the
+Router's actual USDC balance had increased by a corresponding mint.
+
+What this project independently verified, live, against both chains
+(see resultats_reconstruction_2026-09-10.txt and reconstruct_exploit.py):
+
+1. The flash loan, the Router contract, the attack contract, and every
+   dollar figure SlowMist's article describes in prose, down to the
+   USDC-cent: found independently by scanning Aave's own FlashLoan
+   events on Base (Aave's official Pool address, from
+   aave-dao/aave-address-book), not searched for by name or address.
+   808,844.023607 principal, 404.422012 fee, 999,000.000000 payout,
+   189,751.554381 net attacker profit: every one of SlowMist's four
+   numbers matches this project's own decode of the raw Transfer events
+   in transaction 0x9f906fcd8fceaa6745e8d1c004861dcfa9b5e6a893fe1e8c5d0
+   013a4e982e6a8 to the same precision SlowMist itself reported.
+2. A number SlowMist's prose does not give directly: the Router's actual
+   USDC balance one block before and one block after the attack
+   transaction, read live via eth_call. 191,155.976393 before (matching
+   SlowMist's rounded "~191,156"), 1,000.000000 after - the same 1,000
+   USDC SlowMist separately mentions was later taken by copycat
+   attackers. The real loss to Allbridge's Router (not just the
+   attacker's own cut) is the difference: 190,155.976393 USDC, about
+   $404 more than SlowMist's reported attacker profit, because that
+   $404.42 flash-loan fee left the Router too, just to Aave rather than
+   to the attacker.
+3. Both Router contract addresses (0xaa119f7442ecc28b9a8f236707ada836
+   2cff24ff, name "Router") and (0xf9b710e427bf4d93598e0f80a84de22c7ad
+   9b577, name "CCTPTokenMessenger") independently confirmed as verified
+   Allbridge contracts via Base Blockscout's public getsourcecode API
+   (base.blockscout.com/api), cross-checking their on-chain verified
+   name against the roles SlowMist's prose assigns them. Neither address
+   is the one Allbridge's own live api.core.allbridge.io/token-info
+   endpoint currently returns for Base USDC ("cctpAddress"
+   0x1eFE2C85989D97fEBbD0743cdd79B9F0826314f6, "cctpV2Address"
+   0x214D972b8c869cfcE50D55B595adC7eF336D7FAd) - both of those addresses
+   had zero large outgoing USDC transfers on 2026-08-19 when checked
+   directly, and their contract source (contracts/CctpBridge.sol,
+   contracts/CctpV2Bridge.sol in allbridge-io/allbridge-core-evm-contracts)
+   does not even contain the receivedTokenAmount/hookData/messageHash
+   ledger SlowMist describes. Allbridge runs this older Router +
+   CCTPTokenMessenger pair as a separate, parallel CCTP integration from
+   the one its live API currently promotes; this project does not know,
+   and does not claim to know, whether the vulnerable pair has since
+   been deprecated, paused, or left live.
+4. The Polygon setup transaction SlowMist's article never names: found
+   by pulling the attacker EOA's own short transaction history (Base
+   Blockscout, then Polygon Blockscout, both public APIs, no address
+   guessed), the only transaction in the window with a direct call to
+   MessageTransmitterV2. Its MessageSent event decodes, byte for byte
+   against Circle's own header-offset constants (circlefin/evm-cctp-
+   contracts, src/messages/v2/MessageV2.sol), to source domain 7
+   (Polygon), destination domain 6 (Base), a header `recipient` equal to
+   the exact attack contract address found in step 1, a
+   `destinationCaller` equal to the CCTPTokenMessenger address found in
+   step 3, and a forged amount of exactly 1,000,000,000,000 (1,000,000
+   USDC at 6 decimals) sitting in the message body - matching SlowMist's
+   stated "declared amount was 1,000,000 USDC" exactly.
+5. A real, citable discrepancy: SlowMist's article states this setup
+   call happened "On July 26, 2026". The transaction this project found
+   is timestamped 2026-07-25 20:32:55 UTC by the Polygon chain itself
+   (eth_getBlockByNumber on block 90871052, cross-checked against a
+   second RPC endpoint), one calendar day earlier. Every other number
+   and address in SlowMist's account checks out exactly against the
+   chain; this is the one place it does not.
+
+Circle's own official CCTP domain assignments (ETH=0, AVA=1, OPT=2,
+ARB=3, SOL=5, BAS=6, POL=7, SUI=8) were read from Allbridge's own SDK
+source (allbridge-io/allbridge-core-js-sdk, src/configs/mainnet.ts,
+cctpDomains), not assumed, and match the source_domain=7/dest_domain=6
+values decoded directly from the Polygon transaction's own message
+bytes.
