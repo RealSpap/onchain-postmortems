@@ -4,6 +4,41 @@ One entry per addition or correction to this repo. Each incident added
 with `add_new_entry.py` gets tagged as a matching GitHub release, see
 "Get notified of new postmortems" in `README.md`.
 
+## 2026-09-10 (10)
+
+- Added a 22nd incident: XRP Healthcare (XRPH Wallet), XRP Ledger +
+  Ethereum, 2026-09-03/09-04. Not a DeFi protocol hack in the usual
+  sense: every wallet signed an ordinary, validly-signed payment of its
+  own balance, and XRP Healthcare's own investigation states the XRP
+  Ledger itself was not at fault. Found via xrpl.to's own published
+  forensic article (an XRPL-native analytics platform, independent of
+  XRP Healthcare and of any press outlet), treated only as a place to
+  find addresses and transaction hashes to independently re-check, not
+  as facts to repeat. Every hop of the fund flow was independently
+  re-fetched live and matches the article's stated timestamps to the
+  second: the collector account's own genesis transaction; its first and
+  largest sweep (97,829.051309 XRP); a two-hop handoff through a NEAR
+  Intents deposit address to a second XRPL wallet 9 seconds later; the
+  resulting ETH landing on the attacker's Ethereum address 18 seconds
+  after that (twice, for two separate legs); and the final 178 ETH to
+  445,197.999216 DAI swap, confirmed via that transaction's own DAI
+  Transfer event log rather than assumed from the ETH side alone. A live
+  balance check today shows that exact DAI amount, to the wei, still
+  sitting untouched 6 days later. This entry goes beyond the source
+  article by independently paginating the collector account's entire
+  transaction history from genesis (10,936 transactions), which
+  independently totals 267,679.863641 XRP swept from 3,630 distinct
+  addresses (within 0.006% of the article's own count) and exactly
+  reproduces its "five trustlines" and "forty-five deleted accounts"
+  claims. This incident is not tracked in DefiLlama's hacks feed at all.
+  The underlying root-cause mechanism (the wallet app's own private-key
+  generation, per the source article's unreproduced decompilation of it)
+  is reported as the article's claim, not independently confirmed: no
+  XRP Healthcare GitHub source repo was found to check it against
+  directly (the XRPHealthcare org holds exactly one public repo,
+  `.github`, not the wallet-source repo a web search's own synthesized
+  answer had claimed exists).
+
 ## 2026-09-10 (9)
 
 - Added a 21st incident: Nomic (nBTC / Osmosis allBTC), Bitcoin + Nomic +

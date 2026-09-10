@@ -1,0 +1,43 @@
+=== Step 0: the XRPHealthcare GitHub org has no wallet source repo ===
+Public repos under XRPHealthcare: ['.github']
+
+=== Step 1: the collector account is born (funded, created) ===
+rhAtfgPDJEon1aiNB6nHn6H94AxZ1SVM4Y -> rGGXaBdSRUfdarKDkt2csxL67F8MEGxHVB: 15.399968 XRP at 2026-09-03T21:36:32Z
+Account-creating transaction: True
+
+=== Step 2: the first (largest) sweep ===
+rUdG4couJtA5PTB3WwjtWwGNkqFyeFKMkx -> rGGXaBdSRUfdarKDkt2csxL67F8MEGxHVB: 97829.051309 XRP at 2026-09-03T22:07:40Z
+
+=== Step 3: collector -> NEAR Intents deposit address ===
+rGGXaBdSRUfdarKDkt2csxL67F8MEGxHVB -> raDNxjwbjGCUAix8rKCzrHYY2r9AsCjs1P: 307000.0 XRP at 2026-09-04T00:42:32Z
+
+=== Step 4: deposit address -> bridge wallet (same-block-ish sweep) ===
+raDNxjwbjGCUAix8rKCzrHYY2r9AsCjs1P -> r9R8jciZBYGq32DxxQrBPi5ysZm67iQitH: 306998.99999 XRP at 2026-09-04T00:42:41Z
+Gap from Step 3 to Step 4: 9 seconds
+
+=== Step 5: ETH lands at the attacker's Ethereum address ===
+0xc18beb4462527b8c42187c1dcadaa6bf595b62716a414e1d6948d52f2f9edd3c: 175.80878485237295 ETH at block 25900441, 2026-09-04T00:43:11Z
+0x4212d8600239ab50b67fd29c611815a4e6de693f93673690a7a7bd09e9ad0b25: 2.6481672253280544 ETH at block 25900548, 2026-09-04T01:04:35Z
+
+=== Step 6: the attacker swaps 178 ETH for DAI (single tx, single hop) ===
+178.0 ETH in -> 445197.99921599997 DAI out, block 25900576, 2026-09-04T01:10:11Z
+
+=== Step 7: live balances today, is the DAI still sitting there? ===
+Ethereum destination 0x3dc7bff29fc5a051aab250516babd74ae7068930 today: 445197.99921599997 DAI, 0.45274778737565824 ETH dust
+XRPL collector rGGXaBdSRUfdarKDkt2csxL67F8MEGxHVB today: 4.523963 XRP, owner_count=5
+
+=== Step 8: historical XRP/USD price, for an independent floor on the raw-XRP leg ===
+CoinGecko XRP/USD, 2026-09-03: 1.350370850400152
+
+=== Step 9: full collector tx history, paginated, independently totaled ===
+(This re-fetches every transaction touching the collector account from
+ its own genesis, rather than trusting xrpl.to's own '267,664 XRP / 4,011
+ wallets / 10,281 payments' count. xrplcluster.com rate-limits this
+ endpoint (2000 units/10s), so this took about 12 minutes for ~11k txs.)
+Total transactions touching the collector: 10936
+Transaction types: {'Payment': 10313, 'TrustSet': 5, 'CheckCreate': 283, 'CheckCancel': 283, 'AccountDelete': 45, 'OfferCreate': 5}
+Incoming native-XRP Payments: 6030, from 3630 unique sending addresses, totaling 267679.863641 XRP
+Outgoing native-XRP Payments (Account==collector, Destination!=collector): 15, totaling 311830.903657 XRP
+Other (IOU/token) Payment transactions touching the collector: 4258
+First tx: 2026-09-03T21:36:32Z  Last tx: 2026-09-09T01:43:41Z
+Independent USD floor on the raw-XRP leg alone: 267679.863641 XRP * 1.350370850400152 = $361,467.09
