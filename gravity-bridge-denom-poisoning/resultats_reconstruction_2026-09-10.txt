@@ -1,0 +1,89 @@
+=== Step 1: confirm the bridge contract address from Gravity Bridge's own GitHub ===
+Gravity-Docs/docs/resources.md states: [0xa4108aA1Ec4967F8b52220a4f7e94A8201F2D906](https://etherscan.io/address/0xa4108aA1Ec4967F8b52220a4f7e94A8201F2D906)
+-> matches 0xa4108aa1ec4967f8b52220a4f7e94a8201f2d906, used as the sole anchor for every tx below
+eth_getCode at that address: 13549 bytes of live bytecode (not an EOA)
+
+=== Step 2: decode the 4 poisoning transactions (deployERC20 calls) ===
+tx 0x92b2a61d88b3f68d7d3b5cba4a12f53e0c226287702d72de80a60515987e3532
+  wrapper contract deployed: 0x9a280b869a73b6ff812a599e40abd8dbdfb738c2  decimals=0  eventNonce=61410
+  fabricated _cosmosDenom : ibc/C92D312D79D9C44B6C6F94AF40FFCB30A334D87F08952D6ED9904E3E83A9F50C/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/transfer/channel-10/factory/osmo1m9athjzah02f2mnrgtcke7e5ya3zpvw8lccuss
+  -> embeds real token address of USDC: YES
+tx 0x364ebefab8e7c8ddd425447349cc99dcd75ab1751612f7ef9c60c20fdb9a2bb6
+  wrapper contract deployed: 0xc4e01e1bf95f218e97303fa59d21240a93f27c37  decimals=0  eventNonce=61411
+  fabricated _cosmosDenom : ibc/78713E071A62B715FCB38A5ED318EE16F0AF51A78FBF9F43B419308EED0D93F6/0xdAC17F958D2ee523a2206206994597C13D831ec7/transfer/channel-10/factory/osmo1m9athjzah02f2mnrgtcke7e5ya3zpvw8lccuss
+  -> embeds real token address of USDT: YES
+tx 0x871433af303743d61b3f2a38174e9e6655fdc8937c0689122685509dcabbf066
+  wrapper contract deployed: 0x198930ca72f1ed2399fdae362d3ac6e0b2bcae20  decimals=0  eventNonce=61412
+  fabricated _cosmosDenom : ibc/13745F8040D11ADC6C9FBA34C11C2EDCCE5FA2584B140AD498CF81C1354A7330/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2/transfer/channel-10/factory/osmo1m9athjzah02f2mnrgtcke7e5ya3zpvw8lccuss
+  -> embeds real token address of WETH: YES
+tx 0x67a181c333cb75231613c125215168a1eacbb4021d07cf0d91ca8bbaa65f8245
+  wrapper contract deployed: 0x899c7b3a16ad95db1af5ebe17cef9edef5b87cdb  decimals=0  eventNonce=61413
+  fabricated _cosmosDenom : ibc/02C3D150456C472B7ABC651371E2AB80714CCD41F91E7A29E34AC0AE7238CB12/0x45804880De22913dAFE09f4980848ECE6EcbAf78/transfer/channel-10/factory/osmo1m9athjzah02f2mnrgtcke7e5ya3zpvw8lccuss
+  -> embeds real token address of PAXG: YES
+
+=== Step 3: decode the 4 drain transactions (submitBatch outputs) ===
+tx 0xfce883a8f9a4f3479cce1368b99287973ab40451ac092f5a41e1e09eecab5044  block 25205201  batch nonce 41572
+  USDC Transfer: 0xa4108aa1ec4967f8b52220a4f7e94a8201f2d906 -> 0x7b582033061b96cc3f9421e73a749ed7c62da1f9 : 4,349,701.311883
+tx 0x469274f4edd45ec3284bf60de8eb30086222745f8f8c8b6a955137feed41281d  block 25205217  batch nonce 41573
+  USDT Transfer: 0xa4108aa1ec4967f8b52220a4f7e94a8201f2d906 -> 0x7b582033061b96cc3f9421e73a749ed7c62da1f9 : 434,072.402068
+tx 0x59e52302c53e862fcf833b61eb851ff66e098e3d29db19fd66e5a04734eeb84b  block 25205212  batch nonce 41574
+  WETH Transfer: 0xa4108aa1ec4967f8b52220a4f7e94a8201f2d906 -> 0x7b582033061b96cc3f9421e73a749ed7c62da1f9 : 274.345940
+tx 0xd3cdfa10be4f0cde6b3f294856a8bdd840983dcef29a5dc24c70c36e2d7f9ef0  block 25205207  batch nonce 41575
+  PAXG Transfer: 0xa4108aa1ec4967f8b52220a4f7e94a8201f2d906 -> 0x7b582033061b96cc3f9421e73a749ed7c62da1f9 : 14.163836
+
+Batch nonces found: [41572, 41573, 41574, 41575] (rekt.news: "batches 41572 through 41575")
+
+=== Step 4: cross-check against Osmosis tokenfactory state, independently ===
+denoms_from_creator(osmo1m9athjzah02f2mnrgtcke7e5ya3zpvw8lccuss) live query returns 4 denoms:
+  factory/osmo1m9athjzah02f2mnrgtcke7e5ya3zpvw8lccuss/0x198930Ca72F1ed2399FDAe362D3AC6e0b2bCae20/x
+    -> embeds Ethereum wrapper 0x198930ca72f1ed2399fdae362d3ac6e0b2bcae20, matches Step 2's fake WETH deploy: True
+  factory/osmo1m9athjzah02f2mnrgtcke7e5ya3zpvw8lccuss/0x899C7b3A16ad95DB1aF5EBE17ceF9eDeF5b87cdb/x
+    -> embeds Ethereum wrapper 0x899c7b3a16ad95db1af5ebe17cef9edef5b87cdb, matches Step 2's fake PAXG deploy: True
+  factory/osmo1m9athjzah02f2mnrgtcke7e5ya3zpvw8lccuss/0x9a280B869A73b6fF812a599E40ABd8dbdFB738c2/x
+    -> embeds Ethereum wrapper 0x9a280b869a73b6ff812a599e40abd8dbdfb738c2, matches Step 2's fake USDC deploy: True
+  factory/osmo1m9athjzah02f2mnrgtcke7e5ya3zpvw8lccuss/0xC4E01e1Bf95f218e97303FA59D21240A93f27c37/x
+    -> embeds Ethereum wrapper 0xc4e01e1bf95f218e97303fa59d21240a93f27c37, matches Step 2's fake USDT deploy: True
+-> 4/4 Osmosis-side denoms independently match an Ethereum-side deployERC20 call, by wrapper address
+
+=== Step 5: block timestamps, independently, vs. rekt.news's "drained on May 29th" ===
+earliest of the 8 txs: 2026-05-30 01:52:35 UTC
+latest of the 8 txs:   2026-05-30 02:31:11 UTC
+rekt.news's own article text: "drained on May 29th"
+-> all 8 on-chain timestamps read UTC 2026-05-30, not May 29; DefiLlama's own hacks feed already uses 2026-05-30 (see Step 6)
+
+=== Step 6: DefiLlama's own hacks feed for this incident ===
+{
+  "date": 1780099200,
+  "name": "Gravity Bridge",
+  "classification": "Key Compromise",
+  "technique": "Validator Key Compromised",
+  "amount": 5400000,
+  "chain": [
+    "Ethereum"
+  ],
+  "bridgeHack": true,
+  "targetType": "DeFi Protocol",
+  "source": "",
+  "returnedFunds": null,
+  "defillamaId": "3293",
+  "language": "Solidity"
+}
+DefiLlama date 1780099200 = 2026-05-30 00:00:00 UTC
+DefiLlama classification/technique: "Key Compromise" / "Validator Key Compromised"
+-> contradicted by Steps 2-4 above: every validator signature on the outgoing batches was genuine,
+   the registry itself was poisoned via a permissionless function call, no key was compromised
+
+=== Step 7: USD total, CoinGecko's own theft-day snapshot ===
+  4,349,701.311883 USDC @ CoinGecko 2026-05-29 $1.0001 = $4,350,000.83
+  434,072.402068 USDT @ CoinGecko 2026-05-29 $0.9988 = $433,538.65
+  274.345940 WETH @ CoinGecko 2026-05-29 $2,008.1145 = $550,918.05
+  14.163836 PAXG @ CoinGecko 2026-05-29 $4,481.4076 = $63,473.92
+TOTAL: $5,397,931.45
+DefiLlama's own tracked figure for this incident: $5,400,000
+
+=== Step 8: current status of the funds, independently ===
+  Primary Theft Wallet (0x7b582033061b96cc3f9421e73a749ed7c62da1f9) current ETH balance: 0.3854702023555225
+  Secondary Theft Wallet (0x4d3ca32e687e871a58b78acac73be59ac37c7a47) current ETH balance: 8.957084162174299
+  Tornado Cash routing address named by rekt.news (0xc8c71ae4261e55a66d9967f2ac252be4e669f562) current ETH balance: 0.015616571993976936
+
+See README.md for the full reconstruction and every caveat.

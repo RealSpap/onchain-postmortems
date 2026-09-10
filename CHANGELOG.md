@@ -4,6 +4,20 @@ One entry per addition or correction to this repo. Each incident added
 with `add_new_entry.py` gets tagged as a matching GitHub release, see
 "Get notified of new postmortems" in `README.md`.
 
+## 2026-09-10 (3)
+
+- Added a 15th incident: Gravity Bridge denom-poisoning (Ethereum +
+  Osmosis + Gravity Chain, 2026-05-30). Independently reconstructed from
+  Gravity Bridge's own GitHub-documented contract address; decoded the
+  fabricated Cosmos denom string directly from the exploit's own
+  on-chain event data and cross-checked it live against Osmosis's own
+  tokenfactory state (4-of-4 match across two unrelated chains).
+  Independently derived loss ($5,397,931.45) lands within 0.04% of
+  DefiLlama's tracked $5.4M, but this entry's own decode of the raw
+  event data contradicts DefiLlama's "Key Compromise" classification for
+  this incident: every validator signature was genuine, the registry was
+  poisoned via a permissionless function call, not a compromised key.
+
 ## 2026-09-10 (2)
 
 - Added a 9th incident: Cosmos EVM shared staking-precompile

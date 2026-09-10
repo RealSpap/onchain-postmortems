@@ -1,0 +1,98 @@
+Press source found (web search + direct fetch, 2026-09-10):
+
+rekt.news, "Gravity Bridge - Bridge Attack - Rekt" (published 2026-06-04,
+https://rekt.news/gravity-bridge-rekt). The most technical writeup found,
+crediting CoinTelegraph, Specter, QuillAudits, Gravity Bridge, PeckShield,
+ForgeAudit, Popeye, TheBlock, Blockchain News, and Least Authority. This
+is the only source found that names all 8 Ethereum transaction hashes,
+the attacker addresses, the vulnerable contract, and the Cosmos-side setup
+narrative (validator registration, Osmosis tokenfactory minting, IBC
+transfer). Every Ethereum-side claim it makes was independently
+re-derived from raw chain data in reconstruct_exploit.py rather than
+copied from the article; see Steps 2-3 there for exact figures that go a
+few decimals further than the article's own rounding.
+
+Gravity Bridge's own public statements (per rekt.news, quoted, not
+independently re-fetched since they were posted to X/Twitter, not a
+persistent primary-source document): a halt announcement on 2026-05-30,
+and a one-line follow-up about validators halting successfully. No
+technical postmortem, compensation plan, or contract-level root-cause
+disclosure was ever published by the team, per rekt.news's own account.
+
+DefiLlama hacks feed (api.llama.fi/hacks, queried live 2026-09-10, full
+JSON in resultats_reconstruction_2026-09-10.txt Step 6):
+  name: "Gravity Bridge", date: 1780099200 (2026-05-30 00:00:00 UTC),
+  amount: $5,400,000, classification: "Key Compromise",
+  technique: "Validator Key Compromised", chain: ["Ethereum"],
+  bridgeHack: true, source: "" (empty, as in every other record checked
+  in this research program - DefiLlama's hacks feed never links a primary
+  source directly).
+
+Gravity Bridge's own GitHub organization (primary source for contract
+identity, used as the sole starting anchor in reconstruct_exploit.py
+Step 1):
+  - Gravity-Bridge/Gravity-Docs, docs/resources.md, fetched live via
+    raw.githubusercontent.com: states the "Gravity.sol Contract Address"
+    directly as 0xa4108aA1Ec4967F8b52220a4f7e94A8201F2D906.
+  - Gravity-Bridge/Gravity-Bridge, solidity/contracts/contract-explanation.md:
+    describes the 3 events the Gravity.sol contract emits
+    (TransactionBatchExecutedEvent, SendToCosmosEvent, ValsetUpdatedEvent)
+    and the submitBatch/updateValset/sendToCosmos security model; states
+    plainly that "the bridge accepts event-based claims once the
+    validator set signs off, rather than independently verifying the
+    Ethereum event itself" - exactly the trust assumption the exploit
+    abused on the Cosmos side. This document does not separately
+    enumerate an ERC20DeployedEvent; its existence and shape (indexed
+    wrapper address, then _cosmosDenom/_name/_symbol strings, a uint8
+    decimals, and a uint256 eventNonce) were independently confirmed by
+    decoding the raw event data emitted by the bridge contract itself in
+    the 4 deployERC20 transactions (Step 2), not assumed from this doc or
+    from the article.
+
+Naming collision flagged for anyone re-running this search: docs.gravity.xyz
+is a DIFFERENT, unrelated project (an L1 called "Gravity", ticker G,
+formerly Galxe) that also uses the word "Gravity". It was fetched once
+during this research, produced a completely different contract address
+(GravityPortal, 0x76cf...), and was discarded as the wrong project before
+anything from it was used. The correct primary source is
+Gravity-Bridge/Gravity-Docs on GitHub and gravitychain.io, the Cosmos
+IBC-Ethereum bridge with the GRAV token, confirmed by cross-referencing
+the contract address rekt.news names against this GitHub doc directly.
+
+Cosmos-side verification attempted and NOT achieved (retried once with a
+different endpoint, per this project's own standing rule, then reported
+rather than silently dropped or silently trusted):
+
+  - Gravity Chain (gravity-bridge-3) tx lookup for the validator-creation
+    hash rekt.news names (F6AA34E8D01C55A5F1E38310E816DBB4BEE25B2FDB29ACD7ED1E25352BA62009):
+    "tx not found" against both https://rest.cosmos.directory/gravitybridge
+    (Cosmos SDK REST) and https://gravity-rpc.polkachu.com (Tendermint
+    RPC tx_search), 2026-09-10. Both nodes are live and synced (confirmed
+    via /cosmos/base/tendermint/v1beta1/blocks/latest, current block
+    23,605,733 at query time), so this is read as the nodes not retaining
+    tx index back to the 2026-06-25/07-17 window the article describes,
+    not as evidence the transaction doesn't exist.
+  - The validator address rekt.news names for the attacker's "julia666"
+    self-delegation (gravityvaloper1rdwckpx2p3mwu4k8xdz8vmd4x3mqx4v9ars8k)
+    fails bech32 checksum validation against both of the same two nodes
+    ("invalid checksum (expected rmjq46 got 9ars8k)"). This looks like a
+    transcription issue somewhere between the source and this project
+    (a copy/render artifact splitting the address across markup, most
+    likely), not necessarily an error in rekt.news's own investigation,
+    but it means this project could not independently query Gravity
+    Chain's staking module for that specific validator either.
+  - What WAS independently confirmed instead, and stands in for the
+    Cosmos-side claim rekt.news could not otherwise be checked against:
+    Step 4 of reconstruct_exploit.py queries Osmosis's own tokenfactory
+    module live (a completely different, independently-run public LCD,
+    not the Gravity Chain node above) for every denom the named attacker
+    Osmosis address ever created, and finds exactly 4, each embedding one
+    of the 4 wrapper-contract addresses this project independently
+    decoded from the Ethereum-side deployERC20 events in Step 2. That
+    4-for-4 match across two unrelated chains, obtained from two
+    independent live queries, is the strongest evidence this project has
+    for the Cosmos-side half of the mechanism, and it corroborates
+    rekt.news's account without depending on Gravity Chain's own
+    (unreachable) transaction history.
+
+See README.md for how this project weighs the above.
