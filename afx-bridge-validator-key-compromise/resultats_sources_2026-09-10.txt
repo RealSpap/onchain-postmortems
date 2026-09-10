@@ -1,0 +1,17 @@
+{
+  "date": 1784678400,
+  "name": "AFX Bridge",
+  "classification": "Key Compromise",
+  "technique": "Validator Key Compromised",
+  "amount": 24150000,
+  "chain": [
+    "Arbitrum"
+  ],
+  "bridgeHack": true,
+  "targetType": "DeFi Protocol",
+  "source": "",
+  "returnedFunds": null,
+  "defillamaId": "8006",
+  "parentProtocolId": "parent#afx-protocol",
+  "language": "Solidity"
+}
