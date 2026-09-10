@@ -1,0 +1,105 @@
+Primary sources for the Cosmos EVM (MANTRA / TAC / KiiChain) incident,
+collected 2026-09-10.
+
+1. Cosmos Labs' own post-mortem, published on its GitHub security org
+   (not a block explorer search, not a press summary), fetched directly
+   from raw.githubusercontent.com:
+   https://github.com/cosmos/security/blob/main/communications/cosmos_evm_GHSA-7g4w-cg88-2cq2_post_mortem.md
+   GHSA-7g4w-cg88-2cq2, dated 2026-08-28.
+
+   Key excerpts (verbatim):
+
+   "Six networks were exploited. Attackers exchanged stolen tokens for
+   approx. USD 2.87M in various other assets on DEXes, based on August 19
+   prices. In addition, an estimated USD 2.85M was sold on centralized
+   exchanges, based on publicly available volume data."
+
+   "The underlying figures have been provided to us by the affected chains
+   and are consistent with estimates based on available information, but
+   have not been independently audited: 2,613,674.48 USDT, 114.129045 ETH,
+   93.78 TON, 1.393618 USDC, and 98.87 OSMO."
+
+   "We are aware of three other chains that have been attacked using this
+   same chain of vulnerabilities on or after this date, and we are not
+   including their full details in this timeline for brevity."
+
+   Timeline anchors quoted and independently re-verified against each
+   chain's own RPC in reconstruct_exploit.py:
+   - "19:06:00 -- MANTRA attack #1 (tx 0xdf4947ad..., block 17444928)"
+   - "22:59:01 -- MANTRA attack #2 (tx 0x4956c7d9..., block 17449159)"
+   - "19:46:37 -- TAC attacked ... (tx 0xae4e9b70..., height 24662148)"
+   - "19:46:37 -- TAC exploitation: 2,985,651,403.40 TAC withdrawn from the
+     bonded_tokens_pool (tx 0xae4e9b70..., height 24662148)"
+   - "~21:00-22:50: KiiChain is exploited via the identified vulnerability
+     (tx 0xf45c07e9..., block 9355102). Approximately 148.3M KII is
+     withdrawn through 18 distinct exploit iterations ... Asset liquidation
+     on BNB Chain: The attacker swaps 64.6M KII for 1,607,323.41 USDT via
+     PancakeSwap (BSC-USD/KII pool 0x238a3588...)."
+
+   NOTE: the last bullet's own pairing of tx hash to block number is the
+   one this project found to be wrong -- see reconstruct_exploit.py Step 4
+   and the README's "What it found" section.
+
+2. DefiLlama hacks API (https://api.llama.fi/hacks), fetched 2026-09-10,
+   the three records matching this incident by name:
+
+   {"date": 1787270400, "name": "MANTRA Chain", "classification":
+    "Access Control", "technique": "Improper Access Control", "amount": 0,
+    "chain": ["MANTRA"], "bridgeHack": false, "targetType": "Chain",
+    "source": "", "returnedFunds": null, "defillamaId": "chain#mantra"}
+   (date 1787270400 = 2026-08-21 UTC)
+
+   {"date": 1787356800, "name": "TAC", "classification": "Protocol Logic",
+    "technique": "Withdrawal Logic Flaw", "amount": 7500000,
+    "chain": ["TAC"], "bridgeHack": false, "targetType": "Chain",
+    "source": "", "returnedFunds": null, "defillamaId": "chain#tac"}
+   (date 1787356800 = 2026-08-22 UTC)
+
+   {"date": 1787356800, "name": "KiiChain", "classification":
+    "Token & Share Accounting", "technique": "Arithmetic Error",
+    "amount": 9700000, "chain": ["KiiChain"], "bridgeHack": false,
+    "targetType": "Chain", "source": "", "returnedFunds": null,
+    "defillamaId": null}
+
+   "source" is empty on all three: DefiLlama cites nothing external for
+   any of them. KiiChain's defillamaId is null, unlike MANTRA's and TAC's
+   own "chain#..." ids -- KiiChain is not fully registered as a chain
+   entity in DefiLlama's own system, only as a loose hacks-feed row.
+
+   Sum of these three DefiLlama figures: $17,200,000, for 3 of the 6
+   chains Cosmos Labs says were exploited. That is roughly 3x Cosmos
+   Labs' own total realized figure (~$5.72M) for ALL SIX chains combined.
+
+3. News coverage found via web search, consistent with Cosmos Labs' own
+   account on the broad strokes (six Cosmos EVM chains, staking-precompile
+   underflow, MANTRA the first hit): The Hacker News, The Block, rekt.news
+   (KiiChain-specific writeup, itself citing per-transaction detail this
+   project independently re-derived from raw log data rather than taking
+   on faith), BeInCrypto, CoinDesk, TechTimes, AmbCrypto, CoinoTag. None
+   of these outlets cite a source more primary than Cosmos Labs' own
+   post-mortem for the numbers used here.
+
+   rekt.news, specifically, states: "Pre-exploit price: ~$0.0977 per KII =
+   $9.7 million notional value" and "Actual realized by attacker from
+   swaps: ~$1.6 million" for the KiiChain leg -- independently arriving at
+   the same distinction between notional and realized value this project
+   makes about DefiLlama's tracked figure, from a different angle (price
+   history rather than a direct DefiLlama API pull). Note: rekt.news's own
+   $9.7M-via-$0.0977-ATH arithmetic does not itself reproduce DefiLlama's
+   $9,700,000 (148,326,583.15 KII x $0.0977 = ~$14.49M, verified by this
+   project); DefiLlama's own $9.7M figure implies a lower per-KII price
+   (~$0.0654) that this project cannot trace to a specific quoted source,
+   only to the same notional-vs-realized pattern. Reported as a directional
+   finding (DefiLlama's figure values the full extracted amount, not what
+   was actually turned into stablecoins), not as a reproduction of
+   DefiLlama's exact arithmetic.
+
+4. MANTRA (OM) token price: no single historical-price API was queried;
+   the $0.006/OM figure in this project's README and script is an implied
+   price, solved from the widely-reported "$3.6M lost" headline figure
+   divided by the 600,000,035.50 OM this project independently measured
+   (Step 3 of reconstruct_exploit.py) as attack #1's on-chain balance
+   gain. CoinGecko's current OM price at the time this was written was
+   $0.004418 (same order of magnitude, lower, consistent with OM's price
+   having fallen further since the exploit). This is flagged as a
+   cross-check, not a verified historical price.

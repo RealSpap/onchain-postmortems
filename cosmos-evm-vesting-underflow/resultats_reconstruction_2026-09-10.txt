@@ -1,0 +1,51 @@
+=== Step 1: bonded_tokens_pool address, derived from SHA256('bonded_tokens_pool')[:20] ===
+  0x4feA76427B8345861e80A3540a8a9D936FD39391  (identical on every Cosmos SDK chain; not looked up)
+
+=== Step 2: TAC -- re-fetching the cited exploit transaction ===
+  tx 0xae4e9b708ecef134a18aef8a1da9b4d24aa2a0e87f98d02695beae588cda46fc
+  block (live from RPC): 24662148  (post-mortem states 24662148)
+  timestamp (live from RPC): 2026-08-22T19:46:37+00:00  (post-mortem states 2026-08-22T19:46:37+00:00)
+  log[0].address: 0x0000000000000000000000000000000000000800  (== staking precompile: True)
+  log[0].topics[0]: 500599802164a08023e87ffc3eed0ba3ae60697b3083ba81d046683679d81c6b
+  bonded_tokens_pool balance, block 24662147 -> 24662148: 2,985,651,403.404713 -> 0.000000 TAC
+  TAC drained from bonded_tokens_pool: 2,985,651,403.404713
+  (post-mortem states: 2,985,651,403.40 TAC withdrawn from bonded_tokens_pool)
+  attacker EOA 0xecb0Af97644d2c28C58369c663007a1b77c77c84 net gain this tx: 2,985,651,402.729713 TAC (slightly below the pool's loss: gas paid in the same tx)
+
+=== Step 3: MANTRA -- re-fetching both cited attack transactions (archive RPC) ===
+  MANTRA attack #1: tx 0xdf4947ad49d8cf873f8dff98eafb0bdb65da6f5e2987dcb4b6b20b44f0971a86
+    block (live): 17444928  (post-mortem: 17444928, match=True)
+    timestamp (live): 2026-08-20T19:06:00+00:00  (post-mortem: 2026-08-20T19:06:00+00:00, match=True)
+    attacker EOA 0x8cCB0b442737961017ad419826140F06585A477F net gain, this tx alone: 600,000,035.503802 OM (EVM-view units)
+  MANTRA attack #2: tx 0x4956c7d9919bd50602162885e8637fc6de6a9fd1d41321ebbb61875556deb1e5
+    block (live): 17449159  (post-mortem: 17449159, match=True)
+    timestamp (live): 2026-08-20T22:59:01+00:00  (post-mortem: 2026-08-20T22:59:01+00:00, match=True)
+    attacker EOA 0x8cCB0b442737961017ad419826140F06585A477F net gain, this tx alone: 120,923,932.384402 OM (EVM-view units)
+
+  Widely-reported MANTRA loss figure: ~$3,600,000
+  Implied OM price from attack #1 alone ($3.6M / 600,000,035.503802 OM): $0.006000/OM
+
+=== Step 4: KiiChain -- checking the post-mortem's own tx-hash/block pairing ===
+  Post-mortem pairs tx 0xf45c07e94a4d4474220c96b1fff5f798bf22f4a4adf159d8f3e28c52caf1e840 with block 9355102.
+  Live RPC says this tx hash is actually at block: 9355107 (match=False)
+  Live RPC log count on this tx: 0 (no staking-precompile event -- this is a downstream call, input selector (see eth_getTransactionByHash))
+
+  Fetching what is actually AT block 9355102:
+  block 9355102 contains: af0ac52bbef9996ef0c22a93cba5f55a71de79d1799175c6d8bcc35988d7ae9b
+  log[0].address: 0x0000000000000000000000000000000000000800  (== staking precompile: True)
+  delegated amount decoded from this log: 2000000000000000001 akii = 2.000000000000000000 KII
+  (matches the repeating '2 KII + 1 wei' delegate pattern this incident used on every one of KiiChain's 18 exploit iterations)
+
+=== Step 5: DefiLlama's own tracked figures for this incident (api.llama.fi/hacks, fetched 2026-09-10) ===
+  MANTRA Chain : amount = $0            (defillamaId 'chain#mantra')
+  TAC          : amount = $7,500,000     (defillamaId 'chain#tac')
+  KiiChain     : amount = $9,700,000     (defillamaId: null -- not a registered chain entity)
+  Sum for these 3 of the 6 chains named/implied by Cosmos Labs: $17,200,000
+  Cosmos Labs' own post-mortem states a TOTAL REALIZED figure across ALL SIX chains of
+  approximately $5,720,000 (USD 2.87M sold on DEXes + USD 2.85M sold on CEXes),
+  explicitly 'not independently audited'.
+  DefiLlama/total-extracted implied price -- KII: $0.0654/KII, TAC: $0.002512/TAC
+  Actually-realized price on the sold portion (from the post-mortem's own swap totals) -- KII: $0.0249/KII, TAC: $0.000832/TAC
+  Ratio (DefiLlama-implied / actually-realized) -- KII: 2.63x, TAC: 3.02x
+  Reading: DefiLlama's per-chain dollar figures track closer to the FULL amount extracted at a
+  spot-ish price than to what the post-mortem says the attacker actually turned into stablecoins.
