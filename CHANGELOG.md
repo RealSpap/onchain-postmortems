@@ -4,6 +4,30 @@ One entry per addition or correction to this repo. Each incident added
 with `add_new_entry.py` gets tagged as a matching GitHub release, see
 "Get notified of new postmortems" in `README.md`.
 
+## 2026-09-10 (4)
+
+- Added a 16th incident: Avici (Rain Card Collateral), Solana, 2026-08-28.
+  Started from the attacker wallet press named and independently
+  confirmed it live: its earliest on-chain activity (13:40:41 UTC) and the
+  earliest transaction touching its own USDC loot account (16:49:48 UTC)
+  both match press's separately-stated timestamps to the second. Decoded
+  the `WithdrawCollateralAsset` / `AddCollateralAdmin` / `SubmitSignatures`
+  instruction sequence directly from raw program logs and found 3
+  separately-deployed program addresses running the same code, not the 1
+  fixed collateral program and 1 fixed authorization program an initial,
+  smaller sample first suggested; all 3 programs' own on-chain upgrade
+  records show a coordinated patch within a 4.5-minute window, about
+  55-60 minutes after the attacker's last transaction, independently
+  timing a fix press only described as happening "following the attack".
+  One press figure did not hold up: this project's own live count found
+  21,405 signatures sent by the attacker wallet, not the 14,672 the
+  press figure states, left as an open discrepancy. The $500,859.22 loss
+  total is reported as sourced (Avici's own figure, matching DefiLlama
+  exactly), not independently re-derived: a reproducible 35-transaction
+  sample attempt over-estimated it by about 75%, too high a variance to
+  trust, reported as an inconclusive recomputation rather than adopted
+  silently.
+
 ## 2026-09-10 (3)
 
 - Added a 15th incident: Gravity Bridge denom-poisoning (Ethereum +

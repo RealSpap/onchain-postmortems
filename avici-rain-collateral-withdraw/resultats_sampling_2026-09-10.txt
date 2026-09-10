@@ -1,0 +1,48 @@
+attacker USDC loot account: A5fBB5sLNMiF6NGz8JPpeKM2Ke6tCvmmAZ7PZVsp6rZy
+collecting the full signature list touching that account (paginated)...
+total: 5392
+
+drawing a fixed, reproducible random sample of 35 (seed=42)
+   0  3gAwqmupYdCnRE5TqCXHHpNNpHTSa7ywLLkx19DVqs5SzRee8CbZTpwLgYj7KJqiRiQK9PPxvuUWqGVNGqrcCtya  delta=+1669.061827 USDC
+   1  2CkabwWB5eYmR7nBdwrexWeBBrvL36pKPDkFhWZRc2oNGUf7gY7CEx4LxdXGbt3gLDy9yAgsbFgAJTnFUcNXt33K  delta=+0.000000 USDC
+   2  5Zj4HexpAgK52vqQCFufXGq96cDcCtY6Bq8La1WBxmMMYFAHmuZauwHjN4AykTwUwitfYkRupWtuY27T8qvZLSc5  delta=+0.000000 USDC
+   3  5TbLSBUfvGu6EfqLQFtUuMkNaR14T1RmgDUjFtQfPpH2YeV5a69GLmPGBsgqMJg4wzfXsSb1GdrcvUdksJH9nyFm  delta=+6.000000 USDC
+   4  3XvZXxGigxpeFeeufpnPVsqJaeXcAM5AVgvVdxgS8QoWJ9vU6hn3JZGZe3PtpQZJZaj7oTXMbWhSNhY1nnroAXvj  delta=+0.000000 USDC
+   5  2FwDoururb6oHWCzPSEznDDDXmVhUFzEgBc3e9fBSSXMsciwjvXWKSTccs6fQKzh1aVXEjdTDdvBzBtvW8dDxV9o  delta=+0.000000 USDC
+   6  5w3uFMxtxcsG88pTnnkqXoyYrGWtDN9ZGY9j6jgMKb5BoWZE71uukaBBipJdSmUsaFQvd9Q31BfTSLCcKXMy72id  delta=+2936.455500 USDC
+   7  3V76QiTCb3rNVgSf14Jv4XGoq6NT5knNZz4XmiiEwXwo6dkCd1BfCz5zV2T1qGi8BuHhUTf4r4cyFpDQ9xPDHE37  delta=+0.000000 USDC
+   8  33LM8UXbWBTBtt3Uc2BLTohyqYVXActK3iCtbZK3SNocvKBetuBqWq9v8FHmDmKCPtvSxaSyNDNmwfJoMrbKELpL  delta=+0.000000 USDC
+   9  4e94L5YwZgYePuJJnBz1yuh8oK11iyq5Wwxp9oHDjrCye2q3L5eSHqCYm5MpVEf67CermWEfpmd74RyQSqU35jNy  delta=+0.000000 USDC
+  10  5y7BTBi9as5dxTd1nJX3KGXqzDDonWfqH2ptdCwFG1yAqjsH59Jt76eyou6R95BrQijmFX2Qk2QspadcjP1ULGpe  delta=+0.000000 USDC
+  11  5o8gi868UhtcdzMaxyuD2EvaaskdKxbNpB9jJjPofA1ghVe24PFf6tG4vLQDuuMBHfM4dq6M23ooA9nAVRW823ES  delta=+0.000000 USDC
+  12  NqY6chkCRaL5ge4X2LU2j37BYpd1Feetwta6ecEquLHKMi2HGvGvYY8uqCgBtvK1Si6Q5yXMkQDvVK3Hky1hzP3  delta=+0.000000 USDC
+  13  542yhhMPnWF9E6a3aVdf71kXsQv8ZtpHCN8G1qeMGNQ2MeSjYMgiwpCn9yKiAWpeuHG3FifVaoyxB6jQW7DYiecD  delta=+0.000000 USDC
+  14  c8cNzeJgKxuAjhZqXmdo7Js2JKAnZQhaUX2N6qDR5qm4m5ypZ9TSyHSiUbStJR8oPAGiVcq7zE3wWwqeLgb1rnn  delta=+361.392200 USDC
+  15  669vcF1aZ3xn6MLinhsDC5EwEYMWRfRDwVFJzLH7LuhfQDTL84B73B39Z7htcfyTo8EYkVEPgRjtXu9eu133sWHa  delta=+0.000000 USDC
+  16  6ZZC9Jtummz9op4W2wQsMqFwpc1VuaPuDZWeuqi16Z9aKUFL7tfRp8L5ELR7YwwpmUo3cD2hEm7qteK7eBNXpXZ  delta=+5.000000 USDC
+  17  3NFUMybhKCWLj3C5eYfThZGuuWqKH7FAb29K7TzenFFJR1EFWCRZe9pdcCPyNWSkD3fi5w2EWQnocLfGa8m4dd2u  delta=+0.000000 USDC
+  18  Us4nTD2cYrMTbrgm39vcRGiAyE1Rv6E1EZHh1zRgAjL5x5x3BFVhmJGCuChFncUUFyQ5kJfurcZG8AAw1jskzDn  delta=+0.000000 USDC
+  19  ta74AQS9vhYqBYparV1och9d8FchGEmEbXPzBvxGjZPw9WuiahdQWmrFMfkLfqtaB2Mr9rgxqzxsSZFjDV15RoY  delta=+89.950000 USDC
+  20  47S5JFjLABt3yxk9iBeAJpYQuck66bUYDeWMgGVTQy4F5csApaKyQgk2QZeLmfEw88PjF5gWqfQKUUuTUS8QJu3B  delta=+348.008886 USDC
+  21  4Rs2QFk9DSkB7VaQCN2QNAMkXEaYCMy4aqyFrAFgmc9sdvkJKFNHJyhsnqaHZD2ui2qscS5U5LzcwoKTDNC7zYrg  delta=+0.000000 USDC
+  22  2LqAxPNhnVc1UhuH8aT1K7rXt1qGFHtuwsmHF6kwhnJLbmZyhLuBApFpz77EKuswQrdZ9nFcEyUVD2JdNaZd6aoj  delta=+0.000000 USDC
+  23  gaarefuPkY1gfmbfotuuERwNcNvM3RWLzyK1cWCMvjbKJkQeGHBdiEXHk79pA5AZ6SnZiV6Pfwdvrs1x5vuEHHz  delta=+200.105311 USDC
+  24  2ikRxzimsAKn6cU4jHoRgVup6RzV2XQUxbkDh6vSvZSui6PdCjnPHtanawVpN97fJqXxg9LoEDkYRScLbPUFJPJh  delta=+0.000000 USDC
+  25  3ct7UeUQS62w826dNc7BSudzDNhVYBmTXNRECkub2cbY6uQLPeao7HoJytd4fE5uXrYBxYMjyq96Z1xGqU75R9iZ  delta=+0.000000 USDC
+  26  4oA619CBQ5HNb1VrPL6f3Btv2Dht28rShE26tASUQKpJXzC6J4zstqBWCQCPHgTNG77ugdDogFYDdzxUspdbPgpF  delta=+0.000000 USDC
+  27  5wonQEqpoZuCfauDSnPSHJWrmMaepKZoKyzTmffR9uLGcP35TqeqK5nZPsGY7uQ8sfXwLXdWqN9y4ZFuzinWnQEh  delta=+0.000000 USDC
+  28  3H7X2CKSF1veS5iMeS4z5PQb5T8cDfws9CiGsEULzCF5zUT8BnzGcmB9qZJK3BWQXEJ1DzWw55J8BhE1NyMfMwyz  delta=+0.000000 USDC
+  29  s9eBggdLu17kFnPSxR7eCrSWex9NbsvFkgRw3VE39GbMRP2AhDbBss79MUykH5CcPYuk41x3SgjeUtGZJJzk7ze  delta=+60.690000 USDC
+  30  3Ldx8X1fTRAn25xCJFybzpNahL3PAaJoHq9EuC9p6bRk3jeJk2Dsx2EtixY1xgutBTfASnGEs4ithwU6Rjcc9Huh  delta=+0.000000 USDC
+  31  3SKFPTcVhRY32U3EiNuJHMQFm5ZFqcEazvRkLZsAtbgT2aECXh67CdCQbBejiJa5BJ9CBiPsQPdGFfaZFjBDsL9x  delta=+0.000000 USDC
+  32  3gDpZNrhJ56JL8Kq4MtbxB3Mrco1B9feMNrfMbZUu2jo5mbiVjTtdno3AAZowfWzZmDkumD4QtBQnELNhscLkZQB  delta=+9.431273 USDC
+  33  3GrUnqgUY5NDBUcdxX7oFvea6yx3x78toaxHUpPMSG14EwE3Uyfb5UfLtTZV6P3RXP4a8vkVaHPArUFB9w1HBEU4  delta=+0.000000 USDC
+  34  2ni2e44QACq31nbH4XAk7iBBXPLPR8xWBoEby4CuWz6WuigHaX6w8mcGdFzPCde5oGkMqjpLBo3LDATCKsJoNcpj  delta=+0.000000 USDC
+
+10 of 35 sampled transactions moved USDC into the loot account (29%)
+mean delta across all 35 sampled (incl. zero): 162.459857 USDC
+naive extrapolation over all 5392 transactions: $875,983.55
+Avici/DefiLlama's own reported figure: $500,859.22
+naive extrapolation is +75% off the reported figure
+-> the sample's variance is too high (a handful of large withdrawals dominate a mostly-zero
+   distribution) for 35 transactions to extrapolate a reliable independent total; see README.md

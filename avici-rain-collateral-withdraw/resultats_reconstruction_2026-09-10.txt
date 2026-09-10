@@ -1,0 +1,66 @@
+=== Step 1: full signature history of the attacker wallet, live ===
+total signatures found: 21405
+newest: 2026-08-28T19:26:34Z  oldest: 2026-08-28T13:40:41Z
+Press (bleap.finance) states the wallet's first funding (via deBridge) landed at 13:40 UTC
+and separately reports "14,672 transactions, including 2,344 failed attempts".
+-> earliest tx found here matches the 13:40 UTC funding claim; total signature count found
+   here (21405) does not match the press figure (14,672); reported as a discrepancy below,
+   not silently resolved either way.
+
+=== Step 2: signatures touching the attacker's own USDC loot account ===
+attacker's USDC associated token account: A5fBB5sLNMiF6NGz8JPpeKM2Ke6tCvmmAZ7PZVsp6rZy
+transactions touching this account: 5392
+earliest one: 2026-08-28T16:49:48Z
+Press (bleap.finance) states the first exploit call happened at 16:49:48 UTC
+-> matches: 2026-08-28T16:49:48Z
+
+=== Step 3: decode one representative withdrawal, straight from raw logs ===
+  Program CWgkFB7ngUc9cGD1LryyhP7h6xYWtwrAjhSKKCoR1gkz invoke [1]
+  Program log: Instruction: WithdrawCollateralAsset
+  Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA invoke [2]
+  Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA consumed 156 of 191806 compute units
+  Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA success
+  Program data: 5GOlivLB3KIZ6BqqmS6zGGjhcSLrw8B9bSKcvppXEZc9GVpWTHqqvMb6evO+2606PWXzaqvJdDGxu+TC0vbg5HymAgNFL11h10fqsR44i6xDQORcl9Q/kTrqwWoMncBKgx3qSnweVoAAAAAAAAAAAA==
+  Program CWgkFB7ngUc9cGD1LryyhP7h6xYWtwrAjhSKKCoR1gkz consumed 16215 of 206000 compute units
+  Program CWgkFB7ngUc9cGD1LryyhP7h6xYWtwrAjhSKKCoR1gkz success
+-> instruction 'WithdrawCollateralAsset' runs on program CWgkFB7ngUc9cGD1LryyhP7h6xYWtwrAjhSKKCoR1gkz
+   (attributed by pairing each depth-1 'invoke [1]' program with the
+    'Program log: Instruction: ...' line logged at that same depth,
+    not by positional guessing on instruction index)
+
+=== Step 4: find one AddCollateralAdmin + SubmitSignatures call from the same wallet ===
+found AddCollateralAdmin on 3zVB27Gap6fbxpAcV2hsBBUcV3vRjkCikBXREiyBzDuc in tx 4UuPs8vFPgqLB1Uab21nBpSsY4pNQGV1ZNdQ3uFLsicd3yM5tDUxGdPg3gRdBMCUVm358iTpSGQ48JNFzq9bSzRE
+found SubmitSignatures on 26DkA98jjctzPkBEteUsN935CR4dsKx3XvjrtE7MeL4a in tx 5i4g1aLVcWkDp2ZmGgDtTgNd2C9MYXSzFAykfDmfdgPgjRgy72wWJvCvJuMLbotkxoGXXANcFb8TMx7MSBjCLtTD
+-> scanned 3 transactions to find both setup instructions
+
+=== Step 5: read every distinct program's own on-chain upgrade (patch) history ===
+Steps 3-4 above already surfaced 3 DIFFERENT program addresses, not 2 fixed roles:
+the same 3 named instructions (SubmitSignatures, AddCollateralAdmin,
+WithdrawCollateralAsset) appear across all of them, consistent with Rain's own
+statement that the vulnerable contract version was shared across "Avici and a
+small number of other programs" (i.e. one deployed instance per partner/market,
+all running the same underlying code) rather than one fixed collateral program
+and one fixed authorization program.
+program 26DkA98jjctzPkBEteUsN935CR4dsKx3XvjrtE7MeL4a
+  ProgramData account: 5oKB3W9QZPqi9Yno7txjjPT9Tvmud4QFiLgMkynq6sJy
+  last-deployed slot: 442423693  (2026-08-28T20:22:02Z)
+program 3zVB27Gap6fbxpAcV2hsBBUcV3vRjkCikBXREiyBzDuc
+  ProgramData account: 9nyBafiFyguKHVuWryzmKhvfhmpWZfDpG8BjbkcE2anD
+  last-deployed slot: 442424521  (2026-08-28T20:26:29Z)
+program CWgkFB7ngUc9cGD1LryyhP7h6xYWtwrAjhSKKCoR1gkz
+  ProgramData account: 3RgwHvsKpP3ZpXFK8GcnhoekaCHDegBmXhFDLu7pwoXe
+  last-deployed slot: 442423749  (2026-08-28T20:22:21Z)
+Press (crypto.news) states Rain "upgraded" every program using the vulnerable contract
+version "following the August attack", without a timestamp.
+-> all 3 distinct programs' own ProgramData accounts show a
+   last-deployed time within a few minutes of each other, about 55-60 minutes after
+   this wallet's last transaction (2026-08-28T19:26:34Z), independently confirming a
+   coordinated same-day emergency patch without relying on that unverified press claim.
+
+=== Step 6: current status of the attacker's funds ===
+attacker wallet SOL balance now: 0.0
+attacker USDC loot account balance now: 0
+
+See README.md for the full reconstruction and every caveat, including why the
+$500,859.22 total (Avici's own figure, matching DefiLlama) is reported here as
+sourced, not independently re-summed transaction by transaction.
