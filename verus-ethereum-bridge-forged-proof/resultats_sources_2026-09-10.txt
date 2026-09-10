@@ -1,0 +1,102 @@
+=== DefiLlama api.llama.fi/hacks, filtered to name=="Verus-Ethereum Bridge" ===
+{
+  "date": 1778976000,
+  "name": "Verus-Ethereum Bridge",
+  "classification": "Bridge & Cross-Chain",
+  "technique": "Forged Proof",
+  "amount": 11500000,
+  "chain": ["Verus"],
+  "bridgeHack": true
+}
+{
+  "date": 1784678400,
+  "name": "Verus-Ethereum Bridge",
+  "classification": "Bridge & Cross-Chain",
+  "technique": "Forged Proof",
+  "amount": 7530000,
+  "chain": ["Verus"],
+  "bridgeHack": true
+}
+(1778976000 = 2026-05-17 00:00:00 UTC; 1784678400 = 2026-07-22 00:00:00 UTC.
+DefiLlama tracks the two exploits as two separate rows under the identical
+name "Verus-Ethereum Bridge", distinguished only by date and amount.)
+
+=== VerusCoin/Verus-Desktop GitHub release v1.2.17, published 2026-07-03T03:31:26Z ===
+(fetched live via api.github.com/repos/VerusCoin/Verus-Desktop/releases)
+Title: "Announcing Verus v1.2.17 - URGENT AND MANDATORY VERUS-ETHEREUM
+BRIDGE RESTORATION AND RECOVERY UPDATE FOR VERUS AND ALL PBaaS CHAINS"
+
+Key paragraph (verbatim):
+"After the May 17th exploit that after some asset recovery, resulted in
+the network loss of about 26.6% of the ETH and tBTC held in the Ethereum
+contract and being used to back the ETH and tBTC on Verus, the Verus
+network was left with many wallets and numerous liquidity baskets across
+4 blockchains that had one or both of those currencies and also other
+baskets, which contained those currencies as reserves. At the same time,
+the vETH and tBCT.vETH currencies across all chains only had 73.4% of its
+reserves to restore to the Ethereum contract for backing."
+
+=== VerusCoin/Verus-Desktop GitHub release v1.2.17-3, published 2026-08-01T05:53:10Z ===
+(names an official Google Doc writeup on the second, July exploit)
+"For detail on the latest Ethereum bridge hack, what many core
+contributors are work on, support we are getting and how you can help,
+please read our writeup that would be here if it were not as long as it
+is: https://docs.google.com/document/d/1R5kxmTa01gHJ5V7XdjyFphG_q5V02mtkyK7lOR6lV3w/edit?usp=sharing"
+
+=== VerusCoin official writeup (that Google Doc), key excerpt ===
+Title: "Verus Protocol Security in the AI Age"
+
+"...two back to back zero day exploits targeting the Ethereum bridge...
+Although the second attack was different than the first in significant
+ways, the common concept in both was an asymmetry between PBaaS
+serialization and the Ethereum contract's parsing of the data."
+
+"In this recent exploit... [the attackers] discovered a subtle difference
+in the way that PBaaS serialization processed the data for a cross-chain
+notarization vs. the way the contracts did so. Specifically, when
+deserializing a notarization with proof roots... if there are two entries
+for the same key, something that would never be written by the daemon, an
+attempt to add the second entry is ignored and leaves the first entry
+intact. The contract behaves differently and overwrites the first stored
+root by the second when encountered, leaving a different proof root in
+memory, one that the daemon never considered..."
+
+"The first exploit differed in a few important ways. It did not attempt
+to attack the notarization system's deserialization, but instead worked
+to put an output onto Verus that could be proven by real notarizations
+and be interpreted by the contract as a completely different output type
+than what the daemon considered it to be."
+
+-> Confirms, in VerusCoin's own words, that the two exploits used
+   genuinely different root causes, not a single unpatched bug reused
+   (contradicting Blockaid's press-reported claim that "both attacks
+   targeted the same contract through the same import route").
+
+=== VerusCoin/Verus-Mobile web3Constants.js, fetched live ===
+(github.com/VerusCoin/Verus-Mobile, src/utils/constants/web3Constants.js,
+found via GitHub code search scoped to org:VerusCoin for the contract
+address itself)
+export const VERUS_BRIDGE_DELEGATOR_GOERLI_CONTRACT = "0x85a7de2278e52327471e174aeeb280cdfdc6a68a"
+export const VERUS_BRIDGE_DELEGATOR_MAINNET_CONTRACT = "0x71518580f36FeCEFfE0721F06bA4703218cD7F63"
+
+=== Blockscout verified-contract metadata for the Delegator contract ===
+address queried: 0x71518580f36FeCEFfE0721F06bA4703218cD7F63
+name: Delegator
+is_verified: True
+compiler_version: v0.8.9
+verified_at: 2024-12-01T18:35:27.057391Z (well before either 2026 exploit)
+source imports: "../Storage/StorageMaster.sol", "../VerusBridge/Token.sol"
+  (matches VerusCoin/Verus-Ethereum-Contracts' own contracts/ folder layout)
+
+=== Second exploit (2026-07-23) press figures, for context only ===
+cryptotimes.io: date "2026-07-23, ~03:45 UTC" (independently confirmed
+block timestamp: 2026-07-23T03:45:59Z, block 25,592,836); attacker EOA
+0xBda71b58cEc0b1C20A8f87cCD52FA0679747855c; loot wallet
+0xCFd0A20703cD11E0b9f665e1C3F1Ef989C142D54; assets named: "tBTC, USDC,
+USDT, EURC, MKR, and scrvUSD"; total press figure $7.54M. This
+reconstruction independently confirms the transaction
+(0xa1f1e65c1cea4dba4ae439cd4dcdba6cc2dbda0ed1228e61f29ae9c9324eb099, 2
+RPC endpoints agree) hit the same bridge contract and drained exactly
+those 6 tokens plus a 7th (DAI, not named by this press source) directly
+to the loot wallet, but does not re-price this second event to a dollar
+total (see README caveats).

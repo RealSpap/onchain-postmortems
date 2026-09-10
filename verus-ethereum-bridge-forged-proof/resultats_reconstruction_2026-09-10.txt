@@ -1,0 +1,78 @@
+=== Step 1: the primary-source contract address ===
+VerusCoin's own Verus-Mobile repo (github.com/VerusCoin/Verus-Mobile,
+src/utils/constants/web3Constants.js) hardcodes:
+  export const VERUS_BRIDGE_DELEGATOR_MAINNET_CONTRACT = "0x71518580f36FeCEFfE0721F06bA4703218cD7F63"
+BRIDGE_DELEGATOR constant used by this script: 0x71518580f36FeCEFfE0721F06bA4703218cD7F63
+
+=== Step 2: is that address really a verified contract, matching VerusCoin's own repo structure? ===
+Blockscout name: Delegator
+is_verified: True
+compiler_version: v0.8.9
+verified_at: 2024-12-01T18:35:27.057391Z (before the 2026-05-17 exploit)
+  imports "../Storage/StorageMaster.sol": True
+  imports "../VerusBridge/Token.sol": True
+-> matches VerusCoin/Verus-Ethereum-Contracts' own contracts/ folder layout
+
+=== Step 3: the exploit transaction, cross-checked against 3 independent RPC endpoints ===
+  https://ethereum.publicnode.com: status=0x1 block=25118335 logs=2
+  https://eth.merkle.io: status=0x1 block=25118335 logs=2
+  https://eth.drpc.org: status=0x1 block=25118335 logs=2
+All 3 endpoints return byte-identical receipts: True
+
+Tx: 0x6990f01720f57fc515d0e976a0c4f8157e0a9529194c4c15d190e98d087eb321
+Block: 25118335
+From (caller EOA): 0x5abb91b9c01a5ed3ae762d32b236595b459d5777
+To (bridge Delegator contract): 0x71518580f36feceffe0721f06ba4703218cd7f63
+Status: 0x1 (0x1 = success)
+
+=== Step 4: the block timestamp (from eth.merkle.io's receipt-embedded blockTimestamp) ===
+Block timestamp (unix): 1779062123
+Block timestamp (UTC): 2026-05-17T23:55:23Z
+
+=== Step 5: decoding the 3 asset transfers out of the bridge contract, from raw log data ===
+  token 0x18084fba666a33d37592fa2633fd49a74dd93a88  from 0x71518580f36feceffe0721f06ba4703218cd7f63 -> 0x65cb8b128bf6e690761044cceca422bb239c25f9  value(raw) 103567660170000000000
+  token 0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48  from 0x71518580f36feceffe0721f06ba4703218cd7f63 -> 0x65cb8b128bf6e690761044cceca422bb239c25f9  value(raw) 147658836798
+
+  ERC20 legs decoded above are tBTC and USDC (identity confirmed by eth_call symbol()/name() below).
+  0x18084FBA666a33d37592FA2633fD49a74DD93A88 symbol()='tBTC' name()='tBTC v2'
+
+  The native ETH leg does not appear in logs (no Transfer event for native ETH);
+  it is an internal transfer, read from Blockscout's indexed internal-transactions view
+  for the attacker's own address, filtered to this exact transaction hash.
+  internal ETH transfer: 0x71518580f36FeCEFfE0721F06bA4703218cD7F63 -> 0x65Cb8b128Bf6e690761044CCECA422bb239C25F9 value(wei) 1625366886490000000000
+
+  tBTC: 103.567660170000010567
+  USDC: 147658.836798
+  ETH:  1625.366886490000069898
+
+=== Step 6: USD conversion at CoinGecko's 2026-05-17 (theft-day) historical prices ===
+ETH/USD: 2180.0891100856325
+tBTC/USD: 78063.31369616099
+USDC/USD: 0.9997282356945851
+  ETH leg:  1625.36688649 ETH  -> $3,543,444.65
+  tBTC leg: 103.56766017 tBTC -> $8,084,834.74
+  USDC leg: 147658.84 USDC -> $147,618.71
+  TOTAL: $11,775,898.10
+
+=== Step 7: VerusCoin's own acknowledgment of this exploit (GitHub release notes) ===
+github.com/VerusCoin/Verus-Desktop, release v1.2.17 (published 2026-07-03), states:
+  "After the May 17th exploit that after some asset recovery, resulted in the
+   network loss of about 26.6% of the ETH and tBTC held in the Ethereum contract
+   and being used to back the ETH and tBTC on Verus..."
+Fetched live from the GitHub Releases API (see resultats_sources file).
+
+=== Step 8 (context, not re-priced): the second, technically distinct exploit, 2026-07-23 ===
+Same bridge contract, a different attacker, per VerusCoin's own writeup
+(linked from github.com/VerusCoin/Verus-Desktop release v1.2.17-3) a different
+root cause: a map-deserialization asymmetry, not the same unpatched bug.
+Status (2 endpoints): 0x1 0x1 | block: 25592836
+To (same bridge contract): 0x71518580f36feceffe0721f06ba4703218cd7f63 == 0x71518580f36feceffe0721f06ba4703218cd7f63 -> True
+Direct token transfers from the bridge contract to the loot wallet 0xCFd0A20703cD11E0b9f665e1C3F1Ef989C142D54 :
+  tBTC: raw=71504591500000000000
+  DAI: raw=220357027072980000000001
+  MKR: raw=59429543840000000000
+  USDC: raw=149275074098
+  USDT: raw=78300537681
+  EURC: raw=31475664323
+  scrvUSD: raw=92784360277250000000000
+(native units only; not converted to USD here, see README caveats)

@@ -4,6 +4,27 @@ One entry per addition or correction to this repo. Each incident added
 with `add_new_entry.py` gets tagged as a matching GitHub release, see
 "Get notified of new postmortems" in `README.md`.
 
+## 2026-09-10 (6)
+
+- Added an 18th incident: Verus-Ethereum Bridge (Forged Proof), Ethereum +
+  Verus, 2026-05-17. Started from VerusCoin's own Verus-Mobile wallet repo
+  (github.com/VerusCoin/Verus-Mobile), which hardcodes the bridge's
+  mainnet Delegator contract address, independently confirmed as a
+  verified Ethereum contract whose own source (verified 2024-12-01, over
+  a year before the exploit) matches VerusCoin's public
+  Verus-Ethereum-Contracts repo structure. One transaction, cross-checked
+  byte-for-byte across 3 independent RPC endpoints, moved 103.5677 tBTC,
+  147,658.84 USDC, and 1,625.3669 ETH from that contract to one attacker
+  address; at CoinGecko's theft-day prices that totals $11,775,898.10,
+  about 2.4% above DefiLlama's own tracked $11,500,000 for the same date.
+  VerusCoin's own GitHub release notes (v1.2.17, 2026-07-03) independently
+  corroborate the date and scope, stating the network lost "about 26.6%"
+  of its ETH/tBTC bridge reserves. Also confirms and itemizes (without
+  re-pricing) a second, technically distinct exploit against the same
+  contract on 2026-07-23, and catches a press claim (Blockaid, via
+  cryptotimes.io) that both exploits reused the same unpatched bug: per
+  VerusCoin's own official writeup, they were two different root causes.
+
 ## 2026-09-10 (5)
 
 - Added a 17th incident: MORE Markets (Ankr ankrFLOW E-Mode), Flow EVM,
