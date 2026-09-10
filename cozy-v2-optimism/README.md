@@ -10,7 +10,7 @@ On September 7, 2026, an attacker walked away with Cozy V2's collateral on Optim
 | Attack window | September 2 (false oracle answers submitted) to September 7 (claimed), 2026 |
 | Mechanism | Undisputed false "YES" answers to the UMA Optimistic Oracle during its 5-day challenge period |
 | Markets triggered | 3: Aave v2, Curve, Rabbithole Quests |
-| Verified on-chain total | 174,311.01 USDC.e |
+| Verified independently | 174,311.01 USDC.e |
 | Cozy's own published figure | 170,186 USDC.e, about $4,125 less |
 | DefiLlama's tracked figure | $163,326, which turns out to be exactly one of the two claim transactions alone |
 | Attacker | `0x003FE7359A4E03C85Ac2f521eC699ED84C7c5ccB`, funded via a bridge relay, cashed out to a separate EOA |
@@ -50,3 +50,7 @@ An earlier pass through this same investigation assumed the cash-out address was
 - At least one press summary (via Blockaid's monitoring, cited by KuCoin/RootData) describes this as a "reentrancy attack", which does not match Cozy's own, far more specific account of an oracle-dispute-window exploit. This project weights Cozy's account higher, since it is the affected party's own detailed post-incident finding with exact addresses and amounts, not a preliminary automated classification, but the discrepancy is real and unresolved here.
 - Cozy stated a full account would be posted by September 10, 2026, 18:00 UTC. This project was written and published before that date; it may be superseded by Cozy's own fuller account once available.
 - One incident, one protocol, checked from public RPC endpoints. This is independent research, not an audit. Everything above is stated at the confidence level the on-chain data actually supports.
+
+## License
+
+MIT

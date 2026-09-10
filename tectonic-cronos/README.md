@@ -20,7 +20,7 @@ Independent, on-chain verified analysis of the August 30 2026 Tectonic Protocol 
 | Response | Cronos validators rolled back roughly 11,000 blocks |
 | Status | Independent research, verifiable from a public RPC, no API key required |
 
-## What this found
+## What it found
 
 ### Three pools, not one
 
@@ -40,7 +40,7 @@ Checked directly against three independent nodes: the entire attack sequence, no
 
 Full write-up, sources, and the live queries are on the Dune dashboard linked above.
 
-## Verify it yourself
+## The method
 
 `tectonic_risk_snapshot.py` connects directly to a Cronos RPC endpoint and reads Tectonic's live on-chain state: all 18 markets in the real (unlabeled) Pool 1, their prices, collateral factors, borrows, and utilization. No API keys, no indexer, just the contracts.
 

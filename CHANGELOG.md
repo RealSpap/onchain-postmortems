@@ -4,6 +4,45 @@ One entry per addition or correction to this repo. Each incident added
 with `add_new_entry.py` gets tagged as a matching GitHub release, see
 "Get notified of new postmortems" in `README.md`.
 
+## 2026-09-10 (11)
+
+- Backfilled 8 entries that were missing despite this changelog's own
+  opening line above: the 10th, 11th, 12th, 13th, 14th, 23rd, 24th, and
+  25th incidents each already have a subfolder and an Index row, just
+  never got a changelog line when added. One line each below, headline
+  fact only, not a full retroactive narrative, since this entry is written
+  well after the fact.
+  - 10th: Allbridge (CCTP Forged Message), Polygon + Base, 2026-07-25 /
+    08-19. Router's real loss 190,155.976393 USDC; also catches a one-day
+    date error in SlowMist's own post-mortem.
+  - 11th: Liquid Network, Bitcoin + Liquid, 2026-09-06 / 09-07. Range-proof
+    cache-key collision in Elements; 598.50 BTC still unrecovered as of
+    this reconstruction.
+  - 12th: Aquifer, Solana + Ethereum, 2026-08-31 / 09-01. Arbitrary
+    external call on a verified Sweeper contract; $2,418,164 at theft-day
+    price.
+  - 13th: Maya Protocol (MAYAChain), MAYAChain + Bitcoin + Arbitrum,
+    2026-08-18. Voter-clobber bug plus an uncapped slash subsidy;
+    $1,343,181.04 BTC-only floor.
+  - 14th: COLDCARD (Weak Seed RNG), Bitcoin, 2026-07-30. Hardware RNG
+    silently replaced by a weak software PRNG for 5+ years; first theft
+    wave, $37,996,965.32, independently traced.
+  - 23rd: AFX Bridge, Arbitrum + Ethereum, 2026-07-22. 5-of-7 bridge
+    validator signing keys compromised; $24,150,000, matching DefiLlama
+    exactly.
+  - 24th: Lazy Summer Protocol, Ethereum, 2026-07-06. Donation attack on a
+    zeroed-cap Ark; $6,016,632.02, DefiLlama's date is off by 29.3 hours.
+  - 25th: Kelp DAO (rsETH / LayerZero DVN), Ethereum, 2026-04-18. Forged
+    cross-chain message via compromised LayerZero DVN RPC nodes; this
+    repo's largest incident, $273,377,225 at theft-day price against
+    DefiLlama's tracked $293,000,000.
+- Restructured `README.md`'s Index from a single flat table sorted by loss
+  into year, then month sections, each with its own subtotal, plus a table
+  of contents and a "Corrections to press and DefiLlama" section pulled out
+  of the "At a glance" block. Rewrote `add_new_entry.py` and
+  `check_readme_consistency.py` to match. No incident, footnote, or section
+  was dropped in the restructuring.
+
 ## 2026-09-10 (10)
 
 - Added a 22nd incident: XRP Healthcare (XRPH Wallet), XRP Ledger +
