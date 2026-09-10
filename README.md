@@ -186,4 +186,4 @@ before relying on them.
 
 ## License
 
-MIT. See `LICENSE`.
+MIT. See `LICENSE`. Deliberately open, including every reconstruction script: unlike a reusable cross-protocol screening tool, each script here is wired to one already-public historical incident, so publishing it costs nothing competitively and buys real reproducibility, anyone can rerun the same query against the same public chain data and get the same number, which is what makes the corrections to press and DefiLlama in this repo checkable rather than just asserted.
