@@ -1,0 +1,93 @@
+=== Step 0: the primary source - Coinkite's own GitHub repo, Coldcard/firmware ===
+Vulnerable commit b18723dddb: "First pass w/ libNgU"
+  authored: 2021-03-01T14:03:03Z
+Fix commit ca72463709: "fixes rng"
+  authored: 2026-07-31T02:40:23Z
+  files touched: ['stm32/COLDCARD/mpconfigboard.mk', 'stm32/COLDCARD/rng.c', 'stm32/COLDCARD/rng.h', 'stm32/COLDCARD_MK4/mpconfigboard.h', 'stm32/COLDCARD_MK4/mpconfigboard.mk', 'stm32/COLDCARD_MK4/rng.c', 'stm32/COLDCARD_MK4/rng.h', 'stm32/COLDCARD_Q1/mpconfigboard.mk', 'stm32/MK-Makefile', 'stm32/Q1-Makefile', 'stm32/shared.mk']
+
+=== Step 1: the exact bad macro, read live from the current file on GitHub ===
+  stm32/COLDCARD/mpconfigboard.h:77: #define MICROPY_HW_ENABLE_RNG       (0)
+  -> matches Coinkite's own technical backgrounder: '#ifndef' guards on whether
+     MICROPY_HW_ENABLE_RNG is *defined*, not whether it is nonzero, so setting it to
+     0 (meant to disable MicroPython's software PRNG) silently failed to do so, and
+     libNgU's rng_get() symbol resolved to MicroPython's Yasmarang PRNG instead of
+     the hardware TRNG.
+
+=== Step 2: DefiLlama's own hacks feed, record matching name==COLDCARD ===
+{
+  "date": 1785456000,
+  "name": "COLDCARD",
+  "classification": "Key Compromise",
+  "technique": "Weak Key Generation",
+  "amount": 116000000,
+  "chain": [
+    "Bitcoin"
+  ],
+  "bridgeHack": false,
+  "targetType": "Wallet",
+  "source": "",
+  "returnedFunds": null,
+  "defillamaId": null,
+  "language": "C++"
+}
+
+=== Step 3: the first-hop consolidation address, read live (Blockstream) ===
+  address: bc1qnk4zh9qcnap2mycp56qjrgza3cc8ylrh8fecp0
+  funded_txo_count: 506
+  funded_txo_sum:   59447728031 sats = 594.47728031 BTC
+  spent_txo_count:  341
+  spent_txo_sum:    56202666941 sats
+  tx_count:         507
+
+  cross-check against a second, independent public explorer (mempool.space):
+  mempool.space chain_stats identical to Blockstream: True
+
+=== Step 4: page through every transaction touching that address, live ===
+  total distinct transactions fetched: 507
+  funding transactions (address A as an output): 506
+  independently summed total received: 59447728031 sats = 594.47728031 BTC
+  matches the API's own funded_txo_sum: True
+  total victim UTXOs (inputs) swept across those funding txs: 1331
+  distinct victim source addresses: 505
+  input script types: {'v0_p2wpkh': 1191, 'p2pkh': 134, 'p2sh': 6}
+
+=== Step 5: the block-confirmed sweep window, read from each block's own header ===
+  block 960188 (0000000000000000...): timestamp 2026-07-30T01:36:08Z, 63 funding txs to bc1qnk4zh9qcnap2mycp56qjrgza3cc8ylrh8fecp0 in this block
+  block 960189 (0000000000000000...): timestamp 2026-07-30T01:37:21Z, 110 funding txs to bc1qnk4zh9qcnap2mycp56qjrgza3cc8ylrh8fecp0 in this block
+  block 960190 (0000000000000000...): timestamp 2026-07-30T01:43:00Z, 168 funding txs to bc1qnk4zh9qcnap2mycp56qjrgza3cc8ylrh8fecp0 in this block
+  block 960191 (0000000000000000...): timestamp 2026-07-30T01:51:26Z, 159 funding txs to bc1qnk4zh9qcnap2mycp56qjrgza3cc8ylrh8fecp0 in this block
+  txs in the 4-block batch: 500, summing to 594.47722484 BTC
+  remainder (6 more funding txs, 0.00005547 BTC) trickled in over the following weeks
+
+=== Step 6: the single transaction that swept address A onward ===
+  distinct transactions spending from address A: 1
+  txid 0c6bf853a645b699a3b2cd6d8e3c44cf1a02a16f538df08212a44753f75d9d01
+  inputs from address A: 341
+  total spent: 56202666941 sats = 562.02666941 BTC, fee 704640 sats
+  outputs: [('bc1qq85v2c926eg6pgxhwp6q7lf6cnsz80qs3fcu9r', 56201962301)]
+  -> 1 output(s): single destination bc1qq85v2c926eg6pgxhwp6q7lf6cnsz80qs3fcu9r
+
+=== Step 7: address B, the apparent final vault, checked live (2 sources) ===
+  address: bc1qq85v2c926eg6pgxhwp6q7lf6cnsz80qs3fcu9r
+  Blockstream:    funded 56202148293 sats, spent 0 sats, tx_count 64
+  mempool.space:  funded 56202148293 sats, spent 0 sats, tx_count 64
+  two independent sources agree: True
+  current balance: 562.02148293 BTC
+  spent_txo_sum is 0: nothing has ever left this address
+
+=== Step 8: how much of the traced haul is still sitting untouched, right now ===
+  address A residual (never swept onward): 32.45061090 BTC
+  address B total (100% dormant):          562.02148293 BTC
+  combined dormant total:                  594.47209383 BTC
+  vs. total originally received at A:      594.47728031 BTC
+  gap (mining fee + later dust sent to B):  518648 sats = 0.00518648 BTC
+
+=== Step 9: USD conversion, CoinGecko historical price ===
+  BTC/USD, CoinGecko daily snapshot 2026-07-30 (theft day): 63916.59794922001
+  594.47728031 BTC @ theft-day price -> $37,996,965.32
+  hourly BTC/USD around the actual sweep window (01:00-03:00 UTC):
+    2026-07-30T01:00:00Z  $63,620.89
+    2026-07-30T02:00:00Z  $64,196.00
+    2026-07-30T03:00:00Z  $64,112.04
+  DefiLlama's own tracked figure for this incident: $116,000,000
+  this reconstruction's independently-verified figure covers 32.8% of that preliminary total
