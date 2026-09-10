@@ -1,0 +1,86 @@
+
+==============================================================================
+STEP 1: Across's own GitHub deployment record for the Solana SvmSpoke program
+==============================================================================
+Solana (Across internal chainId 34268394551451) SvmSpoke: {'address': 'DLv3NggMiSaef97YCkew5xKUHDh13tVGZ7tydt3ZeAru', 'block_number': 349354195}
+Ethereum mainnet HubPool: {'address': '0xc186fA914353c44b2E33eBE05f21846F1048bEda', 'block_number': 14819537}
+
+==============================================================================
+STEP 2: The merged GitHub PR that fixed the bug (across-protocol/sdk#1486)
+==============================================================================
+PR #1486 title: fix(svm): reject forged CPI events missing the Anchor event discriminator
+PR #1486 state: closed merged_at: 2026-07-17T09:37:55Z
+PR #1486 merge commit: 2e2f9d9d1f9efdd48866bd04e27efadedc548142
+Commit author date: 2026-07-17T09:37:55Z
+Commit message (first line): fix(svm): reject forged CPI events missing the Anchor event discriminator (#1486)
+Regression test file added in this commit names the exploit tx: True
+
+==============================================================================
+STEP 3: Fetch the named exploit transaction live from Solana mainnet
+==============================================================================
+Slot: 433417931
+Block time (UTC): 2026-07-17T05:08:25Z
+Status: None
+Outer (wrapper) program invoked: 4ACJMgcm2s1q7GCGefKXatniBRtWqosMZDX7QV2c3Cut
+Inner (CPI target) program: DLv3NggMiSaef97YCkew5xKUHDh13tVGZ7tydt3ZeAru
+Inner instruction's sole account: F3SDf1r4Abt4ZQ9zDwo2Vd2We9e3Xo6fhfMM2iH23soh
+Inner instruction data length: 272 bytes
+First 8 bytes (instruction discriminator): 760a8700a8f3df75
+Next 8 bytes (forged event discriminator): 9dd1645f3b640344
+
+sha256('global:get_unsafe_deposit_id')[:8] = 760a8700a8f3df75
+sha256('anchor:event')[:8], byte-reversed     = e445a52e51cb9a1d
+Instruction discriminator matches get_unsafe_deposit_id: True
+Instruction discriminator is NOT the genuine Anchor CPI event tag: True
+
+==============================================================================
+STEP 4: Decode the forged FundsDeposited payload's leading fields
+==============================================================================
+inputToken (32B): c6fa7af3bedbad3a3d65f36aabc97431b1bbe4c2d2f6e0e47ca60203452f5d61
+outputToken (32B): 000000000000000000000000a0b86991c6218b36c1d19d4a2e9eb0ce3606eb48
+outputToken, last 20 bytes read as an EVM address: 0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48
+inputAmount (raw, 6dp): 4113882210137 = 4113882.210137 USDC-equivalent
+outputAmount (raw): 0
+
+==============================================================================
+STEP 5: Confirm the wrapper program is not one of Across's own deployments
+==============================================================================
+Wrapper program owner: BPFLoaderUpgradeab1e11111111111111111111111
+Wrapper program executable: True
+Wrapper program address appears in Across's own deployed-addresses.json: False
+
+==============================================================================
+STEP 6: The CBG4 stranded-relayer compensation, both legs, independently re-fetched
+==============================================================================
+Ethereum receipt fetched OK from https://eth.drpc.org
+Ethereum tx status: 0x1 block: 25552651 from: 0x837219d7a9c666f5542c4559bf17d7b804e5c5fe
+USDC Transfer legs in this tx (raw hop chain): [735.5, 735.5, 735.5, 735.5]
+Ethereum block timestamp (UTC): 2026-07-17T13:17:11Z
+Solana delivery tx slot: 433488475 block time (UTC): 2026-07-17T13:17:40Z
+CBG4's own USDC ATA balance delta in this tx: 735.159139
+
+==============================================================================
+STEP 7: The 2 poisoned bundle-proposal transactions are real HubPool transactions
+==============================================================================
+Bundle proposal 1: status=0x1 block=25550386 to=0xc186fa914353c44b2e33ebe05f21846f1048beda
+Bundle proposal 2: status=0x1 block=25550543 to=0xc186fa914353c44b2e33ebe05f21846f1048beda
+
+==============================================================================
+STEP 8: Cross-check DefiLlama's own tracked record
+==============================================================================
+DefiLlama 'Across' entry: date=2026-07-17 amount=$4,500,000 chain=['Solana'] classification=Bridge & Cross-Chain technique=Spoofed Event Log
+
+==============================================================================
+SUMMARY
+==============================================================================
+Exploit tx 3rLkGVvyYL2LTuDzbo8MBYNwjhYaKo1pEoqd24HCPQJEhNgyVnKZeNFsFrStKYY6cVizBfLpa2RMiB8dxHPzGHMV
+  slot 433417931, 2026-07-17T05:08:25Z
+  wrapper program 4ACJMgcm2s1q7GCGefKXatniBRtWqosMZDX7QV2c3Cut CPI'd into SvmSpoke's own get_unsafe_deposit_id
+  (discriminator 760a8700a8f3df75, independently re-derived from its own SHA-256
+  preimage) with the event authority as its sole account, appending a forged
+  FundsDeposited payload for 4,113,882.210137 USDC-equivalent targeting
+  outputToken 0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48 (Ethereum USDC).
+Fix: across-protocol/sdk PR #1486, merged 2026-07-17T09:37:55Z.
+Separately, one of 2 relayers left with stranded, legitimate, already-recognised fills
+  by the same incident (CBG4) was compensated off-protocol: 2026-07-17T13:17:11Z Ethereum leg (735.5 USDC), 2026-07-17T13:17:40Z Solana delivery leg (735.159139 USDC to CBG4's own ATA).
+DefiLlama tracks this incident at $4,500,000 (see Step 8).

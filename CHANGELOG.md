@@ -4,6 +4,30 @@ One entry per addition or correction to this repo. Each incident added
 with `add_new_entry.py` gets tagged as a matching GitHub release, see
 "Get notified of new postmortems" in `README.md`.
 
+## 2026-09-10 (7)
+
+- Added a 19th incident: Across Protocol (Solana Event Spoofing), Solana +
+  Ethereum, 2026-07-17. Started from Across's own merged GitHub fix
+  (across-protocol/sdk PR #1486), whose regression test names one
+  "mainnet exploit transaction" in its own code comment. Independently
+  fetched that transaction live from Solana mainnet and decoded its raw
+  instruction bytes: the first 8 bytes exactly match
+  sha256("global:get_unsafe_deposit_id")[:8], independently computed here,
+  proving the exploit abused the SpokePool's own read-only
+  get_unsafe_deposit_id instruction, not a genuine emitted event (whose
+  real Anchor CPI tag, sha256("anchor:event")[:8] byte-reversed, was also
+  independently computed and confirmed absent). The forged payload
+  decodes to an outputToken of Ethereum's real USDC contract address and
+  an inputAmount of 4,113,882.210137, matching the fix's own "~$4.1M"
+  description. Press/DefiLlama's $4.5M gross-loss figure (zero user funds
+  lost, Risk Labs' own relayer absorbed it) is reported as sourced, not
+  independently re-derived fill-by-fill. A separate, smaller side-effect
+  of the same incident is fully re-derived instead: a stranded relayer's
+  (CBG4) off-protocol compensation, both legs (Ethereum + Solana)
+  independently matched to the microdollar and to the second against an
+  unmerged but fully-detailed recovery-script PR from Across's own
+  contracts repo.
+
 ## 2026-09-10 (6)
 
 - Added an 18th incident: Verus-Ethereum Bridge (Forged Proof), Ethereum +
