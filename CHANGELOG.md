@@ -4,6 +4,15 @@ One entry per addition or correction to this repo. Each incident added
 with `add_new_entry.py` gets tagged as a matching GitHub release, see
 "Get notified of new postmortems" in `README.md`.
 
+## 2026-09-10 (2)
+
+- Added a 9th incident: Cosmos EVM shared staking-precompile
+  underflow/overflow (MANTRA/TAC/KiiChain, plus 3 unnamed chains).
+  Independently reconstructed against each named chain's live RPC,
+  catching a citation error in Cosmos Labs' own official post-mortem
+  along the way (wrong block number cited for the KiiChain anchor
+  transaction). Cumulative loss across all 9 incidents: $35,237,493.
+
 ## 2026-09-10
 
 - Automated review pass: translated the remaining French
