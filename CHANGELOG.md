@@ -4,6 +4,33 @@ One entry per addition or correction to this repo. Each incident added
 with `add_new_entry.py` gets tagged as a matching GitHub release, see
 "Get notified of new postmortems" in `README.md`.
 
+## 2026-09-10 (9)
+
+- Added a 21st incident: Nomic (nBTC / Osmosis allBTC), Bitcoin + Nomic +
+  Osmosis, mint 2026-06-25, disclosed/halted 2026-09-07. Parked in an
+  earlier round for lack of a primary source; reconsidered this round
+  after Osmosis's own governance forum posted "Alloyed BTC: Restore
+  backing after the nBTC incident" (an admin account, forum.osmosis.zone/t/4122)
+  the same day, naming the exploit transaction, block, and frozen attacker
+  address directly. Every hard number was independently re-verified
+  live: the exploit transaction byte-for-byte on Nomic's own public RPC
+  (25 identical forged IBC packets, code 0, gas 0, 101 events); the
+  forged packet sender independently re-derived as Nomic's own ADR-028
+  escrow account for transfer/channel-1 via SHA256/bech32, not copied
+  from any report; the allBTC transmuter's live pool composition on 2
+  independent Osmosis LCD endpoints (39.83974592 BTC of nBTC against
+  70.73128010 BTC of real WBTC/cbBTC collateral, 63.97% backing,
+  matching the forum post's own table); the attacker's frozen Osmosis
+  balance and Nomic's own BTC reserve address balance, both confirmed
+  live; and the halt's real root cause independently corroborated via a
+  still-open Nomic GitHub issue (#340) unrelated to the forum post or its
+  linked forensic report. Also catches a DefiLlama date/price gap:
+  DefiLlama dates this incident 2026-09-09 (the disclosure date), 76 days
+  after the mint's own live-confirmed timestamp of 2026-06-25, and its
+  $3,150,000 figure tracks the full counterfeit mint at a current BTC
+  price rather than the theft-day rate this entry uses instead for the
+  still-unbacked portion ($2,429,809.11).
+
 ## 2026-09-10 (8)
 
 - Added a 20th incident: Ostium (PrivatePriceUpKeep Compromise), Arbitrum,

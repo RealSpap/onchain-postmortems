@@ -1,0 +1,60 @@
+=== Step 0: the primary source - Osmosis's own governance forum post ===
+title: Alloyed BTC: Restore backing after the nBTC incident
+created_at: 2026-09-10T11:21:23.715Z
+posted by: JohnnyWyles
+
+=== Step 1: re-derive the ADR-028 escrow account for transfer/channel-1 ===
+  SHA256('ics20-1' + 0x00 + 'transfer/channel-1')[:20], bech32 'nomic': nomic1kq2rzz6fq2q7fsu75a9g7cpzjeanmk685ak9g7
+  forum post's named packet sender:                                    nomic1kq2rzz6fq2q7fsu75a9g7cpzjeanmk685ak9g7
+  MATCH: True
+
+=== Step 2: re-fetch the cited exploit transaction from Nomic's own public RPC ===
+  tx height (live): 33137470  (forum post: 33137470)
+  block time (live): 2026-06-25T21:49:59.960727999Z
+  code: 0  gas_wanted: 0  gas_used: 0
+  'success: packet send' occurrences: 25
+  distinct usat amounts across all packets: {'162602409537873'}
+  distinct senders: {'nomic1kq2rzz6fq2q7fsu75a9g7cpzjeanmk685ak9g7'}
+  distinct recipients: {'osmo1wq76r2mhqsa9yaygghuwyq4wy6dcsgf8vtzltn'}
+  num raw events: 101
+
+=== Step 3: Osmosis's allBTC transmuter (pool 1868) live pool composition, 2 independent LCD endpoints ===
+  [publicnode] nBTC inside alloy: 39.83974592 BTC | real WBTC/cbBTC collateral: 70.73128010 BTC | backing ratio: 63.97%
+  [polkachu] nBTC inside alloy: 39.83974592 BTC | real WBTC/cbBTC collateral: 70.73128010 BTC | backing ratio: 63.97%
+
+=== Step 4: attacker's frozen Osmosis balance, live ===
+  factory/osmo1z6r6qdknhgsc0zeracktgpcxf43j6sekq07nw8sxduc9lg0qjjlqfu25e: 2265060846
+  uosmo: 703055696
+
+=== Step 5: Nomic's own BTC reserve address, independent Bitcoin explorer ===
+  bc1q9e3d4nca68wzh8j3gme7z7gatnrzrpgcflsu5tgeuh6g7svqykssqzxyfe: 74599951 sats = 0.74599951 BTC
+
+=== Step 6: attacker's Ethereum wallet, live balance + outgoing tx count ===
+  outgoing tx count (nonce): 35
+  current balance: 0.5753708194 ETH
+
+=== Step 7: Nomic's own GitHub - independent confirmation of the halt's root cause ===
+  issue #340: Fix: prevent advancing checkpoints that cannot cover outputs and fees
+  state: open  created_at: 2026-09-07T17:00:45Z  author: Cordtus
+
+=== Step 8: CoinGecko historical BTC price on the actual mint date (theft-day, not disclosure-day) ===
+  BTC/USD on 2026-06-25: 60989.57352152134
+  39.83974592384514 BTC (nBTC still inside the alloy, from Step 3) x $60989.57 = $2,429,809.11
+
+=== Step 9: DefiLlama's own tracked entry for this incident ===
+{
+  "date": 1788912000,
+  "name": "Nomic",
+  "classification": "Bridge & Cross-Chain",
+  "technique": "Unbacked Cross-Chain Mint",
+  "amount": 3150000,
+  "chain": [
+    "Nomic"
+  ],
+  "bridgeHack": true,
+  "targetType": "DeFi Protocol",
+  "source": "",
+  "returnedFunds": null,
+  "defillamaId": null,
+  "language": "Rust"
+}
