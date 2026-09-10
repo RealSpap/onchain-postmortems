@@ -1,0 +1,102 @@
+=== MAYAChain GitLab, MR !835 (primary source), fetched live 2026-09-10 ===
+URL: https://gitlab.com/mayachain/mayanode/-/merge_requests/835
+Title: [V133] fix(mayachain): harden outbound matching, native txID uniqueness and theft-slash subsidy #check-lint-warning
+Author: Bitol
+Created: 2026-08-18T19:22:21.435Z  Merged: 2026-09-07T20:15:06.033Z
+
+## Summary
+
+Consensus hardening after the 2026‑08‑18 pool drain. Six related defects allowed a multi‑message `MsgDeposit` to (a) get two legitimate trade‑account outbounds mis‑classified as **theft** and (b) have the resulting slash *credit an unbounded amount of CACAO* to a near‑empty pool, which was then withdrawn from the Asgard module and swapped out.
+
+All behaviour changes are gated on **`1.133.0`** (version bumped). Old implementations are archived (`handleV129`, `TxOutStorageV129`, `subsidizePoolWithSlashBondV92`, `calculatePoolUnitsV1`) and untouched.
+
+## Incident chain this closes
+
+| Step | Where | Defect |
+|---|---|---|
+| 1 | `handler_deposit.go` | Every message of a multi‑message `MsgDeposit` tx created a **fresh** `ObservedTxInVoter` for the same tx hash. A trailing 1‑unit `DONATE` message overwrote the voter of the earlier `trade-` messages and reset `OutboundHeight` to 0. |
+| 2 | `manager_txout_current.go` | `voter.OutboundHeight` was set once and then forced onto every later outbound of the same inbound. |
+| 3 | `handler_common_outbound.go` | The matcher only checked `FinalisedHeight/OutboundHeight + N·SigningTransactionPeriod`. Outbounds scheduled at `FinalisedHeight+1` were never found → `security: missing tx out` → theft slash. |
+| 4 | `helpers.go` `subsidizePoolWithSlashBondV92` | Pool subsidy used the **uncapped** observed amount in `pool.AssetValueInRune()`. With the pool at 100 sats of asset, `0.97 LINK × cacao/asset` = **49.45M CACAO** booked into the pool. `SetPool` ran before the `Reserve→Asgard` transfer; the transfer failed (Reserve had 168k) but the pool stayed inflated. |
+| 5 | `handler_add_liquidity.go` `calculatePoolUnitsV1` | Pool with `BalanceAsset==0` but units outstanding treated an add as a *new pool*: 100 CACAO → 1e12 units = 99.93 % of the pool → `WITHDRAW:…:9900` paid 48.87M CACAO out of Asgard (every pool's CACAO). |
+| 6 | `handler_trade_account_withdrawal.go` | `InHash` re‑derived from `ctx.TxBytes()` rather than `msg.Tx.ID` — incompatible with per‑message txIDs (found while fixing 1). |
+
+## Changes
+
+### `handler_deposit.go` — `handleV133`
+- txID is resolved **before** any state mutation (gas, module transfers) so a retry can recurse without double‑charging.
+- If a voter already exists for the txID, retry with `HASH-idx` (bounded by new constant `MaxDepositTxIDRetries = 100`). Each message of a multi‑message tx now gets its own voter.
+- `common.NewTxID` accepts `^[0-9a-fA-F]{64}-[0-9]+$`.
+
+### `handler_trade_account_withdrawal.go` — `handleV133`
+- `InHash: msg.Tx.ID`.
+
+### `manager_txout_current.go` (old → `manager_txout_v129.go`)
+- `voter.OutboundHeight` = furthest‑future scheduled outbound (`if outboundHeight > voter.OutboundHeight`), instead of set‑once‑then‑force. Each outbound keeps its own security delay.
+
+### `handler_common_outbound.go` — `handleV133`
+- Scan **every** height from `now` (rounded up to the next `RescheduleCoalesceBlocks` multiple) back to `max(voter.Height, now − SigningTransactionPeriod)`; break on first match. Rescheduled and delayed outbounds are found; no more false “missing tx out”.
+
+### `helpers.go` — `subsidizePoolWithSlashBondV133`
+- Stolen amount capped by **vault balance and `pool.BalanceAsset`** (mirrors `SlashVaultToLP`).
+- `Reserve→Asgard` transfer happens **before** `SetPool`; a failed transfer skips the credit. The pool ledger can never exceed what the Asgard module actually holds.
+
+### `handler_add_liquidity.go` — `calculatePoolUnitsV133`
+- Pool with units but one side zero: new units are pro rata to the side that still has depth (`GetUncappedShare`); both sides zero with units outstanding → error. Genuinely new pools and normal adds are unchanged (asserted in test).
+
+### Version
+- `1.132.4 → 1.133.0` (`version`, `openapi/openapi.yaml`, `openapi/gen/api/openapi.yaml`).
+
+## Tests
+
+- **New** `TestHandleMatchesTxOutAtNonPeriodHeight` — reproduces the incident (TxOut at `FinalisedHeight+1`, voter `OutboundHeight=0`, observed 6 blocks later). Verified to **fail on the old matcher** (`fail to slash account`) and pass on `handleV133`.
+- **New** `TestCalculatePoolUnitsV133` — incident numbers: 100 CACAO into the 49.45M‑CACAO / 0‑asset pool yields **1 479** units (V1: 1e12); zero‑CACAO side; both‑zero rejection; parity with V1 for new pool / normal add.
+- **New** indexed‑txID cases in `common/tx_test.go`.
+- **Updated** `TestAddOutTxItem_MultipleOutboundWillNotBeScheduledAtTheSameBlockHeight` (new `OutboundHeight` semantics), `TestTradeAccountWithdrawal` (asserts `InHash == msg.Tx.ID`).
+- `x/mayachain`, `keeper`, `types`, `memo`, `common`, `constants`, `bifrost/observer`, `bifrost/signer` — all green locally. `gofumpt` / `go vet` clean.
+- **Not run:** Docker regression suite (`make test-regression`).
+
+## Rollout notes
+
+- Consensus change → requires all validators on 1.133.0; activates when the network version flips.
+- Native txIDs of the form `HASH-N` will appear in `/mayachain/tx/…`, outbound memos (`OUT:HASH-1`) and Midgard for multi‑message deposits — explorer/Midgard maintainers should be told.
+- This MR does **not** repair mainnet state (unbacked pool CACAO, attacker balances/LP units). That needs a separate store migration.
+- Independent defenses: fix 1 alone would have failed the exploit tx; fix 3 alone would have matched the outbounds; fix 4 alone would have limited the subsidy to ~30 CACAO; fix 5 alone would have given the attacker 1 479 units.
+
+=== MAYAChain GitLab, MR !836 (primary source, follow-up hardening), fetched live 2026-09-10 ===
+URL: https://gitlab.com/mayachain/mayanode/-/merge_requests/836
+Title: [V133] fix(mayachain): atomic vault-outbound slash + ragnarok matcher + subsidy guard #check-lint-warning
+Author: Bitol
+Created: 2026-08-19T17:11:51.969Z  Merged: 2026-08-20T23:16:51.613Z
+
+## Summary
+
+Follow-up hardening after the 2026-08-18 ARB.LINK incident. **MR !835 closes the exploit itself** (voter clobber, outbound matcher, subsidy cap, zero-side pool units). This MR addresses the remaining RCA root causes that are *defense-in-depth* for that incident but close real related weaknesses — **F** (slash atomicity / error swallowing), the **ragnarok sibling of B** (stepping matcher), and **D** (Reserve guard vs. executed amount).
+
+Stacked on !835 — targets its branch so the diff is only the hardening delta. All changes gated on **1.133.0** (same release as !835); previous implementations archived.
+
+## Changes
+
+### F — atomic vault-outbound slash (`handler_observed_txout.go` `handleV133`)
+The incident's phantom 49M CACAO credit persisted because the observed-outbound fallback ran `SlashVaultToLP` on the **uncached outer store** (`ctx.WithContext` swaps only the telemetry context, not the `MultiStore`) and its funding error was **logged, not propagated** — so the pool write, bond-provider LP reductions, and vault debit committed with the message even though the Reserve→Asgard transfer failed.
+
+`handleV133` runs the whole slash (`SlashVaultToLP` + subsidy + vault debit) inside a `ctx.CacheContext()` and **commits only on success**. A funding failure now discards every mutation atomically. The memoless/inbound "sent_extra_funds" slash goes through the same atomic helper.
+
+### D — guard matches execution (`helpers.go` `subsidizePoolWithSlashBondV133`)
+- The Reserve guard now checks capacity against the **exact sum that will be transferred and credited** (Σ of the capped per-pool subsidies), not the separately-derived `totalBaseStolen`.
+- A `SendFromModuleToModule(Reserve→Asgard)` failure now **returns the error** (instead of logging + debiting asset only), so `SlashVaultToLP` propagates it and the atomic caller above discards. Keeps the V133 cap-by-vault/pool and send-before-`SetPool`.
+
+### Ragnarok matcher (`handler_ragnarok.go` `handleV133`)
+Replaces the `msg.BlockHeight + n×SigningTransactionPeriod` stepping matcher — the **same bug as B, which !835 fixed only for common-outbound** — with a full backward height scan (rounded up to the next `RescheduleCoalesceBlocks` multiple, back to `max(msg.BlockHeight, now − SigningTransactionPeriod)`). A rescheduled ragnarok outbound is now matched rather than falsely slashed as missing. A single unreadable height skips instead of aborting the scan.
+
+## Behavioral note for review
+On a slash whose subsidy cannot be fully funded, `handleV133` now performs **no slash at all** (atomic rollback) rather than a partial one. The observed outbound is still marked done. The vault is therefore not debited for the real outflow in that (pathological, guard-passed-but-send-failed) case — leaving a solvency gap that the solvency checker catches, which the RCA (§9.5) prefers over inconsistent partial state. A dedicated deficit-record is called out there as a further improvement.
+
+## Tests
+- **`TestRagnarokMatchesNonPeriodHeight`** — a ragnarok outbound recorded at a non-period height (the incident's bug-B mechanism); **fails on the old matcher, passes on `handleV133`**.
+- Full `x/mayachain`, `constants`, `common` unit suites green; `gofumpt`/`go vet` clean.
+- **Not yet regenerated:** regression golden fixtures for suites that hit the ragnarok / observed-outbound-slash paths will drift (behavior change on those paths) and must be regenerated on native Linux, same as !835. The RCA §10.4/§10.5 transfer-failure-atomicity and event-ordering regression suites are recommended additions.
+
+## Out of scope (separate follow-ups)
+Per the RCA §6/§9, not included here: synth denominator `SafeSub→1` (§6.1), `LiquidityLockUpBlocks` (§6.4), `PauseOnSlashThreshold`-on-final-plan (§6.5), CACAO 1e8-vs-1e10 unit-literal safety (§6.6), and the EndBlock backing-reconciliation invariant (§10.8).
+

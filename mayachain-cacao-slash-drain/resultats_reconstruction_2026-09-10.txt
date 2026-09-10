@@ -1,0 +1,83 @@
+=== Step 0: the primary source - MAYAChain's own GitLab fix commits ===
+MR !835: [V133] fix(mayachain): harden outbound matching, native txID uniqueness and theft-slash subsidy #check-lint-warning
+  author: Bitol  merged_at: 2026-09-07T20:15:06.033Z
+MR !836: [V133] fix(mayachain): atomic vault-outbound slash + ragnarok matcher + subsidy guard #check-lint-warning
+  author: Bitol  merged_at: 2026-08-20T23:16:51.613Z
+
+=== Step 1: DefiLlama's own hacks feed, record matching name==Maya Protocol ===
+{
+  "date": 1787011200,
+  "name": "Maya Protocol",
+  "classification": "Protocol Logic",
+  "technique": "Withdrawal Logic Flaw",
+  "amount": 1700000,
+  "chain": [
+    "Mayachain"
+  ],
+  "bridgeHack": true,
+  "targetType": "DeFi Protocol",
+  "source": "",
+  "returnedFunds": null,
+  "defillamaId": "3791",
+  "language": "Go"
+}
+
+=== Step 2: the incident block and its single transaction, read live ===
+height: 17977941 | time (UTC): 2026-08-18T17:00:38.654351652Z | chain_id: mayachain-mainnet-v1
+number of transactions in this block: 1
+computed tx hash (sha256 of raw tx bytes): 516BA14D6976EC7B8A3087E1C52B195433EF0F9D85F4B9520675BC4FEB99E9B7
+
+=== Step 3: decode that transaction via mayanode's own REST endpoint ===
+tx height: 17977941 | code: 0 (0 = success) | num messages: 23
+  trade- messages carrying ARB~ETH: 20
+  trade- messages carrying ARB~LINK: 2
+  trailing DONATE message: DONATE:ARB.LINK, coin [{'asset': 'MAYA.CACAO', 'amount': '1', 'decimals': '0'}]
+  -> matches MR !835's root-cause step 1: a trailing 1-unit DONATE message inside a
+     multi-message MsgDeposit clobbers the earlier messages' ObservedTxInVoter
+
+=== Step 4: the follow-up add-liquidity + withdraw, located via Midgard ===
+height: 17977971
+  addLiquidity IN: 100 CACAO (1e10 decimals) + 100 ARB.LINK (1e8 decimals)
+  withdraw OUT to maya1dl3yrfpedyr5jfr0r86s2apjltnjqgszmwsv8x: 48869502.5269541928 CACAO (exact, Decimal)
+  -> MR !835's own RCA states this step 'withdrew 48.87 million CACAO'; independently
+     re-derived here to full precision: 48869502.5269541928 CACAO
+
+=== Step 5: spot-check that add+withdraw action against the raw transaction ===
+  raw tx 888AF3EBE9A9A0DBA0F64FE4FD77793E69872466691387A786C9FE19E2693519: 2 messages
+    memo=+:ARB.LINK:0xa2f246f82995CBcCA8eD0d9F251383881A5E423e  coins=[{'asset': 'MAYA.CACAO', 'amount': '1000000000000', 'decimals': '0'}]
+    memo=WITHDRAW:ARB.LINK:9900  coins=[{'asset': 'MAYA.CACAO', 'amount': '1', 'decimals': '0'}]
+  -> matches the Midgard-derived add+withdraw pair independently, from the chain's own tx data
+
+=== Step 6: the swaps that converted phantom CACAO into real BTC ===
+  swap actions sending BTC.BTC to bc1q0hsgwunccczelq05ucpmfz268eyy5jr2y5l646: 10
+  total BTC swapped out (Midgard action log): 2082730682 sats = 20.82730682 BTC
+
+=== Step 7: independent cross-check against Bitcoin mainnet itself (Blockstream) ===
+  address: bc1q0hsgwunccczelq05ucpmfz268eyy5jr2y5l646
+  funded_txo_sum (total ever received): 2082731774 sats = 20.82731774 BTC
+  spent_txo_sum (total ever spent out): 0 sats = 0.00000000 BTC
+  tx_count: 12
+  difference vs Midgard-derived total: 1092 sats (0.0001%) - Bitcoin's own chain data
+  confirms the BTC arrived and, since spent_txo_sum is 0, remains entirely unspent
+
+=== Step 8: full CACAO reconciliation for the attacker's native address, checked live today ===
+  total actions found for maya1dl3yrfpedyr5jfr0r86s2apjltnjqgszmwsv8x: 54
+  net CACAO flow (all OUT-to-this-address minus all IN-from-this-address, across every
+  action Midgard has indexed for it): 8874278.3052775995 CACAO
+  current native CACAO balance (mayanode /cosmos/bank, live): 8874269.1052775996 CACAO
+  gap vs the action-log-derived net flow: -9.1999999999 CACAO (native gas fees are paid out of
+  this balance but are not themselves a Midgard 'action', which is why a small negative
+  gap here is expected, not a discrepancy)
+  -> of the 48869502.5269541928 CACAO withdrawn (Step 4), 40,000,000 CACAO was
+     swapped out to real BTC (Step 6); the rest, 8874269.1052775996 CACAO, still sits
+     unconverted in the attacker's own MAYAChain wallet as of this run, not yet moved
+     to an asset outside the chain's own accounting the way the BTC has
+
+=== Step 9: USD conversion of the confirmed BTC extraction, CoinGecko historical price ===
+  BTC/USD, CoinGecko daily snapshot 2026-08-18 (theft day): 64491.345282946255
+  20.82730682 BTC @ theft-day price -> $1,343,181.04
+  hourly BTC/USD around the actual swap window (17:00-18:00 UTC):
+    2026-08-18T16:00:00Z  $64,817.62
+    2026-08-18T17:00:00Z  $64,790.82
+    2026-08-18T18:00:00Z  $64,633.94
+  DefiLlama's own tracked figure for this incident: $1,700,000
