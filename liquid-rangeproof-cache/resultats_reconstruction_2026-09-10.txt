@@ -1,0 +1,95 @@
+=== Step 1: root cause, ElementsProject/elements' own GitHub repo ===
+Release tag: elements-23.3.4
+Published at: 2026-09-09T03:14:44Z
+Release body (What's Changed):
+## What's Changed
+* Change test order in feature_discount_ct.py to fix intermittent failure by @tomt1664 in https://github.com/ElementsProject/elements/pull/1542
+* Use --break-system-packages for macos CI by @tomt1664 in https://github.com/ElementsProject/elements/pull/1543
+* Enable elip203 by default in liquidv1 and liquidtestnet by @psgreco in https://github.com/ElementsProject/elements/pull/1554
+* fix help man by @RuslanProgrammer in https://github.com/ElementsProject/elements/pull/1549
+* Prepare 23.3.4rc1 by @psgreco in https://github.com/ElementsProject/elements/pull/1566
+* elements-23.3.x: update secp256k1-zkp to a2b001cc20 by @delta1 in https://github.com/ElementsProject/elements/pull/1585
+* Cherry picks from 23.x into 23.3.x by @psgreco in https://github.com/ElementsProject/elements/pull/1599
+* sigcache: harden range proof cache keys and add -norangeproofcache option by @delta1 in https://github.com/ElementsProject/elements/pull/1600
+
+
+**Full Changelog**: https://github.com/ElementsProject/elements/compare/elements-23.3.3...elements-23.3.4
+
+Fix PR #1600: sigcache: harden range proof cache keys and add -norangeproofcache option
+State: closed | merged_at: 2026-09-08T19:06:54Z
+PR body:
+Target branch is elements-23.3.x
+
+Switch the range-proof and surjection-proof cache hashers from raw
+CSHA256 concatenation to CHashWriter . This length-prefixes
+every field, so distinct argument tuples with byte-identical raw
+concatenations no longer collide to the same cache key.
+
+Both caches retain per-process salted midstates with distinct domain
+separators ('r' / 's').
+
+Also adds a -norangeproofcache startup option to
+disable the range proof cache without recompiling.
+
+Unit tests cover field-boundary collisions, script sensitivity, domain
+separation, determinism, and vTags sensitivity. 
+
+Bump version to 23.3.4 and updates manpages. 
+
+Formal GitHub Security Advisories on this repo as of script run: 0 (none published yet)
+
+=== Step 2: the federation's Bitcoin reserve address, walking its own history ===
+Federation address: bc1qdlld6antmv4xug242ed83q7k4rqw50cwfns38szx4qu2f4jwaxxsuhwxxr
+Lifetime funded (sats): 2336286329078
+Lifetime spent (sats): 1976139125852
+Current balance (BTC), live: 3601.47203226
+
+=== Step 3: the 3 outflow transactions on 2026-09-06, decoded from the address's own tx history ===
+  8db751a650ae2f12006b7e8c69a75e4df360e8afd6b9e05ae0b9fa6458a7b140
+    block 965783 at 2026-09-06T14:28:56Z, net federation outflow 4002.66609035 BTC
+    input 0 spent via 11 valid witness signatures against the federation's own multisig script
+  1e5c0fbbf43fd91f9eb9d6520aa700e8644c20e7ae640b2332d097b176b3998d
+    block 965799 at 2026-09-06T16:01:28Z, net federation outflow 4.14039943 BTC
+    input 0 spent via 11 valid witness signatures against the federation's own multisig script
+  cb1a2b59147ba452d7ce5b9454658e4b276dd414e4f231b3516b2e43f87e403e
+    block 965804 at 2026-09-06T16:48:45Z, net federation outflow 1.01571202 BTC
+    input 0 spent via 11 valid witness signatures against the federation's own multisig script
+
+Total net outflow across these 3 transactions: 4007.82220180 BTC
+
+=== Step 4: main drain tx's own outputs, decoded from its receipt ===
+Total inputs: 4019.44426085 BTC across 83 inputs
+  -> bc1qgslsydz56d0ed6827hdemfmk5w2f6ldyc6wt7p 3996.01834922 BTC
+  -> bc1qkxwva32eh7mgezq5kladncd3n5wtcjmslh98my 2.65138358 BTC
+  -> bc1qk3cvk5599nydy8zwavlxaduke54pgf4vl0ckru 3.99601658 BTC
+Fee: 34097 sats
+
+=== Step 5: the OP_RETURN contact message, 2026-09-06 ===
+  c103de95817b43f2df635ec6f35ff126ca26a7c6d20570c4b01866b2b3e69a19 block 965818 at 2026-09-06T18:30:10Z, 0.00001000 BTC sent to federation address with an OP_RETURN payload
+
+=== Step 6: the return transaction, 2026-09-07 ===
+  a6d697a25266ce3c78774fd1d75f896b7af522ada209b0f6228ea497bc49a46d block 965950 at 2026-09-07T16:09:25Z
+  source address(es): {'bc1ql4mfu6aundtkksxklfajs2h3t9nzcd6gyqjlte'}
+  sent to federation: 3400.00000000 BTC
+  change back to source: bc1ql4mfu6aundtkksxklfajs2h3t9nzcd6gyqjlte 598.49955894 BTC
+
+=== Step 7: current live balance of the consolidation address bc1ql4mfu6aundtkksxklfajs2h3t9nzcd6gyqjlte ===
+Current balance, live: 598.50041569 BTC
+This is the still-unreturned amount as of the moment this script ran.
+
+=== Step 8: Liquid sidechain block cited in Liquid Network's own incident report ===
+Liquid block 4050336: hash e1d9a2aae69e0fc3ca18f7f7f84e0615e92a5e3b5000d66c10c34043346da0d5
+Chain-recorded timestamp: 2026-09-06T13:53:10Z (unix 1788702790)
+Liquid Network's own official incident report (@Liquid_BTC on X, posted 2026-09-08 19:10 UTC)
+states: "On September 6, 2026 at 15:53:10 UTC (Liquid block 4,050,336)"
+That is 2 hours later than this block's own chain-recorded timestamp.
+Block contains 7 transactions, all Confidential Transactions (blinded amounts)
+except fee outputs. Public explorer access alone cannot unblind them, so no specific
+txid in this block is claimed here as 'the' fraudulent mint.
+
+=== Step 9: BTC/USD, live and historical, from CoinGecko ===
+Live BTC/USD: 77809 at 2026-09-10T11:09:20Z
+CoinGecko 2026-09-06 snapshot BTC/USD: 79821.69873179746
+
+Still-unrecovered (floor, this address only): 598.50041569 BTC = $46,568,718.84 at live price
+Gross drained (3 txs, 2026-09-06): 4007.82220180 BTC = $319,911,176.36 at 2026-09-06 price

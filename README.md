@@ -28,11 +28,11 @@ lost in the merge.
 
 | | |
 |---|---|
-| Incidents covered | 10, independently reconstructed on-chain, see the index table for detail |
-| Cumulative loss, recomputed | About $35.4M across the 10 incidents ($35,427,649 exactly, sum of the figures in the table below). At least one entry is a known floor, so the real total is higher. |
-| Corrections made | 4 of the first 8 incidents correct at least one already-published press or DefiLlama figure or label: Sandbox (real loss about 5.2x the reported figure), Balancer V1 (4 pools drained, not the single one reported), Notional V1 (DefiLlama's own feed labels the exploited contract "V2" when it's actually V1), Cozy V2 Optimism (both Cozy's own figure and DefiLlama's undercount the verified on-chain total). A 5th, different kind of correction: Cosmos EVM catches a citation error in a primary source itself (Cosmos Labs' own official post-mortem), not just press or DefiLlama. A 6th, same kind: the Allbridge CCTP entry catches SlowMist's own published post-mortem stating the wrong date (July 26) for a transaction independently found and timestamped July 25, confirmed on two RPC endpoints; it also separates the Router's real loss, the attacker's net profit, and DefiLlama's gross-balance figure, three different numbers DefiLlama's single tracked total conflates. This count is updated by hand each time a new correction is found, `add_new_entry.py` doesn't touch it |
+| Incidents covered | 11, independently reconstructed on-chain, see the index table for detail |
+| Cumulative loss, recomputed | About $82.0M across the 11 incidents ($81,996,368 exactly, sum of the figures in the table below). At least one entry is a known floor, so the real total is higher. |
+| Corrections made | 4 of the first 8 incidents correct at least one already-published press or DefiLlama figure or label: Sandbox (real loss about 5.2x the reported figure), Balancer V1 (4 pools drained, not the single one reported), Notional V1 (DefiLlama's own feed labels the exploited contract "V2" when it's actually V1), Cozy V2 Optimism (both Cozy's own figure and DefiLlama's undercount the verified on-chain total). A 5th, different kind of correction: Cosmos EVM catches a citation error in a primary source itself (Cosmos Labs' own official post-mortem), not just press or DefiLlama. A 6th, same kind: the Allbridge CCTP entry catches SlowMist's own published post-mortem stating the wrong date (July 26) for a transaction independently found and timestamped July 25, confirmed on two RPC endpoints; it also separates the Router's real loss, the attacker's net profit, and DefiLlama's gross-balance figure, three different numbers DefiLlama's single tracked total conflates. A 7th, same kind again: the Liquid Network entry catches the project's own incident report citing 15:53:10 UTC for the block where the exploit happened, when that block's own chain-recorded timestamp, read live, is 13:53:10 UTC; it also reports the still-unrecovered floor (598.50 BTC) rather than DefiLlama's pre-return gross figure ($320,000,000), since most of the drained BTC was returned the next day. This count is updated by hand each time a new correction is found, `add_new_entry.py` doesn't touch it |
 | Method | Each subfolder keeps its original Python reconstruction script, its `registre_hypotheses.csv` falsification registry, and its script's raw output in `resultats_*.txt`, so every figure below can be checked against the file that produced it |
-| License | MIT across all 10 entries, single author (s_pap, 2026) |
+| License | MIT across all 11 entries, single author (s_pap, 2026) |
 
 ## Index
 
@@ -42,6 +42,7 @@ label.
 
 | Protocol | Date | Loss ($) | Chain | Type/Mechanism | Link |
 |---|---|---|---|---|---|
+| Liquid Network | 2026-09-06 / 09-07 | ≥ 46,568,719 [^liquid-rangeproof-cache] | Bitcoin + Liquid | Range-proof cache-key collision in Elements let a peg-out register as fully backed; the federation's real multisig then genuinely signed the BTC release | [liquid-rangeproof-cache/](liquid-rangeproof-cache/) |
 | Moonwell (MAMO market) | 2026-08-27 | ≈ 9,131,000 [^moonwell] | Base | Donation attack on an illiquid market's exchange rate, combined with collateral/oracle manipulation | [moonwell-mamo-oracle/](moonwell-mamo-oracle/) |
 | Term Finance (Meta Vault) | 2026-08-17 / 08-23 | ≈ 8,500,000 [^termfinance] | Ethereum | Hijacked governance: a proposal self-voted by a fresh wallet through an attacker-deployed executor, normal 6-day delay elapsed with no veto | [termfinance-metavault-governance/](termfinance-metavault-governance/) |
 | Tectonic | 2026-08-30 | ≈ 8,300,000 [^tectonic] | Cronos | Donation attack (recursive collateral minting then direct donations to the market contract) inflating an exchange rate, massive borrowing against the inflated collateral, followed by a chain rollback | [tectonic-cronos/](tectonic-cronos/) |
@@ -54,6 +55,7 @@ label.
 | Cozy V2 | 2026-09-02 / 09-07 | 174,311 [^cozy] | Optimism | False answers to the UMA Optimistic Oracle left uncontested during its 5-day dispute window | [cozy-v2-optimism/](cozy-v2-optimism/) |
 [^cosmos-evm-vesting-underflow]: Cosmos Labs' own post-mortem (github.com/cosmos/security, 2026-08-28) states $5.72M realized across all 6 exploited chains ($2.87M DEX-sold, $2.85M CEX-frozen), explicitly "not independently audited", with 3 of the 6 chains left unnamed. Independently reconstructed against each named chain's live RPC: TAC's exact drain (2,985,651,403.40 TAC, from a self-derived bonded_tokens_pool address, not looked up anywhere) and MANTRA's two attack transactions both matched the post-mortem's own cited figures to the block and second. KiiChain's reconstruction caught a citation error in the post-mortem itself: the transaction hash it cites for the KiiChain anchor sits at block 9355107, not the 9355102 stated, confirmed independently via two separate RPC calls. DefiLlama tracks this as 3 separate rows summing to $17.2M, a real, disclosed gap against the primary source's own $5.72M, not resolved either way here. See `cosmos-evm-vesting-underflow/README.md`.
 [^allbridge-cctp-forged-message]: Allbridge's Router (0xaa119f7442ecc28b9a8f236707ada8362cff24ff, verified as "Router" on Base Blockscout) held 191,155.976393 USDC one block before the attack and exactly 1,000.000000 USDC one block after (read live via `eth_call`), a real Router loss of 190,155.976393 USDC. Of that, the attacker's own transaction receipt shows a kept profit of 189,751.554381 USDC and a 404.422012 USDC flash-loan fee paid to Aave, matching SlowMist's own published post-mortem to 6 decimals throughout. DefiLlama tracks this incident as "Allbridge", $191,000, Base only; that figure sits closer to the Router's gross pre-attack balance than to either the real loss or the attacker's profit. This reconstruction also independently found the Polygon setup transaction SlowMist's article never names, and caught a one-day date error in that same article (see `allbridge-cctp-forged-message/README.md`). External source: https://slowmist.medium.com/a-cross-chain-attack-spanning-one-month-analysis-of-the-allbridge-hack-32a6183bce08.
+[^liquid-rangeproof-cache]: A range-proof cache-key collision in Elements (ElementsProject/elements PR #1600, merged 2026-09-08, released as elements-23.3.4) let a peg-out register as fully backed when it was not; the federation's real 11-of-15 multisig, decoded live from its own witness script, then genuinely signed 3 transactions releasing 4,007.82220180 BTC from its Bitcoin reserve on 2026-09-06 (read live via the public Esplora API, not a stolen key). A single return transaction sent 3,400.00000000 BTC back on 2026-09-07; the source address's own live balance, queried again 2026-09-10, is 598.50041569 BTC, essentially unchanged since, which is the still-unrecovered floor reported here (two smaller untraced destination addresses, 6.65 BTC combined, are excluded from it). DefiLlama tracks this as "Liquid Network", $320,000,000, dated 2026-09-06, the gross figure before the return. This reconstruction also caught Liquid Network's own incident report citing 15:53:10 UTC for block 4,050,336, when that block's own chain-recorded timestamp is 13:53:10 UTC. See `liquid-rangeproof-cache/README.md`.
 
 [^moonwell]: Debt still unrecovered as of August 28, 2026 per Moonwell's own official postmortem (595 liquidations on $11.03M gross borrowed, $9.131M remained uncovered at that date). Press coverage (PeckShield/CertiK) reported about $8.7M. See `moonwell-mamo-oracle/README.md`.
 [^termfinance]: Press figure, consistent with the amounts independently verified on-chain (2,841.7435 WETH drained from the ETH Meta Vault, plus 1,679,639.290442 USDC swept then converted to 1,679,642.454089 DAI). No dollar total was independently recomputed in the source repo. See `termfinance-metavault-governance/README.md`.
@@ -151,16 +153,17 @@ tips with a tx hash or block number attached get looked at first.
   from an old summary without checking it against those files. When a
   subfolder's source data doesn't support a full dollar total, the table
   says so in a footnote instead of inventing one.
-- Two entries (Sandbox, Balancer V1) report a dollar figure that is a
-  known floor, not a complete total, because their source repo found a
-  wider scope than the press without converting every recovered amount to
-  dollars. Read the linked subfolder for the full accounting in native
-  units.
-- The Tectonic and Moonwell entries report the confirmed unrecoverable or
-  still-uncovered figure, not the higher, gross amount borrowed or
-  extracted before liquidations and, for Tectonic, a chain rollback
-  recovered part of it. Both readings are given in the footnote and in the
-  linked subfolder.
+- Three entries (Sandbox, Balancer V1, Liquid Network) report a dollar
+  figure that is a known floor, not a complete total, because their source
+  repo found a wider scope than the press without converting every
+  recovered amount to dollars, or (Liquid Network) left some smaller
+  destination addresses untraced. Read the linked subfolder for the full
+  accounting in native units.
+- The Tectonic, Moonwell, and Liquid Network entries report the confirmed
+  unrecoverable or still-uncovered figure, not the higher, gross amount
+  borrowed or extracted before liquidations or, for Tectonic, a chain
+  rollback, and for Liquid Network, a large partial return the next day.
+  Both readings are given in the footnote and in the linked subfolder.
 - `tectonic-cronos/` is the only subfolder without a `resultats_*.txt` or
   a `registre_hypotheses.csv`: its script is a tool for reading the
   chain's current state (`tectonic_risk_snapshot.py`), not a replay of the
