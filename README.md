@@ -8,6 +8,15 @@ chain data: `eth_getLogs`, decoded transaction receipts, live `eth_call`
 reads. When press coverage or DefiLlama gets a number, a scope, or a label
 wrong, this repo says so and shows the on-chain proof.
 
+By the same author: [@RealSpap on X](https://x.com/RealSpap), [Dune
+profile](https://dune.com/s_pap), and
+[[private-repo-name-redacted]](https://github.com/RealSpap/[private-repo-name-redacted]),
+on-chain research into who actually controls DeFi admin keys.
+
+Get notified of new postmortems: click Watch, then Custom, then Releases
+only, on this repo's GitHub page. Every new incident gets tagged as a
+release.
+
 This repo brings together 8 postmortems that used to live in 8 separate
 GitHub repos. The merge is justified because one repo per incident doesn't
 scale: 8 repos today and 50 tomorrow would mean 50 places to search instead
@@ -119,6 +128,15 @@ incident, or a compromised validator set all belong here just as much, as
 long as they get the same treatment: an independent on-chain reconstruction
 from a primary source, not a summary of press coverage.
 
+## Suggest an incident
+
+Know of an on-chain incident that fits this program's scope, an
+independent, primary-source reconstruction, not a summary of press? Open
+a GitHub issue with the protocol name, date, and chain, or reach out on X
+([@RealSpap](https://x.com/RealSpap)). Every entry is still built and
+verified by one person, so not every suggestion becomes a subfolder, but
+tips with a tx hash or block number attached get looked at first.
+
 ## Limits
 
 - This is independent research, not a security audit, and isn't
@@ -145,6 +163,26 @@ from a primary source, not a summary of press coverage.
   incident, and its loss figures ($120M+ borrowed, $8.3M unrecoverable)
   rest on its README and the Dune dashboard it links, not on a locally
   reproducible output file in this repo. Flagged here rather than hidden.
+
+## Disclaimer
+
+Every entry in this repo is an independent, factual reconstruction of
+publicly available on-chain data (transaction receipts, decoded logs,
+live contract reads) as of the date noted per entry, not a security
+audit, and not affiliated with, commissioned by, or endorsed by any
+protocol, auditor, or outlet named in a subfolder. Statements about who
+sent, received, or drained funds are based solely on on-chain records and
+publicly disclosed information cited inline, so no claim of wrongdoing
+beyond what that cited on-chain data shows is made or implied against any
+named address or entity. Nothing in this repo is legal, financial, or
+investment advice. Each entry reflects a snapshot in time: on-chain
+balances, labels, and follow-up transactions can and do change after
+publication, and entries are not updated automatically to reflect such
+changes. Any individual or entity named in an entry who believes a fact
+about them is inaccurate is invited to contact the author with supporting
+evidence for a prompt, transparent correction. Readers should
+independently verify all cited addresses, transactions, and figures
+before relying on them.
 
 ## License
 

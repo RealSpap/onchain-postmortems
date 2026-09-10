@@ -191,7 +191,7 @@ if __name__ == "__main__":
     print("=== Step 1: TODO ===")
 '''
 
-REGISTRE_HEADER = "cle;hypothese;locator;test_falsification;confiance_preuve\n"
+REGISTRE_HEADER = "key;hypothesis;locator;falsification_test;evidence_confidence\n"
 
 
 def scaffold_subfolder(slug: str, name: str, date: str, chain: str):

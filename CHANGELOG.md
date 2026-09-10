@@ -1,0 +1,23 @@
+# Changelog
+
+One entry per addition or correction to this repo. Each incident added
+with `add_new_entry.py` gets tagged as a matching GitHub release, see
+"Get notified of new postmortems" in `README.md`.
+
+## 2026-09-10
+
+- Automated review pass: translated the remaining French
+  `registre_hypotheses.csv` files (all 7 subfolders that have one) to
+  English, fixed `add_new_entry.py`'s `REGISTRE_HEADER` so newly
+  scaffolded entries use the same English header, added a "Suggest an
+  incident" note, an author cross-linking line, a root-level Disclaimer
+  section, and this changelog with the accompanying Watch/Releases
+  guidance in `README.md`.
+- Translated `README.md` and `add_new_entry.py` to English.
+
+## 2026-09-09
+
+- Consolidated 8 previously separate postmortem repos into this single
+  indexed repo: sandbox-oft-delegate-hijack, moonwell-mamo-oracle,
+  balancer-v1-rounding, termfinance-metavault-governance,
+  notional-v1-escrow, ajna-liquidation, cozy-v2-optimism, tectonic-cronos.
