@@ -1,0 +1,14 @@
+USDC: 1,877,869.183182
+DAI: 1,736.920247
+USDT: 51,759.121322
+TOTAL stablecoin units: 1931365.224751
+
+  to f908610e: 1,064,576.777548
+  to 5051da1c: 781,045.866256
+  to a8ce49a5: 85,742.580941
+  to probe: 0.000006
+
+press figure (BlockSec/DefiLlama): 776,000
+press covers only tx 0xd191fead = 774943.379409 USDC
+ratio my_total/press = 2.489x
+n theft txs: 17

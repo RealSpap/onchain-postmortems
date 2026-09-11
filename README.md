@@ -28,8 +28,8 @@ lost in the merge.
 
 | | |
 |---|---|
-| Incidents covered | 37, independently reconstructed on-chain, see the index for detail |
-| Cumulative loss, recomputed | About $781.4M across the 37 incidents ($781,388,640 exactly, sum of the figures in the index below). At least one entry is a known floor, so the real total is higher. |
+| Incidents covered | 38, independently reconstructed on-chain, see the index for detail |
+| Cumulative loss, recomputed | About $783.3M across the 38 incidents ($783,320,005 exactly, sum of the figures in the index below). At least one entry is a known floor, so the real total is higher. |
 | Corrections made | 24 entries below correct, reconcile, or newly surface a press or DefiLlama figure, label, date, or classification (18 corrections, 4 reconciliations, 2 discoveries not previously priced by DefiLlama at all). See Corrections to press and DefiLlama below. |
 | Method | Each subfolder keeps its original Python reconstruction script, its `registre_hypotheses.csv` falsification registry, and its script's raw output in `resultats_*.txt`, so every figure below can be checked against the file that produced it |
 | License | MIT across all 35 entries, single author (s_pap, 2026) |
@@ -75,7 +75,7 @@ exact figure decoded from source data.
 
 ### 2026
 
-**2026 total: $781,388,640** across 37 incidents (6 months, April through September). At least one entry this year is a known floor, so the true total is higher.
+**2026 total: $783,320,005** across 38 incidents (6 months, April through September). At least one entry this year is a known floor, so the true total is higher.
 
 #### September 2026 (current month)
 
@@ -126,9 +126,10 @@ exact figure decoded from source data.
 | Ostium (PrivatePriceUpKeep Compromise) | 2026-07-15 | ≈ 23,752,642 [^ostium-oracle-forwarder-compromise] | Arbitrum | Oracle | Compromised off-chain oracle-signer credential pushed self-authored BTC/USD price reports through a trusted PrivatePriceUpKeep forwarder, extracting real USDC from the counterparty vault | [ostium-oracle-forwarder-compromise/](ostium-oracle-forwarder-compromise/) |
 | Lazy Summer Protocol | 2026-07-06 | ≈ 6,016,632 [^lazy-summer-stale-ark-donation] | Ethereum | Donation-Attack | Donation attack: a zeroed-cap Ark, still summed in totalAssets() despite being blocked from new deposits, was donated an over-valued token to inflate vault share price ~9.5%, redeemed after a flash-loan-funded deposit at the honest price | [lazy-summer-stale-ark-donation/](lazy-summer-stale-ark-donation/) |
 | Across Protocol (Solana Event Spoofing) | 2026-07-17 | ≈ 4,500,000 [^across-solana-event-spoofing] | Solana + Ethereum | Bridge | Missing Anchor CPI event-discriminator check let a wrapper program forge FundsDeposited events via a read-only instruction, so the relayer paid real funds against Solana deposits that never escrowed anything | [across-solana-event-spoofing/](across-solana-event-spoofing/) |
+| BarnBridge SMART Yield | 2026-07-06/2026-07-23 | ≈ 1,931,365 [^barnbridge-dormant-dao-controller-swap] | Ethereum | Governance | Governance takeover of an abandoned DAO used to swap SMART Yield pool Controllers and drain live ERC-20 approvals | [barnbridge-dormant-dao-controller-swap/](barnbridge-dormant-dao-controller-swap/) |
 | Allbridge (CCTP Forged Message) | 2026-07-25 / 08-19 | ≈ 190,156 [^allbridge-cctp-forged-message] | Polygon + Base | Bridge | Forged Circle CCTP message accepted without checking the mint recipient, unlocked with a self-funded Aave flash loan to match the fabricated credit | [allbridge-cctp-forged-message/](allbridge-cctp-forged-message/) |
 
-**July 2026 subtotal: $96,606,395** across 6 incidents. Includes 1 known floor figure (COLDCARD (Weak Seed RNG)), so the true total is higher.
+**July 2026 subtotal: $98,537,760** across 7 incidents. Includes 1 known floor figure (COLDCARD (Weak Seed RNG)), so the true total is higher.
 
 #### June 2026
 
@@ -193,6 +194,7 @@ exact figure decoded from source data.
 [^drift-protocol-durable-nonce-admin-hijack]: Two Squads multisig signers were social-engineered into pre-signing durable-nonce transactions weeks earlier; broadcasting them overwrote Drift's own on-chain admin key (confirmed via the program's own "admin: X -> Y" log line, not a press claim), which then listed a fabricated "CarbonVote" (CVT) token as collateral (mint independently derived from the hijack transaction's own inner instructions, not supplied by press, and confirmed via live Metaplex metadata) and raised the withdraw guard on at least 23 real spot markets over about 2 hours. $295,706,374.93 is Drift's own stated total (drift.trade, fetched live), matching DefiLlama's tracked $295,000,000; a representative sample of the real-asset outflow (USDT and USDS legs) independently matches Drift's own per-asset figures to within 0.002%. See `drift-protocol-durable-nonce-admin-hijack/README.md`. External source: https://www.drift.trade/updates/incident-recovery-update-april-16-2026-now.
 [^wealthmanagementv2-selfowned-proxy-drain]: No press-disclosed transaction hash or contract address exists for this incident; starting from only the attacker EOA press names, 4 `withdraw(address,uint256,address)` calls, decoded from their own receipts' real Transfer events (not from the calls' own calldata argument, which does not equal the amount actually moved), move exactly 422,315.000000 real BSC-USDT from an attacker-deployed, attacker-owned EIP-1967 proxy to one collector address, $422,251.40 at CoinGecko's 2026-09-08 historical price, about 16.0x DefiLlama's tracked $26,414. That collector still holds 250,000.00202223 USDT three days later. The proxy's own `owner()` has been the attacker's own EOA since the same session that deployed it, and the implementation's `owner()`, called directly, returns the zero address, contradicting DefiLlama's "Key Compromise" classification: there is no prior owner for a leaked key to have taken anything from. Reported as a floor: only nonces 0-41 of the attacker's 252 lifetime transactions were exhaustively decoded. See `wealthmanagementv2-selfowned-proxy-drain/README.md`. External source: https://api.llama.fi/hacks.
 [^weft-finance-hug-collateral-manipulation]: DefiLlama's hacks feed lists this incident with an empty source field, so this entry starts entirely from Weft's own official DefiLlama TVL adapter (Weft's own PR, not a block explorer) and reconstructs the rest from the chain: a single swap of 70.6 XRD into 539,703.17 units of an obscure meme token ("Hug", HUG) through one thin CaviarNine pool, posted as CDP collateral, unlocked a borrow of 47,280,000 LSULP and 13,100,500 XRD, after which the HUG collateral was removed in the same transaction. The CDP's own on-chain data, read live, confirms the aftermath 6 days later: real outstanding loan units in both assets against 0.0000000000000165 HUG of collateral, functionally zero. Net of the one partial liquidation that followed (51.13 of the 47,280,000 LSULP repaid), the independently reconstructed loss is $61,592.84 at CoinGecko's 2026-08-30 XRD price and Weft's own on-chain LSULP/XRD price-feed rate, about 30.5% above DefiLlama's tracked $47,200. See `weft-finance-hug-collateral-manipulation/README.md`. External source: https://api.llama.fi/hacks.
+[^barnbridge-dormant-dao-controller-swap]: 1,877,869.183182 USDC + 51,759.121322 USDT + 1,736.920247 DAI = $1,931,365.22 across 17 extraction transactions from 10 SMART Yield pools, decoded directly from the Governance contract's own proposal-execution receipts — 2.49x BlockSec's and DefiLlama's reported $776,000 (one of the seventeen transactions, correctly identified but not the total). A separate $3,001,678.69 in unattributed flows through a third, unrelated Controller from 2026-08-22 is excluded from this figure. See `barnbridge-dormant-dao-controller-swap/README.md`.
 
 ## Corrections to press and DefiLlama
 

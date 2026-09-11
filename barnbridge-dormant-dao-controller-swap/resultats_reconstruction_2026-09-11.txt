@@ -1,0 +1,178 @@
+[0] event topics recomputed from signatures (keccak self-check passed)
+    0xc2c021f5d73c63c481d336fbbafec58f694fc45095f00b02d2deb8cca59afe07  ProposalCreated
+    0x88d35328232823f54954b6627e9f732371656f6daa40cb1b01b27dc7875a7b47  Vote
+    0xf7230a453b4c21e4f2d0ef1ad055635b08cb2c884eaf24a5ddc7147c79fd8c22  ProposalQueued
+    0x9c85b616f29fca57a17eafe71cf9ff82ffef41766e2cf01ea7f8f7878dd3ec24  ProposalExecuted
+    0x27eba018e1c52b84f732fe4d806fd9750c60752f1d37e7f70bcb4cbec65b1c6a  AbrogationProposalStarted
+    0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef  Transfer
+    0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0  OwnershipTransferred
+
+[1] BarnBridge's own subgraph repo lists 9 deployed SMART Yield pools
+    bb_aDAI    token=0x6c9dae2c40b1e5883847bf5129764e76cb69fc57 provider=0x372d02e58a8fcf42114232f614d57f31401d4c7d controller=0x851e47f37e20712407990556376a7124de5c3d4a
+    bb_aGUSD   token=0x6324538cc222b43490dd95cebf72cf09d98d9dae provider=0x5cfcfb6171db72a26b84bc50edd2d80b0f3fc094 controller=0x851e47f37e20712407990556376a7124de5c3d4a
+    bb_aUSDC   token=0x3cf46da7d65e9aa2168a31b73dd4beea5ca1a1f1 provider=0x99230f93135f3650ab5706b7b6d4b30b4ee961c9 controller=0x851e47f37e20712407990556376a7124de5c3d4a
+    bb_aUSDT   token=0x660daf6643191cf0ed045b861d820f283ca078fc provider=0xbf5649526aa1dc1daa82ed29ddc65149278ca5d8 controller=0x851e47f37e20712407990556376a7124de5c3d4a
+    bb_cDAI    token=0x673f9488619821ab4f4155fdffe06f6139de518f provider=0xe6c1a8e7a879d7febb8144276a62f9a6b381bd37 controller=0x851e47f37e20712407990556376a7124de5c3d4a
+    bb_crDAI   token=0x89d82fdf095083ded96b48fc6462ed5dbd14151f provider=0x37923eb0f4a9097b2774eab9d928afad6196cf76 controller=0x851e47f37e20712407990556376a7124de5c3d4a
+    bb_crUSDC  token=0x62e479060c89c48199fc7ad43b1432cc585ba1b9 provider=0xa4f8310cd972b1fc3ca9f130b235a91bc882badb controller=0x851e47f37e20712407990556376a7124de5c3d4a
+    bb_crUSDT  token=0xc45f49be156888a1c0c93dc0fe7dc89091e291f5 provider=0x7b1e1a841afe589f1b5337a2eec41a18a58475be controller=0x851e47f37e20712407990556376a7124de5c3d4a
+    bb_cUSDC   token=0x4b8d90d68f26def303dcb6cfc9b63a1aaec15840 provider=0xdaa037f99d168b552c0c61b7fb64cf7819d78310 controller=0x66c6f3b4b4b458e6d764759ecf122484ebef7580
+
+[2] Governance 0x4cAE362D7F227e3d306f70ce4878E245563F3069: 25 logs over blocks 25000000..25955104
+    blk=25472231 P14 ProposalCreated            from=0xf908610e9174c7cd6e9dfd371e238be4511297a1 
+    blk=25494106 P15 ProposalCreated            from=0xa8ce49a57400445c6a4118ae3460ed4e46c815b8 
+    blk=25507914 P14 Vote                       from=0xf908610e9174c7cd6e9dfd371e238be4511297a1 voter=0xf908610e9174c7cd6e9dfd371e238be4511297a1 support=True power=63,824.1715
+    blk=25508121 P14 ProposalQueued             from=0xf908610e9174c7cd6e9dfd371e238be4511297a1 caller=0xf908610e9174c7cd6e9dfd371e238be4511297a1
+    blk=25508121 P14 AbrogationProposalStarted  from=0xf908610e9174c7cd6e9dfd371e238be4511297a1 caller=0xf908610e9174c7cd6e9dfd371e238be4511297a1
+    blk=25527946 P15 Vote                       from=0xa8ce49a57400445c6a4118ae3460ed4e46c815b8 voter=0xa8ce49a57400445c6a4118ae3460ed4e46c815b8 support=True power=135,659.3524
+    blk=25529980 P15 ProposalQueued             from=0xa8ce49a57400445c6a4118ae3460ed4e46c815b8 caller=0xa8ce49a57400445c6a4118ae3460ed4e46c815b8
+    blk=25529981 P15 AbrogationProposalStarted  from=0xa8ce49a57400445c6a4118ae3460ed4e46c815b8 caller=0xa8ce49a57400445c6a4118ae3460ed4e46c815b8
+    blk=25535097 P14 ProposalExecuted           from=0xf908610e9174c7cd6e9dfd371e238be4511297a1 caller=0x8b5f73544e50f18791682d1bcb4bb5011ca81b00
+    blk=25540060 P16 ProposalCreated            from=0xf908610e9174c7cd6e9dfd371e238be4511297a1 
+    blk=25541984 P17 ProposalCreated            from=0x01c3dbd90a0d639ca6c9f6a11928056168d72c89 
+    blk=25544335 P15 ProposalExecuted           from=0xa8ce49a57400445c6a4118ae3460ed4e46c815b8 caller=0xa8ce49a57400445c6a4118ae3460ed4e46c815b8
+    blk=25544750 P18 ProposalCreated            from=0xb971770cd53b839004fdfcaf4cd2f5b39342cd9a 
+    blk=25560921 P16 Vote                       from=0x2f6be6ac5af4af7ce7d618006ebd8d5137f2de11 voter=0x2f6be6ac5af4af7ce7d618006ebd8d5137f2de11 support=True power=301,504.2857
+    blk=25560922 P16 Vote                       from=0xf908610e9174c7cd6e9dfd371e238be4511297a1 voter=0xf908610e9174c7cd6e9dfd371e238be4511297a1 support=True power=62,995.2035
+    blk=25560924 P16 Vote                       from=0xa8ce49a57400445c6a4118ae3460ed4e46c815b8 voter=0xa8ce49a57400445c6a4118ae3460ed4e46c815b8 support=True power=134,468.4186
+    blk=25572315 P17 Vote                       from=0x2f6be6ac5af4af7ce7d618006ebd8d5137f2de11 voter=0x2f6be6ac5af4af7ce7d618006ebd8d5137f2de11 support=False power=301,393.4950
+    blk=25572316 P17 Vote                       from=0xf908610e9174c7cd6e9dfd371e238be4511297a1 voter=0xf908610e9174c7cd6e9dfd371e238be4511297a1 support=False power=62,971.6905
+    blk=25572318 P17 Vote                       from=0xa8ce49a57400445c6a4118ae3460ed4e46c815b8 voter=0xa8ce49a57400445c6a4118ae3460ed4e46c815b8 support=False power=134,418.5727
+    blk=25572319 P18 Vote                       from=0x2f6be6ac5af4af7ce7d618006ebd8d5137f2de11 voter=0x2f6be6ac5af4af7ce7d618006ebd8d5137f2de11 support=False power=301,234.3372
+    blk=25572320 P18 Vote                       from=0xf908610e9174c7cd6e9dfd371e238be4511297a1 voter=0xf908610e9174c7cd6e9dfd371e238be4511297a1 support=False power=62,937.9127
+    blk=25572321 P18 Vote                       from=0xa8ce49a57400445c6a4118ae3460ed4e46c815b8 voter=0xa8ce49a57400445c6a4118ae3460ed4e46c815b8 support=False power=134,346.9659
+    blk=25578928 P16 ProposalQueued             from=0xf908610e9174c7cd6e9dfd371e238be4511297a1 caller=0xf908610e9174c7cd6e9dfd371e238be4511297a1
+    blk=25578929 P16 AbrogationProposalStarted  from=0xf908610e9174c7cd6e9dfd371e238be4511297a1 caller=0xf908610e9174c7cd6e9dfd371e238be4511297a1
+    blk=25596181 P16 ProposalExecuted           from=0xa8ce49a57400445c6a4118ae3460ed4e46c815b8 caller=0xa5df767a55f11d5f89ede46dcb685880036ea5a4
+
+[2b] proposal payloads, decoded from getActions(uint256)
+     --- proposal 14: 1 action(s)
+       target=0x41ab25709e0c3edf027f6099963fe9ad3ebab3a3 sig=yieldControllTo(address) calldata=0x00000000000000000000000066c6f3b4b4b458e6d764759ecf122484ebef7580
+     --- proposal 15: 10 action(s)
+       target=0x26984a19e3c6fc8d3e8ff124cd72d71f6b603ff3 sig=yieldControllTo(address) calldata=0x000000000000000000000000851e47f37e20712407990556376a7124de5c3d4a
+       target=0x39a84fcf5c22f227f2108a9d214090ee4c334893 sig=yieldControllTo(address) calldata=0x000000000000000000000000851e47f37e20712407990556376a7124de5c3d4a
+       target=0x1050716f239e13a803b7d1ba55b187303b14374a sig=yieldControllTo(address) calldata=0x000000000000000000000000851e47f37e20712407990556376a7124de5c3d4a
+       target=0xaa963524e65c671ef7a5485adf9e342c401a46ff sig=yieldControllTo(address) calldata=0x000000000000000000000000851e47f37e20712407990556376a7124de5c3d4a
+       target=0xbd4dd68e8a91076d9d3a4d6fef49231bd6eb6ed2 sig=yieldControllTo(address) calldata=0x000000000000000000000000851e47f37e20712407990556376a7124de5c3d4a
+       target=0x2ff662a35e7f66adc10469ddba3cd45a62854718 sig=yieldControllTo(address) calldata=0x000000000000000000000000851e47f37e20712407990556376a7124de5c3d4a
+       target=0x0e87dc8aad3494252e641aad0745c009d08b8cc8 sig=yieldControllTo(address) calldata=0x000000000000000000000000851e47f37e20712407990556376a7124de5c3d4a
+       target=0xa7dad944581638ad570ce50e3e66e8cdea4f78ba sig=yieldControllTo(address) calldata=0x000000000000000000000000851e47f37e20712407990556376a7124de5c3d4a
+       target=0x4594bab27825d662064d20eb8eb75195c5d98c8b sig=yieldControllTo(address) calldata=0x000000000000000000000000851e47f37e20712407990556376a7124de5c3d4a
+       target=0xcee88909be73d07d557ef2648ab60f7c8c90ac9f sig=yieldControllTo(address) calldata=0x000000000000000000000000851e47f37e20712407990556376a7124de5c3d4a
+     --- proposal 16: 10 action(s)
+       target=0x68af34129755091e22f91899ceac48657e5a5062 sig=transferOwnership(address) calldata=0x000000000000000000000000f908610e9174c7cd6e9dfd371e238be4511297a1
+       target=0xf4bde50cdf4ee4cf3fb8702fceb6fd499a92792d sig=transferOwnership(address) calldata=0x000000000000000000000000f908610e9174c7cd6e9dfd371e238be4511297a1
+       target=0x51d924bf2ff813a68bd5f86cdcc98918f2ae5868 sig=transferOwnership(address) calldata=0x000000000000000000000000f908610e9174c7cd6e9dfd371e238be4511297a1
+       target=0x69951b60b6253697f29c8311bfcea6da09bbac0d sig=transferOwnership(address) calldata=0x000000000000000000000000f908610e9174c7cd6e9dfd371e238be4511297a1
+       target=0x10e138877df69ca44fdc68655f86c88cde142d7f sig=transferOwnership(address) calldata=0x000000000000000000000000f908610e9174c7cd6e9dfd371e238be4511297a1
+       target=0x31f7da25361ad99ca4daa4e8709624660f324f48 sig=transferDAO(address) calldata=0x000000000000000000000000f908610e9174c7cd6e9dfd371e238be4511297a1
+       target=0x13d5387389ac1a3b72391d88b03b893a945b17cd sig=transferDAO(address) calldata=0x000000000000000000000000f908610e9174c7cd6e9dfd371e238be4511297a1
+       target=0xb0105f829d50841b949c274636c2d173a78db7e0 sig=transferDAO(address) calldata=0x000000000000000000000000f908610e9174c7cd6e9dfd371e238be4511297a1
+       target=0x0b2bcde6a404c53c05a6c0f5402daed4f2dd5779 sig=transferDAO(address) calldata=0x000000000000000000000000f908610e9174c7cd6e9dfd371e238be4511297a1
+       target=0x21f768446a171f50a20c727e420981ad70e0e9d9 sig=transferDAO(address) calldata=0x000000000000000000000000f908610e9174c7cd6e9dfd371e238be4511297a1
+     --- proposal 17: 2 action(s)
+       target=0x1050716f239e13a803b7d1ba55b187303b14374a sig=yieldControllTo(address) calldata=0x00000000000000000000000035a0a68519eccd0929678351394fa3b397068833
+       target=0x39a84fcf5c22f227f2108a9d214090ee4c334893 sig=yieldControllTo(address) calldata=0x00000000000000000000000035a0a68519eccd0929678351394fa3b397068833
+     --- proposal 18: 6 action(s)
+       target=0x31f7da25361ad99ca4daa4e8709624660f324f48 sig=transferDAO(address) calldata=0x00000000000000000000000001c3dbd90a0d639ca6c9f6a11928056168d72c89
+       target=0x13d5387389ac1a3b72391d88b03b893a945b17cd sig=transferDAO(address) calldata=0x00000000000000000000000001c3dbd90a0d639ca6c9f6a11928056168d72c89
+       target=0xb0105f829d50841b949c274636c2d173a78db7e0 sig=transferDAO(address) calldata=0x00000000000000000000000001c3dbd90a0d639ca6c9f6a11928056168d72c89
+       target=0x0b2bcde6a404c53c05a6c0f5402daed4f2dd5779 sig=transferDAO(address) calldata=0x00000000000000000000000001c3dbd90a0d639ca6c9f6a11928056168d72c89
+       target=0x21f768446a171f50a20c727e420981ad70e0e9d9 sig=transferDAO(address) calldata=0x00000000000000000000000001c3dbd90a0d639ca6c9f6a11928056168d72c89
+       target=0x10e138877df69ca44fdc68655f86c88cde142d7f sig=transferOwnership(address) calldata=0x00000000000000000000000001c3dbd90a0d639ca6c9f6a11928056168d72c89
+
+[3] BOND staked into the Barn (voting power acquisition)
+    blk=25472195 2026-07-06 08:08:11 UTC 0xf908610e9174c7cd6e9dfd371e238be4511297a1 32,000.0000 BOND
+    blk=25493943 2026-07-09 08:51:11 UTC 0xa8ce49a57400445c6a4118ae3460ed4e46c815b8 2,000.0000 BOND
+    blk=25507818 2026-07-11 07:15:59 UTC 0xa8ce49a57400445c6a4118ae3460ed4e46c815b8 65,838.0000 BOND
+    blk=25541925 2026-07-16 01:25:23 UTC 0x01c3dbd90a0d639ca6c9f6a11928056168d72c89 100,000.0000 BOND
+    blk=25544708 2026-07-16 10:43:47 UTC 0xb971770cd53b839004fdfcaf4cd2f5b39342cd9a 50,000.0000 BOND
+    blk=25553413 2026-07-17 15:49:59 UTC 0x2f6be6ac5af4af7ce7d618006ebd8d5137f2de11 150,781.0000 BOND
+    blk=25566608 2026-07-19 11:58:47 UTC 0x555dead5552df0dcc4592e2cffb9c26591fd7589 60.0000 BOND
+    blk=25575679 2026-07-20 18:21:23 UTC 0x2f6be6ac5af4af7ce7d618006ebd8d5137f2de11 39,550.2800 BOND
+    blk=25575880 2026-07-20 19:01:35 UTC 0xb971770cd53b839004fdfcaf4cd2f5b39342cd9a 30,000.0000 BOND
+    Barn total BOND immediately before the first attacker stake: 146,010.8951
+
+[3b] providers recovered from proposal 15's execution receipt: ['0x6ac048ee380cbf0cb22c30401e710c28d91eb94d', '0xe6c1a8e7a879d7febb8144276a62f9a6b381bd37']
+    scanning 10 provider addresses
+
+[4] 22 transactions moved underlying out of a BarnBridge provider
+    THEFT  blk=25535120 0xd191fead1b9a2244f2837560f35d4fc865404914d229bfcb0172d1a7a9895afb
+           entrypoint=0x66c6f3b4b4b458e6d764759ecf122484ebef7580 share_burned=False 774,943.379409 USDC
+    THEFT  blk=25535160 0x7d722637a58a7117dbca0182ec26d74e2be0c1052ac319f0150bc056e528d238
+           entrypoint=0x66c6f3b4b4b458e6d764759ecf122484ebef7580 share_burned=False 1,632.168524 USDC
+    THEFT  blk=25542518 0xf9ebf03ac4c3819fd02c1bdd65c5e600abde02585dcc101cc01b84f896c28ccb
+           entrypoint=0x66c6f3b4b4b458e6d764759ecf122484ebef7580 share_burned=False 500.000000 USDC
+    THEFT  blk=25544358 0x9903a7b1e1963ef797218b8530f7f6fc085de966b61b2b9e3f4d8837ba4b7c9b
+           entrypoint=0x851e47f37e20712407990556376a7124de5c3d4a share_burned=False 1,736.920247 DAI; 32,246.539372 USDC; 51,759.121322 USDT
+    THEFT  blk=25546439 0x425d43ab837823bd56a96a81a5a173b2d6424e7146a19c342da06c9329210e58
+           entrypoint=0x66c6f3b4b4b458e6d764759ecf122484ebef7580 share_burned=False 118,030.000000 USDC
+    THEFT  blk=25561666 0x9ed16eb4d38ee8c43f51259efc9b98a5014d0ef902d27fc9a959f6cb9c8c88a0
+           entrypoint=0x66c6f3b4b4b458e6d764759ecf122484ebef7580 share_burned=False 6,082.879952 USDC
+    THEFT  blk=25567102 0xcefca9cc33f3bb5b89ef2c71989f8cf037369d112b8ca4e02a6752873ab95679
+           entrypoint=0x66c6f3b4b4b458e6d764759ecf122484ebef7580 share_burned=False 5,004.794465 USDC
+    THEFT  blk=25573294 0x76577e0b2c748dca1afd6994ebc6384fe1ad0e37131f2fca1eb5ea1f5009e008
+           entrypoint=0x66c6f3b4b4b458e6d764759ecf122484ebef7580 share_burned=False 63,753.681156 USDC
+    THEFT  blk=25586832 0x2f100bb3229fb4b338131a25b7b7e2df9c128b3af9ab8706b5ead6c46b8ee44c
+           entrypoint=0x66c6f3b4b4b458e6d764759ecf122484ebef7580 share_burned=False 0.000001 USDC
+    THEFT  blk=25586833 0xa8795cc428280eb0ced7737c292516682c47b310acb61591c151d149bf8e7ba2
+           entrypoint=0x66c6f3b4b4b458e6d764759ecf122484ebef7580 share_burned=False 0.000001 USDC
+    THEFT  blk=25586834 0xcd0542da12ab155dfa7af794bdf7617442e13a221ec39c473c830b2727dd8a8e
+           entrypoint=0x66c6f3b4b4b458e6d764759ecf122484ebef7580 share_burned=False 0.000001 USDC
+    THEFT  blk=25586835 0x4eacd35b0d1813338d658f2c0142626a57a5b5358b5b0d732e9687a6aa5e79fb
+           entrypoint=0x66c6f3b4b4b458e6d764759ecf122484ebef7580 share_burned=False 0.000001 USDC
+    THEFT  blk=25586836 0x093212c87f60c332f1f4bf7a488137664d9946ed985890766a239f433ef1153a
+           entrypoint=0x66c6f3b4b4b458e6d764759ecf122484ebef7580 share_burned=False 0.000001 USDC
+    THEFT  blk=25586837 0xc14bba345d4477ba4e5c0e48372dc7c942e3a515e9001a14d546d37a9d6572d1
+           entrypoint=0x66c6f3b4b4b458e6d764759ecf122484ebef7580 share_burned=False 0.000001 USDC
+    THEFT  blk=25589161 0x6ad2fdde7dae6d770c8c90c52dcd2b2d703d511bd419c407177b8fc2a06f459f
+           entrypoint=0x66c6f3b4b4b458e6d764759ecf122484ebef7580 share_burned=False 94,629.874042 USDC
+    THEFT  blk=25596937 0x783a62dc859433d5cc016cd1770a3fb6031821e0936460461d0e5057bac50222
+           entrypoint=0x66c6f3b4b4b458e6d764759ecf122484ebef7580 share_burned=False 524,353.111656 USDC
+    THEFT  blk=25596953 0xeee0698793fdfde7c901383a6cdcd6cef3859cc33d75a46ab9fb4aa170c30b7c
+           entrypoint=0x66c6f3b4b4b458e6d764759ecf122484ebef7580 share_burned=False 256,692.754600 USDC
+    other  blk=25808124 0x32e00c382bf5269f3d58f0d3b739837b7f55192d8c8a9d454deea34f7a28253f
+           entrypoint=0xfd04775ef1c7e0486951f3431bc9bcd3dc6a90b8 share_burned=False 1,100.000000 USDC
+    other  blk=25810281 0x86aef7474a38441c53f856c714acbf46812fbd84fce3dad6cb49423ccc827c71
+           entrypoint=0xfd04775ef1c7e0486951f3431bc9bcd3dc6a90b8 share_burned=False 2,001.758372 USDC
+    other  blk=25852942 0x2779e26ed55983398c6bb197dfcb035cd52d4554f168d0637c26239c74385bd7
+           entrypoint=0xfd04775ef1c7e0486951f3431bc9bcd3dc6a90b8 share_burned=False 2,468,514.560863 USDC
+    other  blk=25878204 0x7fadb1fb1200611274abc138b56a5c27ad0c5339671d86d0f69ad5b735916c37
+           entrypoint=0xfd04775ef1c7e0486951f3431bc9bcd3dc6a90b8 share_burned=False 350,000.000800 USDC
+    other  blk=25878236 0x0ef681bf520d5a396300afbe6c3fa01ab3d037f0383ee91a0e0ae7987702e836
+           entrypoint=0xfd04775ef1c7e0486951f3431bc9bcd3dc6a90b8 share_burned=False 180,062.370165 USDC
+
+[4b] 17 transactions entered through an attacker-installed Controller
+     USDC: 1,877,869.183182
+     USDT: 51,759.121322
+     DAI: 1,736.920247
+     INDEPENDENTLY DERIVED LOSS: 1,931,365.22 stablecoin units
+     DefiLlama / BlockSec published figure: 776,000
+     ratio: 2.49x
+
+[4c] NOT counted - outflows through a different entrypoint, unattributed:
+     USDC: 3,001,678.690200
+
+[5] victims in 0xd191fead1b9a2244f2837560f35d4fc865404914d229bfcb0172d1a7a9895afb
+     USDC: 50 distinct source wallets, 774,943.379409 total
+
+[6] control state at block 25955104 (2026-09-11 15:37:47 UTC)
+     owner() 0x68af34129755091e22f91899ceac48657e5a5062 -> 0xf908610e9174c7cd6e9dfd371e238be4511297a1  [STILL ATTACKER]
+     owner() 0xf4bde50cdf4ee4cf3fb8702fceb6fd499a92792d -> 0xf908610e9174c7cd6e9dfd371e238be4511297a1  [STILL ATTACKER]
+     owner() 0x51d924bf2ff813a68bd5f86cdcc98918f2ae5868 -> 0xf908610e9174c7cd6e9dfd371e238be4511297a1  [STILL ATTACKER]
+     owner() 0x69951b60b6253697f29c8311bfcea6da09bbac0d -> 0xf908610e9174c7cd6e9dfd371e238be4511297a1  [STILL ATTACKER]
+     owner() 0x10e138877df69ca44fdc68655f86c88cde142d7f -> 0xf908610e9174c7cd6e9dfd371e238be4511297a1  [STILL ATTACKER]
+     dao()   0x31f7da25361ad99ca4daa4e8709624660f324f48 -> 0xf908610e9174c7cd6e9dfd371e238be4511297a1  [STILL ATTACKER]
+     dao()   0x13d5387389ac1a3b72391d88b03b893a945b17cd -> 0xf908610e9174c7cd6e9dfd371e238be4511297a1  [STILL ATTACKER]
+     dao()   0xb0105f829d50841b949c274636c2d173a78db7e0 -> 0xf908610e9174c7cd6e9dfd371e238be4511297a1  [STILL ATTACKER]
+     dao()   0x0b2bcde6a404c53c05a6c0f5402daed4f2dd5779 -> 0xf908610e9174c7cd6e9dfd371e238be4511297a1  [STILL ATTACKER]
+     dao()   0x21f768446a171f50a20c727e420981ad70e0e9d9 -> 0xf908610e9174c7cd6e9dfd371e238be4511297a1  [STILL ATTACKER]
+     controller() bb_aDAI    -> 0x851e47f37e20712407990556376a7124de5c3d4a  [attacker-installed]
+     controller() bb_aGUSD   -> 0x851e47f37e20712407990556376a7124de5c3d4a  [attacker-installed]
+     controller() bb_aUSDC   -> 0x851e47f37e20712407990556376a7124de5c3d4a  [attacker-installed]
+     controller() bb_aUSDT   -> 0x851e47f37e20712407990556376a7124de5c3d4a  [attacker-installed]
+     controller() bb_cDAI    -> 0x851e47f37e20712407990556376a7124de5c3d4a  [attacker-installed]
+     controller() bb_crDAI   -> 0x851e47f37e20712407990556376a7124de5c3d4a  [attacker-installed]
+     controller() bb_crUSDC  -> 0x851e47f37e20712407990556376a7124de5c3d4a  [attacker-installed]
+     controller() bb_crUSDT  -> 0x851e47f37e20712407990556376a7124de5c3d4a  [attacker-installed]
+     controller() bb_cUSDC   -> 0x66c6f3b4b4b458e6d764759ecf122484ebef7580  [attacker-installed]

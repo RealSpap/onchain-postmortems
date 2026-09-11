@@ -1,0 +1,56 @@
+{
+ "barnbridge-bb_adai": {
+  "smartYield": "0x6c9dae2c40b1e5883847bf5129764e76cb69fc57",
+  "provider": "0x372d02e58a8fcf42114232f614d57f31401d4c7d",
+  "controller": "0x851e47f37e20712407990556376a7124de5c3d4a",
+  "symbol": "bb_aDAI"
+ },
+ "barnbridge-bb_agusd": {
+  "smartYield": "0x6324538cc222b43490dd95cebf72cf09d98d9dae",
+  "provider": "0x5cfcfb6171db72a26b84bc50edd2d80b0f3fc094",
+  "controller": "0x851e47f37e20712407990556376a7124de5c3d4a",
+  "symbol": "bb_aGUSD"
+ },
+ "barnbridge-bb_ausdc": {
+  "smartYield": "0x3cf46da7d65e9aa2168a31b73dd4beea5ca1a1f1",
+  "provider": "0x99230f93135f3650ab5706b7b6d4b30b4ee961c9",
+  "controller": "0x851e47f37e20712407990556376a7124de5c3d4a",
+  "symbol": "bb_aUSDC"
+ },
+ "barnbridge-bb_ausdt": {
+  "smartYield": "0x660daf6643191cf0ed045b861d820f283ca078fc",
+  "provider": "0xbf5649526aa1dc1daa82ed29ddc65149278ca5d8",
+  "controller": "0x851e47f37e20712407990556376a7124de5c3d4a",
+  "symbol": "bb_aUSDT"
+ },
+ "barnbridge-bb_cdai": {
+  "smartYield": "0x673f9488619821ab4f4155fdffe06f6139de518f",
+  "provider": "0xe6c1a8e7a879d7febb8144276a62f9a6b381bd37",
+  "controller": "0x851e47f37e20712407990556376a7124de5c3d4a",
+  "symbol": "bb_cDAI"
+ },
+ "barnbridge-bb_crdai": {
+  "smartYield": "0x89d82fdf095083ded96b48fc6462ed5dbd14151f",
+  "provider": "0x37923eb0f4a9097b2774eab9d928afad6196cf76",
+  "controller": "0x851e47f37e20712407990556376a7124de5c3d4a",
+  "symbol": "bb_crDAI"
+ },
+ "barnbridge-bb_crusdc": {
+  "smartYield": "0x62e479060c89c48199fc7ad43b1432cc585ba1b9",
+  "provider": "0xa4f8310cd972b1fc3ca9f130b235a91bc882badb",
+  "controller": "0x851e47f37e20712407990556376a7124de5c3d4a",
+  "symbol": "bb_crUSDC"
+ },
+ "barnbridge-bb_crusdt": {
+  "smartYield": "0xc45f49be156888a1c0c93dc0fe7dc89091e291f5",
+  "provider": "0x7b1e1a841afe589f1b5337a2eec41a18a58475be",
+  "controller": "0x851e47f37e20712407990556376a7124de5c3d4a",
+  "symbol": "bb_crUSDT"
+ },
+ "barnbridge-bb_cusdc": {
+  "smartYield": "0x4b8d90d68f26def303dcb6cfc9b63a1aaec15840",
+  "provider": "0xdaa037f99d168b552c0c61b7fb64cf7819d78310",
+  "controller": "0x66c6f3b4b4b458e6d764759ecf122484ebef7580",
+  "symbol": "bb_cUSDC"
+ }
+}

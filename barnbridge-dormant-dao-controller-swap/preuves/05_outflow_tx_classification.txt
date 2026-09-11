@@ -1,0 +1,72 @@
+distinct outflow txs: 22
+blk=25535120 tx=0xd191fead1b9a2244f2837560f35d4fc865404914d229bfcb0172d1a7a9895afb
+   tx.from=0xf908610e9174c7cd6e9dfd371e238be4511297a1 tx.to=MALICIOUS-ctrl-A(f908) sel=0xe321fa05
+     bb_cUSDC USDC 774,943.379409 -> 0xf908610e9174c7cd6e9dfd371e238be4511297a1   (n_transfer_logs=1)
+blk=25535160 tx=0x7d722637a58a7117dbca0182ec26d74e2be0c1052ac319f0150bc056e528d238
+   tx.from=0xf908610e9174c7cd6e9dfd371e238be4511297a1 tx.to=MALICIOUS-ctrl-A(f908) sel=0xe321fa05
+     bb_cUSDC USDC 1,632.168524 -> 0xf908610e9174c7cd6e9dfd371e238be4511297a1   (n_transfer_logs=1)
+blk=25542518 tx=0xf9ebf03ac4c3819fd02c1bdd65c5e600abde02585dcc101cc01b84f896c28ccb
+   tx.from=0xf908610e9174c7cd6e9dfd371e238be4511297a1 tx.to=MALICIOUS-ctrl-A(f908) sel=0xe321fa05
+     bb_cUSDC USDC 500.000000 -> 0xf908610e9174c7cd6e9dfd371e238be4511297a1   (n_transfer_logs=1)
+blk=25544358 tx=0x9903a7b1e1963ef797218b8530f7f6fc085de966b61b2b9e3f4d8837ba4b7c9b
+   tx.from=0xa8ce49a57400445c6a4118ae3460ed4e46c815b8 tx.to=MALICIOUS-ctrl-B(a8ce) sel=0x93b2243d
+     bb_aDAI DAI 1,314.286075 -> 0xa8ce49a57400445c6a4118ae3460ed4e46c815b8   (n_transfer_logs=1)
+     bb_aUSDC USDC 32,246.539372 -> 0xa8ce49a57400445c6a4118ae3460ed4e46c815b8   (n_transfer_logs=1)
+     bb_aUSDT USDT 51,736.949846 -> 0xa8ce49a57400445c6a4118ae3460ed4e46c815b8   (n_transfer_logs=1)
+     bb_cDAI DAI 422.634172 -> 0xa8ce49a57400445c6a4118ae3460ed4e46c815b8   (n_transfer_logs=1)
+     bb_cUSDT USDT 22.171476 -> 0xa8ce49a57400445c6a4118ae3460ed4e46c815b8   (n_transfer_logs=1)
+blk=25546439 tx=0x425d43ab837823bd56a96a81a5a173b2d6424e7146a19c342da06c9329210e58
+   tx.from=0x1e987954fe10f1fb706463497dbe8b38ffbab387 tx.to=MALICIOUS-ctrl-A(f908) sel=0xe321fa05
+     bb_cUSDC USDC 118,030.000000 -> 0xf908610e9174c7cd6e9dfd371e238be4511297a1   (n_transfer_logs=1)
+blk=25561666 tx=0x9ed16eb4d38ee8c43f51259efc9b98a5014d0ef902d27fc9a959f6cb9c8c88a0
+   tx.from=0x1e987954fe10f1fb706463497dbe8b38ffbab387 tx.to=MALICIOUS-ctrl-A(f908) sel=0xe321fa05
+     bb_cUSDC USDC 6,082.879952 -> 0xf908610e9174c7cd6e9dfd371e238be4511297a1   (n_transfer_logs=1)
+blk=25567102 tx=0xcefca9cc33f3bb5b89ef2c71989f8cf037369d112b8ca4e02a6752873ab95679
+   tx.from=0x1e987954fe10f1fb706463497dbe8b38ffbab387 tx.to=MALICIOUS-ctrl-A(f908) sel=0xe321fa05
+     bb_cUSDC USDC 5,004.794465 -> 0xf908610e9174c7cd6e9dfd371e238be4511297a1   (n_transfer_logs=1)
+blk=25573294 tx=0x76577e0b2c748dca1afd6994ebc6384fe1ad0e37131f2fca1eb5ea1f5009e008
+   tx.from=0x1e987954fe10f1fb706463497dbe8b38ffbab387 tx.to=MALICIOUS-ctrl-A(f908) sel=0xe321fa05
+     bb_cUSDC USDC 63,753.681156 -> 0xf908610e9174c7cd6e9dfd371e238be4511297a1   (n_transfer_logs=1)
+blk=25586832 tx=0x2f100bb3229fb4b338131a25b7b7e2df9c128b3af9ab8706b5ead6c46b8ee44c
+   tx.from=0xf908610e9174c7cd6e9dfd371e238be4511297a1 tx.to=MALICIOUS-ctrl-A(f908) sel=0x33bfd4b6
+     bb_cUSDC USDC 0.000001 -> 0xe594d2b63c6f411eec706c902ca2e3a98844c541   (n_transfer_logs=1)
+blk=25586833 tx=0xa8795cc428280eb0ced7737c292516682c47b310acb61591c151d149bf8e7ba2
+   tx.from=0xf908610e9174c7cd6e9dfd371e238be4511297a1 tx.to=MALICIOUS-ctrl-A(f908) sel=0x33bfd4b6
+     bb_cUSDC USDC 0.000001 -> 0xd51bf1227eaa8c758761d81758e16c888764be09   (n_transfer_logs=1)
+blk=25586834 tx=0xcd0542da12ab155dfa7af794bdf7617442e13a221ec39c473c830b2727dd8a8e
+   tx.from=0xf908610e9174c7cd6e9dfd371e238be4511297a1 tx.to=MALICIOUS-ctrl-A(f908) sel=0x33bfd4b6
+     bb_cUSDC USDC 0.000001 -> 0x185c034bdc0ca1d66dc75650d33dea190315595b   (n_transfer_logs=1)
+blk=25586835 tx=0x4eacd35b0d1813338d658f2c0142626a57a5b5358b5b0d732e9687a6aa5e79fb
+   tx.from=0xf908610e9174c7cd6e9dfd371e238be4511297a1 tx.to=MALICIOUS-ctrl-A(f908) sel=0x33bfd4b6
+     bb_cUSDC USDC 0.000001 -> 0x401a234e2ceec91a0222339026284f47a876c172   (n_transfer_logs=1)
+blk=25586836 tx=0x093212c87f60c332f1f4bf7a488137664d9946ed985890766a239f433ef1153a
+   tx.from=0xf908610e9174c7cd6e9dfd371e238be4511297a1 tx.to=MALICIOUS-ctrl-A(f908) sel=0x33bfd4b6
+     bb_cUSDC USDC 0.000001 -> 0xd26f1f1830766a6d9d950ea0d30b9485cc838771   (n_transfer_logs=1)
+blk=25586837 tx=0xc14bba345d4477ba4e5c0e48372dc7c942e3a515e9001a14d546d37a9d6572d1
+   tx.from=0xf908610e9174c7cd6e9dfd371e238be4511297a1 tx.to=MALICIOUS-ctrl-A(f908) sel=0x33bfd4b6
+     bb_cUSDC USDC 0.000001 -> 0x78bb4748ae8ec71b34f9052c9a5d9e768ba4957f   (n_transfer_logs=1)
+blk=25589161 tx=0x6ad2fdde7dae6d770c8c90c52dcd2b2d703d511bd419c407177b8fc2a06f459f
+   tx.from=0xf908610e9174c7cd6e9dfd371e238be4511297a1 tx.to=MALICIOUS-ctrl-A(f908) sel=0x881f87b9
+     bb_cUSDC USDC 94,629.874042 -> 0xf908610e9174c7cd6e9dfd371e238be4511297a1   (n_transfer_logs=62)
+blk=25596937 tx=0x783a62dc859433d5cc016cd1770a3fb6031821e0936460461d0e5057bac50222
+   tx.from=0x1e987954fe10f1fb706463497dbe8b38ffbab387 tx.to=MALICIOUS-ctrl-A(f908) sel=0xe321fa05
+     bb_cUSDC USDC 524,353.111656 -> 0x5051da1c714dbf1183ca015edcd82836d9dbb9af   (n_transfer_logs=1)
+blk=25596953 tx=0xeee0698793fdfde7c901383a6cdcd6cef3859cc33d75a46ab9fb4aa170c30b7c
+   tx.from=0x1e987954fe10f1fb706463497dbe8b38ffbab387 tx.to=MALICIOUS-ctrl-A(f908) sel=0xe321fa05
+     bb_cUSDC USDC 256,692.754600 -> 0x5051da1c714dbf1183ca015edcd82836d9dbb9af   (n_transfer_logs=1)
+blk=25808124 tx=0x32e00c382bf5269f3d58f0d3b739837b7f55192d8c8a9d454deea34f7a28253f
+   tx.from=0xafac1611329c245146d81e11222976949eabe8ba tx.to=0xfd04775ef1c7e0486951f3431bc9bcd3dc6a90b8 sel=0xcf8751ff
+     bb_cUSDC USDC 1,100.000000 -> 0xe4ed3720d16802dfaac61183b0ec3fe13520b908   (n_transfer_logs=1)
+blk=25810281 tx=0x86aef7474a38441c53f856c714acbf46812fbd84fce3dad6cb49423ccc827c71
+   tx.from=0xafac1611329c245146d81e11222976949eabe8ba tx.to=0xfd04775ef1c7e0486951f3431bc9bcd3dc6a90b8 sel=0xcf8751ff
+     bb_cUSDC USDC 2,001.758372 -> 0xe4ed3720d16802dfaac61183b0ec3fe13520b908   (n_transfer_logs=1)
+blk=25852942 tx=0x2779e26ed55983398c6bb197dfcb035cd52d4554f168d0637c26239c74385bd7
+   tx.from=0xafac1611329c245146d81e11222976949eabe8ba tx.to=0xfd04775ef1c7e0486951f3431bc9bcd3dc6a90b8 sel=0xcf8751ff
+     bb_cUSDC USDC 2,468,514.560863 -> 0xe4ed3720d16802dfaac61183b0ec3fe13520b908   (n_transfer_logs=1)
+blk=25878204 tx=0x7fadb1fb1200611274abc138b56a5c27ad0c5339671d86d0f69ad5b735916c37
+   tx.from=0xafac1611329c245146d81e11222976949eabe8ba tx.to=0xfd04775ef1c7e0486951f3431bc9bcd3dc6a90b8 sel=0xcf8751ff
+     bb_cUSDC USDC 350,000.000800 -> 0xe4ed3720d16802dfaac61183b0ec3fe13520b908   (n_transfer_logs=1)
+blk=25878236 tx=0x0ef681bf520d5a396300afbe6c3fa01ab3d037f0383ee91a0e0ae7987702e836
+   tx.from=0xafac1611329c245146d81e11222976949eabe8ba tx.to=0xfd04775ef1c7e0486951f3431bc9bcd3dc6a90b8 sel=0xcf8751ff
+     bb_cUSDC USDC 180,062.370165 -> 0xe4ed3720d16802dfaac61183b0ec3fe13520b908   (n_transfer_logs=1)
+CLASSDONE

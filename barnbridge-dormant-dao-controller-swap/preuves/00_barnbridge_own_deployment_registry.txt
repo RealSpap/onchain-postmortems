@@ -1,0 +1,31 @@
+### barnbridge-dao
+  - kind: ethereum/contract
+    name: Contract
+      address: "0x0391D2021f89DC339F60Fff84546EA23E337750f"
+      kind: ethereum/events
+        - name: Contract
+### barnbridge-governance-staking
+  - kind: ethereum/contract
+    name: GovernanceStaking
+      address: "0x10e138877df69ca44fdc68655f86c88cde142d7f"
+      kind: ethereum/events
+        - name: GovernanceStaking
+### barnbridge-governance-token
+  - kind: ethereum/contract
+    name: Contract
+      address: "0x0391D2021f89DC339F60Fff84546EA23E337750f"
+      kind: ethereum/events
+        - name: Contract
+### barnbridge-bb_cusdc
+  - kind: ethereum/contract
+    name: bb_cUSDC
+      address: "0x4b8d90d68f26def303dcb6cfc9b63a1aaec15840"
+      kind: ethereum/events
+        - name: bb_cUSDC
+### barnbridge-bb_cusdt
+### barnbridge-bb_cdai
+  - kind: ethereum/contract
+    name: bb_cDAI
+      address: "0x673f9488619821ab4f4155fdffe06f6139de518f"
+      kind: ethereum/events
+        - name: bb_cDAI

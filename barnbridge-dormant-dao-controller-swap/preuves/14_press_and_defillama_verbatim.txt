@@ -1,0 +1,63 @@
+PRESS AND TRACKER SOURCES — VERBATIM EXTRACTS
+Collected 2026-09-11, AFTER the independent on-chain reconstruction was complete.
+Sequencing is deliberate: nothing below was read before the chain data was gathered.
+
+--------------------------------------------------------------------------
+SOURCE 1 — BlockSec, "~$1.35M Lost: BarnBridge, DeFiTuna | BlockSec Weekly"
+https://blocksec.com/blog/web3-security-barnbridge-defituna-exploits
+Retrieved 2026-09-11 via WebFetch.
+
+Date given: July 15, 2026
+Loss given, verbatim: "approximately $776K in USDC"
+Root cause, verbatim: "the abandoned governance contract retaining the
+  authority to modify critical protocol configuration"
+BOND deposited, verbatim: "32,000 BOND"
+Voting power, verbatim: "approximately 43% of the total voting power"
+Affected accounts, verbatim: "approximately 50 users"
+Acquisition cost, verbatim: the attacker "spent approximately 0.335 ETH to
+  acquire about 32,795 BOND"
+Transaction hash given:
+  0xd191fead1b9a2244f2837560f35d4fc865404914d229bfcb0172d1a7a9895afb
+Contract named: CompoundProvider (no address published)
+
+--------------------------------------------------------------------------
+SOURCE 2 — DefiLlama hacks feed, api.llama.fi/hacks
+Retrieved 2026-09-11 via curl. Full record saved at
+preuves/12_defillama_hacks_record.json:
+
+{"date": 1783987200, "name": "BarnBridge", "classification": "Governance",
+ "technique": "Malicious Proposal", "amount": 776000, "chain": ["Ethereum"],
+ "bridgeHack": false, "targetType": "DeFi Protocol", "source": "",
+ "returnedFunds": null, "defillamaId": "131", "language": "Solidity"}
+
+Unix timestamp 1783987200 decodes to 2026-07-14 00:00:00 UTC.
+
+--------------------------------------------------------------------------
+SOURCE 3 — GoPlus Security, X/Twitter thread
+https://x.com/GoPlusSecurity/status/2077368534628458801
+Headline text as surfaced in search results, verbatim fragment:
+  "The #ETH-based BarnBridge SMART Yield protocol was attacked through a
+  malicious governance proposal, resulting in a loss of approximately $776K!
+  The attacker submitted a malicious proposal to the governance contract,
+  updating the controller"
+(Thread body not fetched; only the fragment above is treated as sourced.)
+
+--------------------------------------------------------------------------
+SOURCE 4 — Blockaid, X/Twitter, community alert
+https://x.com/blockaid_/status/2077197943195439588
+Headline text as surfaced in search results, verbatim fragment:
+  "Community alert - BarnBridge Smart Yield approval risk Old BarnBridge
+  Smart Yield governance proposals may put existing token approvals at risk
+  if executed/upgraded maliciously. There is no confirmed drain at this
+  time, but we recommend checking and revoking relevant Ethereum"
+
+--------------------------------------------------------------------------
+SOURCE 5 — Search for an official BarnBridge post-mortem
+Query run 2026-09-11: "BarnBridge official statement post-mortem governance
+attack SMART Yield July 2026 DAO abandoned".
+Result: no official BarnBridge statement, blog post, forum post or GitHub
+issue about this incident was found. The BarnBridge GitHub organisation
+(github.com/BarnBridge) was enumerated via the GitHub API on 2026-09-11:
+38 repositories, none containing a 2026 incident write-up. This project
+reports the absence of an official post-mortem as a finding, not as proof
+that none exists somewhere unindexed.

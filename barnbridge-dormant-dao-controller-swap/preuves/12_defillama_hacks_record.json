@@ -1,0 +1,18 @@
+[
+ {
+  "date": 1783987200,
+  "name": "BarnBridge",
+  "classification": "Governance",
+  "technique": "Malicious Proposal",
+  "amount": 776000,
+  "chain": [
+   "Ethereum"
+  ],
+  "bridgeHack": false,
+  "targetType": "DeFi Protocol",
+  "source": "",
+  "returnedFunds": null,
+  "defillamaId": "131",
+  "language": "Solidity"
+ }
+]

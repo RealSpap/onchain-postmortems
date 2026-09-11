@@ -1,0 +1,43 @@
+Live eth_call reads at head block 25955104 (2026-09-11 15:37:47 UTC).
+Each line shows the raw 32-byte return word AND the decoded address, so the
+decoded value appears literally in this evidence file.
+
+bb_cUSDC provider 0xdaa037f99d168b552c0c61b7fb64cf7819d78310 controller()         raw=0x000000000000000000000000fd04775ef1c7e0486951f3431bc9bcd3dc6a90b8
+bb_cUSDC provider 0xdaa037f99d168b552c0c61b7fb64cf7819d78310 controller()         decoded=0xfd04775ef1c7e0486951f3431bc9bcd3dc6a90b8
+bb_cUSDC provider 0xdaa037f99d168b552c0c61b7fb64cf7819d78310 smartYield()         raw=0x0000000000000000000000004b8d90d68f26def303dcb6cfc9b63a1aaec15840
+bb_cUSDC provider 0xdaa037f99d168b552c0c61b7fb64cf7819d78310 smartYield()         decoded=0x4b8d90d68f26def303dcb6cfc9b63a1aaec15840
+
+MALCTRL-A 0x66c6f3b4b4b458e6d764759ecf122484ebef7580 implementation()     raw=0x000000000000000000000000b8a154b450e8a3b5a0a3083df0b8e19190489dda
+MALCTRL-A 0x66c6f3b4b4b458e6d764759ecf122484ebef7580 implementation()     decoded=0xb8a154b450e8a3b5a0a3083df0b8e19190489dda
+MALCTRL-A 0x66c6f3b4b4b458e6d764759ecf122484ebef7580 admin()              raw=0x000000000000000000000000f908610e9174c7cd6e9dfd371e238be4511297a1
+MALCTRL-A 0x66c6f3b4b4b458e6d764759ecf122484ebef7580 admin()              decoded=0xf908610e9174c7cd6e9dfd371e238be4511297a1
+MALCTRL-A 0x66c6f3b4b4b458e6d764759ecf122484ebef7580 owner()              raw=0x000000000000000000000000f0d6ec63d78012e5d6a21299ec550e9f28369003
+MALCTRL-A 0x66c6f3b4b4b458e6d764759ecf122484ebef7580 owner()              decoded=0xf0d6ec63d78012e5d6a21299ec550e9f28369003
+MALCTRL-A 0x66c6f3b4b4b458e6d764759ecf122484ebef7580 dao()                REVERT (eth_call failed: {'code': 3, 'message': 'execution reverted')
+
+MALCTRL-B 0x851e47f37e20712407990556376a7124de5c3d4a implementation()     raw=0x00000000000000000000000066c42d05a0b0544ca75ccea92fd1d40fc998e8e3
+MALCTRL-B 0x851e47f37e20712407990556376a7124de5c3d4a implementation()     decoded=0x66c42d05a0b0544ca75ccea92fd1d40fc998e8e3
+MALCTRL-B 0x851e47f37e20712407990556376a7124de5c3d4a admin()              raw=0x000000000000000000000000a8ce49a57400445c6a4118ae3460ed4e46c815b8
+MALCTRL-B 0x851e47f37e20712407990556376a7124de5c3d4a admin()              decoded=0xa8ce49a57400445c6a4118ae3460ed4e46c815b8
+MALCTRL-B 0x851e47f37e20712407990556376a7124de5c3d4a owner()              REVERT (eth_call failed: {'code': 3, 'message': 'execution reverted')
+MALCTRL-B 0x851e47f37e20712407990556376a7124de5c3d4a dao()                raw=0x000000000000000000000000a8ce49a57400445c6a4118ae3460ed4e46c815b8
+MALCTRL-B 0x851e47f37e20712407990556376a7124de5c3d4a dao()                decoded=0xa8ce49a57400445c6a4118ae3460ed4e46c815b8
+
+FD-proxy 0xfd04775ef1c7e0486951f3431bc9bcd3dc6a90b8 implementation()     raw=0x00000000000000000000000082cc9c0e3fa87646464ad509a794016d2ca658f1
+FD-proxy 0xfd04775ef1c7e0486951f3431bc9bcd3dc6a90b8 implementation()     decoded=0x82cc9c0e3fa87646464ad509a794016d2ca658f1
+FD-proxy 0xfd04775ef1c7e0486951f3431bc9bcd3dc6a90b8 admin()              raw=0x0000000000000000000000003588a1de656398e1336329a8194f2be8d80af53a
+FD-proxy 0xfd04775ef1c7e0486951f3431bc9bcd3dc6a90b8 admin()              decoded=0x3588a1de656398e1336329a8194f2be8d80af53a
+FD-proxy 0xfd04775ef1c7e0486951f3431bc9bcd3dc6a90b8 owner()              REVERT (eth_call failed: {'code': 3, 'message': 'execution reverted')
+FD-proxy 0xfd04775ef1c7e0486951f3431bc9bcd3dc6a90b8 dao()                raw=0x0000000000000000000000003588a1de656398e1336329a8194f2be8d80af53a
+FD-proxy 0xfd04775ef1c7e0486951f3431bc9bcd3dc6a90b8 dao()                decoded=0x3588a1de656398e1336329a8194f2be8d80af53a
+
+EIP-1967 storage slots read directly with eth_getStorageAt:
+MALCTRL-A 0x66c6f3b4b4b458e6d764759ecf122484ebef7580 impl slot raw=0x000000000000000000000000b8a154b450e8a3b5a0a3083df0b8e19190489dda decoded=0xb8a154b450e8a3b5a0a3083df0b8e19190489dda
+MALCTRL-A 0x66c6f3b4b4b458e6d764759ecf122484ebef7580 admin slot raw=0x000000000000000000000000f908610e9174c7cd6e9dfd371e238be4511297a1 decoded=0xf908610e9174c7cd6e9dfd371e238be4511297a1
+FD-proxy 0xfd04775ef1c7e0486951f3431bc9bcd3dc6a90b8 impl slot raw=0x00000000000000000000000082cc9c0e3fa87646464ad509a794016d2ca658f1 decoded=0x82cc9c0e3fa87646464ad509a794016d2ca658f1
+FD-proxy 0xfd04775ef1c7e0486951f3431bc9bcd3dc6a90b8 admin slot raw=0x0000000000000000000000003588a1de656398e1336329a8194f2be8d80af53a decoded=0x3588a1de656398e1336329a8194f2be8d80af53a
+
+Bytecode sizes:
+  MALCTRL-A 0x66c6f3b4b4b458e6d764759ecf122484ebef7580 596 bytes
+  MALCTRL-B 0x851e47f37e20712407990556376a7124de5c3d4a 596 bytes
+  FD-proxy 0xfd04775ef1c7e0486951f3431bc9bcd3dc6a90b8 1289 bytes
