@@ -1,0 +1,110 @@
+=== Step 1: Drift's own GitHub deployment record for the program ID (primary source) ===
+fetched live from https://raw.githubusercontent.com/drift-labs/protocol-v2/master/Anchor.toml
+[programs.localnet] drift = "dRiftyHA39MWEi3m9aunc5MzRF1JYuBsbn6VPcn33UH"
+
+=== Step 2: the durable-nonce pre-signed multisig approval, one second before the hijack ===
+tx 2HvMSgDEfKhNryYZKhjowrBY55rUx5MWtcWkG9hqxZCFBaTiahPwfynP1dxBSRk9s5UTVc8LFeS4Btvkm9pc2C4H
+slot 410344005, blockTime 1775059518 (2026-04-01 16:05:18 UTC), err=None
+   Program 11111111111111111111111111111111 invoke [1]
+   Program 11111111111111111111111111111111 success
+   Program SQDS4ep65T869zMMBKyuUq6aD6EgTu8psMjkvj52pCf invoke [1]
+   Program log: Instruction: VaultTransactionCreate
+   Program 11111111111111111111111111111111 invoke [2]
+   Program 11111111111111111111111111111111 success
+   Program log: transaction index: 7
+   Program SQDS4ep65T869zMMBKyuUq6aD6EgTu8psMjkvj52pCf consumed 25244 of 602850 compute units
+   Program SQDS4ep65T869zMMBKyuUq6aD6EgTu8psMjkvj52pCf success
+   Program SQDS4ep65T869zMMBKyuUq6aD6EgTu8psMjkvj52pCf invoke [1]
+   Program log: Instruction: ProposalCreate
+   Program 11111111111111111111111111111111 invoke [2]
+   Program 11111111111111111111111111111111 success
+   Program SQDS4ep65T869zMMBKyuUq6aD6EgTu8psMjkvj52pCf consumed 14148 of 577606 compute units
+   Program SQDS4ep65T869zMMBKyuUq6aD6EgTu8psMjkvj52pCf success
+   Program SQDS4ep65T869zMMBKyuUq6aD6EgTu8psMjkvj52pCf invoke [1]
+   Program log: Instruction: ProposalApprove
+   Program SQDS4ep65T869zMMBKyuUq6aD6EgTu8psMjkvj52pCf consumed 9591 of 563458 compute units
+   Program SQDS4ep65T869zMMBKyuUq6aD6EgTu8psMjkvj52pCf success
+-> advanceNonce on nonce account 7s7s6saC5LHZoLyBXLM3pCjpWaA7meyQdP8NiH9ktAeC, authority 39JyWrdbVdRqjzw9yyEjxNtTbTKcTPLdtdCgbz7C7Aq8 (the account that had pre-signed a still-valid,
+   not-yet-broadcast transaction against this nonce, per Solana's durable-nonce mechanism)
+
+=== Step 3: the admin-hijack transaction itself ===
+tx 4BKBmAJn6TdsENij7CsVbyMVLJU1tX27nfrMM1zgKv1bs2KJy6Am2NqdA3nJm4g9C6eC64UAf5sNs974ygB9RsN1
+slot 410344009, blockTime 1775059519 (2026-04-01 16:05:19 UTC), err=None
+   Program 11111111111111111111111111111111 invoke [1]
+   Program 11111111111111111111111111111111 success
+   Program SQDS4ep65T869zMMBKyuUq6aD6EgTu8psMjkvj52pCf invoke [1]
+   Program log: Instruction: ProposalApprove
+   Program SQDS4ep65T869zMMBKyuUq6aD6EgTu8psMjkvj52pCf consumed 10353 of 402850 compute units
+   Program SQDS4ep65T869zMMBKyuUq6aD6EgTu8psMjkvj52pCf success
+   Program SQDS4ep65T869zMMBKyuUq6aD6EgTu8psMjkvj52pCf invoke [1]
+   Program log: Instruction: VaultTransactionExecute
+   Program dRiftyHA39MWEi3m9aunc5MzRF1JYuBsbn6VPcn33UH invoke [2]
+   Program log: Instruction: UpdateAdmin
+   Program log: admin: AiLGdNitMjv8n5HMS7HAdV2kaeJZZFd4jdfn5xp1PKrW -> H7PiGqqUaanBovwKgEtreJbKmQe6dbq6VTrw6guy7ZgL
+   Program dRiftyHA39MWEi3m9aunc5MzRF1JYuBsbn6VPcn33UH consumed 36950 of 371938 compute units
+   Program dRiftyHA39MWEi3m9aunc5MzRF1JYuBsbn6VPcn33UH success
+   Program SQDS4ep65T869zMMBKyuUq6aD6EgTu8psMjkvj52pCf consumed 58770 of 392497 compute units
+   Program SQDS4ep65T869zMMBKyuUq6aD6EgTu8psMjkvj52pCf success
+-> Drift's own program log line: admin AiLGdNitMjv8n5HMS7HAdV2kaeJZZFd4jdfn5xp1PKrW -> H7PiGqqUaanBovwKgEtreJbKmQe6dbq6VTrw6guy7ZgL
+   (this line is emitted by dRiftyHA...'s own UpdateAdmin instruction handler, reading its
+    own prior state before overwriting it -- not something an attacker's own script can spoof)
+
+=== Step 4: what the new admin did next, 20 seconds later ===
+tx 4a5962Rdqd9pkXtk9DMQ9ZYhdGb2k9gPw71GvukJgELhxbCY5gm1c1hhKdwuGefyqJ3XMvihUTDNDn3qbXnst82X
+slot 410344059, blockTime 1775059539 (2026-04-01 16:05:39 UTC), 20s after the hijack
+top-level Drift instructions in this one transaction: ['InitializeSpotMarket', 'InitializeAccount3', 'InitializeAccount3', 'UpdateWithdrawGuardThreshold', 'UpdateWithdrawGuardThreshold', 'UpdateWithdrawGuardThreshold', 'UpdateWithdrawGuardThreshold', 'UpdateWithdrawGuardThreshold']
+   Program log: updating spot market withdraw guard threshold 19
+   Program log: spot_market.withdraw_guard_threshold: 5000000000 -> 500000000000000
+   Program log: updating spot market withdraw guard threshold 0
+   Program log: spot_market.withdraw_guard_threshold: 25000000000000 -> 500000000000000
+   Program log: updating spot market withdraw guard threshold 27
+   Program log: spot_market.withdraw_guard_threshold: 10000000000 -> 500000000000000
+   Program log: updating spot market withdraw guard threshold 17
+   Program log: spot_market.withdraw_guard_threshold: 5000000000000 -> 500000000000000
+   Program log: updating spot market withdraw guard threshold 4
+   Program log: spot_market.withdraw_guard_threshold: 200000000000 -> 500000000000000
+-> 5 existing real spot markets had their withdraw guard raised in this transaction alone
+
+=== Step 5: the fake collateral mint, derived from this tx's own inner instructions ===
+new spot-market token accounts were initialized with mint = G84LEhbNMR1yYbHgHbnNYNSK8mpTKcazh5jcW5yMPQKo
+(not supplied by any press source; derived purely from this transaction's own SPL-Token
+ initializeAccount3 inner instructions)
+live mint account: decimals=9, supply=749,999,997.231083, mintAuthority=None
+
+=== Step 6: the mint's own Metaplex metadata, read live (name/symbol, not assumed) ===
+metadata account: 8ajU6KHDnT7MGULEMa9WFoDnaPdWMPMs2dEHRVfmX3op
+name='CarbonVote Token'  symbol='CVT'
+uri='https://arweave.net/AtgGd3qImxJuKmE3Y3SEXBiHAR__VU10acsYol0pAXY'
+
+=== Step 7: a second spot-market setup for the same mint, ~1.5 hours later ===
+tx 2zwpKAerW73YJjYRWzRLfMV27ZswM2nBYy5v9DsGqYdWamV4c7Ywf6LzKA6TazX9BqMRX6bgFxqaNtCd8fPzGVQy
+slot 410357573, blockTime 1775064837 (2026-04-01 17:33:57 UTC), 88.6 minutes after the hijack
+mint used for this second market's token accounts: G84LEhbNMR1yYbHgHbnNYNSK8mpTKcazh5jcW5yMPQKo (same as the CVT mint above)
+
+=== Step 7b: identifying the real-asset mint the attacker wallet first received ===
+mint 27G8MtK7VtTcCHkpASjSDdkWWYfoqT6ggEuKidVJidD4's own Metaplex metadata: name='Jupiter Perps LP' symbol='JLP'
+-> this is Solana's real Jupiter Perps LP token, not a fake one, matching Drift's own #1
+   asset in its official stolen-asset breakdown (Step 9 below)
+
+=== Step 8: a representative sample of the real-asset outflow ===
+(full method: paginate getSignaturesForAddress on both attacker wallets, filter to the
+ 2026-04-01 window, decode preTokenBalances/postTokenBalances on each -- see README.md for
+ the full 315-tx window and 170-tx decode; sampled here to stay within the public RPC's rate limit)
+USDT: tx Z1vjtrziosTdP58u.. -> 8ubo4HbWJHKyFJYJc2Gh74dxCP7bN7Fu2Pi13KZ9rGxw received +4,009,718.693543
+USDT: tx 5DjHKgBVv4XcEXnv.. -> 8ubo4HbWJHKyFJYJc2Gh74dxCP7bN7Fu2Pi13KZ9rGxw received +1,638,691.548357
+USDS: tx 2tpnkJaXcPr7z3mf.. -> 8ubo4HbWJHKyFJYJc2Gh74dxCP7bN7Fu2Pi13KZ9rGxw received +5,254,017.070394
+
+Drift's own official per-asset figures (Step 9 below), for comparison:
+  USDT: $5,648,410.13 (5,648,410.15 tokens)   USDS: $5,254,126.13 (5,254,016.98 tokens)
+  independently summed USDT reaching the consolidation address: 5,648,410.241900
+  independently summed USDS reaching the consolidation address: 5,254,017.070394
+
+=== Step 9: Drift's own official recovery-update page, fetched live ===
+fetched live from https://www.drift.trade/updates/incident-recovery-update-april-16-2026-now
+total figure found on the page: $295,706,374.93
+
+=== Step 10: are the money-trail wallets still queryable / do they still hold funds today? ===
+attacker wallet 1 (HkGz4KmoZ7Zmk7HN6ndJ31UJ1qZ2qgwQxgVqQwovpZES): 1.101626031 SOL
+attacker wallet 2 / hijacked admin (H7PiGqqUaanBovwKgEtreJbKmQe6dbq6VTrw6guy7ZgL): 2.968763800 SOL
+consolidation address (8ubo4HbWJHKyFJYJc2Gh74dxCP7bN7Fu2Pi13KZ9rGxw): 0.097765726 SOL
+original (pre-hijack) admin (AiLGdNitMjv8n5HMS7HAdV2kaeJZZFd4jdfn5xp1PKrW): 0.051000000 SOL

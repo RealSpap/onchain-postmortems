@@ -1,0 +1,16 @@
+=== DefiLlama hacks feed: rows named 'Drift Trade' ===
+2022-05-11 | Drift Trade | 14500000 | ['Solana'] | Market Manipulation | Risk Parameter Abuse | returnedFunds= 14500000
+2026-04-01 | Drift Trade | 295000000 | ['Solana'] | Access Control | Proxy Upgrade Hijack | returnedFunds= None
+
+=== Drift's own GitHub org: drift-labs/protocol-v2 now redirects ===
+{
+  "message": "Moved Permanently",
+  "url": "https://api.github.com/repositories/497045217",
+  "documentation_url": "https://docs.github.com/rest/guides/best-practices-for-using-the-rest-api#follow-redirects"
+}
+
+--- following redirect to repository ID ---
+full_name: velocity-exchange/protocol-v2
+archived: True
+pushed_at: 2026-07-08T22:29:56Z
+html_url: https://github.com/velocity-exchange/protocol-v2

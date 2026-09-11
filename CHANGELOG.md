@@ -4,6 +4,56 @@ One entry per addition or correction to this repo. Each incident added
 with `add_new_entry.py` gets tagged as a matching GitHub release, see
 "Get notified of new postmortems" in `README.md`.
 
+## 2026-09-11 (21)
+
+- Added a 35th incident: Drift Protocol durable-nonce admin hijack,
+  Solana, 2026-04-01, the largest DeFi hack this repo has covered to
+  date. Found via DefiLlama's hacks feed (a "Drift Trade" row, $295M,
+  "Access Control" / "Proxy Upgrade Hijack", distinct from an older 2022
+  $14.5M "Drift Trade" row already resolved via a whitehat return, not
+  this incident) and cross-checked against extensive press coverage
+  (Elliptic, TRM Labs, Chainalysis, QuillAudits, Halborn, Merkle Science),
+  none of which decodes the actual on-chain admin-change instruction,
+  names a verifiable fake-token mint address, or shows the
+  withdraw-guard-threshold manipulation. Started from Drift's own GitHub
+  deployment record (`drift-labs/protocol-v2`'s `Anchor.toml`, fetched
+  live) for the program ID, and, separately, from two transaction
+  signatures a QuillAudits write-up names, treated only as a lead (the
+  same way this repo's Aquifer entry treats a press-named address), not
+  taken on faith. Independently decoded the admin-hijack transaction's
+  own program log ("Instruction: UpdateAdmin" / "admin: X -> Y"),
+  confirming two Squads-multisig-signer approvals bundled with a
+  durable-nonce `advanceNonce` instruction (Solana's mechanism for a
+  transaction signed once and broadcast much later) overwrote Drift's own
+  on-chain admin key at 2026-04-01 16:05:19 UTC, one second after a
+  matching pre-sign transaction. Twenty seconds later the new admin key
+  created a new fake spot market and, in the same transaction, raised the
+  withdraw-guard circuit breaker on five real markets to an identical
+  ceiling; continuing to paginate the admin key's own transaction history
+  finds at least 23 such changes across roughly 2 hours, a level of
+  mechanism detail none of the press write-ups reviewed show. The fake
+  collateral mint itself was not taken from any press source: derived
+  purely from the hijack transaction's own inner SPL-Token instructions,
+  then independently confirmed via live Metaplex metadata to be named
+  "CarbonVote Token" / "CVT" with a live supply of 749,999,997.23 (within
+  0.0000004% of press's "750 million" claim) and a renounced mint
+  authority. The real asset the attacker wallet first received was
+  likewise identified via its own live metadata ("Jupiter Perps LP" /
+  "JLP", not a fake token), and a representative sample of the downstream
+  outflow (USDT and USDS legs reaching a consolidation address) matches
+  Drift's own official per-asset figures, published on its own
+  "Incident Recovery Update" page and fetched live by the committed
+  script, to within 0.002%. Also independently confirmed, via a live
+  GitHub API call, that Drift's own GitHub organization no longer exists
+  under its original name (`drift-labs/protocol-v2` now redirects to
+  `velocity-exchange/protocol-v2`, archived), consistent with widely
+  reported press coverage of Drift's July 2026 rebrand to "Velocity DEX"
+  as part of its post-hack relaunch. This entry treats the $295,706,374.93
+  total as Drift's own primary-source figure, cross-checked against (not
+  fully re-derived from) the independently verified mechanism and sample
+  outflow, rather than reproducing all 19 stolen-asset rows
+  transaction-by-transaction.
+
 ## 2026-09-11 (20)
 
 - Added a 34th incident: Full Sail (Sui Vaults) Switchboard-oracle vault
