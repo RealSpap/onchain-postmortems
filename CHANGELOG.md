@@ -4,6 +4,63 @@ One entry per addition or correction to this repo. Each incident added
 with `add_new_entry.py` gets tagged as a matching GitHub release, see
 "Get notified of new postmortems" in `README.md`.
 
+## 2026-09-11 (14)
+
+- Added a 28th incident: Reddio (RedSonic Vault), Ethereum, 2026-09-05.
+  Found via DefiLlama's hacks feed ("Reddio RedSonic", $22,800, "Token &
+  Share Accounting" / "Incorrect Share Accounting", no source URL
+  attached). The starting anchor was not a press address: Reddio's own
+  official documentation (`docs.reddio.com/zkevm/staking`) independently
+  names `0x4315990D9eeAFFdFAfD49958b4851F203FA1126f` as the "Deposit
+  Smart Contract" behind rsvETH/rsvUSDT, and
+  `0xCA9de1F80Df74331c5fcb7Eee2D05E746d47BFb2` as rsvETH itself, matching
+  the vault address security-firm write-ups (ExVulSec, republished by
+  coin-turk.com and others) separately named. From there this entry
+  worked entirely from the chain: the exploit transaction
+  (`0xe3cba90e865c6cba950ebce36a52607f51f1fd33cd9fb920c78803f19b57791a`,
+  block 25,912,201) is a single contract-creation call whose raw
+  bytecode itself contains `keccak256("registerErc20(address)")`
+  (`0xa4a3c9ef`, computed independently, not assumed from a press quote)
+  next to Lido stETH's real address and the vault's own address in the
+  same byte window. A live Diamond `facets()` (EIP-2535 Loupe) call
+  confirms that exact selector is a real, currently-installed function on
+  one of the vault's 7 facets, one of which (the one owning this
+  selector) is unverified on Blockscout. The vault's own emitted event
+  (receipt log index 4, two ABI-indexed topics, no offset-guessing)
+  independently confirms the asset registered was Lido stETH and names
+  the new share token created,
+  `0xf65e1ec6093642Ba9D439aC25AF1b767054e1558`; querying that token live
+  today returns `name()` "RedSonic Vault Liquid staked Ether 2.0",
+  `symbol()` "rsvstETH", `owner()` the vault itself, and `totalSupply()`
+  0 (the attacker's own position was fully unwound). The vault's real
+  `owner()` (`0x3786540Ec316f2383FAb2d5Cfc816C1ABDfEEf44`) does not match
+  the address that actually called `registerErc20`
+  (`0x39a2aee44bd9ef106917d94880a9f8f7cfaf09d5`), confirming the caller
+  held no special privilege. Log order also shows the registration happened
+  before the attacker's own ETH deposit into rsvETH, not after: the vault's
+  own paired `Deposited`/`Withdrawn`-shaped events for that one rsvETH
+  position (1,130.259297504314190519 ETH in, 1,139.513928645387068173 ETH
+  out for the identical shares minted and burned) show a gain of exactly
+  9.254631141072739098 ETH attributable purely to the vault's share-price
+  math once stETH was registered, independent of and closely matching the
+  attacker's own total realized profit below. The attacker's own EOA sent
+  this transaction at nonce 0 (its first ever) and held 9.261768945208 ETH
+  the instant the
+  block closed, read live via `eth_getBalance` against an archive-capable
+  public endpoint after `ethereum-rpc.publicnode.com` rejected that
+  specific historical query as "archive"; at CoinGecko's own 2026-09-05
+  historical price that is $22,747.69, within 0.23% of DefiLlama's
+  tracked $22,800, a confirmation rather than a correction, so this entry
+  was not added to the "Corrections to press and DefiLlama" table. Two
+  read-only `eth_call` simulations, run today and touching no mainnet
+  state, go beyond what any write-up reported: calling
+  `registerErc20(WETH)` from a completely arbitrary, unprivileged address
+  still succeeds against the vault's real, currently-deployed bytecode,
+  while the identical call against an already-registered asset (stETH)
+  correctly reverts with the facet's own real error string, `"Vaults:
+  vToken already registered"` -- proving the bug is still live and
+  unpatched as of this reconstruction, not merely a historical curiosity.
+
 ## 2026-09-11 (13)
 
 - Added a 27th incident: Radix (Hyperlane Warp Routes), Radix + Ethereum,

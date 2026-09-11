@@ -28,8 +28,8 @@ lost in the merge.
 
 | | |
 |---|---|
-| Incidents covered | 27, independently reconstructed on-chain, see the index for detail |
-| Cumulative loss, recomputed | About $478.6M across the 27 incidents ($478,616,096 exactly, sum of the figures in the index below). At least one entry is a known floor, so the real total is higher. |
+| Incidents covered | 28, independently reconstructed on-chain, see the index for detail |
+| Cumulative loss, recomputed | About $478.6M across the 28 incidents ($478,638,844 exactly, sum of the figures in the index below). At least one entry is a known floor, so the real total is higher. |
 | Corrections made | 18 entries below correct, reconcile, or newly surface a press or DefiLlama figure, label, date, or classification (14 corrections, 3 reconciliations, 1 discovery not previously tracked by DefiLlama at all). See Corrections to press and DefiLlama below. |
 | Method | Each subfolder keeps its original Python reconstruction script, its `registre_hypotheses.csv` falsification registry, and its script's raw output in `resultats_*.txt`, so every figure below can be checked against the file that produced it |
 | License | MIT across all 26 entries, single author (s_pap, 2026) |
@@ -75,7 +75,7 @@ exact figure decoded from source data.
 
 ### 2026
 
-**2026 total: $478,616,096** across 27 incidents (6 months, April through September). At least one entry this year is a known floor, so the true total is higher.
+**2026 total: $478,638,844** across 28 incidents (6 months, April through September). At least one entry this year is a known floor, so the true total is higher.
 
 #### September 2026 (current month)
 
@@ -85,8 +85,9 @@ exact figure decoded from source data.
 | Notional Finance (V1 Escrow) | 2026-09-03 / 09-04 | 1,727,782 [^notional] | Ethereum | Rounding/Math-Bug | uint128 overflow/downcast in the legacy V1 Escrow contract's collateral valuation | [notional-v1-escrow/](notional-v1-escrow/) |
 | XRP Healthcare (XRPH Wallet) | 2026-09-03 / 09-04 | ≥ 445,198 [^xrph-wallet-key-compromise] | XRP Ledger + Ethereum | Key-Compromise | Mass wallet-side private-key compromise (not an XRPL protocol bug) swept thousands of externally-owned wallets to one collector, laundered via NEAR Intents into Ethereum and settled as DAI | [xrph-wallet-key-compromise/](xrph-wallet-key-compromise/) |
 | Cozy V2 | 2026-09-02 / 09-07 | 174,311 [^cozy] | Optimism | Oracle | False answers to the UMA Optimistic Oracle left uncontested during its 5-day dispute window | [cozy-v2-optimism/](cozy-v2-optimism/) |
+| Reddio (RedSonic Vault) | 2026-09-05 | ≈ 22,748 [^redsonic-vault-share-registration] | Ethereum | Access-Control | Permissionless registerErc20() let an unprivileged caller register a second share class over the same pooled collateral, letting a flash-loan-funded deposit be redeemed for more than it was worth | [redsonic-vault-share-registration/](redsonic-vault-share-registration/) |
 
-**September 2026 subtotal: $48,916,010** across 4 incidents. Includes 2 known floor figures (Liquid Network, XRP Healthcare (XRPH Wallet)), so the true total is higher.
+**September 2026 subtotal: $48,938,758** across 5 incidents. Includes 2 known floor figures (Liquid Network, XRP Healthcare (XRPH Wallet)), so the true total is higher.
 
 #### August 2026
 
@@ -173,6 +174,7 @@ exact figure decoded from source data.
 [^kelpdao-rseth-layerzero-rpc-spoofing]: Compromised LayerZero DVN RPC nodes plus a DDoS-forced failover let a forged cross-chain message pass a 1-of-1 verifier; the exploit transaction moved exactly 116,500 rsETH. At theft-day price that is $273,377,225, about 6.7% below DefiLlama's tracked $293,000,000; a second, independently-derived cross-check via Kelp's own on-chain oracle backing rate instead gives $301,716,067, bracketing both figures from the other side. See `kelpdao-rseth-layerzero-rpc-spoofing/README.md`. External sources: https://layerzero.network/blog/kelpdao-incident-statement, https://api.llama.fi/hacks.
 [^virtue-iota-switchboard-oracle]: All 14 Switchboard oracle signing keys for Virtue's IOTA price queue were compromised and, in one atomic transaction, self-submitted a fake $10,000,000 IOTA price, minted 4,942,703.659474 VUSD against 1 IOTA of real collateral, and seeded the stability pool with 1,000,000 of it; the price was then crashed, triggering 47 real-user liquidations (45 distinct users) that cleared $455,102.94 of VUSD debt (matching Virtue's own $455,103 figure) against real-user collateral independently valued at ≈$848,457 at theft-day prices, closer to DefiLlama's tracked $894,500. See `virtue-iota-switchboard-oracle/README.md`. External source: https://cryptoslate.com/cross-chain-oracle-compromise-triggers-liquidations-and-frozen-vaults-across-multiple-defi-networks/.
 [^radix-hyperlane-vault-access-drain]: A missing owner check on direct vault references in the Radix Engine kernel let a published blueprint call `take`/`lock_fee` on 59 victim vaults across 6 Hyperlane-bridged assets (hUSDC, hUSDT, hETH, hWBTC, hSOL, hBNB) with no badge or proof; independently measuring each asset's own `total_supply` before/after the sweep (not assumed from any report) and pricing the 4 non-stablecoin drops at CoinGecko's 2026-08-31 historical close gives $1,251,368.54, within 0.11% of DefiLlama's tracked $1,249,946 for the chain-level "Radix" row. Radix validators halted mainnet consensus the same evening; it remains halted 11 days later. See `radix-hyperlane-vault-access-drain/README.md`. External sources: https://github.com/radixdlt/radixdlt-scrypto/releases/tag/v1.4.0, https://api.llama.fi/hacks.
+[^redsonic-vault-share-registration]: An attacker flash-loaned WETH from Balancer, then immediately called the unprivileged `registerErc20(address)` on Reddio's RedSonic Vault's Diamond proxy (confirmed live as a real, currently-installed selector, not assumed from a write-up), registering Lido stETH as a second share class before ever depositing into the vault's existing rsvETH product. Only after that registration did a ~1,130 ETH deposit mint rsvETH shares that could then be redeemed for 9.254631141072739 ETH more than they were deposited for, decoded directly from the vault's own paired deposit/withdraw events. The attacker's own EOA held 9.261768945208 ETH immediately after the exploit block; at CoinGecko's 2026-09-05 price that is $22,747.69, within 0.23% of DefiLlama's tracked $22,800. A live simulation confirms the same call still succeeds today from any unprivileged address. See `redsonic-vault-share-registration/README.md`. External sources: https://docs.reddio.com/zkevm/staking, https://api.llama.fi/hacks.
 
 ## Corrections to press and DefiLlama
 
