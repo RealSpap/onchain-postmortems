@@ -4,6 +4,55 @@ One entry per addition or correction to this repo. Each incident added
 with `add_new_entry.py` gets tagged as a matching GitHub release, see
 "Get notified of new postmortems" in `README.md`.
 
+## 2026-09-11 (13)
+
+- Added a 27th incident: Radix (Hyperlane Warp Routes), Radix + Ethereum,
+  2026-08-31. This project first learned the incident existed from the
+  community-run RADIX Wiki's incident page
+  (`radix.wiki/contents/history/hyperlane-asset-drain-2026`), which is not
+  a primary source and is not relied on for any figure in the entry. Every
+  address instead comes from Hyperlane's own official GitHub deployment
+  registry (`hyperlane-xyz/hyperlane-registry`, fetched live), which also
+  surfaced a real bug in that registry: `ETH/ethereum-radix-deploy.yaml`'s
+  own hETH component address is one Bech32m character short of the correct
+  one in its own `ethereum-radix-config.yaml`, caught because the shorter
+  string fails a live address check outright. Radix's own public Gateway
+  API refuses ordinary "current state" reads with a `NotSyncedUpError`
+  once the ledger has gone static for too long, itself an independent,
+  unprompted confirmation that mainnet is still halted (state_version
+  557840622 / epoch 339896 / round 102, unchanged for 10+ days), matching
+  every read in this entry passing an explicit `at_ledger_state` instead.
+  Per-asset supply drops for all 6 Hyperlane-bridged assets (hUSDC, hUSDT,
+  hETH, hWBTC, hSOL, hBNB) are independently measured from each resource's
+  own `total_supply` immediately before/after the sweep, not assumed from
+  any report. The single largest hUSDC-draining transaction was found by
+  filtering the Gateway API's own transaction stream by
+  `affected_global_entities_filter` on the hUSDC resource address (fee
+  alone turned out not to be a reliable way to single it out: several
+  attack transactions carry near-identical fees, and an earlier pass of
+  this project's own script ranked by fee and surfaced the wrong
+  transaction before this was caught and fixed) and its own
+  `BurnFungibleResourceEvent`/`SendRemoteTransferEvent`/`DispatchEvent`
+  were decoded directly: 59 vaults drained of 442,985.632108 hUSDC in one
+  atomic call, dispatched toward Ethereum with no authorization badge or
+  proof against any of the 59 vaults. Independently cross-checking
+  Ethereum mainnet's own real USDC contract for the attacker's own
+  recipient address (named directly in that `SendRemoteTransferEvent`,
+  never guessed) finds only 15,544.443004 USDC actually delivered so far
+  -- 3.5% of what was dispatched -- while the equivalent USDT check on the
+  same recipient finds 99.3% delivered, an inconsistency this project
+  cannot explain from either chain's own data and reports as an open
+  question rather than a conclusion. Pricing all 6 assets' drops at
+  CoinGecko's 2026-08-31 historical close gives an independently
+  reconstructed total of $1,251,368.54, within 0.11% of DefiLlama's
+  tracked $1,249,946 for the chain-level "Radix" row, reported as a
+  confirmation rather than a correction. The official fix (`radixdlt`'s
+  own GitHub repos, not the wiki's paraphrase of them: `radixdlt-scrypto`
+  PR #2093 / release v1.4.0, `radixdlt/babylon-node` PR #1076 / release
+  v1.4.0.0-RC1) adds a kernel-level ownership check on direct method
+  invocations that did not exist before, matching the drain's own
+  mechanism exactly.
+
 ## 2026-09-11 (12)
 
 - Added a 26th incident: Virtue Protocol (VUSD CDP), IOTA, 2026-08-28.

@@ -28,8 +28,8 @@ lost in the merge.
 
 | | |
 |---|---|
-| Incidents covered | 26, independently reconstructed on-chain, see the index for detail |
-| Cumulative loss, recomputed | About $477.4M across the 26 incidents ($477,364,727 exactly, sum of the figures in the index below). At least one entry is a known floor, so the real total is higher. |
+| Incidents covered | 27, independently reconstructed on-chain, see the index for detail |
+| Cumulative loss, recomputed | About $478.6M across the 27 incidents ($478,616,096 exactly, sum of the figures in the index below). At least one entry is a known floor, so the real total is higher. |
 | Corrections made | 18 entries below correct, reconcile, or newly surface a press or DefiLlama figure, label, date, or classification (14 corrections, 3 reconciliations, 1 discovery not previously tracked by DefiLlama at all). See Corrections to press and DefiLlama below. |
 | Method | Each subfolder keeps its original Python reconstruction script, its `registre_hypotheses.csv` falsification registry, and its script's raw output in `resultats_*.txt`, so every figure below can be checked against the file that produced it |
 | License | MIT across all 26 entries, single author (s_pap, 2026) |
@@ -75,7 +75,7 @@ exact figure decoded from source data.
 
 ### 2026
 
-**2026 total: $477,364,727** across 26 incidents (6 months, April through September). At least one entry this year is a known floor, so the true total is higher.
+**2026 total: $478,616,096** across 27 incidents (6 months, April through September). At least one entry this year is a known floor, so the true total is higher.
 
 #### September 2026 (current month)
 
@@ -98,6 +98,7 @@ exact figure decoded from source data.
 | Cosmos EVM (MANTRA / TAC / KiiChain) | 2026-08-20 / 08-22 | ≥ 5,720,000 [^cosmos-evm-vesting-underflow] | MANTRA + TAC + KiiChain (+ 3 unnamed Cosmos EVM chains) | Rounding/Math-Bug | Underflow then overflow of the native balance in a shared Cosmos EVM staking precompile | [cosmos-evm-vesting-underflow/](cosmos-evm-vesting-underflow/) |
 | Aquifer | 2026-08-31 / 09-01 | ≈ 2,418,164 [^aquifer-sweeper-arbitrary-call] | Solana + Ethereum | Access-Control | Arbitrary external call on a verified cross-chain Sweeper contract redirected swept funds to the attacker's own address | [aquifer-sweeper-arbitrary-call/](aquifer-sweeper-arbitrary-call/) |
 | Maya Protocol (MAYAChain) | 2026-08-18 | ≥ 1,343,181 [^mayachain-cacao-slash-drain] | MAYAChain + Bitcoin + Arbitrum | Access-Control | Voter-clobber misrouted a multi-message deposit, an uncapped theft-slash subsidy then credited phantom CACAO to a near-empty pool, drained by a single-sided add/withdraw and swapped out to Bitcoin | [mayachain-cacao-slash-drain/](mayachain-cacao-slash-drain/) |
+| Radix (Hyperlane Warp Routes) | 2026-08-31 | ≈ 1,251,369 [^radix-hyperlane-vault-access-drain] | Radix + Ethereum | Access-Control | Missing owner check on direct vault references in the Radix Engine kernel let one manifest call take/lock_fee on 59 victim vaults across 6 Hyperlane-bridged assets directly, without a badge or proof, forcing validators to halt mainnet consensus for over a week | [radix-hyperlane-vault-access-drain/](radix-hyperlane-vault-access-drain/) |
 | Virtue Protocol (VUSD CDP) | 2026-08-28 | ≈ 848,457 [^virtue-iota-switchboard-oracle] | IOTA | Oracle | All 14 Switchboard oracle signing keys for the IOTA price queue compromised, self-submitted a fake $10,000,000 IOTA price inside the same transaction that minted 4.94M VUSD against 1 IOTA of real collateral, then a crashed price triggered a real-user liquidation cascade | [virtue-iota-switchboard-oracle/](virtue-iota-switchboard-oracle/) |
 | Ajna Finance | 2026-08-28 / 08-29 | ≈ 775,400 [^ajna] | Ethereum | Rounding/Math-Bug | Liquidation-math exploit (Kick) on pools deployed through a factory the protocol never documented | [ajna-liquidation/](ajna-liquidation/) |
 | Sandbox (SAND / OFT) | 2026-08-21 / 08-22 | ≥ 675,000 [^sandbox] | Base + BSC + Ethereum | Bridge | LayerZero delegate hijack via a legacy approveAndCall primitive, a composition bug, not a compromised key | [sandbox-oft-delegate-hijack/](sandbox-oft-delegate-hijack/) |
@@ -105,7 +106,7 @@ exact figure decoded from source data.
 | MORE Markets (Ankr ankrFLOW E-Mode) | 2026-08-31 | ≈ 415,398 [^more-markets-ankrflow-emode] | Flow EVM | Access-Control | Ankr's ankrFLOW liquid-staking contract let unbacked ankrFLOW be minted via a recursive stake/restake loop, supplied as E-Mode collateral to drain MORE Markets' WFLOW reserve | [more-markets-ankrflow-emode/](more-markets-ankrflow-emode/) |
 | Balancer V1 (legacy pools) | 2026-08-30 / 08-31 | ≥ 234,000 [^balancer] | Ethereum | Rounding/Math-Bug | Rounding error on unmaintained V1 pools, repeated 1-satoshi joins | [balancer-v1-rounding/](balancer-v1-rounding/) |
 
-**August 2026 subtotal: $38,861,459** across 12 incidents. Includes 4 known floor figures (Cosmos EVM (MANTRA / TAC / KiiChain), Maya Protocol (MAYAChain), Sandbox (SAND / OFT), Balancer V1 (legacy pools)), so the true total is higher.
+**August 2026 subtotal: $40,112,828** across 13 incidents. Includes 4 known floor figures (Cosmos EVM (MANTRA / TAC / KiiChain), Maya Protocol (MAYAChain), Sandbox (SAND / OFT), Balancer V1 (legacy pools)), so the true total is higher.
 
 #### July 2026
 
@@ -171,6 +172,7 @@ exact figure decoded from source data.
 [^gravity-bridge-denom-poisoning]: A permissionless `deployERC20()` plus a missing registry collision check let a fabricated Cosmos denom string embed a real custody token address, poisoning the bridge's ERC20 lookup. $5,397,931.45 moved, within 0.04% of DefiLlama's tracked $5.4M, but this entry's own decode of the raw event data contradicts DefiLlama's "Key Compromise" classification: every validator signature on the payout batches was genuine, the registry was poisoned via a missing check, no key was compromised. See `gravity-bridge-denom-poisoning/README.md`. External source: https://rekt.news/gravity-bridge-rekt.
 [^kelpdao-rseth-layerzero-rpc-spoofing]: Compromised LayerZero DVN RPC nodes plus a DDoS-forced failover let a forged cross-chain message pass a 1-of-1 verifier; the exploit transaction moved exactly 116,500 rsETH. At theft-day price that is $273,377,225, about 6.7% below DefiLlama's tracked $293,000,000; a second, independently-derived cross-check via Kelp's own on-chain oracle backing rate instead gives $301,716,067, bracketing both figures from the other side. See `kelpdao-rseth-layerzero-rpc-spoofing/README.md`. External sources: https://layerzero.network/blog/kelpdao-incident-statement, https://api.llama.fi/hacks.
 [^virtue-iota-switchboard-oracle]: All 14 Switchboard oracle signing keys for Virtue's IOTA price queue were compromised and, in one atomic transaction, self-submitted a fake $10,000,000 IOTA price, minted 4,942,703.659474 VUSD against 1 IOTA of real collateral, and seeded the stability pool with 1,000,000 of it; the price was then crashed, triggering 47 real-user liquidations (45 distinct users) that cleared $455,102.94 of VUSD debt (matching Virtue's own $455,103 figure) against real-user collateral independently valued at ≈$848,457 at theft-day prices, closer to DefiLlama's tracked $894,500. See `virtue-iota-switchboard-oracle/README.md`. External source: https://cryptoslate.com/cross-chain-oracle-compromise-triggers-liquidations-and-frozen-vaults-across-multiple-defi-networks/.
+[^radix-hyperlane-vault-access-drain]: A missing owner check on direct vault references in the Radix Engine kernel let a published blueprint call `take`/`lock_fee` on 59 victim vaults across 6 Hyperlane-bridged assets (hUSDC, hUSDT, hETH, hWBTC, hSOL, hBNB) with no badge or proof; independently measuring each asset's own `total_supply` before/after the sweep (not assumed from any report) and pricing the 4 non-stablecoin drops at CoinGecko's 2026-08-31 historical close gives $1,251,368.54, within 0.11% of DefiLlama's tracked $1,249,946 for the chain-level "Radix" row. Radix validators halted mainnet consensus the same evening; it remains halted 11 days later. See `radix-hyperlane-vault-access-drain/README.md`. External sources: https://github.com/radixdlt/radixdlt-scrypto/releases/tag/v1.4.0, https://api.llama.fi/hacks.
 
 ## Corrections to press and DefiLlama
 

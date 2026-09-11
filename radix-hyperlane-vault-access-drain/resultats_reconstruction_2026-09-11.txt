@@ -1,0 +1,101 @@
+=== Step 1: read Hyperlane's own official deployment registry, not a block explorer ===
+Source: github.com/hyperlane-xyz/hyperlane-registry (raw.githubusercontent.com)
+
+  hUSDC  <- deployments/warp_routes/USDC/radix-deploy.yaml
+           component address: component_rdx1crvhu42czzpvkh556228sc5xk7uz69yvwcsqn23u5yy65pea0w02l0  (len=68)
+  hUSDT  <- deployments/warp_routes/USDT/ethereum-radix-deploy.yaml
+           component address: component_rdx1cp2llht7llhp9ung4l657uecn03m6tu07x7eznhmfctspxtpl5h43g  (len=68)
+  hETH   <- deployments/warp_routes/ETH/ethereum-radix-config.yaml
+           component address: component_rdx1cr0v0jnmfzhzs4xfsvfgcm43vp7khrx7jfkf0umfl4qes528zm7pcq  (len=68)
+  hWBTC  <- deployments/warp_routes/WBTC/ethereum-radix-deploy.yaml
+           component address: component_rdx1cp9lqkswethenu2l8cx5d39x9lh9dm22t62cykkc4sxp8rdvj25ak4  (len=68)
+  hSOL   <- deployments/warp_routes/SOL/radix-config.yaml
+           component address: component_rdx1cz8zrl66x305z7lf2mshv8rzlkpcj40s4a7tj0keudr6rxvygsrjgd  (len=68)
+  hBNB   <- deployments/warp_routes/BNB/radix-config.yaml
+           component address: component_rdx1cpsxagjgh6yw4lkscwptlg2fvvha4sg7fgrf0x9mdntp3nxen0hzfy  (len=68)
+
+  NOTE: ethereum-radix-deploy.yaml's own hETH address is 'component_rdx1cr0v0jnmfzhzs4xfsvfgcm43vp7khrx7jfkf0umfl4qes528zm7pc' (67 chars) -- one character short of the config.yaml's 'component_rdx1cr0v0jnmfzhzs4xfsvfgcm43vp7khrx7jfkf0umfl4qes528zm7pcq' (68 chars). This script uses the config.yaml value, confirmed live against the chain in Step 3.
+
+=== Step 2: confirm mainnet is still halted, live, via the official Gateway API ===
+  network: mainnet
+  state_version: 557840622
+  epoch/round: 339896/102
+  proposer_round_timestamp (last real ledger progress): 2026-08-31T21:19:06.179Z
+  -> mainnet has produced no new state for 10.3 days as of this run
+
+=== Step 3: read each warp route's Radix-side resource address live, and its supply just before the attack ===
+  hUSDC  resource resource_rdx1thxj9m87sn5cc9ehgp9qxp6vzeqxtce90xm5cp33373tclyp4et4gv
+           total_supply 2026-08-31T16:01:00Z = 460,006.679705
+           total_supply 2026-08-31T17:00:00Z = 1,091.793964   drop = 458,914.885741
+  hUSDT  resource resource_rdx1th4v03gezwgzkuma6p38lnum8ww8t4ds9nvcrkr2p9ft6kxx3kxvhe
+           total_supply 2026-08-31T16:01:00Z = 72,420.420768
+           total_supply 2026-08-31T17:00:00Z = 0.036292   drop = 72,420.384476
+  hETH   resource resource_rdx1th09yvv7tgsrv708ffsgqjjf2mhy84mscmj5jwu4g670fh3e5zgef0
+           total_supply 2026-08-31T16:01:00Z = 62.088284
+           total_supply 2026-08-31T17:00:00Z = 0.010278   drop = 62.078006
+  hWBTC  resource resource_rdx1t58kkcqdz0mavfz98m98qh9m4jexyl9tacsvlhns6yxs4r6hrm5re5
+           total_supply 2026-08-31T16:01:00Z = 6.353842
+           total_supply 2026-08-31T17:00:00Z = 0.005600   drop = 6.348243
+  hSOL   resource resource_rdx1t5ljlq97xfcewcdjxsqld89443fchqg96xv8a8k8gdftdycy9haxpx
+           total_supply 2026-08-31T16:01:00Z = 536.196143
+           total_supply 2026-08-31T17:00:00Z = 0.036338   drop = 536.159806
+  hBNB   resource resource_rdx1t4et4jddp2fdupr00k83ct9jpnkgewply42l5098ztjkfvjfedvjva
+           total_supply 2026-08-31T16:01:00Z = 32.912210
+           total_supply 2026-08-31T17:00:00Z = 0.002105   drop = 32.910105
+
+=== Step 4: find the single largest hUSDC-draining transaction by filtering the Gateway's own transaction stream ===
+  (not copied from any article -- this project filters stream/transactions by
+   affected_global_entities_filter=[hUSDC resource address] to find every
+   transaction that touched hUSDC at all during the sweep, then ranks those
+   candidates -- generic 'biggest transaction of the whole incident' is not a
+   well-defined question, since different attack transactions targeted
+   different assets with similarly-sized manifests and near-identical fees)
+  3 transactions touched the hUSDC resource in the sweep window:
+    557753511  2026-08-31T16:22:37.664Z  txid_rdx190ag4etv8h8w4y3t6szdjghmye2krwrsg0a0qjljnm96haly270snvmlgh  fee=1.87644024006
+    557756614  2026-08-31T16:33:28.554Z  txid_rdx19lzunu3relu436dm9r4mnmvyjx3yzr2723gk7d7kv0tce8g9h4kqd60u5v  fee=8.39329093338
+    557761342  2026-08-31T16:50:54.537Z  txid_rdx177qfu39dnjhekfnvy3enk7re527jyw08u75s4ejgls35zntc9zmqa9w8h7  fee=8.40218233338
+    txid_rdx190ag4etv8h8w4y3t6szdjghmye2krwrsg0a0qjljnm96haly270snvmlgh: hUSDC withdrawn = 384.810629
+    txid_rdx19lzunu3relu436dm9r4mnmvyjx3yzr2723gk7d7kv0tce8g9h4kqd60u5v: hUSDC withdrawn = 442,985.632108
+    txid_rdx177qfu39dnjhekfnvy3enk7re527jyw08u75s4ejgls35zntc9zmqa9w8h7: hUSDC withdrawn = 15,544.443004
+
+  largest hUSDC-draining transaction: txid_rdx19lzunu3relu436dm9r4mnmvyjx3yzr2723gk7d7kv0tce8g9h4kqd60u5v (442,985.632108 hUSDC, 2026-08-31T16:33:28.554Z)
+
+=== Step 5: decode that transaction's own balance changes and events live ===
+  intent_hash: txid_rdx19lzunu3relu436dm9r4mnmvyjx3yzr2723gk7d7kv0tce8g9h4kqd60u5v
+  round_timestamp: 2026-08-31T16:33:28.554Z
+  affected_global_entities: 68
+  hUSDC balance-change entries: 59 distinct entities
+  total hUSDC withdrawn (sum of negative changes): 442,985.632108
+  event names in this tx: {'VaultCreationEvent': 1, 'LockFeeEvent': 1, 'WithdrawEvent': 61, 'BurnFungibleResourceEvent': 2, 'SendRemoteTransferEvent': 1, 'InsertedIntoTreeEvent': 1, 'DepositEvent': 4, 'GasPayment': 1, 'DispatchIdEvent': 1, 'DispatchEvent': 1, 'PayFeeEvent': 1}
+  BurnFungibleResourceEvent (hUSDC resource): 442,985.632108
+  SendRemoteTransferEvent: destination_domain=1 application_recipient=0x67899664446ccfadf75e0d3f5668be262acd1069 user_recipient=0x626d7be5c2f2b6e9baa542e25b6313ac91d47cd2 amount=442985.632108
+  DispatchEvent: destination=1 sequence=3880
+
+=== Step 6: cross-check on Ethereum mainnet -- did the recipient address actually receive real tokens? ===
+  Reading the real USDC/USDT ERC-20 contracts' own event logs, a completely separate chain.
+  Ethereum block at/just after the Radix tx's own timestamp: 25876484 (1788194015)
+  Transfer logs found to 0x626d7be5c2f2b6e9baa542e25b6313ac91d47cd2:
+    USDC 15,544.443004  tx=0x2798497bc6234fd8d938d503f2152e8dff8560fa2bb4c6ab2f21b7b3d1a37e30  ts=2026-08-31T16:51:11Z
+    USDT 24,417.722847  tx=0xa1d66d64eed0ec03d08cb5228e0dd1c93f878ddc27ebfbf8f2fbcb4c8466f490  ts=2026-08-31T16:40:47Z
+    USDT 47,465.737677  tx=0xd852d68e48ef1f055b0a49dc2f70ef4dd11fed5eadeb027553d3dccecbbcc812  ts=2026-08-31T16:40:59Z
+    USDT 53.929097  tx=0xf79a7bd1c306c708837b52ba28b3b4b77c070b91fb2a456c61fee8fbe20d5c8b  ts=2026-08-31T16:52:11Z
+  TOTAL USDC actually delivered to this address so far: 15,544.443004
+  (compare to 442,985.632108 hUSDC dispatched in this one message -- a large gap here means most of this message's value has not yet been relayed/claimed)
+
+=== Step 7: price the full 6-asset drop at theft-day rates and compare to DefiLlama ===
+  hETH: drop=62.078006  theft-day price=$2,416.2418  -> $149,995.47
+  hWBTC: drop=6.348243  theft-day price=$77,658.2313  -> $492,993.29
+  hSOL: drop=536.159806  theft-day price=$101.6829  -> $54,518.27
+  hBNB: drop=32.910105  theft-day price=$684.4779  -> $22,526.24
+  hUSDC: drop=458,914.885741 @ $1.00 -> $458,914.89
+  hUSDT: drop=72,420.384476 @ $1.00 -> $72,420.38
+
+  TOTAL independently reconstructed loss: $1,251,368.54
+  DefiLlama tracked figure (chain-level 'Radix' row): $1,249,946
+  difference: +0.11%
+
+=== Step 8: confirm the official fix exists (GitHub, radixdlt org) ===
+  radixdlt-scrypto PR #2093: '0xOmarA/vault access' created=2026-09-02T12:26:45Z merged=2026-09-07T17:33:31Z
+  radixdlt-scrypto v1.4.0 published_at=2026-09-07T17:35:11Z
+
+Done.
