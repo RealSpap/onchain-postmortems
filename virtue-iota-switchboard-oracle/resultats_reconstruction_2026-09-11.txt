@@ -1,0 +1,79 @@
+=== Step 1: read Virtue's own GitHub SDK deployment config, not a block explorer ===
+fetched 12,947 bytes from https://raw.githubusercontent.com/Virtue-CDP/virtue-sdk/main/src/constants/object.ts
+  CDP_PACKAGE_ID               0xb0ca01917f84a07774397395467fc2d56de377fab9d603cb79b82f062d1f6e9a
+  ORACLE_PACKAGE_ID            0x7eebbee92f64ba2912bdbfba1864a362c463879fc5b3eacc735c1dcb255cc2cf
+  SWITCHBOARD_PACKAGE_ID       0x8650249db8ffcffe8eb08b0696a8cb71e325f2afb9abc646f45344077b073ba1
+  VUSD_PACKAGE_ID              0xd3b63e603a78786facf65ff22e79701f3e824881a12fa3268d62a75530fe904f
+  SWITCHBOARD_AGGREGATORS.IOTA 0x7c16ffdac553a4816db57e5e2cfbba8245337f2983b4ffb4dd944493a530c556
+
+=== Step 2: confirm these are live IOTA mainnet objects ===
+iota_getChainIdentifier: 6364aad5
+  CDP package            0xb0ca01917f84a07774397395467fc2d56de377fab9d603cb79b82f062d1f6e9a  -> live object confirmed: True
+  Oracle package         0x7eebbee92f64ba2912bdbfba1864a362c463879fc5b3eacc735c1dcb255cc2cf  -> live object confirmed: True
+  Switchboard package    0x8650249db8ffcffe8eb08b0696a8cb71e325f2afb9abc646f45344077b073ba1  -> live object confirmed: True
+
+VUSD decimals (live iotax_getCoinMetadata): 6
+IOTA decimals (live iotax_getCoinMetadata): 9
+
+=== Step 3: paginate the CDP package's own event log back through the incident window ===
+  page 1: 50 events, oldest so far 2026-08-28 23:56:35.446000 UTC
+  page 10: 50 events, oldest so far 2026-08-26 19:23:06.979000 UTC
+total events fetched: 500, spanning back to 2026-08-26 19:23:06.979000 UTC
+
+=== Step 4: find the exploit mint -- the single largest 'borrow' in a manage event ===
+transaction:    CaAD9SRJjuvEbNiHQcgT176kg4F8jKUTM1EneeYsd3Gd
+timestamp:      2026-08-28 21:53:10.246000 UTC
+attacker addr:  0x381d5b5fa3ae0ba5b3d0ce3421a43d48397cf6eb2a87e624d56dec5e68e7c7e9
+collateral type:0000000000000000000000000000000000000000000000000000000000000002::iota::IOTA
+deposit:        1.000000000 (native units)
+borrow (mint):  4,942,703.659474 VUSD
+
+=== Step 5: decode the exploit transaction's own commands and events ===
+total PTB commands in this single transaction: 48
+calls to Switchboard's own aggregator_submit_result_action::run: 14
+distinct oracle_id signers who submitted a result in THIS transaction: 14
+distinct raw values submitted: {'10000000000000000000000000'}
+Virtue Oracle's own resulting PriceAggregated<IOTA>.result: 10000000000000000
+  at this Oracle's own 9-decimal convention (cross-checked in Step 7): $10,000,000.00 per IOTA
+vusd::Mint event: amount=4,942,703.659474 VUSD, total_supply immediately after=5,592,035.484667 VUSD
+stability_pool::Deposit in the SAME transaction: 1,000,000.000000 VUSD (attacker seeding the pool that absorbs the collateral from the liquidations that follow)
+
+=== Step 6: cross-check the Oracle's price decimal convention against a normal, later price ===
+most recent PriceAggregated<IOTA> on-chain (post-freeze, still using Switchboard): result=39260630 at 2026-08-28 23:13:51.750000 UTC -> $0.039261 per IOTA at the same 9-decimal convention
+
+=== Step 7: theft-day IOTA/USD spot price, independent of Virtue's own oracle ===
+CoinGecko IOTA/USD samples 21:00-23:00 UTC 2026-08-28: [0.03918965539351392, 0.03920572127099474, 0.03916760151002458]
+mean theft-window spot price used below: $0.039188
+
+=== Step 8: the liquidation cascade -- every 'liquidate' memo event on the CDP package ===
+total liquidate events found: 48
+distinct debtor addresses across all 48 events: 46
+of those, 1 belong to the attacker's own address (0x381d5b5fa3ae0ba5b3d0ce3421a43d48397cf6eb2a87e624d56dec5e68e7c7e9), a small wash/test cycle before the main exploit, not a real affected user
+real-user liquidate events: 47, distinct real-user debtors: 45
+
+total VUSD debt cleared, ALL 48 liquidate events: 455,103.005552 VUSD
+total VUSD debt cleared, 47 REAL-USER events only: 455,102.938610 VUSD
+
+real-user collateral withdrawn (raw native units, by coin type):
+  0000000000000000000000000000000000000000000000000000000000000002::iota::IOTA: 3611650830680175 raw (3,611,650.830680 native units, assuming 9 decimals)
+  346778989a9f57480ec3fee15f2cd68409c73a62112d40a3efd13987997be68c::cert::CERT: 16911443633889400 raw (16,911,443.633889 native units, assuming 9 decimals)
+  e4abf8b6183c106282addbfb8483a043e1a60f1fd3dd91fb727fa284306a27fd::cert::CERT: 54017069548773 raw (54,017.069549 native units, assuming 9 decimals)
+
+liquidation window: 2026-08-28 21:52:12.496000 UTC to 2026-08-28 22:45:02.444000 UTC
+
+=== Step 9: convert stIOTA/vIOTA collateral to IOTA-equivalent at their exploit-time exchange rate ===
+  3,611,650.830680 native IOTA -> 3,611,650.830680 IOTA-equivalent (1:1)
+  16,911,443.633889 stIOTA * exploit-time rate 1.063108479 (pool v763405317, metadata v763405315) = 17,978,699.124687 IOTA-equivalent
+  54,017.069549 vIOTA * exploit-time rate 0.999136720 (pool v763327055, metadata v763327055) = 53,970.437687 IOTA-equivalent
+
+TOTAL real-user collateral seized, IOTA-equivalent: 21,644,320.393055
+TOTAL at theft-window mean spot price ($0.039188/IOTA): $848,190.26
+
+=== Step 10: compare against DefiLlama's own tracked entry and Virtue's own press-relayed figure ===
+  DefiLlama: date=2026-08-28 chain=['Iota'] amount=$894,500 classification=Oracle Manipulation / Oracle Misconfiguration
+
+Virtue's own figure (per press paraphrase, X not independently fetchable): 455,103 VUSD debt cleared against 23,215,117 IOTA-equivalent seized
+This reconstruction, VUSD debt cleared (real users only): 455,102.938610 VUSD (diff -0.06)
+This reconstruction, IOTA-equivalent seized: 21,644,320.39 vs Virtue's stated 23,215,117 (-6.77%)
+
+See README.md for the full reconstruction and every caveat (the stIOTA/vIOTA exchange-rate conversion above is an approximation of Virtue's own internal accounting, not a byte-for-byte replication of it; the attacker's own original exploit position, 1 IOTA collateral against the 4.94M VUSD mint, is never seen being liquidated in this project's own capture of the CDP package's event log).

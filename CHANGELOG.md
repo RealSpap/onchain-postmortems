@@ -4,6 +4,44 @@ One entry per addition or correction to this repo. Each incident added
 with `add_new_entry.py` gets tagged as a matching GitHub release, see
 "Get notified of new postmortems" in `README.md`.
 
+## 2026-09-11 (12)
+
+- Added a 26th incident: Virtue Protocol (VUSD CDP), IOTA, 2026-08-28.
+  Found via DefiLlama's hacks feed ("Virtue", $894,500, "Oracle
+  Manipulation" / "Oracle Misconfiguration"), cross-checked against press
+  coverage of a broader Switchboard oracle compromise affecting Aptos,
+  Sui, IOTA and Movement the same day. Every package address was read
+  live from Virtue's own GitHub SDK repo (`Virtue-CDP/virtue-sdk`,
+  `src/constants/object.ts`), not a block explorer. The exploit
+  transaction (`CaAD9SRJjuvEbNiHQcgT176kg4F8jKUTM1EneeYsd3Gd`) was found
+  by paginating the CDP package's own on-chain event log for the single
+  largest mint, not copied from any article: a single atomic transaction
+  shows 14 distinct Switchboard oracle signers self-submitting an
+  identical fake price (independently decoded to exactly $10,000,000.00
+  per IOTA at the Oracle's own 9-decimal convention), a mint of
+  4,942,703.659474 VUSD against 1 IOTA of real collateral (about 88.4% of
+  the entire VUSD supply the instant after), and a 1,000,000 VUSD
+  stability-pool deposit inside the same transaction. The subsequent
+  liquidation cascade (48 raw events on-chain) resolves to exactly 47
+  events / 45 distinct real users once the attacker's own 1
+  wash-test liquidation is identified and excluded, matching Virtue's own
+  press-relayed account on both counts exactly; the VUSD debt-cleared
+  total independently reconstructs to $455,102.94, within 7 cents of
+  Virtue's own 455,103 figure. A second figure, the real-user collateral's
+  value at theft-day prices (≈$848,457, using each cert token's own
+  historical exchange rate read at the exact object version each
+  liquidation transaction used), sits much closer to DefiLlama's tracked
+  $894,500 than to the face-value debt figure -- a reconciliation, not an
+  error, logged in "Corrections to press and DefiLlama". Also surfaces a
+  root-cause detail from Virtue's own GitHub commit history not stated in
+  any press account found: a commit merged less than 24 hours before the
+  exploit removed Pyth as a price source (its own Hermes endpoint had
+  been persistently returning 401 Unauthorized), with the commit message
+  itself stating "there is no second opinion left, so crossbar going down
+  means no price at all" -- a risk the team had already named in writing
+  one day before it was realized through a compromised signer rather than
+  a downed feed.
+
 ## 2026-09-10 (11)
 
 - Backfilled 8 entries that were missing despite this changelog's own

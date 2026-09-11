@@ -28,11 +28,11 @@ lost in the merge.
 
 | | |
 |---|---|
-| Incidents covered | 25, independently reconstructed on-chain, see the index for detail |
-| Cumulative loss, recomputed | About $476.5M across the 25 incidents ($476,516,270 exactly, sum of the figures in the index below). At least one entry is a known floor, so the real total is higher. |
-| Corrections made | 17 entries below correct, reconcile, or newly surface a press or DefiLlama figure, label, date, or classification (14 corrections, 2 reconciliations, 1 discovery not previously tracked by DefiLlama at all). See Corrections to press and DefiLlama below. |
+| Incidents covered | 26, independently reconstructed on-chain, see the index for detail |
+| Cumulative loss, recomputed | About $477.4M across the 26 incidents ($477,364,727 exactly, sum of the figures in the index below). At least one entry is a known floor, so the real total is higher. |
+| Corrections made | 18 entries below correct, reconcile, or newly surface a press or DefiLlama figure, label, date, or classification (14 corrections, 3 reconciliations, 1 discovery not previously tracked by DefiLlama at all). See Corrections to press and DefiLlama below. |
 | Method | Each subfolder keeps its original Python reconstruction script, its `registre_hypotheses.csv` falsification registry, and its script's raw output in `resultats_*.txt`, so every figure below can be checked against the file that produced it |
-| License | MIT across all 25 entries, single author (s_pap, 2026) |
+| License | MIT across all 26 entries, single author (s_pap, 2026) |
 
 ## Table of contents
 
@@ -75,7 +75,7 @@ exact figure decoded from source data.
 
 ### 2026
 
-**2026 total: $476,516,270** across 25 incidents (6 months, April through September). At least one entry this year is a known floor, so the true total is higher.
+**2026 total: $477,364,727** across 26 incidents (6 months, April through September). At least one entry this year is a known floor, so the true total is higher.
 
 #### September 2026 (current month)
 
@@ -98,13 +98,14 @@ exact figure decoded from source data.
 | Cosmos EVM (MANTRA / TAC / KiiChain) | 2026-08-20 / 08-22 | ≥ 5,720,000 [^cosmos-evm-vesting-underflow] | MANTRA + TAC + KiiChain (+ 3 unnamed Cosmos EVM chains) | Rounding/Math-Bug | Underflow then overflow of the native balance in a shared Cosmos EVM staking precompile | [cosmos-evm-vesting-underflow/](cosmos-evm-vesting-underflow/) |
 | Aquifer | 2026-08-31 / 09-01 | ≈ 2,418,164 [^aquifer-sweeper-arbitrary-call] | Solana + Ethereum | Access-Control | Arbitrary external call on a verified cross-chain Sweeper contract redirected swept funds to the attacker's own address | [aquifer-sweeper-arbitrary-call/](aquifer-sweeper-arbitrary-call/) |
 | Maya Protocol (MAYAChain) | 2026-08-18 | ≥ 1,343,181 [^mayachain-cacao-slash-drain] | MAYAChain + Bitcoin + Arbitrum | Access-Control | Voter-clobber misrouted a multi-message deposit, an uncapped theft-slash subsidy then credited phantom CACAO to a near-empty pool, drained by a single-sided add/withdraw and swapped out to Bitcoin | [mayachain-cacao-slash-drain/](mayachain-cacao-slash-drain/) |
+| Virtue Protocol (VUSD CDP) | 2026-08-28 | ≈ 848,457 [^virtue-iota-switchboard-oracle] | IOTA | Oracle | All 14 Switchboard oracle signing keys for the IOTA price queue compromised, self-submitted a fake $10,000,000 IOTA price inside the same transaction that minted 4.94M VUSD against 1 IOTA of real collateral, then a crashed price triggered a real-user liquidation cascade | [virtue-iota-switchboard-oracle/](virtue-iota-switchboard-oracle/) |
 | Ajna Finance | 2026-08-28 / 08-29 | ≈ 775,400 [^ajna] | Ethereum | Rounding/Math-Bug | Liquidation-math exploit (Kick) on pools deployed through a factory the protocol never documented | [ajna-liquidation/](ajna-liquidation/) |
 | Sandbox (SAND / OFT) | 2026-08-21 / 08-22 | ≥ 675,000 [^sandbox] | Base + BSC + Ethereum | Bridge | LayerZero delegate hijack via a legacy approveAndCall primitive, a composition bug, not a compromised key | [sandbox-oft-delegate-hijack/](sandbox-oft-delegate-hijack/) |
 | Avici (Rain Card Collateral) | 2026-08-28 | ≈ 500,859 [^avici-rain-collateral-withdraw] | Solana | Access-Control | Forged dual-signature authorization (Ed25519 instruction-offset reuse) on a shared Rain card-collateral program let one attacker-controlled signature satisfy a two-signer withdrawal check | [avici-rain-collateral-withdraw/](avici-rain-collateral-withdraw/) |
 | MORE Markets (Ankr ankrFLOW E-Mode) | 2026-08-31 | ≈ 415,398 [^more-markets-ankrflow-emode] | Flow EVM | Access-Control | Ankr's ankrFLOW liquid-staking contract let unbacked ankrFLOW be minted via a recursive stake/restake loop, supplied as E-Mode collateral to drain MORE Markets' WFLOW reserve | [more-markets-ankrflow-emode/](more-markets-ankrflow-emode/) |
 | Balancer V1 (legacy pools) | 2026-08-30 / 08-31 | ≥ 234,000 [^balancer] | Ethereum | Rounding/Math-Bug | Rounding error on unmaintained V1 pools, repeated 1-satoshi joins | [balancer-v1-rounding/](balancer-v1-rounding/) |
 
-**August 2026 subtotal: $38,013,002** across 11 incidents. Includes 4 known floor figures (Cosmos EVM (MANTRA / TAC / KiiChain), Maya Protocol (MAYAChain), Sandbox (SAND / OFT), Balancer V1 (legacy pools)), so the true total is higher.
+**August 2026 subtotal: $38,861,459** across 12 incidents. Includes 4 known floor figures (Cosmos EVM (MANTRA / TAC / KiiChain), Maya Protocol (MAYAChain), Sandbox (SAND / OFT), Balancer V1 (legacy pools)), so the true total is higher.
 
 #### July 2026
 
@@ -169,18 +170,19 @@ exact figure decoded from source data.
 [^verus-ethereum-bridge-forged-proof]: A forged output, provable by real Verus notarizations, was interpreted by the Ethereum bridge contract as a different output type than intended, releasing funds with no matching real export. One transaction moved $11,775,898.10 at theft-day prices, about 2.4% above DefiLlama's tracked $11,500,000. Also catches a press mechanism claim: VerusCoin's own official writeup states this and a second 2026-07-23 exploit against the same contract shared only a general bug category, not the same unpatched bug some press claimed. See `verus-ethereum-bridge-forged-proof/README.md`.
 [^gravity-bridge-denom-poisoning]: A permissionless `deployERC20()` plus a missing registry collision check let a fabricated Cosmos denom string embed a real custody token address, poisoning the bridge's ERC20 lookup. $5,397,931.45 moved, within 0.04% of DefiLlama's tracked $5.4M, but this entry's own decode of the raw event data contradicts DefiLlama's "Key Compromise" classification: every validator signature on the payout batches was genuine, the registry was poisoned via a missing check, no key was compromised. See `gravity-bridge-denom-poisoning/README.md`. External source: https://rekt.news/gravity-bridge-rekt.
 [^kelpdao-rseth-layerzero-rpc-spoofing]: Compromised LayerZero DVN RPC nodes plus a DDoS-forced failover let a forged cross-chain message pass a 1-of-1 verifier; the exploit transaction moved exactly 116,500 rsETH. At theft-day price that is $273,377,225, about 6.7% below DefiLlama's tracked $293,000,000; a second, independently-derived cross-check via Kelp's own on-chain oracle backing rate instead gives $301,716,067, bracketing both figures from the other side. See `kelpdao-rseth-layerzero-rpc-spoofing/README.md`. External sources: https://layerzero.network/blog/kelpdao-incident-statement, https://api.llama.fi/hacks.
+[^virtue-iota-switchboard-oracle]: All 14 Switchboard oracle signing keys for Virtue's IOTA price queue were compromised and, in one atomic transaction, self-submitted a fake $10,000,000 IOTA price, minted 4,942,703.659474 VUSD against 1 IOTA of real collateral, and seeded the stability pool with 1,000,000 of it; the price was then crashed, triggering 47 real-user liquidations (45 distinct users) that cleared $455,102.94 of VUSD debt (matching Virtue's own $455,103 figure) against real-user collateral independently valued at ≈$848,457 at theft-day prices, closer to DefiLlama's tracked $894,500. See `virtue-iota-switchboard-oracle/README.md`. External source: https://cryptoslate.com/cross-chain-oracle-compromise-triggers-liquidations-and-frozen-vaults-across-multiple-defi-networks/.
 
 ## Corrections to press and DefiLlama
 
 Every figure in the Index above is recomputed from each subfolder's own
 source files, then checked against whatever press or DefiLlama already
-published. The 17 rows below are the cases where that check turned up a
+published. The 18 rows below are the cases where that check turned up a
 real gap: a wrong number, a wrong label, a wrong date, a wrong
-classification, or (for Aquifer and Maya Protocol) a reconciled gap
-neither side is really "wrong" about, or (for XRP Healthcare) an incident
-DefiLlama does not track at all. Full detail, including the exact
-transactions and event logs behind each figure, lives in the linked
-subfolder; this table gives the headline gap only.
+classification, or (for Aquifer, Maya Protocol, and Virtue Protocol) a
+reconciled gap neither side is really "wrong" about, or (for XRP
+Healthcare) an incident DefiLlama does not track at all. Full detail,
+including the exact transactions and event logs behind each figure, lives
+in the linked subfolder; this table gives the headline gap only.
 
 | Incident | What press/DefiLlama got wrong | What this repo found | Link |
 |---|---|---|---|
@@ -201,6 +203,7 @@ subfolder; this table gives the headline gap only.
 | XRP Healthcare (XRPH Wallet) | Not tracked in DefiLlama's hacks feed at all | Independently re-derived totals (267,679.863641 XRP; 445,197.999216 DAI) land within 0.006% and 1.5% of the two figures the source article itself gives (a discovery, not a correction) | [xrph-wallet-key-compromise/](xrph-wallet-key-compromise/) |
 | Lazy Summer Protocol | DefiLlama dates this incident 2026-07-05T00:00:00Z | The exploit transaction's own block timestamp is 2026-07-06T05:17:59Z, 29.3 hours later; the amount and classification both check out independently | [lazy-summer-stale-ark-donation/](lazy-summer-stale-ark-donation/) |
 | Kelp DAO (rsETH / LayerZero DVN) | DefiLlama tracks $293,000,000 and LayerZero's own statement says "approximately $290M" | This entry's own reconstruction confirms exactly 116,500 rsETH moved; priced at theft-day rate that is $273,377,225, while a second cross-check via Kelp's own oracle backing rate gives $301,716,067, bracketing both public figures from either side | [kelpdao-rseth-layerzero-rpc-spoofing/](kelpdao-rseth-layerzero-rpc-spoofing/) |
+| Virtue Protocol (VUSD CDP) | Virtue's own press-relayed figure ($455,103) is the face-value VUSD debt cleared, well below DefiLlama's tracked $894,500 | The debt-cleared figure matches Virtue's own account almost exactly (independently re-derived: $455,102.94), but the real-user collateral actually seized during the crash-triggered liquidation cascade is worth roughly double that at theft-day prices (independently re-derived: ≈$848,457), much closer to DefiLlama's figure (a reconciliation, not an error) | [virtue-iota-switchboard-oracle/](virtue-iota-switchboard-oracle/) |
 
 ## Structure
 
