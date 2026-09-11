@@ -28,11 +28,11 @@ lost in the merge.
 
 | | |
 |---|---|
-| Incidents covered | 32, independently reconstructed on-chain, see the index for detail |
-| Cumulative loss, recomputed | About $485.1M across the 32 incidents ($485,061,370 exactly, sum of the figures in the index below). At least one entry is a known floor, so the real total is higher. |
-| Corrections made | 20 entries below correct, reconcile, or newly surface a press or DefiLlama figure, label, date, or classification (15 corrections, 4 reconciliations, 1 discovery not previously tracked by DefiLlama at all). See Corrections to press and DefiLlama below. |
+| Incidents covered | 33, independently reconstructed on-chain, see the index for detail |
+| Cumulative loss, recomputed | About $485.1M across the 33 incidents ($485,106,815 exactly, sum of the figures in the index below). At least one entry is a known floor, so the real total is higher. |
+| Corrections made | 21 entries below correct, reconcile, or newly surface a press or DefiLlama figure, label, date, or classification (16 corrections, 4 reconciliations, 1 discovery not previously tracked by DefiLlama at all). See Corrections to press and DefiLlama below. |
 | Method | Each subfolder keeps its original Python reconstruction script, its `registre_hypotheses.csv` falsification registry, and its script's raw output in `resultats_*.txt`, so every figure below can be checked against the file that produced it |
-| License | MIT across all 32 entries, single author (s_pap, 2026) |
+| License | MIT across all 33 entries, single author (s_pap, 2026) |
 
 ## Table of contents
 
@@ -75,7 +75,7 @@ exact figure decoded from source data.
 
 ### 2026
 
-**2026 total: $485,061,370** across 32 incidents (6 months, April through September). At least one entry this year is a known floor, so the true total is higher.
+**2026 total: $485,106,815** across 33 incidents (6 months, April through September). At least one entry this year is a known floor, so the true total is higher.
 
 #### September 2026 (current month)
 
@@ -85,9 +85,10 @@ exact figure decoded from source data.
 | Notional Finance (V1 Escrow) | 2026-09-03 / 09-04 | 1,727,782 [^notional] | Ethereum | Rounding/Math-Bug | uint128 overflow/downcast in the legacy V1 Escrow contract's collateral valuation | [notional-v1-escrow/](notional-v1-escrow/) |
 | XRP Healthcare (XRPH Wallet) | 2026-09-03 / 09-04 | ≥ 445,198 [^xrph-wallet-key-compromise] | XRP Ledger + Ethereum | Key-Compromise | Mass wallet-side private-key compromise (not an XRPL protocol bug) swept thousands of externally-owned wallets to one collector, laundered via NEAR Intents into Ethereum and settled as DAI | [xrph-wallet-key-compromise/](xrph-wallet-key-compromise/) |
 | Cozy V2 | 2026-09-02 / 09-07 | 174,311 [^cozy] | Optimism | Oracle | False answers to the UMA Optimistic Oracle left uncontested during its 5-day dispute window | [cozy-v2-optimism/](cozy-v2-optimism/) |
+| Secured Finance (JPYC Lending Market) | 2026-09-05/09-06 | ≈ 45,445 [^securedfinance-jpyc-tokenvault-selflend] | Ethereum | Access-Control | Flash-loan-funded self-matched lend/borrow position on the JPYC market let TokenVault's collateral accounting treat the just-deposited amount as withdrawable, before the flash loan was repaid | [securedfinance-jpyc-tokenvault-selflend/](securedfinance-jpyc-tokenvault-selflend/) |
 | Reddio (RedSonic Vault) | 2026-09-05 | ≈ 22,748 [^redsonic-vault-share-registration] | Ethereum | Access-Control | Permissionless registerErc20() let an unprivileged caller register a second share class over the same pooled collateral, letting a flash-loan-funded deposit be redeemed for more than it was worth | [redsonic-vault-share-registration/](redsonic-vault-share-registration/) |
 
-**September 2026 subtotal: $48,938,758** across 5 incidents. Includes 2 known floor figures (Liquid Network, XRP Healthcare (XRPH Wallet)), so the true total is higher.
+**September 2026 subtotal: $48,984,203** across 6 incidents. Includes 2 known floor figures (Liquid Network, XRP Healthcare (XRPH Wallet)), so the true total is higher.
 
 #### August 2026
 
@@ -183,12 +184,13 @@ exact figure decoded from source data.
 [^coinsbuy-wallet-drain]: Unauthorized withdrawals drained named Coinsbuy hot wallets on Ethereum and Tron within under an hour. The Tron leg is independently summed in full from a live TronGrid query: 6,037,005.00 USDT landed on the attacker's Tron collector, matching rekt.news's own figure to the cent. The Ethereum leg is confirmed only in part: one direct 77 ETH transfer (worth $147,489.48 at CoinGecko's 2026-08-09 price) from a Blockscout-tagged Coinsbuy hot wallet to the attacker's Ethereum collector, verified via raw JSON-RPC on 2 endpoints; the remainder of rekt.news's claimed 360.8 ETH Ethereum-side total (210.8 ETH via FixedFloat, 150 ETH via ChangeNOW) routes through an unlabeled intermediary address this project could not independently attribute to Coinsbuy, so it is not counted. Combined independently-confirmed floor: $6,184,494.48. rekt.news's own total is $8.07M; DefiLlama tracks $7,900,000. Coinsbuy's own official statement confirms the incident and a full reimbursement from its own reserves but discloses no technical detail. See `coinsbuy-wallet-drain/README.md`. External sources: https://rekt.news/coinsbuy-rekt/, https://coinsbuy.com/news/official-statement-on-the-august-9-security-incident/.
 [^coreum-xrpl-bridge-deposit-forgery]: Relayers credited a self-transfer of the bridge's own already-issued wrapped-token IOU, carrying a forged bridge-deposit memo (decoded directly from the transaction's own raw bytes), as a real XRP deposit. A direct before/after ledger-snapshot comparison (independent of any transaction-list indexer) confirms the bridge's own reserve fell by exactly 199,916.334320 XRP; enumerating the 94 individual payouts behind that (every one carrying the contract's own 17-of-28 signer threshold) finds 199,916.300000 XRP delivered to 2 attacker addresses (107,397.5 and 92,518.8 XRP, matching press to the exact XRP), $207,699.83 at CoinGecko's 2026-08-09 price, about 3.8% above DefiLlama's tracked $200,000. See `coreum-xrpl-bridge-deposit-forgery/README.md`. External sources: https://www.coindesk.com/tech/2026/08/12/xrp-bridge-drained-for-usd200-000-after-software-mistook-fake-deposits-for-real-ones, https://decrypt.co/375441/xrp-drained-tx-bridge.
 [^oraichain-ics20-precompile-selfmint]: A self-referential call to the `cosmos/evm` ICS-20 precompile escrowed the caller's balance correctly for an outbound IBC transfer but also erroneously minted the same amount straight back to the caller, letting 24 repeated calls double a starting ~90 ORAI to 1,509,949,343.000000 ORAI in 10 minutes (2026-08-08 23:23-23:33 UTC), independently found and decoded live from Oraichain's own RPC, not copied from any report. Total supply, read at specific historical block heights via Oraichain's own `supply` endpoint, peaked at 1,525,538,652.019679 ORAI (78.00x the post-incident baseline) and was reversed to 19,558,484.847626 ORAI in a single block (118018795, 2026-08-09T03:56:51.6 UTC), consistent with a coordinated state-surgery upgrade. DefiLlama tracks this incident as "Oraichain", a flat $1,000,000 with an empty source field, matching neither the mint's true scale nor a defensible realized-loss floor. This entry instead prices only the two legs independently confirmed, via live cross-chain balance checks on Cosmos Hub and Osmosis, to have left Oraichain's own reach and been further dispersed by the attacker before the reversal: 3,161.082810 ATOM and 5,438.198605 OSMO, $4,461.73 at CoinGecko's 2026-08-08 historical prices. Real USDT and USDC were also drained from OraiDEX pools (about $6,383 combined) but now sit at a zero balance with no on-chain trace of leaving any other way, consistent with (not proven to be) the same reversal, so not counted in the floor above; the 600,000,000 ORAI bridged to Injective and 59,255,027.19 ORAI locked as lending-market collateral were not independently traced past Oraichain's own chain. See `oraichain-ics20-precompile-selfmint/README.md`.
+[^securedfinance-jpyc-tokenvault-selflend]: Two flash-loan-funded, self-matched lend/borrow transactions on Secured Finance's JPYC market drained 4,360,902.135130 JPYC from TokenVault (decoded directly from JPYC's own Transfer events, cross-checked against TokenVault's Deposit/Withdraw events), $45,444.97 at CoinGecko's theft-day price. DefiLlama tracks this incident as "Secured Finance Lending", $104,000, "Oracle Manipulation"/"Spot Price Manipulation" with an empty source field; this project's figure is 0.44x DefiLlama's, an unreconciled gap, and no oracle read appears in either transaction, contradicting DefiLlama's own classification. 91% of the attacker's realized ETH proceeds were routed through Tornado Cash. See `securedfinance-jpyc-tokenvault-selflend/README.md`. External source: https://api.llama.fi/hacks.
 
 ## Corrections to press and DefiLlama
 
 Every figure in the Index above is recomputed from each subfolder's own
 source files, then checked against whatever press or DefiLlama already
-published. The 20 rows below are the cases where that check turned up a
+published. The 21 rows below are the cases where that check turned up a
 real gap: a wrong number, a wrong label, a wrong date, a wrong
 classification, or (for Aquifer, Maya Protocol, Virtue Protocol, and
 Float Protocol) a reconciled gap neither side is really "wrong" about, or
@@ -218,6 +220,7 @@ in the linked subfolder; this table gives the headline gap only.
 | Virtue Protocol (VUSD CDP) | Virtue's own press-relayed figure ($455,103) is the face-value VUSD debt cleared, well below DefiLlama's tracked $894,500 | The debt-cleared figure matches Virtue's own account almost exactly (independently re-derived: $455,102.94), but the real-user collateral actually seized during the crash-triggered liquidation cascade is worth roughly double that at theft-day prices (independently re-derived: ≈$848,457), much closer to DefiLlama's figure (a reconciliation, not an error) | [virtue-iota-switchboard-oracle/](virtue-iota-switchboard-oracle/) |
 | Float Protocol (Hypervisor Vaults) | DefiLlama's $28,000 sits 6.5-7.6% above this entry's independently re-derived figure | The exploit transaction's own WETH `Withdrawal` event and the attacker EOA's own balance delta agree, to the wei, on 10.706591043820923 ETH; converting that at CoinGecko's daily or intraday price gives $25,869.71-$26,189.43, and neither side of the gap can be shown as wrong from public data alone (a reconciliation, not an error) | [float-protocol-hypervisor-spot-manipulation/](float-protocol-hypervisor-spot-manipulation/) |
 | Oraichain (ICS-20 EVM Precompile) | DefiLlama's flat $1,000,000 (empty source field) matches neither reading | The self-referential precompile bug actually minted 1,509,949,343 ORAI (peak supply 78.00x baseline, reversed in one block 4.5 hours later); the confirmed still-missing floor, priced from only the 2 legs proven to have left Oraichain's own reach, is $4,461.73, two orders of magnitude below DefiLlama's number | [oraichain-ics20-precompile-selfmint/](oraichain-ics20-precompile-selfmint/) |
+| Secured Finance (JPYC Lending Market) | DefiLlama classifies this "Oracle Manipulation" / "Spot Price Manipulation" and tracks $104,000, empty source field | Neither of the 2 confirmed exploit transactions reads any price oracle; this is a collateral-accounting bug in TokenVault, and the independently re-derived drain (4,360,902.135130 JPYC, $45,444.97) is 0.44x DefiLlama's tracked figure, an unreconciled gap | [securedfinance-jpyc-tokenvault-selflend/](securedfinance-jpyc-tokenvault-selflend/) |
 
 ## Structure
 

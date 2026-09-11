@@ -1,0 +1,124 @@
+=== Step 1: confirm contract addresses from Secured Finance's own GitHub deployment registry ===
+Secured-Finance/contracts/deployments/mainnet/LendingMarketController.json -> address: 0x35e9D8e0223A75E51a67aa731127C91Ea0779Fe2
+Secured-Finance/contracts/deployments/mainnet/TokenVault.json -> address: 0xB74749b2213916b1dA3b869E41c7c57f1db69393
+
+=== Step 2: confirm these are live, real contracts on Ethereum mainnet (chain 1) ===
+eth_chainId: 0x1 (1)
+  eth_getCode(LendingMarketController 0x35e9D8e0223A75E51a67aa731127C91Ea0779Fe2): 1051 bytes
+  eth_getCode(TokenVault 0xB74749b2213916b1dA3b869E41c7c57f1db69393): 1051 bytes
+
+=== Step 3: confirm the JPYC currency mapping live, from TokenVault's own state ===
+TokenVault.getTokenAddress("JPYC") live = 0xe7c3d8c9a439fede00d2600032d5db0be71c3c29
+  JPYC.symbol() live = 'JPYC'
+  JPYC.name() live   = 'JPY Coin'
+
+=== Step 4: locate the incident window by binary-searching live block timestamps ===
+chain head: block 25952935 @ 2026-09-11 08:22:23 UTC
+binary search: block 25900227 is first at/after 2026-09-04T00:00:00Z (actual ts 2026-09-04 00:00:11)
+binary search: block 25921754 is first at/after 2026-09-07T00:00:00Z (actual ts 2026-09-07 00:00:11)
+
+=== Step 5: scan LendingMarketController + TokenVault's own event logs across the full 72-hour window (not just a 24-hour guess), 2000 blocks at a time ===
+distinct transactions touching LendingMarketController or TokenVault, 2026-09-04/09-07: 10
+  0x4b3c70d0327cec387ec03169d63d85bea964f3bf791fc2f34f76ad663d684c3d
+  0x51784fa25714ca719ba26c1cceec48aa18ee8cb2507602cddb08b41ae57d7796
+  0x6fdb1869659197947facc536823dbb58260d8db0e79949675ae87df2a9b82b9a
+  0x8944ba35184832f6e3c83b47fc3837f16abb24f988172179dec64ea8f6d545b4
+  0x95c6f289dab7ca06ca84b0d33659308096df01a6a946b6fdf5b1a4ae31864753
+  0xcd6159860783d8d481cc4bf4dceddc88acdca6bb08f6445525b2904cfd75b1da
+  0xcf85f50679393aa291bafc547431e8e75685b05d081be8451dd7d20c0de488e7
+  0xd87caec60a17ad09188590affa2ff1540f2e647b8e42b57d73e661b78f2e6767
+  0xeaf30248f1f8d1d768b27a1911a91e7682f604fb686eef4bdd8a1c38480ba46d
+  0xf3627506a6d7d70ac993722539706e86aa442f69e8200149ba36f11e9eeafcb5
+
+=== Step 6: pull every receipt, and for each transaction sum JPYC in/out of TokenVault ===
+  0x4b3c70d0327cec387ec03169d63d85bea964f3bf791fc2f34f76ad663d684c3d  block=25914488  2026-09-05 23:42:47  from=0xc0ffeebabe5d496b2dde509f9fa189c25cf29671  JPYC net-out-of-TokenVault=0.000000
+  0x51784fa25714ca719ba26c1cceec48aa18ee8cb2507602cddb08b41ae57d7796  block=25914841  2026-09-06 00:53:59  from=0xefb0eb625f472453d4750e4bc57ed7c5c4cd59d3  JPYC net-out-of-TokenVault=4,247,652.823342
+  0x6fdb1869659197947facc536823dbb58260d8db0e79949675ae87df2a9b82b9a  block=25914035  2026-09-05 22:11:23  from=0xfc3facd67138966ab0c841e905b0c4bca1abe92f  JPYC net-out-of-TokenVault=0.000000
+  0x8944ba35184832f6e3c83b47fc3837f16abb24f988172179dec64ea8f6d545b4  block=25914579  2026-09-06 00:00:59  from=0x4f122d7fce7971e38801af5d96fcd4ed83efd654  JPYC net-out-of-TokenVault=0.000000
+  0x95c6f289dab7ca06ca84b0d33659308096df01a6a946b6fdf5b1a4ae31864753  block=25914679  2026-09-06 00:21:11  from=0xfc3facd67138966ab0c841e905b0c4bca1abe92f  JPYC net-out-of-TokenVault=0.000000
+  0xcd6159860783d8d481cc4bf4dceddc88acdca6bb08f6445525b2904cfd75b1da  block=25914192  2026-09-05 22:43:11  from=0xc0ffeebabe5d496b2dde509f9fa189c25cf29671  JPYC net-out-of-TokenVault=0.000000
+  0xcf85f50679393aa291bafc547431e8e75685b05d081be8451dd7d20c0de488e7  block=25914571  2026-09-05 23:59:23  from=0xfc3facd67138966ab0c841e905b0c4bca1abe92f  JPYC net-out-of-TokenVault=0.000000
+  0xd87caec60a17ad09188590affa2ff1540f2e647b8e42b57d73e661b78f2e6767  block=25914652  2026-09-06 00:15:35  from=0xfc3facd67138966ab0c841e905b0c4bca1abe92f  JPYC net-out-of-TokenVault=0.000000
+  0xeaf30248f1f8d1d768b27a1911a91e7682f604fb686eef4bdd8a1c38480ba46d  block=25914552  2026-09-05 23:55:35  from=0xefb0eb625f472453d4750e4bc57ed7c5c4cd59d3  JPYC net-out-of-TokenVault=113,249.311788
+  0xf3627506a6d7d70ac993722539706e86aa442f69e8200149ba36f11e9eeafcb5  block=25914405  2026-09-05 23:26:11  from=0xf601d7646c2db4940f0b1909b4835ed7279c5aed  JPYC net-out-of-TokenVault=0.000000
+
+Transactions whose JPYC net-out-of-TokenVault exceeds 1 JPYC (i.e. TokenVault paid out more JPYC than it received, same tx): 2
+  0x51784fa25714ca719ba26c1cceec48aa18ee8cb2507602cddb08b41ae57d7796  from=0xefb0eb625f472453d4750e4bc57ed7c5c4cd59d3  to=None
+  0xeaf30248f1f8d1d768b27a1911a91e7682f604fb686eef4bdd8a1c38480ba46d  from=0xefb0eb625f472453d4750e4bc57ed7c5c4cd59d3  to=None
+
+=== Step 7: confirm neither flagged transaction is a liquidation (LiquidationExecuted / ForcedRepaymentExecuted absent from every transaction in the window) ===
+transactions in the full window carrying a LiquidationExecuted or ForcedRepaymentExecuted event: 0
+
+=== Step 8: decode the JPYC Transfer sequence in each flagged transaction, confirming the Uniswap V4 PoolManager flash loan is fully repaid ===
+
+--- 0x51784fa25714ca719ba26c1cceec48aa18ee8cb2507602cddb08b41ae57d7796 ---
+  logIndex= 995  0x000000000004444c5dc75cb358380d2e3de08a90 -> 0xa340340825fc2e6e8ee8c0821a531f9308590ba7   8,668,491.386301 JPYC (Uniswap V4 PoolManager -> attacker contract: flash loan)
+  logIndex= 996  0xa340340825fc2e6e8ee8c0821a531f9308590ba7 -> 0xb74749b2213916b1da3b869e41c7c57f1db69393   8,668,491.386301 JPYC
+  logIndex=1025  0xb74749b2213916b1da3b869e41c7c57f1db69393 -> 0xa340340825fc2e6e8ee8c0821a531f9308590ba7   8,666,517.639717 JPYC
+  logIndex=1027  0xa340340825fc2e6e8ee8c0821a531f9308590ba7 -> 0xb74749b2213916b1da3b869e41c7c57f1db69393   4,247,652.823342 JPYC
+  logIndex=1033  0xa340340825fc2e6e8ee8c0821a531f9308590ba7 -> 0xb8642637813b8a933ae6463ea01250c129d28564   3,172,510.574510 JPYC
+  logIndex=1034  0xb8642637813b8a933ae6463ea01250c129d28564 -> 0xb74749b2213916b1da3b869e41c7c57f1db69393   3,172,510.574510 JPYC
+  logIndex=1042  0xa340340825fc2e6e8ee8c0821a531f9308590ba7 -> 0xb74749b2213916b1da3b869e41c7c57f1db69393   1.000000 JPYC
+  logIndex=1069  0xb74749b2213916b1da3b869e41c7c57f1db69393 -> 0xa340340825fc2e6e8ee8c0821a531f9308590ba7   11,669,790.967777 JPYC
+  logIndex=1071  0xa340340825fc2e6e8ee8c0821a531f9308590ba7 -> 0x000000000004444c5dc75cb358380d2e3de08a90   8,668,491.386301 JPYC (attacker contract -> Uniswap V4 PoolManager: flash-loan repayment)
+  logIndex=1072  0xa340340825fc2e6e8ee8c0821a531f9308590ba7 -> 0xefb0eb625f472453d4750e4bc57ed7c5c4cd59d3   4,247,652.823342 JPYC (final payout to attacker EOA)
+  PoolManager lent 8,668,491.386301 JPYC, was repaid 8,668,491.386301 JPYC (flash loan fully repaid: True)
+  Net JPYC landing on the attacker's own EOA this transaction: 4,247,652.823342
+
+--- 0xeaf30248f1f8d1d768b27a1911a91e7682f604fb686eef4bdd8a1c38480ba46d ---
+  logIndex= 362  0x000000000004444c5dc75cb358380d2e3de08a90 -> 0xeefce12cea20fff70d7526f151ffcf56986d19a7   4,414,172.811731 JPYC (Uniswap V4 PoolManager -> attacker contract: flash loan)
+  logIndex= 363  0xeefce12cea20fff70d7526f151ffcf56986d19a7 -> 0xb74749b2213916b1da3b869e41c7c57f1db69393   4,414,172.811731 JPYC
+  logIndex= 392  0xb74749b2213916b1da3b869e41c7c57f1db69393 -> 0xeefce12cea20fff70d7526f151ffcf56986d19a7   4,527,422.123520 JPYC
+  logIndex= 394  0xeefce12cea20fff70d7526f151ffcf56986d19a7 -> 0x62618e5fd4c560b49de9b76c9901c9c498b9bfb7   1,000.000000 JPYC
+  logIndex= 395  0x62618e5fd4c560b49de9b76c9901c9c498b9bfb7 -> 0xb74749b2213916b1da3b869e41c7c57f1db69393   1,000.000000 JPYC
+  logIndex= 402  0xb74749b2213916b1da3b869e41c7c57f1db69393 -> 0xeefce12cea20fff70d7526f151ffcf56986d19a7   1,000.000000 JPYC
+  logIndex= 404  0xeefce12cea20fff70d7526f151ffcf56986d19a7 -> 0xb74749b2213916b1da3b869e41c7c57f1db69393   1.000000 JPYC
+  logIndex= 429  0xb74749b2213916b1da3b869e41c7c57f1db69393 -> 0xeefce12cea20fff70d7526f151ffcf56986d19a7   1.000000 JPYC
+  logIndex= 431  0xeefce12cea20fff70d7526f151ffcf56986d19a7 -> 0x000000000004444c5dc75cb358380d2e3de08a90   4,414,172.811731 JPYC (attacker contract -> Uniswap V4 PoolManager: flash-loan repayment)
+  logIndex= 432  0xeefce12cea20fff70d7526f151ffcf56986d19a7 -> 0xefb0eb625f472453d4750e4bc57ed7c5c4cd59d3   113,249.311788 JPYC (final payout to attacker EOA)
+  PoolManager lent 4,414,172.811731 JPYC, was repaid 4,414,172.811731 JPYC (flash loan fully repaid: True)
+  Net JPYC landing on the attacker's own EOA this transaction: 113,249.311788
+
+Total JPYC landing on the attacker's own EOA across both transactions: 4,360,902.135130
+
+=== Step 9: nonce / contract-code check on the other 8 in-window addresses, to see whether they resemble the attacker's fresh, single-use pattern ===
+  0xc0ffeebabe5d496b2dde509f9fa189c25cf29671  current nonce (lifetime tx count): 222969
+  0xe08d97e151473a848c3d9ca3f323cb720472d015  current nonce (lifetime tx count): 24
+  0xfc3facd67138966ab0c841e905b0c4bca1abe92f  current nonce (lifetime tx count): 264
+  0xb149182cc2c023d16683a4b9bdada24d9ffa25cb  current nonce (lifetime tx count): 2
+  0x4f122d7fce7971e38801af5d96fcd4ed83efd654  current nonce (lifetime tx count): 1348
+  0x52605bbf54845f520a3e94792d019f62407db2f8  current nonce (lifetime tx count): 1
+  0x511a170eccb0954fed1827a2a31575486ff45040  current nonce (lifetime tx count): 2
+  0x61ad7caec2302767084b257f1fbf1b4c82b90095  current nonce (lifetime tx count): 1
+  0x8e83521d21eb71b842cfcfcc8813ffd18d056bff  current nonce (lifetime tx count): 2
+  0xf601d7646c2db4940f0b1909b4835ed7279c5aed  current nonce (lifetime tx count): 73
+  0x9cb7a294cd1b0df5a1d335e713aa0c7f8f8dd5f1  current nonce (lifetime tx count): 22
+  (for comparison) attacker EOA 0xefb0eb625f472453d4750e4bc57ed7c5c4cd59d3  current nonce: 10
+None of the other 8 transactions' from/to addresses show the attacker's pattern (a near-fresh EOA whose transaction both creates and calls a brand-new contract, to=null); this reconstruction does not count them, and reports this as an open, not a resolved, question. See README Caveats.
+
+=== Step 10: trace the attacker EOA's complete transaction history for where the JPYC (converted to ETH) actually went ===
+Blockscout: 0xefb0eb625f472453d4750e4bc57ed7c5c4cd59d3 has sent 10 transactions, lifetime, in total
+  nonce= 0  0xeaf30248f1f8d1d768b27a1911a91e7682f604fb686eef4bdd8a1c38480ba46d  2026-09-05T23:55:35.000000Z  to=None  method=None  value=0.0 ETH
+  nonce= 1  0xc6cd34a83d8d4243110ddf80e1b043bff5eba6a15247ff53058524054a8c4879  2026-09-05T23:57:35.000000Z  to=0xE7C3D8C9a439feDe00D2600032D5dB0Be71C3c29  method=approve  value=0.0 ETH
+  nonce= 2  0xba3f6ed4e3f4dd6001d4595fc88fb9f39aacda6752329aea0c3520bf1a1b543c  2026-09-05T23:57:59.000000Z  to=0x111111125421cA6dc452d289314280a0f8842A65  method=swap  value=0.0 ETH
+  nonce= 3  0x4702c9bf71df433b8d9d68d4b6e2139ff0a631d55834bb6865b4eedebd12bdc7  2026-09-06T00:30:35.000000Z  to=0x4cD00E387622C35bDDB9b4c962C136462338BC31  method=depositNative  value=0.1 ETH  <- Relay cross-chain bridge (RelayDepository)
+  nonce= 4  0x51784fa25714ca719ba26c1cceec48aa18ee8cb2507602cddb08b41ae57d7796  2026-09-06T00:53:59.000000Z  to=None  method=None  value=0.0 ETH
+  nonce= 5  0xb2381e35db2cd8ae3924631628c8cd553d54d6b2b7f9dc707d42987d4ea9a495  2026-09-06T00:54:35.000000Z  to=0xE7C3D8C9a439feDe00D2600032D5dB0Be71C3c29  method=approve  value=0.0 ETH
+  nonce= 6  0xde87c71f7111f7fed33cec42687af072e5cb922b51d04b1bcb692eecd0410eeb  2026-09-06T00:54:35.000000Z  to=0x111111125421cA6dc452d289314280a0f8842A65  method=swap  value=0.0 ETH
+  nonce= 7  0x262b4660cf4f0be5a4d18200449109d079cae360602a19e8570b7150048bcd9c  2026-09-06T01:08:35.000000Z  to=0x831fbD88F2465f76D86468651F986410080D46ed  method=None  value=0.3 ETH
+  nonce= 8  0x3fb115902570eb0321453011fbcf219efc45a82945a22b125c2b68cade3d1a91  2026-09-06T04:42:11.000000Z  to=0xd90e2f925DA726b50C4Ed8D0Fb90Ad053324F31b  method=deposit  value=10.0 ETH  <- Tornado Cash Router
+  nonce= 9  0x609577d25e9bb96d76a398eba164737a7f61edd3de5bae3f54c6dd9abe56c1c9  2026-09-06T09:35:11.000000Z  to=0xd90e2f925DA726b50C4Ed8D0Fb90Ad053324F31b  method=deposit  value=0.1 ETH  <- Tornado Cash Router
+
+Of the JPYC converted to ETH, 10.1 ETH was sent into Tornado Cash's own router contract and 0.1 ETH into Relay's cross-chain bridge deposit contract.
+Attacker EOA's current native ETH balance: 0.690316 ETH
+
+=== Step 11: USD total, CoinGecko's own theft-day snapshot ===
+CoinGecko JPYC price on 2026-09-05: $0.01042100273803
+4,360,902.135130 JPYC x $0.01042100273803 = $45,444.97
+CoinGecko ETH price on 2026-09-05: $2456.0850663649
+
+=== Step 12: DefiLlama's own tracked figure for this incident ===
+  api.llama.fi/hacks: name='Secured Finance Lending' date=2026-09-05 amount=$104,000 classification=Oracle Manipulation technique=Spot Price Manipulation source=''
+  this reconstruction's $45,444.97 is 0.44x DefiLlama's tracked $104,000 -- an unreconciled gap, see README Caveats
+
+See README.md for the full reconstruction, the DepositManagementLogic.sol root-cause citation, and every caveat (the DefiLlama gap above all).

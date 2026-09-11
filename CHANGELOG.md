@@ -4,6 +4,65 @@ One entry per addition or correction to this repo. Each incident added
 with `add_new_entry.py` gets tagged as a matching GitHub release, see
 "Get notified of new postmortems" in `README.md`.
 
+## 2026-09-11 (19)
+
+- Added a 33rd incident: Secured Finance (JPYC Lending Market) TokenVault
+  self-lend, Ethereum, 2026-09-05/09-06. Found via DefiLlama's hacks feed
+  (tracked as "Secured Finance Lending", $104,000, "Oracle Manipulation" /
+  "Spot Price Manipulation", empty source field); no press writeup,
+  security-firm postmortem, or official protocol statement was found
+  anywhere for it. Started from Secured Finance's own GitHub deployment
+  registry (`deployments/mainnet/LendingMarketController.json` and
+  `TokenVault.json`), confirmed both proxies live on Ethereum mainnet, and
+  read the JPYC currency's own token address live from TokenVault's own
+  `getTokenAddress("JPYC")` state rather than assuming it. Scanned both
+  contracts' own event logs across a full 72-hour window (not the
+  narrower 24-hour window a previously-parked attempt at this same
+  candidate used) and found exactly 2 transactions, 58 minutes apart,
+  where TokenVault paid out materially more JPYC than it received in the
+  same transaction, both sent by the same near-fresh EOA (nonce 10,
+  matching its full Blockscout-fetched transaction history exactly), both
+  `to: null` (a contract-creation transaction running the exploit in its
+  own constructor). Confirmed neither transaction carries a
+  LiquidationExecuted or ForcedRepaymentExecuted event (independently
+  computed topic hashes checked against every transaction in the window,
+  zero matches), ruling out ordinary liquidation profit. Decoded both
+  transactions' full JPYC Transfer sequence directly: each opens with a
+  flash loan from Uniswap V4's PoolManager and closes with that exact
+  same amount repaid, with 4,360,902.135130 JPYC landing on the attacker's
+  EOA in between ($45,444.97 at CoinGecko's theft-day price), cross-checked
+  a second way against TokenVault's own Deposit/Withdraw event totals
+  (both methods agree to the last decimal). Read Secured Finance's own
+  currently-live `DepositManagementLogic.sol` from GitHub (last touched
+  2026-02-09, seven months before this incident, still the most recent
+  commit on that file) and quoted the exact `_calculateCollateral`/
+  `getWithdrawableCollateral` functions whose structure is consistent
+  with the exploit's observed same-block deposit-then-over-withdraw
+  pattern, an improvement over a previously-parked attempt at this
+  candidate that could only offer this project's own unsourced inference.
+  Traced the attacker's complete 10-transaction lifetime history (not
+  just the 2 exploit transactions) and found 91% of the realized ETH
+  proceeds (10.1 of 11.125698746898514 ETH total, the total independently
+  cross-checked 3 ways: 1inch swap decode, WETH's own Withdrawal event,
+  and an attacker-EOA balance-delta check net of gas) routed into Tornado
+  Cash's own router contract, a genuinely new finding beyond what the
+  parked candidate issue had found, and itself independent evidence
+  against any legitimate or white-hat explanation. This project's own
+  figure ($45,444.97) sits at 0.44x DefiLlama's tracked $104,000, an
+  unreconciled gap explicitly disclosed rather than papered over, and
+  this entry corrects DefiLlama's classification outright: neither
+  transaction reads any price oracle anywhere, so "Oracle Manipulation" /
+  "Spot Price Manipulation" does not hold up; this is a TokenVault
+  collateral-accounting / access-control bug. 8 other transactions active
+  on the same two contracts in the same 72-hour window are neither
+  counted nor cleared: 2 addresses among them show a superficially similar
+  same-transaction deposit-then-withdraw pattern on USDC or WBTC, but
+  unlike the confirmed attacker, neither creates a fresh contract in the
+  same transaction and every counterparty carries a long prior
+  transaction history (nonces from 264 up to 222,969), so this
+  reconstruction reports them as an open question rather than asserting
+  either "routine" or "exploit" without stronger per-transaction evidence.
+
 ## 2026-09-11 (18)
 
 - Added a 32nd incident: Oraichain (ICS-20 EVM Precompile) self-mint,
