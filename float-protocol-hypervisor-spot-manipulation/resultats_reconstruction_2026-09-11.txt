@@ -1,0 +1,217 @@
+=== Step 0: DefiLlama's own hacks feed entry for this incident ===
+{
+  "date": 1788134400,
+  "name": "Float Protocol",
+  "classification": "Oracle Manipulation",
+  "technique": "Spot Price Manipulation",
+  "amount": 28000,
+  "chain": [
+    "Ethereum"
+  ],
+  "bridgeHack": false,
+  "targetType": "DeFi Protocol",
+  "source": "",
+  "returnedFunds": null,
+  "defillamaId": "497",
+  "language": "Solidity"
+}
+(note: DefiLlama reuses defillamaId 497 for Float Protocol's older Jan-2022
+ exploit too; this script only uses the 2026 row, picked by timestamp)
+
+=== Step 1: the exploit transaction, fetched live ===
+Tx hash: 0x3d7549db65344da2a41067e17791b17fac16ec6b8e5132e82e243f6541de5cff
+Block: 25874402
+Block time (UTC): 2026-08-31T09:35:11Z
+From (attacker EOA): 0xaea29218262dc6b0904ca077f6527c49dfd426d9 == declared: True
+Nonce: 8
+To: None (None = this tx itself creates a contract)
+Contract created by this tx: 0x05303c95ee7ff76daf1421b28e024635d7fe51ab
+Status: 0x1 (0x1 = success)
+Gas used: 2865454, effective gas price: 1012435661 wei, fee paid: 0.002901087814555094 ETH
+Log count: 108
+
+=== Step 2: are the two vault addresses really Float Protocol's own Hypervisor vaults? ===
+  VAULT1 0x85cbed523459b7f6f81c11e710df969703a8a70c
+    name(): 'Visor FLOAT-ETH Uni .3%'  symbol(): 'vFLOAT-ETH3'
+    token0(): 0xb05097849bca421a3f51b249ba6cca4af4b97cb9  == FLOAT: True
+    token1(): 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2  == WETH:  True
+  VAULT2 0xc86b1e7fa86834cac1468937cdd53ba3ccbc1153
+    name(): 'Visor FLOAT-ETH Uni .3%'  symbol(): 'vFLOAT-ETH3'
+    token0(): 0xb05097849bca421a3f51b249ba6cca4af4b97cb9  == FLOAT: True
+    token1(): 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2  == WETH:  True
+  Cross-checked against messari/subgraphs' own public Gamma Strategies deployment
+  registry (subgraphs/gamma-strategies/.../gamma-strategies-ethereum/configurations.json),
+  which independently names vFLOAT-ETH3_2 = 0x85cbed523459b7f6f81c11e710df969703a8a70c and vFLOAT-ETH3_3 = 0xc86b1e7fa86834cac1468937cdd53ba3ccbc1153 -- not a press address.
+
+=== Step 3: is FLOAT really Float Protocol's own token? ===
+FLOAT token name(): 'Float Protocol: FLOAT'  symbol(): 'FLOAT'
+Float Protocol's own GitHub org (github.com/FloatProtocol) is live and holds float-staking, float-ui, float-whitelist, confirming this is the same project, not a namesake.
+
+=== Step 4: the underlying Uniswap V3 pool ===
+POOL 0xe8c2030686fc3b0161ee1def0e8d01dfe4fac0ac
+  token0(): 0xb05097849bca421a3f51b249ba6cca4af4b97cb9 == FLOAT: True
+  token1(): 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2 == WETH: True
+
+=== Step 5: decoding every one of the 108 event logs ===
+  0 FLASHLOAN FLASH_PROVIDER   receiver=ATTACK_CONTRACT  token=WETH amount=1000.000000000000000000
+  1 TRANSFER WETH             FLASH_PROVIDER   -> ATTACK_CONTRACT  1000.000000000000000000
+  2 TRANSFER FLOAT            V2_PAIR          -> ATTACK_CONTRACT  120000.000000000000000000
+  3 TRANSFER WETH             POOL             -> ATTACK_CONTRACT  12.048651336097103481
+  4 TRANSFER FLOAT            ATTACK_CONTRACT  -> POOL             114000.000000000000000000
+  5 SWAP POOL             sender=ATTACK_CONTRACT  FLOATdelta=114000.000000 WETHdelta=-12.048651
+  6 other FLOAT            topic0=0x8c5be1e5ebec
+  7 other WETH             topic0=0x8c5be1e5ebec
+  8 TRANSFER FLOAT            ATTACK_CONTRACT  -> HELPER1          2000.000000000000000000
+  9 other FLOAT            topic0=0x8c5be1e5ebec
+ 10 TRANSFER WETH             ATTACK_CONTRACT  -> HELPER1          200.000000000000000000
+ 11 other POOL             topic0=0x0c396cd989a3
+ 12 other POOL             topic0=0x0c396cd989a3
+ 13 TRANSFER FLOAT            HELPER1          -> VAULT1           2000.000000000000000000
+ 14 other FLOAT            topic0=0x8c5be1e5ebec
+ 15 TRANSFER WETH             HELPER1          -> VAULT1           200.000000000000000000
+ 16 TRANSFER VAULT1           0x0000000000000000000000000000000000000000 -> HELPER1          222.628862475761707174
+ 17 DEPOSIT VAULT1           sender=HELPER1          shares=222.628862 FLOATin=2000.000000 WETHin=200.000000
+ 18 TRANSFER VAULT1           HELPER1          -> ATTACK_CONTRACT  222.628862475761707174
+ 19 other POOL             topic0=0x0c396cd989a3
+ 20 TRANSFER FLOAT            POOL             -> ATTACK_CONTRACT  14.377991540921446045
+ 21 other POOL             topic0=0x70935338e697
+ 22 other POOL             topic0=0x0c396cd989a3
+ 23 TRANSFER FLOAT            POOL             -> ATTACK_CONTRACT  16.821418945836203562
+ 24 other POOL             topic0=0x70935338e697
+ 25 TRANSFER FLOAT            VAULT1           -> ATTACK_CONTRACT  7114.080750335035190801
+ 26 TRANSFER WETH             VAULT1           -> ATTACK_CONTRACT  199.782221837819520260
+ 27 TRANSFER VAULT1           ATTACK_CONTRACT  -> 0x0000000000000000000000000000000000000000 222.628862475761707174
+ 28 WITHDRAW VAULT1           sender=ATTACK_CONTRACT  shares=222.628862 FLOATout=7145.280161 WETHout=199.782222
+ 29 other FLOAT            topic0=0x8c5be1e5ebec
+ 30 other WETH             topic0=0x8c5be1e5ebec
+ 31 TRANSFER FLOAT            ATTACK_CONTRACT  -> HELPER2          4000.000000000000000000
+ 32 other FLOAT            topic0=0x8c5be1e5ebec
+ 33 TRANSFER WETH             ATTACK_CONTRACT  -> HELPER2          400.000000000000000000
+ 34 other POOL             topic0=0x0c396cd989a3
+ 35 other POOL             topic0=0x0c396cd989a3
+ 36 TRANSFER FLOAT            HELPER2          -> VAULT2           4000.000000000000000000
+ 37 other FLOAT            topic0=0x8c5be1e5ebec
+ 38 TRANSFER WETH             HELPER2          -> VAULT2           400.000000000000000000
+ 39 TRANSFER VAULT2           0x0000000000000000000000000000000000000000 -> ATTACK_CONTRACT  3703.209972128726803930
+ 40 DEPOSIT VAULT2           sender=HELPER2          shares=3703.209972 FLOATin=4000.000000 WETHin=400.000000
+ 41 other POOL             topic0=0x0c396cd989a3
+ 42 TRANSFER FLOAT            POOL             -> ATTACK_CONTRACT  13852.575945758841044153
+ 43 TRANSFER WETH             POOL             -> ATTACK_CONTRACT  0.585678802171304302
+ 44 other POOL             topic0=0x70935338e697
+ 45 other POOL             topic0=0x0c396cd989a3
+ 46 TRANSFER FLOAT            POOL             -> ATTACK_CONTRACT  544.796324702262495521
+ 47 TRANSFER WETH             POOL             -> ATTACK_CONTRACT  0.033328095915659869
+ 48 other POOL             topic0=0x70935338e697
+ 49 TRANSFER FLOAT            VAULT2           -> ATTACK_CONTRACT  36027.816294910080614500
+ 50 TRANSFER WETH             VAULT2           -> ATTACK_CONTRACT  397.230119248611629246
+ 51 TRANSFER VAULT2           ATTACK_CONTRACT  -> 0x0000000000000000000000000000000000000000 3703.209972128726803930
+ 52 WITHDRAW VAULT2           sender=ATTACK_CONTRACT  shares=3703.209972 FLOATout=50425.188565 WETHout=397.849126
+ 53 TRANSFER FLOAT            POOL             -> ATTACK_CONTRACT  337465.086971173994243145
+ 54 TRANSFER WETH             ATTACK_CONTRACT  -> POOL             250.000000000000000000
+ 55 SWAP POOL             sender=ATTACK_CONTRACT  FLOATdelta=-337465.086971 WETHdelta=250.000000
+ 56 TRANSFER FLOAT            ATTACK_CONTRACT  -> HELPER1          395035.555697366944514215
+ 57 other FLOAT            topic0=0x8c5be1e5ebec
+ 58 TRANSFER WETH             ATTACK_CONTRACT  -> HELPER1          0.000000000000000000
+ 59 other POOL             topic0=0x0c396cd989a3
+ 60 other POOL             topic0=0x0c396cd989a3
+ 61 TRANSFER FLOAT            HELPER1          -> VAULT1           395035.555697366944514215
+ 62 other FLOAT            topic0=0x8c5be1e5ebec
+ 63 TRANSFER VAULT1           0x0000000000000000000000000000000000000000 -> HELPER1          4298.630215489444708510
+ 64 DEPOSIT VAULT1           sender=HELPER1          shares=4298.630215 FLOATin=395035.555697 WETHin=0.000000
+ 65 TRANSFER VAULT1           HELPER1          -> ATTACK_CONTRACT  4298.630215489444708510
+ 66 other POOL             topic0=0x0c396cd989a3
+ 67 TRANSFER WETH             POOL             -> ATTACK_CONTRACT  0.000043750993213990
+ 68 other POOL             topic0=0x70935338e697
+ 69 other POOL             topic0=0x0c396cd989a3
+ 70 TRANSFER WETH             POOL             -> ATTACK_CONTRACT  0.000037132206876492
+ 71 other POOL             topic0=0x70935338e697
+ 72 TRANSFER FLOAT            VAULT1           -> ATTACK_CONTRACT  394911.862263990449719131
+ 73 TRANSFER WETH             VAULT1           -> ATTACK_CONTRACT  1.851751399332150605
+ 74 TRANSFER VAULT1           ATTACK_CONTRACT  -> 0x0000000000000000000000000000000000000000 4298.630215489444708510
+ 75 WITHDRAW VAULT1           sender=ATTACK_CONTRACT  shares=4298.630215 FLOATout=394911.862264 WETHout=1.851832
+ 76 TRANSFER FLOAT            ATTACK_CONTRACT  -> HELPER2          394911.862263990449719131
+ 77 other FLOAT            topic0=0x8c5be1e5ebec
+ 78 other POOL             topic0=0x0c396cd989a3
+ 79 other POOL             topic0=0x0c396cd989a3
+ 80 TRANSFER FLOAT            HELPER2          -> VAULT2           394911.862263990449719131
+ 81 other FLOAT            topic0=0x8c5be1e5ebec
+ 82 TRANSFER VAULT2           0x0000000000000000000000000000000000000000 -> ATTACK_CONTRACT  11687.202600147522389307
+ 83 DEPOSIT VAULT2           sender=HELPER2          shares=11687.202600 FLOATin=394911.862264 WETHin=0.000000
+ 84 other POOL             topic0=0x0c396cd989a3
+ 85 TRANSFER FLOAT            POOL             -> ATTACK_CONTRACT  5.109634848002429841
+ 86 TRANSFER WETH             POOL             -> ATTACK_CONTRACT  0.076863646793645851
+ 87 other POOL             topic0=0x70935338e697
+ 88 other POOL             topic0=0x0c396cd989a3
+ 89 TRANSFER WETH             POOL             -> ATTACK_CONTRACT  0.000750722206497827
+ 90 other POOL             topic0=0x70935338e697
+ 91 TRANSFER FLOAT            VAULT2           -> ATTACK_CONTRACT  394291.910532230162061751
+ 92 TRANSFER WETH             VAULT2           -> ATTACK_CONTRACT  2.763774295284982863
+ 93 TRANSFER VAULT2           ATTACK_CONTRACT  -> 0x0000000000000000000000000000000000000000 11687.202600147522389307
+ 94 WITHDRAW VAULT2           sender=ATTACK_CONTRACT  shares=11687.202600 FLOATout=394297.020167 WETHout=2.841389
+ 95 TRANSFER FLOAT            ATTACK_CONTRACT  -> V2_PAIR          120361.083249749251990579
+ 96 TRANSFER WETH             POOL             -> ATTACK_CONTRACT  238.071077231653276840
+ 97 TRANSFER FLOAT            ATTACK_CONTRACT  -> POOL             233291.415527642529923469
+ 98 SWAP POOL             sender=ATTACK_CONTRACT  FLOATdelta=233291.415528 WETHdelta=-238.071077
+ 99 other V2_PAIR          topic0=0x1c411e9a96e0
+100 other V2_PAIR          topic0=0xd78ad95fa46c
+101 TRANSFER FLOAT            ATTACK_CONTRACT  -> V2_PAIR          40644.521389686371549033
+102 TRANSFER WETH             V2_PAIR          -> ATTACK_CONTRACT  8.262293544735058504
+103 other V2_PAIR          topic0=0x1c411e9a96e0
+104 other V2_PAIR          topic0=0xd78ad95fa46c
+105 other WETH             topic0=0x8c5be1e5ebec
+106 TRANSFER WETH             ATTACK_CONTRACT  -> FLASH_PROVIDER   1000.000000000000000000
+107 WETH_UNWRAP WETH             by=ATTACK_CONTRACT  amount=10.706591043820923304 ETH
+
+=== Step 6: the flash loan -- borrowed and fully repaid? ===
+FlashLoan event: provider=0xbbbbbbbbbb9cc5e90e3b3af64bdaf62c37eeffcb receiver=0xb46655eb5b77de277063a75586d1883e951b6c54 token=0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2 amount=1000.0 WETH
+Final WETH Transfer (log 106): 0xb46655eb5b77de277063a75586d1883e951b6c54 -> 0xbbbbbbbbbb9cc5e90e3b3af64bdaf62c37eeffcb amount=1000.0 WETH
+Borrowed == repaid: True
+
+=== Step 7: the FLOAT-side capital -- a Uniswap V2 flash swap ===
+Candidate V2 pair 0x481ddaf90c59d91f3e480e6793122e62612ca5a9: token0=0xb05097849bca421a3f51b249ba6cca4af4b97cb9 token1=0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2
+  matches FLOAT/WETH: True
+log[2]  FLOAT out, pair -> attack contract: 120000.000000 FLOAT
+log[95] FLOAT back, attack contract -> pair: 120361.083250 FLOAT
+  premium paid: 0.3009% (Uniswap V2's flash-swap fee is 0.30%)
+
+=== Step 8: the deposit/withdraw cycles, all 4, both vaults ===
+  Cycle 1, VAULT1: deposit 2,000.0000 FLOAT + 200.000000 WETH -> 222.6289 shares (log 17)
+                     withdraw same 222.6289 shares -> 7,145.2802 FLOAT + 199.782222 WETH (log 28)
+                     shares matched: True
+  Cycle 2, VAULT2: deposit 4,000.0000 FLOAT + 400.000000 WETH -> 3,703.2100 shares (log 40)
+                     withdraw same 3,703.2100 shares -> 50,425.1886 FLOAT + 397.849126 WETH (log 52)
+                     shares matched: True
+  Cycle 3, VAULT1: deposit 395,035.5557 FLOAT + 0.000000 WETH -> 4,298.6302 shares (log 64)
+                     withdraw same 4,298.6302 shares -> 394,911.8623 FLOAT + 1.851832 WETH (log 75)
+                     shares matched: True
+  Cycle 4, VAULT2: deposit 394,911.8623 FLOAT + 0.000000 WETH -> 11,687.2026 shares (log 83)
+                     withdraw same 11,687.2026 shares -> 394,297.0202 FLOAT + 2.841389 WETH (log 94)
+                     shares matched: True
+
+=== Step 9: the final unwrap -- the attacker's realized profit, as WETH becomes ETH ===
+WETH Withdrawal event (log 107): by 0xb46655eb5b77de277063a75586d1883e951b6c54 == attack contract: True
+Amount unwrapped: 10.706591043820923304 ETH
+
+=== Step 10: cross-check -- attacker EOA balance delta across the exploit block ===
+Archive endpoint used: https://eth.drpc.org
+Balance at block 25874401 (before): 1.523042733552253614 ETH
+Balance at block 25874402 (after):    12.226732689558621914 ETH
+Delta: 10.703689956006368078 ETH; + gas paid (0.002901087814555094) = gross received: 10.706591043820923304 ETH
+Matches the WETH Withdrawal amount from Step 9 (10.706591043820923304 ETH): True
+
+=== Step 11: cross-checking the second archive endpoint agrees ===
+https://eth-mainnet.public.blastapi.io agrees: True True
+
+=== Step 12: USD conversion ===
+ETH/USD, CoinGecko daily snapshot 2026-08-31 (theft day): 2416.2418165172735
+10.706591043820923 ETH @ daily snapshot -> $25,869.71
+Intraday interpolation between 1788166800.0 ($2445.9707) and 1788170400.0 ($2446.1977) at ts=1788168911: $2446.1038
+10.706591043820923 ETH @ intraday interpolation -> $26,189.43
+
+DefiLlama's own tracked figure for this incident ('Float Protocol', 2026 row): $28,000
+Gap vs daily-snapshot figure: 7.61%
+Gap vs intraday-interpolation figure: 6.47%
+
+=== Step 13: current state -- how much FLOAT is left in each vault today ===
+  FLOAT.balanceOf(VAULT1 0x85cbed523459b7f6f81c11e710df969703a8a70c) today: 189.664448 FLOAT
+  FLOAT.balanceOf(VAULT2 0xc86b1e7fa86834cac1468937cdd53ba3ccbc1153) today: 871.173253 FLOAT

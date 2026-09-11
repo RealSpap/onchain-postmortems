@@ -28,11 +28,11 @@ lost in the merge.
 
 | | |
 |---|---|
-| Incidents covered | 28, independently reconstructed on-chain, see the index for detail |
-| Cumulative loss, recomputed | About $478.6M across the 28 incidents ($478,638,844 exactly, sum of the figures in the index below). At least one entry is a known floor, so the real total is higher. |
-| Corrections made | 18 entries below correct, reconcile, or newly surface a press or DefiLlama figure, label, date, or classification (14 corrections, 3 reconciliations, 1 discovery not previously tracked by DefiLlama at all). See Corrections to press and DefiLlama below. |
+| Incidents covered | 29, independently reconstructed on-chain, see the index for detail |
+| Cumulative loss, recomputed | About $478.7M across the 29 incidents ($478,664,714 exactly, sum of the figures in the index below). At least one entry is a known floor, so the real total is higher. |
+| Corrections made | 19 entries below correct, reconcile, or newly surface a press or DefiLlama figure, label, date, or classification (14 corrections, 4 reconciliations, 1 discovery not previously tracked by DefiLlama at all). See Corrections to press and DefiLlama below. |
 | Method | Each subfolder keeps its original Python reconstruction script, its `registre_hypotheses.csv` falsification registry, and its script's raw output in `resultats_*.txt`, so every figure below can be checked against the file that produced it |
-| License | MIT across all 26 entries, single author (s_pap, 2026) |
+| License | MIT across all 29 entries, single author (s_pap, 2026) |
 
 ## Table of contents
 
@@ -75,7 +75,7 @@ exact figure decoded from source data.
 
 ### 2026
 
-**2026 total: $478,638,844** across 28 incidents (6 months, April through September). At least one entry this year is a known floor, so the true total is higher.
+**2026 total: $478,664,714** across 29 incidents (6 months, April through September). At least one entry this year is a known floor, so the true total is higher.
 
 #### September 2026 (current month)
 
@@ -106,8 +106,9 @@ exact figure decoded from source data.
 | Avici (Rain Card Collateral) | 2026-08-28 | ≈ 500,859 [^avici-rain-collateral-withdraw] | Solana | Access-Control | Forged dual-signature authorization (Ed25519 instruction-offset reuse) on a shared Rain card-collateral program let one attacker-controlled signature satisfy a two-signer withdrawal check | [avici-rain-collateral-withdraw/](avici-rain-collateral-withdraw/) |
 | MORE Markets (Ankr ankrFLOW E-Mode) | 2026-08-31 | ≈ 415,398 [^more-markets-ankrflow-emode] | Flow EVM | Access-Control | Ankr's ankrFLOW liquid-staking contract let unbacked ankrFLOW be minted via a recursive stake/restake loop, supplied as E-Mode collateral to drain MORE Markets' WFLOW reserve | [more-markets-ankrflow-emode/](more-markets-ankrflow-emode/) |
 | Balancer V1 (legacy pools) | 2026-08-30 / 08-31 | ≥ 234,000 [^balancer] | Ethereum | Rounding/Math-Bug | Rounding error on unmaintained V1 pools, repeated 1-satoshi joins | [balancer-v1-rounding/](balancer-v1-rounding/) |
+| Float Protocol (Hypervisor Vaults) | 2026-08-31 | ≈ 25,870 [^float-protocol-hypervisor-spot-manipulation] | Ethereum | Oracle | Flash-loan-funded Uniswap V3 slot0 manipulation distorted two Gamma-style Hypervisor vaults' share pricing, letting deposit/withdraw pairs straddling the skewed price redeem more value than deposited | [float-protocol-hypervisor-spot-manipulation/](float-protocol-hypervisor-spot-manipulation/) |
 
-**August 2026 subtotal: $40,112,828** across 13 incidents. Includes 4 known floor figures (Cosmos EVM (MANTRA / TAC / KiiChain), Maya Protocol (MAYAChain), Sandbox (SAND / OFT), Balancer V1 (legacy pools)), so the true total is higher.
+**August 2026 subtotal: $40,138,698** across 14 incidents. Includes 4 known floor figures (Cosmos EVM (MANTRA / TAC / KiiChain), Maya Protocol (MAYAChain), Sandbox (SAND / OFT), Balancer V1 (legacy pools)), so the true total is higher.
 
 #### July 2026
 
@@ -175,16 +176,17 @@ exact figure decoded from source data.
 [^virtue-iota-switchboard-oracle]: All 14 Switchboard oracle signing keys for Virtue's IOTA price queue were compromised and, in one atomic transaction, self-submitted a fake $10,000,000 IOTA price, minted 4,942,703.659474 VUSD against 1 IOTA of real collateral, and seeded the stability pool with 1,000,000 of it; the price was then crashed, triggering 47 real-user liquidations (45 distinct users) that cleared $455,102.94 of VUSD debt (matching Virtue's own $455,103 figure) against real-user collateral independently valued at ≈$848,457 at theft-day prices, closer to DefiLlama's tracked $894,500. See `virtue-iota-switchboard-oracle/README.md`. External source: https://cryptoslate.com/cross-chain-oracle-compromise-triggers-liquidations-and-frozen-vaults-across-multiple-defi-networks/.
 [^radix-hyperlane-vault-access-drain]: A missing owner check on direct vault references in the Radix Engine kernel let a published blueprint call `take`/`lock_fee` on 59 victim vaults across 6 Hyperlane-bridged assets (hUSDC, hUSDT, hETH, hWBTC, hSOL, hBNB) with no badge or proof; independently measuring each asset's own `total_supply` before/after the sweep (not assumed from any report) and pricing the 4 non-stablecoin drops at CoinGecko's 2026-08-31 historical close gives $1,251,368.54, within 0.11% of DefiLlama's tracked $1,249,946 for the chain-level "Radix" row. Radix validators halted mainnet consensus the same evening; it remains halted 11 days later. See `radix-hyperlane-vault-access-drain/README.md`. External sources: https://github.com/radixdlt/radixdlt-scrypto/releases/tag/v1.4.0, https://api.llama.fi/hacks.
 [^redsonic-vault-share-registration]: An attacker flash-loaned WETH from Balancer, then immediately called the unprivileged `registerErc20(address)` on Reddio's RedSonic Vault's Diamond proxy (confirmed live as a real, currently-installed selector, not assumed from a write-up), registering Lido stETH as a second share class before ever depositing into the vault's existing rsvETH product. Only after that registration did a ~1,130 ETH deposit mint rsvETH shares that could then be redeemed for 9.254631141072739 ETH more than they were deposited for, decoded directly from the vault's own paired deposit/withdraw events. The attacker's own EOA held 9.261768945208 ETH immediately after the exploit block; at CoinGecko's 2026-09-05 price that is $22,747.69, within 0.23% of DefiLlama's tracked $22,800. A live simulation confirms the same call still succeeds today from any unprivileged address. See `redsonic-vault-share-registration/README.md`. External sources: https://docs.reddio.com/zkevm/staking, https://api.llama.fi/hacks.
+[^float-protocol-hypervisor-spot-manipulation]: A flash-loan-funded Uniswap V3 `slot0` manipulation, confirmed via the WETH contract's own `Withdrawal` event and independently cross-checked against the attacker EOA's own balance delta (two archive RPC providers agree), nets exactly 10.706591043820923 ETH, matching SlowMist's own reported "10.71 ETH" to the stated precision. At CoinGecko's 2026-08-31 daily price that is $25,869.71, about 7.6% below DefiLlama's tracked $28,000 (same defillamaId as Float Protocol's unrelated Jan-2022 exploit); an intraday-interpolated price gives $26,189.43 instead, about 6.5% below. See `float-protocol-hypervisor-spot-manipulation/README.md`. External source: https://crypto.news/float-protocol-hit-by-28k-flash-loan-attack-through-uniswap-v3-manipulation/.
 
 ## Corrections to press and DefiLlama
 
 Every figure in the Index above is recomputed from each subfolder's own
 source files, then checked against whatever press or DefiLlama already
-published. The 18 rows below are the cases where that check turned up a
+published. The 19 rows below are the cases where that check turned up a
 real gap: a wrong number, a wrong label, a wrong date, a wrong
-classification, or (for Aquifer, Maya Protocol, and Virtue Protocol) a
-reconciled gap neither side is really "wrong" about, or (for XRP
-Healthcare) an incident DefiLlama does not track at all. Full detail,
+classification, or (for Aquifer, Maya Protocol, Virtue Protocol, and
+Float Protocol) a reconciled gap neither side is really "wrong" about, or
+(for XRP Healthcare) an incident DefiLlama does not track at all. Full detail,
 including the exact transactions and event logs behind each figure, lives
 in the linked subfolder; this table gives the headline gap only.
 
@@ -208,6 +210,7 @@ in the linked subfolder; this table gives the headline gap only.
 | Lazy Summer Protocol | DefiLlama dates this incident 2026-07-05T00:00:00Z | The exploit transaction's own block timestamp is 2026-07-06T05:17:59Z, 29.3 hours later; the amount and classification both check out independently | [lazy-summer-stale-ark-donation/](lazy-summer-stale-ark-donation/) |
 | Kelp DAO (rsETH / LayerZero DVN) | DefiLlama tracks $293,000,000 and LayerZero's own statement says "approximately $290M" | This entry's own reconstruction confirms exactly 116,500 rsETH moved; priced at theft-day rate that is $273,377,225, while a second cross-check via Kelp's own oracle backing rate gives $301,716,067, bracketing both public figures from either side | [kelpdao-rseth-layerzero-rpc-spoofing/](kelpdao-rseth-layerzero-rpc-spoofing/) |
 | Virtue Protocol (VUSD CDP) | Virtue's own press-relayed figure ($455,103) is the face-value VUSD debt cleared, well below DefiLlama's tracked $894,500 | The debt-cleared figure matches Virtue's own account almost exactly (independently re-derived: $455,102.94), but the real-user collateral actually seized during the crash-triggered liquidation cascade is worth roughly double that at theft-day prices (independently re-derived: ≈$848,457), much closer to DefiLlama's figure (a reconciliation, not an error) | [virtue-iota-switchboard-oracle/](virtue-iota-switchboard-oracle/) |
+| Float Protocol (Hypervisor Vaults) | DefiLlama's $28,000 sits 6.5-7.6% above this entry's independently re-derived figure | The exploit transaction's own WETH `Withdrawal` event and the attacker EOA's own balance delta agree, to the wei, on 10.706591043820923 ETH; converting that at CoinGecko's daily or intraday price gives $25,869.71-$26,189.43, and neither side of the gap can be shown as wrong from public data alone (a reconciliation, not an error) | [float-protocol-hypervisor-spot-manipulation/](float-protocol-hypervisor-spot-manipulation/) |
 
 ## Structure
 

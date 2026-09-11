@@ -4,6 +4,58 @@ One entry per addition or correction to this repo. Each incident added
 with `add_new_entry.py` gets tagged as a matching GitHub release, see
 "Get notified of new postmortems" in `README.md`.
 
+## 2026-09-11 (15)
+
+- Added a 29th incident: Float Protocol (Hypervisor Vaults), Ethereum,
+  2026-08-31. Found via DefiLlama's hacks feed (a "Float Protocol" row,
+  $28,000, "Oracle Manipulation" / "Spot Price Manipulation", reusing
+  defillamaId 497, the same id as Float Protocol's unrelated January 2022
+  exploit). The starting anchor was not a press address: SlowMist's own
+  alert (as republished by crypto.news and cryptotimes.io) named 5
+  addresses, and every one of them was independently re-derived rather
+  than trusted. The two "vulnerable contracts" it named
+  (`0x85cbed523459b7f6f81c11e710df969703a8a70c` and
+  `0xc86b1e7fa86834cac1468937cdd53ba3ccbc1153`) are confirmed live as
+  Float Protocol's own Gamma-style Hypervisor vaults
+  (`name()`="Visor FLOAT-ETH Uni .3%", `token0()`=FLOAT, `token1()`=WETH),
+  cross-checked against messari/subgraphs' own public Gamma Strategies
+  deployment registry on GitHub (a primary source, not a press write-up),
+  which independently names the same two addresses `vFLOAT-ETH3_2` and
+  `vFLOAT-ETH3_3`, deployed November 2021. All 108 event logs in the
+  single exploit transaction
+  (`0x3d7549db65344da2a41067e17791b17fac16ec6b8e5132e82e243f6541de5cff`,
+  block 25,874,402) were decoded against independently recomputed
+  `keccak256` topic hashes, asserted at runtime rather than assumed:
+  a 1,000 WETH flash loan (fully repaid) and a 120,000 FLOAT Uniswap V2
+  flash swap (repaid with a 0.3009% premium, matching V2's own 0.30% fee)
+  funded four deposit/withdraw cycles straddling a Uniswap V3 `slot0`
+  price the attacker pushed away from fair value, alternating between the
+  two vaults, each pair burning and minting the identical share count for
+  a disproportionate token split. The realized profit is confirmed two
+  independent ways, agreeing to the wei: the WETH contract's own
+  `Withdrawal` event (the attack contract's final unwrap, log 107) and
+  the attacker EOA's own `eth_getBalance` delta across the exploit block
+  (cross-checked on two separate archive-capable RPC providers,
+  `eth.drpc.org` and `eth-mainnet.public.blastapi.io`), both landing on
+  exactly 10.706591043820923 ETH, matching SlowMist's own reported
+  "10.71 ETH" to the stated precision. Converting that at CoinGecko's
+  2026-08-31 daily price gives $25,869.71, and at an intraday-interpolated
+  price (from CoinGecko's hourly range data bracketing the exact block
+  timestamp) gives $26,189.43 -- both 6.5-7.6% below DefiLlama's tracked
+  $28,000, a gap this reconstruction could not attribute to either side
+  being wrong (DefiLlama's row carries no source URL; SlowMist's own
+  alert states only the ETH amount), so it is recorded as a reconciliation
+  in the "Corrections to press and DefiLlama" table, not a correction.
+  A live probe also found the deployed vault bytecode does not match
+  several documented getters on the current `GammaStrategies/hypervisor`
+  GitHub `master` branch (both revert), consistent with a 2021-era
+  version predating later refactors -- flagged honestly in the entry's
+  Caveats rather than asserting a specific Solidity mechanism this
+  reconstruction could not confirm against the actual deployed bytecode.
+  Both vaults, untouched for nearly 5 years, still hold real FLOAT
+  balances today (189.66 and 871.17 FLOAT), confirming this was a live,
+  unmonitored deployment, not an abandoned shell.
+
 ## 2026-09-11 (14)
 
 - Added a 28th incident: Reddio (RedSonic Vault), Ethereum, 2026-09-05.
