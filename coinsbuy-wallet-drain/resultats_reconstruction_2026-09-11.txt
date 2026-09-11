@@ -1,0 +1,64 @@
+=== Step 0: Coinsbuy has no public GitHub source repo (there is no contract to decode) ===
+  GET api.github.com/users/coinsbuy: not found
+  GET api.github.com/users/Coinsbuy: not found
+  GET api.github.com/users/CoinsBuy: not found
+
+=== Step 1: Coinsbuy's own official statement, fetched live from coinsbuy.com ===
+  page contains claim -- names August 9: True
+  page contains claim -- confirms client funds covered from own reserves: True
+  page contains claim -- withholds technical details: True
+  page contains claim -- offers a $100,000 reward: True
+
+=== Step 2: the named Ethereum hot wallet carries a public 'Coinsbuy' tag (Blockscout) ===
+  0xc6acbee42e9e323140c1ed060c2f6ea9cc3b4b75 public tags (from 50 recent txs): [('Coinsbuy 1', 'name'), ('Exchange', 'generic')]
+  (community-maintained indexer label, corroborating rekt.news's own naming, not itself proof)
+
+=== Step 3: the confirmed 77 ETH transfer, hot wallet -> attacker collector, raw RPC ===
+  [primary (publicnode)] 0xc6acbee42e9e323140c1ed060c2f6ea9cc3b4b75 -> 0x4d1bef2fe998b3e3c4029ef9ea6a0534d95661d3: 77.0 ETH, block 25717677, 2026-08-09T13:19:23Z, status=success
+  [cross-check (blastapi)] 0xc6acbee42e9e323140c1ed060c2f6ea9cc3b4b75 -> 0x4d1bef2fe998b3e3c4029ef9ea6a0534d95661d3: 77.0 ETH, block 25717677, 2026-08-09T13:19:23Z, status=success
+
+=== Step 4: independently locating the 2026-08-09 UTC block window (no hardcoded blocks) ===
+  2026-08-09 00:00 UTC -> block 25713690
+  2026-08-10 00:00 UTC -> block 25720868
+
+=== Step 5: no OTHER direct plain-ETH transfer from the 3 named hot wallets to the attacker collector or its swap address that day (Blockscout indexer, flagged as such) ===
+  0xc6acbee42e9e323140c1ed060c2f6ea9cc3b4b75: Blockscout's public indexer rate-limited this query during this run (get_json https://eth.blockscout.com/api?module=account&action=txlist&address=0xc6acbee42e9e323140c1ed060c2f6ea9cc3b4b75&startblock=25713690&endblock=25720868&sort=asc failed after 3 retries: {'message': 'Too many requests. Increase limits now at https://dev.blockscout.com', 'result': None, 'status': '0'}); not scanned this round, see Caveats.
+  0xc6f005765727770113ee70d63de23fe931bc6383: Blockscout's public indexer rate-limited this query during this run (get_json https://eth.blockscout.com/api?module=account&action=txlist&address=0xc6f005765727770113ee70d63de23fe931bc6383&startblock=25713690&endblock=25720868&sort=asc failed after 3 retries: {'message': 'Too many requests. Increase limits now at https://dev.blockscout.com', 'result': None, 'status': '0'}); not scanned this round, see Caveats.
+  0x340fd3b164ce979b103684ee74dc66ca6d5782ba: Blockscout's public indexer rate-limited this query during this run (get_json https://eth.blockscout.com/api?module=account&action=txlist&address=0x340fd3b164ce979b103684ee74dc66ca6d5782ba&startblock=25713690&endblock=25720868&sort=asc failed after 3 retries: {'message': 'Too many requests. Increase limits now at https://dev.blockscout.com', 'result': None, 'status': '0'}); not scanned this round, see Caveats.
+  Wallets successfully scanned this run: []
+  Total additional direct ETH found (beyond the confirmed 77 ETH, Step 3): 0 ETH
+  (The attacker collector also received far more ETH that day -- 551 ETH across 4 transfers --
+   from the unlabeled address 0x66790b54...4b17, an intermediary this project could not
+   independently attribute to a specific Coinsbuy source wallet; see Caveats.)
+
+=== Step 6: the TRON leg, full day, summed independently from TronGrid's trc20-transfer list ===
+  126 TRC20-USDT transfer records touching TVpX9xCzrj6KHeNhhDJoqjzEqFMxdgubGR that day
+  Total inbound USDT: 6,037,005.00
+  By source address:
+       3,492,005.00  TCEEJKaAT4mF3AsjqwUUHmHvosq67x3FTz  <-- rekt.news's own named Coinsbuy hot wallet
+       1,010,000.00  TEauiNEmQo9WimV5zQHpVVbU4kwuy3ktfc
+         480,000.00  TSriRu1sN8ishVpLqXYc1tnmvpzvVTMNW3
+         400,000.00  TEjBLgyLmjexV1MLuFWpdudpMeXBNuXevc
+         309,000.00  THH76A5EgVqFYzDB6LuC5yt3UjmHSGWBDM
+         138,000.00  TBk8Z9nLQau7zUNpfC2iP6vgAF9eqWbvkf
+         115,000.00  TJNvhYEgSbsK3Rnf5KJUEcAAc3Dxov76Km
+          93,000.00  THgWGuFFTDRX6SvWp6ZqgoK2YCUSXgRFN7
+
+=== Step 7: one representative TRON transfer, cross-checked via TronGrid's RAW transaction-info endpoint (independent of Step 6's list endpoint) ===
+  tx d486373ffd15d88ecec024c2944d79ff868ab0142c2753c26f86639f23f67f4b: block 85203083, 2026-08-09T12:57:03Z
+  event topic0: ddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef (standard Transfer signature: ddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef)
+  raw log data decodes to: 1,460,000.00 USDT (matches Step 6's per-tx figure)
+
+=== Step 8: live state today -- did the funds move on? ===
+  TVpX9xCzrj6KHeNhhDJoqjzEqFMxdgubGR live USDT balance today: 10.63 (near-zero would confirm the funds were moved on same-day, matching rekt.news's account)
+  0x4d1bef2fe998b3e3c4029ef9ea6a0534d95661d3 live ETH balance today: 4.42879093e-07
+
+=== Step 9: historical ETH/USD price for the confirmed 77 ETH direct transfer ===
+  CoinGecko ETH/USD, 2026-08-09: 1915.447810935271
+
+=== Step 10: the independently-confirmed floor ===
+  TRON leg (Step 6, exact): 6,037,005.00 USDT = $6,037,005.00
+  Ethereum leg (Step 3+9, exact): 77 ETH * $1,915.45 = $147,489.48
+  Combined independently-confirmed floor: $6,184,494.48
+  (rekt.news's own total is $8.07M; the gap is the additional, un-attributed Ethereum-side
+   laundering flow through 0x66790b54...4b17 noted in Step 5, not independently priced here.)

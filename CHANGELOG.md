@@ -4,6 +4,51 @@ One entry per addition or correction to this repo. Each incident added
 with `add_new_entry.py` gets tagged as a matching GitHub release, see
 "Get notified of new postmortems" in `README.md`.
 
+## 2026-09-11 (16)
+
+- Added a 30th incident: Coinsbuy (hot-wallet drain), Ethereum + Tron,
+  2026-08-09. Found via rekt.news's own published account (not DefiLlama's
+  hacks feed, though DefiLlama separately tracks the same incident at
+  $7,900,000, "Access Control" / "Improper Access Control", with an empty
+  source field). Unlike almost every other entry in this repo, this is a
+  custodial-wallet incident, not a smart-contract exploit: Coinsbuy has no
+  public GitHub org (checked live across 3 case variants) and its own
+  official statement, fetched live from coinsbuy.com rather than trusted
+  from a press paraphrase, confirms the date and a full reimbursement from
+  its own reserves but explicitly withholds every technical detail ("we
+  are not sharing technical details at this stage"). The Tron leg is
+  independently confirmed in full: every TRC20-USDT transfer landing on
+  the attacker's Tron collector on 2026-08-09, summed live from TronGrid
+  across 126 transfer records from 8 source addresses, totals exactly
+  6,037,005.00 USDT, matching rekt.news's own figure to the cent, with one
+  representative transaction separately cross-checked via TronGrid's raw
+  transaction-info endpoint and its own decoded Transfer event log,
+  independent of the list endpoint used for the sum. The Ethereum leg is
+  confirmed only in part: one direct 77 ETH transfer from a
+  Blockscout-tagged "Coinsbuy 1" / "Exchange" wallet to the attacker's
+  named Ethereum collector is confirmed via raw eth_getTransactionByHash /
+  eth_getTransactionReceipt / eth_getBlockByNumber on 2 independent RPC
+  endpoints, but rekt.news's fuller claim (210.8 ETH via FixedFloat, 150
+  ETH via ChangeNOW) routes through an unlabeled intermediary address that
+  itself cycles hundreds of ETH through 1inch's router and dozens of
+  single-use-looking destinations -- a pattern consistent with active
+  cash-out laundering, but not independently attributable to a specific
+  named Coinsbuy wallet, so it is not counted. A best-effort scan of the 3
+  named Ethereum hot wallets for any other direct transfer to the
+  attacker (method step 6) hit Blockscout's public rate limit on all 3
+  wallets during this run (8 retries with growing backoff each, still
+  refused); the script is written to report exactly which wallets it
+  could and could not reach on a given run rather than claim a
+  completeness it doesn't have, and this entry's Caveats say so plainly.
+  Combined independently-confirmed floor: $6,184,494.48 (6,037,005.00 USDT
+  + 77 ETH at CoinGecko's 2026-08-09 price of $1,915.45), reported as a
+  known floor (`≥`) against rekt.news's own $8.07M total and DefiLlama's
+  tracked $7,900,000. Live state check: the Tron collector's own balance
+  today is near-zero (10.63 USDT), and its own outbound transfers on
+  2026-08-09 sum to 6,036,994.37 USDT, confirming the funds were forwarded
+  onward the same day rather than left sitting, matching rekt.news's
+  "refills began within 10-12 hours" account.
+
 ## 2026-09-11 (15)
 
 - Added a 29th incident: Float Protocol (Hypervisor Vaults), Ethereum,

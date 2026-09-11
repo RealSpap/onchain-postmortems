@@ -28,11 +28,11 @@ lost in the merge.
 
 | | |
 |---|---|
-| Incidents covered | 29, independently reconstructed on-chain, see the index for detail |
-| Cumulative loss, recomputed | About $478.7M across the 29 incidents ($478,664,714 exactly, sum of the figures in the index below). At least one entry is a known floor, so the real total is higher. |
+| Incidents covered | 30, independently reconstructed on-chain, see the index for detail |
+| Cumulative loss, recomputed | About $484.8M across the 30 incidents ($484,849,208 exactly, sum of the figures in the index below). At least one entry is a known floor, so the real total is higher. |
 | Corrections made | 19 entries below correct, reconcile, or newly surface a press or DefiLlama figure, label, date, or classification (14 corrections, 4 reconciliations, 1 discovery not previously tracked by DefiLlama at all). See Corrections to press and DefiLlama below. |
 | Method | Each subfolder keeps its original Python reconstruction script, its `registre_hypotheses.csv` falsification registry, and its script's raw output in `resultats_*.txt`, so every figure below can be checked against the file that produced it |
-| License | MIT across all 29 entries, single author (s_pap, 2026) |
+| License | MIT across all 30 entries, single author (s_pap, 2026) |
 
 ## Table of contents
 
@@ -75,7 +75,7 @@ exact figure decoded from source data.
 
 ### 2026
 
-**2026 total: $478,664,714** across 29 incidents (6 months, April through September). At least one entry this year is a known floor, so the true total is higher.
+**2026 total: $484,849,208** across 30 incidents (6 months, April through September). At least one entry this year is a known floor, so the true total is higher.
 
 #### September 2026 (current month)
 
@@ -96,6 +96,7 @@ exact figure decoded from source data.
 | Moonwell (MAMO market) | 2026-08-27 | ≈ 9,131,000 [^moonwell] | Base | Donation-Attack | Donation attack on an illiquid market's exchange rate, combined with collateral/oracle manipulation | [moonwell-mamo-oracle/](moonwell-mamo-oracle/) |
 | Term Finance (Meta Vault) | 2026-08-17 / 08-23 | ≈ 8,500,000 [^termfinance] | Ethereum | Governance | Hijacked governance: a proposal self-voted by a fresh wallet through an attacker-deployed executor, normal 6-day delay elapsed with no veto | [termfinance-metavault-governance/](termfinance-metavault-governance/) |
 | Tectonic | 2026-08-30 | ≈ 8,300,000 [^tectonic] | Cronos | Donation-Attack | Donation attack (recursive collateral minting then direct donations to the market contract) inflating an exchange rate, massive borrowing against the inflated collateral, followed by a chain rollback | [tectonic-cronos/](tectonic-cronos/) |
+| Coinsbuy | 2026-08-09 | ≥ 6,184,494 [^coinsbuy-wallet-drain] | Ethereum + Tron | Access-Control | Under-an-hour drain of named Coinsbuy hot wallets on Ethereum and Tron via unauthorized withdrawals; Coinsbuy's own statement withholds the root-cause mechanism | [coinsbuy-wallet-drain/](coinsbuy-wallet-drain/) |
 | Cosmos EVM (MANTRA / TAC / KiiChain) | 2026-08-20 / 08-22 | ≥ 5,720,000 [^cosmos-evm-vesting-underflow] | MANTRA + TAC + KiiChain (+ 3 unnamed Cosmos EVM chains) | Rounding/Math-Bug | Underflow then overflow of the native balance in a shared Cosmos EVM staking precompile | [cosmos-evm-vesting-underflow/](cosmos-evm-vesting-underflow/) |
 | Aquifer | 2026-08-31 / 09-01 | ≈ 2,418,164 [^aquifer-sweeper-arbitrary-call] | Solana + Ethereum | Access-Control | Arbitrary external call on a verified cross-chain Sweeper contract redirected swept funds to the attacker's own address | [aquifer-sweeper-arbitrary-call/](aquifer-sweeper-arbitrary-call/) |
 | Maya Protocol (MAYAChain) | 2026-08-18 | ≥ 1,343,181 [^mayachain-cacao-slash-drain] | MAYAChain + Bitcoin + Arbitrum | Access-Control | Voter-clobber misrouted a multi-message deposit, an uncapped theft-slash subsidy then credited phantom CACAO to a near-empty pool, drained by a single-sided add/withdraw and swapped out to Bitcoin | [mayachain-cacao-slash-drain/](mayachain-cacao-slash-drain/) |
@@ -108,7 +109,7 @@ exact figure decoded from source data.
 | Balancer V1 (legacy pools) | 2026-08-30 / 08-31 | ≥ 234,000 [^balancer] | Ethereum | Rounding/Math-Bug | Rounding error on unmaintained V1 pools, repeated 1-satoshi joins | [balancer-v1-rounding/](balancer-v1-rounding/) |
 | Float Protocol (Hypervisor Vaults) | 2026-08-31 | ≈ 25,870 [^float-protocol-hypervisor-spot-manipulation] | Ethereum | Oracle | Flash-loan-funded Uniswap V3 slot0 manipulation distorted two Gamma-style Hypervisor vaults' share pricing, letting deposit/withdraw pairs straddling the skewed price redeem more value than deposited | [float-protocol-hypervisor-spot-manipulation/](float-protocol-hypervisor-spot-manipulation/) |
 
-**August 2026 subtotal: $40,138,698** across 14 incidents. Includes 4 known floor figures (Cosmos EVM (MANTRA / TAC / KiiChain), Maya Protocol (MAYAChain), Sandbox (SAND / OFT), Balancer V1 (legacy pools)), so the true total is higher.
+**August 2026 subtotal: $46,323,192** across 15 incidents. Includes 5 known floor figures (Coinsbuy, Cosmos EVM (MANTRA / TAC / KiiChain), Maya Protocol (MAYAChain), Sandbox (SAND / OFT), Balancer V1 (legacy pools)), so the true total is higher.
 
 #### July 2026
 
@@ -177,6 +178,7 @@ exact figure decoded from source data.
 [^radix-hyperlane-vault-access-drain]: A missing owner check on direct vault references in the Radix Engine kernel let a published blueprint call `take`/`lock_fee` on 59 victim vaults across 6 Hyperlane-bridged assets (hUSDC, hUSDT, hETH, hWBTC, hSOL, hBNB) with no badge or proof; independently measuring each asset's own `total_supply` before/after the sweep (not assumed from any report) and pricing the 4 non-stablecoin drops at CoinGecko's 2026-08-31 historical close gives $1,251,368.54, within 0.11% of DefiLlama's tracked $1,249,946 for the chain-level "Radix" row. Radix validators halted mainnet consensus the same evening; it remains halted 11 days later. See `radix-hyperlane-vault-access-drain/README.md`. External sources: https://github.com/radixdlt/radixdlt-scrypto/releases/tag/v1.4.0, https://api.llama.fi/hacks.
 [^redsonic-vault-share-registration]: An attacker flash-loaned WETH from Balancer, then immediately called the unprivileged `registerErc20(address)` on Reddio's RedSonic Vault's Diamond proxy (confirmed live as a real, currently-installed selector, not assumed from a write-up), registering Lido stETH as a second share class before ever depositing into the vault's existing rsvETH product. Only after that registration did a ~1,130 ETH deposit mint rsvETH shares that could then be redeemed for 9.254631141072739 ETH more than they were deposited for, decoded directly from the vault's own paired deposit/withdraw events. The attacker's own EOA held 9.261768945208 ETH immediately after the exploit block; at CoinGecko's 2026-09-05 price that is $22,747.69, within 0.23% of DefiLlama's tracked $22,800. A live simulation confirms the same call still succeeds today from any unprivileged address. See `redsonic-vault-share-registration/README.md`. External sources: https://docs.reddio.com/zkevm/staking, https://api.llama.fi/hacks.
 [^float-protocol-hypervisor-spot-manipulation]: A flash-loan-funded Uniswap V3 `slot0` manipulation, confirmed via the WETH contract's own `Withdrawal` event and independently cross-checked against the attacker EOA's own balance delta (two archive RPC providers agree), nets exactly 10.706591043820923 ETH, matching SlowMist's own reported "10.71 ETH" to the stated precision. At CoinGecko's 2026-08-31 daily price that is $25,869.71, about 7.6% below DefiLlama's tracked $28,000 (same defillamaId as Float Protocol's unrelated Jan-2022 exploit); an intraday-interpolated price gives $26,189.43 instead, about 6.5% below. See `float-protocol-hypervisor-spot-manipulation/README.md`. External source: https://crypto.news/float-protocol-hit-by-28k-flash-loan-attack-through-uniswap-v3-manipulation/.
+[^coinsbuy-wallet-drain]: Unauthorized withdrawals drained named Coinsbuy hot wallets on Ethereum and Tron within under an hour. The Tron leg is independently summed in full from a live TronGrid query: 6,037,005.00 USDT landed on the attacker's Tron collector, matching rekt.news's own figure to the cent. The Ethereum leg is confirmed only in part: one direct 77 ETH transfer (worth $147,489.48 at CoinGecko's 2026-08-09 price) from a Blockscout-tagged Coinsbuy hot wallet to the attacker's Ethereum collector, verified via raw JSON-RPC on 2 endpoints; the remainder of rekt.news's claimed 360.8 ETH Ethereum-side total (210.8 ETH via FixedFloat, 150 ETH via ChangeNOW) routes through an unlabeled intermediary address this project could not independently attribute to Coinsbuy, so it is not counted. Combined independently-confirmed floor: $6,184,494.48. rekt.news's own total is $8.07M; DefiLlama tracks $7,900,000. Coinsbuy's own official statement confirms the incident and a full reimbursement from its own reserves but discloses no technical detail. See `coinsbuy-wallet-drain/README.md`. External sources: https://rekt.news/coinsbuy-rekt/, https://coinsbuy.com/news/official-statement-on-the-august-9-security-incident/.
 
 ## Corrections to press and DefiLlama
 
@@ -311,16 +313,20 @@ tips with a tx hash or block number attached get looked at first.
   from an old summary without checking it against those files. When a
   subfolder's source data doesn't support a full dollar total, the table
   says so in a footnote instead of inventing one.
-- Five entries (Sandbox, Balancer V1, Liquid Network, Maya Protocol,
-  COLDCARD) report a dollar figure that is a known floor, not a complete
-  total, because their source repo found a wider scope than the press
-  without converting every recovered amount to dollars, (Liquid Network)
-  left some smaller destination addresses untraced, (Maya Protocol) found a
-  real, still-unconverted balance sitting in the attacker's own wallet that
-  this repo declined to price for lack of a sourceable historical rate, or
-  (COLDCARD) independently traced only the first of a reported 4 theft
-  waves, about a third of the named-security-team's own preliminary total.
-  Read the linked subfolder for the full accounting in native units.
+- Six entries (Sandbox, Balancer V1, Liquid Network, Maya Protocol,
+  COLDCARD, Coinsbuy) report a dollar figure that is a known floor, not a
+  complete total, because their source repo found a wider scope than the
+  press without converting every recovered amount to dollars, (Liquid
+  Network) left some smaller destination addresses untraced, (Maya
+  Protocol) found a real, still-unconverted balance sitting in the
+  attacker's own wallet that this repo declined to price for lack of a
+  sourceable historical rate, (COLDCARD) independently traced only the
+  first of a reported 4 theft waves, about a third of the
+  named-security-team's own preliminary total, or (Coinsbuy) confirmed the
+  Tron leg in full but only one Ethereum-side transaction, with the
+  remainder routing through an intermediary address this repo could not
+  independently attribute to Coinsbuy. Read the linked subfolder for the
+  full accounting in native units.
 - The Tectonic, Moonwell, and Liquid Network entries report the confirmed
   unrecoverable or still-uncovered figure, not the higher, gross amount
   borrowed or extracted before liquidations or, for Tectonic, a chain
