@@ -1,0 +1,114 @@
+=== Step 0: primary source for the exploited precompile's identity - cosmos/evm's own GitHub source ===
+  cosmos/evm x/vm/types/precompiles.go: ICS20PrecompileAddress = 0x0000000000000000000000000000000000000802
+  matches the address seen live on Oraichain below: True
+
+=== Step 1: binary-search Oraichain's own RPC for the incident window (0xposed's only anchor: 23:25-23:31 UTC Aug 8) ===
+  block 117999224 = 2026-08-08T23:27:59.535648603Z
+  block 117999225 = 2026-08-08T23:28:00.150647531Z  (bracket around the press-reported window midpoint)
+
+=== Step 2: every transaction ever sent by the account found inside that window (message.sender query, not a hardcoded list) ===
+  total_count for message.sender='orai1ckf89y55jvu0uta5pljf3k00k4ah052hr0vf54' across all retained history: 31
+  self-referential IBC transfers (receiver == sender, the doubling step): 24
+    height 117998813  amount 89999995 uorai (89.999995 ORAI)  tx 618372D166A0D32AD129A23ECAEBCA4AC6C4D542606E9CCB39BCE06F95CC5B33
+    height 117998842  amount 179999989 uorai (179.999989 ORAI)  tx 39EA072A4925F2119E0CB30C0576D57425541AE5E17AE6C6FA51186DCD8732EA
+    height 117998863  amount 359999977 uorai (359.999977 ORAI)  tx BF56A9924D025FFF2D296008430894C8C829A48A20DA9F6867688BE6C5FF85FE
+    height 117998893  amount 719999953 uorai (719.999953 ORAI)  tx 318E1EA7138B6E94D3B0EA8132AC0A1EE0B35C46B830FFB5A47D771D0EC240C6
+    height 117998922  amount 1439999905 uorai (1,439.999905 ORAI)  tx 57E20A8EAEB1E1F2A08108C6CD509B2159DD519B9AA6A75FADEB7E2A0F37E261
+    height 117998951  amount 2879999809 uorai (2,879.999809 ORAI)  tx 79AD2840C6EFA0A6294C5B46D646306206C3B5759FA42E96D9C72A682D35CA6D
+    height 117998980  amount 5759999616 uorai (5,759.999616 ORAI)  tx D769744F08418B858E5E61CD35AAB38F49F31A3FFDAD1573D50FD9D9562D68BC
+    height 117999009  amount 11519999232 uorai (11,519.999232 ORAI)  tx 926E46A30A4D053B1947F6349BF87A14CA83CF988416262FA0299D7DDBC5F4B8
+    height 117999040  amount 23039998463 uorai (23,039.998463 ORAI)  tx 9F1CD5810842FEF5D68C893DF15A77D61A8C3B6434CBA92950B6FF61AF315935
+    height 117999071  amount 46079996925 uorai (46,079.996925 ORAI)  tx 8BEC6A57EDF7093AC148B81E310B9E767EE5D902D107D98921B5AAD00C12599E
+    height 117999108  amount 92159993849 uorai (92,159.993849 ORAI)  tx FD567ACBBA18F06C42B3C0270ACB9F9D43E5C39838A00DCEFC26F4A42D00FFBD
+    height 117999138  amount 184319987697 uorai (184,319.987697 ORAI)  tx DF84E854F0CDEE181F5B13C8D28B0DAA0D4A1926228BAB846F325CE27B28F2AA
+    height 117999167  amount 368639975393 uorai (368,639.975393 ORAI)  tx 872BD87CEC6C336B4A20DD3804F014F4A393257B2793225CF81A2875BBEDD42E
+    height 117999196  amount 737279950785 uorai (737,279.950785 ORAI)  tx 6B9ED7CB9ABE0382C89D2568713EDC98255F9FD449A06A19CB4E1374093DAF95
+    height 117999225  amount 1474559901569 uorai (1,474,559.901569 ORAI)  tx A5A0D56814D6AC44B0D0D4C2674A0E960568A311A5C2BFFFAAFCC765B5DDAFC0
+    height 117999255  amount 2949119803136 uorai (2,949,119.803136 ORAI)  tx 25CBA40A64432B79B19FF0718C08C453969893C50DD732085BB5533ECBFBCA0E
+    height 117999284  amount 5898239606272 uorai (5,898,239.606272 ORAI)  tx 7AABB9FBCDBA565586579A9A62235EFC71B0D01F048729C26A42DA9BC925ABFC
+    height 117999315  amount 11796479212543 uorai (11,796,479.212543 ORAI)  tx A16C50BD10ECF54B75321ECE5A9615D985661BE106C872E9B858F4F36750F81D
+    height 117999344  amount 23592958425085 uorai (23,592,958.425085 ORAI)  tx A852E0BFAAC9F716FC726F6A2B7405AE089A15D4A144FFE3D430504375C7D5C1
+    height 117999365  amount 47185916850169 uorai (47,185,916.850169 ORAI)  tx E6BC1BA6498558E3D19CACCD72D6F2E9F40D5A0B47D7E236B97D7565C210F685
+    height 117999394  amount 94371833700337 uorai (94,371,833.700337 ORAI)  tx 49E4CD67599203994523C3D37E8D74EF58B99B43D3206F5936C40354E67F9F96
+    height 117999423  amount 188743667400672 uorai (188,743,667.400672 ORAI)  tx 0063015B300314AF39DC46F04108E39C4C6F0675D50ED2360D1E70EA2071F553
+    height 117999452  amount 377487334801344 uorai (377,487,334.801344 ORAI)  tx 04F7570C4CC159CD1C9D12E56C08AC05851AE8084B8B8D4591481288B027BFE5
+    height 117999490  amount 754974669602687 uorai (754,974,669.602687 ORAI)  tx 8F9AB055EA05980E8C010A376D75E28D04D9A0D3670A39B0489046CE883A40D0
+
+=== Step 3: the final consolidation transaction - full balance moved out in one native EVM transfer ===
+  height 117999703  tx F4CF134FEBC284DF7175662F0D4EA7979A160DF1544C154C36A1703720C5338E
+  block time: 2026-08-08T23:33:22.434283852Z
+  total consolidated in this tx (coinbase mint leg): 1509949343000000orai
+  = 1,509,949,343.000000 ORAI
+  moved via a plain native EVM value-transfer to: 0x6111774471a6bc4577E81f389f81Cab99f462f56
+  = cash-out cosmos address: orai1vyghw3r3567y2algruuflqw2hx05vt6k945wrq
+
+=== Step 4: every transaction sent by the cash-out address - the laundering trail ===
+  total_count: 17
+  outbound IBC transfers from the cash-out address:
+    height 118000067  -> inj1w79x4v3g7qjp0clfv0syaed9c70mr8z4mwlmds  amount 100000000000000 orai
+    height 118002465  -> cosmos1vyghw3r3567y2algruuflqw2hx05vt6kkxzdzn  amount 3161082810 ibc/A2E2EEC9057A4A1C2C0A6A4C78B0239118DF5F278830F50B4A6BDD7A66506B78
+    height 118002568  -> osmo1vyghw3r3567y2algruuflqw2hx05vt6k7a3a5p  amount 5438198605 ibc/9C4DCD21B48231D0BC2AC3D1B74A864746B37E4292694C93C617324250D002FC
+    height 118005052  -> inj1w79x4v3g7qjp0clfv0syaed9c70mr8z4mwlmds  amount 500000000000000 orai
+  OraiDEX swap legs from the cash-out address (offer -> ask):
+    height 118001785  offer=orai-orai12hzjxfh77wl572gdzct2fxv2arxcwh6gykc7qh-3000000000-100 amount_in=1948220999999  ask=None return_amount=112931702
+    height 118001785  offer=orai-orai15un8msx3n5zf9ahlxmfeqd2kwa5wm0nrpxer304m9nd5q6qq0g6sku5pdd-3000000000-100 amount_in=443123999999  ask=None return_amount=31811684
+    height 118001785  offer=orai amount_in=1659586499999  ask=ibc/A2E2EEC9057A4A1C2C0A6A4C78B0239118DF5F278830F50B4A6BDD7A66506B78 return_amount=3161082810
+    height 118001785  offer=orai amount_in=600920099999  ask=orai12hzjxfh77wl572gdzct2fxv2arxcwh6gykc7qh return_amount=3390712320
+    height 118001785  offer=orai amount_in=59083199999  ask=ibc/9C4DCD21B48231D0BC2AC3D1B74A864746B37E4292694C93C617324250D002FC return_amount=5438198605
+    height 118001785  offer=orai amount_in=487347299999  ask=orai15un8msx3n5zf9ahlxmfeqd2kwa5wm0nrpxer304m9nd5q6qq0g6sku5pdd return_amount=2808584345
+    height 118001785  offer=orai amount_in=10769705099999  ask=orai1065qe48g7aemju045aeyprflytemx7kecxkf5m7u5h5mphd0qlcs47pclp return_amount=57593485318
+    height 118001785  offer=orai amount_in=51539399999  ask=factory/orai1wuvhex9xqs3r539mvc6mtm7n20fcj3qr2m0y9khx6n5vtlngfzes3k0rq9/D7yP4ycfsRWUGYionGpi64sLF2ddZ2JXxuRAti2M7uck return_amount=238591263892627
+    height 118001785  offer=orai amount_in=83199599999  ask=factory/orai1wuvhex9xqs3r539mvc6mtm7n20fcj3qr2m0y9khx6n5vtlngfzes3k0rq9/oraiJP7H3LAt57DkFXNLDbLdBFNRRPvS8jg2j5AZkd9 return_amount=133788000370752
+    height 118001785  offer=orai amount_in=111681899999  ask=factory/orai1wuvhex9xqs3r539mvc6mtm7n20fcj3qr2m0y9khx6n5vtlngfzes3k0rq9/oraix39mVDGnusyjag97Tz5H8GvGriSZmhVvkvXRoc4 return_amount=77359628889994
+
+  total native ORAI IBC'd to Injective address inj1w79x4v3g7qjp0clfv0syaed9c70mr8z4mwlmds: 600000000000000 uorai = 600,000,000.000000 ORAI
+
+=== Step 5: identify the CW20 contracts the swaps drained, via their own on-chain token_info (not assumed from context) ===
+  orai12hzjxfh77wl572gdzct2fxv2arxcwh6gykc7qh: USDT token (USDT, 6 decimals)
+  orai15un8msx3n5zf9ahlxmfeqd2kwa5wm0nrpxer304m9nd5q6qq0g6sku5pdd: USDC token (USDC, 6 decimals)
+
+=== Step 6: independently decode the two IBC voucher denoms via Oraichain's own live denom-trace endpoint ===
+  ibc/A2E2EEC9057A4A1C...: path=transfer/channel-15 base_denom=uatom
+  ibc/9C4DCD21B48231D0...: path=transfer/channel-13 base_denom=uosmo
+
+=== Step 7: current balances - Oraichain-side addresses (post state-surgery) vs the two sister chains (irreversible) ===
+  Oraichain / attacker (precompile caller) (orai1ckf89y55jvu0uta5pljf3k00k4ah052hr0vf54): [{'denom': 'orai', 'amount': '1205373'}]
+  Oraichain / cash-out address (orai1vyghw3r3567y2algruuflqw2hx05vt6k945wrq): []
+  Cosmos Hub / attacker (cosmos1vyghw3r3567y2algruuflqw2hx05vt6kkxzdzn): [{'denom': 'uatom', 'amount': '1081869'}]
+  Osmosis / attacker (osmo1vyghw3r3567y2algruuflqw2hx05vt6k7a3a5p): [{'denom': 'uosmo', 'amount': '543356'}]
+
+=== Step 8: binary-search the exact block where total ORAI supply was reversed ===
+  height 118008048: total supply 1525513180443924 uorai (1,525,513,180.443924 ORAI)
+  height 118028048: total supply 19558766037384 uorai (19,558,766.037384 ORAI)
+  last still-inflated height: 118018794  supply 1525538652019679 uorai  time 2026-08-09T03:56:51.007054695Z
+  first reversed height:      118018795  supply 19558484847626 uorai  time 2026-08-09T03:56:51.608428715Z
+  peak/baseline ratio at reversal: 78.00x
+
+=== Step 9: CoinGecko historical prices (2026-08-08) for the two legs that actually left Oraichain's reach ===
+  ATOM/USD on 2026-08-08: 1.3623822226146092
+  OSMO/USD on 2026-08-08: 0.028524523846098014
+  USDT/USD on 2026-08-08: 0.9994776147290675
+  USDC/USD on 2026-08-08: 0.999695704909313
+  3161.08281 ATOM x $1.362382 = $4,306.60
+  5438.198605 OSMO x $0.028525 = $155.12
+  confirmed-floor loss (ATOM + OSMO that left Oraichain and were further dispersed on their own chains): $4,461.73
+
+=== Step 10: DefiLlama's own tracked entry for this incident ===
+[
+  {
+    "date": 1786147200,
+    "name": "Oraichain",
+    "classification": "Bridge & Cross-Chain",
+    "technique": "Unbacked Cross-Chain Mint",
+    "amount": 1000000,
+    "chain": [
+      "Oraichain"
+    ],
+    "bridgeHack": true,
+    "targetType": "Chain",
+    "source": "",
+    "returnedFunds": null,
+    "defillamaId": null,
+    "language": "Solidity"
+  }
+]

@@ -4,6 +4,77 @@ One entry per addition or correction to this repo. Each incident added
 with `add_new_entry.py` gets tagged as a matching GitHub release, see
 "Get notified of new postmortems" in `README.md`.
 
+## 2026-09-11 (18)
+
+- Added a 32nd incident: Oraichain (ICS-20 EVM Precompile) self-mint,
+  Oraichain + Cosmos Hub + Osmosis + Injective, 2026-08-08/08-09. Found via
+  DefiLlama's hacks feed (tracked as "Oraichain", a flat $1,000,000 with an
+  empty source field), cross-checked against the only public writeup
+  found, a short radar note on 0xposed.io that states plainly it has no
+  attacker address, no transaction hash, and no official post-mortem as of
+  2026-08-20 -- treated here as a rough time-window anchor only, not a
+  source of any hard number. Every address, transaction, and figure below
+  was independently found and re-derived from the chain. Binary search
+  against a live archive RPC (mainnet-orai-rpc.konsortech.xyz, the only
+  one of Oraichain's 7 registered RPC endpoints whose retained history
+  reaches back before 2026-08-08) located the incident window; a
+  `message.sender` tx_search on the address found calling the chain's own
+  ICS-20 EVM precompile (0x0000...0802, independently confirmed as
+  `ICS20PrecompileAddress` from `cosmos/evm`'s own GitHub source, not
+  assumed from the address alone) returned that address's entire
+  31-transaction history: 24 self-referential IBC-transfer calls, each of
+  which correctly escrowed the sender's balance for an outbound packet and
+  then also erroneously minted the identical amount straight back to the
+  same sender, roughly doubling the balance every call over 10 minutes
+  (89.999995 ORAI to 754,974,669.602687 ORAI), followed by one final
+  native-EVM consolidation transfer of 1,509,949,343.000000 ORAI (decoded
+  directly from its own `coinbase` event) to a second, cash-out address.
+  That address's own complete 17-transaction history was likewise fully
+  decoded: 600,000,000 ORAI IBC'd to Injective; a 9-way OraiDEX swap chain
+  draining, among other assets, two CW20 stablecoins independently
+  identified via their own live `token_info` query (not assumed from a
+  swap-log symbol) as USDT and USDC; two of those swap outputs further
+  bridged onward to Cosmos Hub and Osmosis as 3,161.082810 ATOM and
+  5,438.198605 OSMO, with both IBC voucher denoms independently decoded via
+  Oraichain's own live `denom_traces` endpoint (not trusted from the
+  packet's self-reported memo); 59,255,027.19 ORAI locked as lending-market
+  collateral with no matching borrow event found; and a small leg toward
+  Ethereum mainnet via the legacy bridge, not independently re-traced.
+  Oraichain's own `supply/by_denom` endpoint, queried at specific
+  historical block heights via the `x-cosmos-block-height` header, pins
+  the reversal to one single block: total supply was 1,525,538,652.019679
+  ORAI (78.00x the post-incident baseline) at block 118018794
+  (2026-08-09T03:56:51.007Z) and 19,558,484.847626 ORAI one block later,
+  118018795 (2026-08-09T03:56:51.608Z), about 3 minutes after the
+  officially reported 04:00 UTC halt time -- consistent with a coordinated
+  state-surgery reversal, not a gradual burn. Live balance checks today
+  confirm which legs actually stayed reachable: both Oraichain-side
+  addresses are now empty (the attacker's holds 1.205373 dust ORAI; the
+  cash-out address holds nothing at all, in any denom), while the
+  attacker's own Cosmos Hub and Osmosis addresses hold only 1.081869 ATOM
+  and 0.543356 OSMO today, a small fraction of what was bridged in,
+  meaning the attacker moved almost all of it onward well beyond
+  Oraichain's own reach. Loss figure: this entry prices only the ATOM and
+  OSMO confirmed, via those live cross-chain balance checks, to have left
+  Oraichain and been further dispersed: $4,461.73 at CoinGecko's
+  2026-08-08 historical prices, two orders of magnitude below DefiLlama's
+  flat $1,000,000 and far below the true nominal mint. The roughly $6,383
+  in USDT/USDC also drained from OraiDEX pools is not added to that floor:
+  both now sit at a zero balance with no on-chain trace of having left any
+  other way, consistent with (though not proven to be) the same reversal.
+  Not independently re-traced this round: the 600,000,000 ORAI sitting on
+  Injective (its status there was not checked on Injective's own chain),
+  whether the lending-market collateral was ever borrowed against or
+  separately seized, and whether this is the exact same defect `cosmos/evm`'s
+  own security advisory ASA-2026-002 (patched in v0.6.0, published March
+  2026, describing an unrelated ~$7M incident on a different, unnamed
+  chain on 2026-01-21) already documents, a later recurrence of it on
+  Oraichain specifically, or an independently discovered variant -- flagged
+  as an open question rather than asserted either way, since Oraichain's
+  own public GitHub has not been pushed since November 2024 and its
+  `master` branch shows no `cosmos/evm` dependency at all, meaning it is
+  not the code the live chain actually runs.
+
 ## 2026-09-11 (17)
 
 - Added a 31st incident: Coreum (XRPL Bridge) deposit forgery, XRP Ledger +
