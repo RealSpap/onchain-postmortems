@@ -1,0 +1,134 @@
+=== Step 0: confirm the RPC endpoint is live Sui mainnet ===
+sui_getChainIdentifier: 35834a8a (expected 35834a8a for Sui mainnet)
+
+=== Step 1: read Full Sail's own published npm SDK, not a block explorer ===
+npm package: @fullsailfinance/sdk  latest version: 11.0.0  published: 2026-07-27T13:44:50.894Z
+tarball: https://registry.npmjs.org/@fullsailfinance/sdk/-/sdk-11.0.0.tgz
+extracted 332,601 bytes from package/dist/index.js
+production config located: sdkConfig3 (contracts: contractsConfig3), 3297 bytes
+  vault.packageId          0x4ddf9276519dee634ec187b09dedc5d6627f8c578cbacb3c91bbca7dd73aab50
+  globalVaultId            0xfb971d3a2fb98bde74e1c30ba15a3d8bef60a02789e59ae0b91660aeed3e64e1
+  globalVaultConfigId      0x5b7625bbf001aae0fe0fb0a250677321a349838101f1a0f8489dcbacda7140e7
+  portOracleId             0xcadb497cbaf7e861ef451754d8cdf187162e8b1fb7cb4c17745dbb3e999d954b
+  priceAggregatorId        0x6fad8b69ab1d9550302c610e5a0ffcb81c1e2b218ff05b6ea6cdd236b5963346
+  priceMonitorId           0x1e2b11f45b7d059c55ebaf026b499114f7a4ed0c1fd9d9b4c76b4c759fb63900
+
+=== Step 2: confirm these are live Sui mainnet objects ===
+  vault package                                    -> type=package
+  globalVaultConfigId (vault_config::GlobalConfig) -> type=0x4ddf9276519dee634ec187b09dedc5d6627f8c578cbacb3c91bbca7dd73aab50::vault_config::GlobalConfig
+  portOracleId (port_oracle::PortOracle)           -> type=0x4ddf9276519dee634ec187b09dedc5d6627f8c578cbacb3c91bbca7dd73aab50::port_oracle::PortOracle
+  priceAggregatorId (Switchboard Aggregator)       -> type=0xc3c7e6eb7202e9fb0389a2f7542b91cc40e4f7a33c02554fec11c4c92f938ea3::aggregator::Aggregator
+
+=== Step 3: paginate the vault package's own WithdrawEvent log for the incident window ===
+fetched 150 WithdrawEvent entries across 3 page(s), back to 2026-07-27 10:57:08.912000 UTC
+fetched 150 IncreaseLiquidityEvent entries across 3 page(s), back to 2026-08-08 14:32:54.165000 UTC
+
+=== Step 4: cluster Aug-29 withdraws by sender to find the attacker (not assumed from press) ===
+  sender 0x9104d073e1fdfd76a6b756f61c5684e4affa0b3d124d383afc64aabbd87934cc: 63 withdraw calls on 3 distinct port(s) on 2026-08-29
+  sender 0xa7cf9e035f7d8a8fead8be3c3be58ff3d02b7bdfc7db711c78fca30b169e0d0b: 3 withdraw calls on 3 distinct port(s) on 2026-08-29
+  sender 0xed7c1ce282a126ea247c68d17fa8ad6452c9e51b140969817821b8ed2b083521: 1 withdraw calls on 1 distinct port(s) on 2026-08-29
+
+attacker address (most withdraw calls across the most distinct ports in one day): 0x9104d073e1fdfd76a6b756f61c5684e4affa0b3d124d383afc64aabbd87934cc
+ports touched by this address on 2026-08-29: 3
+  0x320ca75b93419d306bfc5db266952e52fb5c81b5ad05372039123a7822b1d0ea
+  0x8c8a0203bb4ecb49b7ea3b96822826408eb7a5d27a232f630dc04f08f6bc45c3
+  0x9787a95e76530f80ff8e8dd4a851a2a266b3eadcca4e6503c6d6fa18d8129ccc
+
+=== Step 5: identify each port's underlying vault (coin_a/coin_b), read live, not assumed ===
+  port 0x320ca75b93419d306bfc5db266952e52fb5c81b5ad05372039123a7822b1d0ea
+    coin_a: dba34672e30cb065b1f93e3ab55318768fd6fef66c15942c9f7cb846e2f900e7::usdc::USDC
+    coin_b: d0e89b2af5e4910726fbcd8b8dd37bb79b29e5f83f7491bca830e94f7f226d29::eth::ETH
+  port 0x8c8a0203bb4ecb49b7ea3b96822826408eb7a5d27a232f630dc04f08f6bc45c3
+    coin_a: 7262fb2f7a3a14c888c438a3cd9b912469a58cf60f367352c46584262e8299aa::ika::IKA
+    coin_b: 0000000000000000000000000000000000000000000000000000000000000002::sui::SUI
+  port 0x9787a95e76530f80ff8e8dd4a851a2a266b3eadcca4e6503c6d6fa18d8129ccc
+    coin_a: dba34672e30cb065b1f93e3ab55318768fd6fef66c15942c9f7cb846e2f900e7::usdc::USDC
+    coin_b: 0000000000000000000000000000000000000000000000000000000000000002::sui::SUI
+
+=== Step 6: decode ONE full attack transaction's own PTB commands and events ===
+sample attack transaction: EUcJWv6ZpMA1C3WmyrbrTbRQ8DRXj1TyqCrqJUVRoenJ
+timestamp: 2026-08-29 04:57:27.497000 UTC
+total PTB commands: 16
+MoveCalls in order:
+    coin::zero
+    aggregator_submit_result_action::run
+    port_oracle::external_update_price_from_switchboard
+    aggregator_submit_result_action::run
+    port_oracle::external_update_price_from_switchboard
+    port::update_pool_reward_v2
+    port::update_pool_reward_v2
+    port::update_pool_reward_v2
+    port::update_position_reward
+    port::calculate_aum
+    port::deposit
+    aggregator_submit_result_action::run
+    port_oracle::external_update_price_from_switchboard
+
+UpdatePriceEvent entries emitted by this ONE transaction: 3
+  SUI: price sequence within this tx (raw, scale 1e10) = [74050000, 7405000000]
+    -> 0.740500 then 0.007405 within the SAME transaction (ratio 100.00x)
+  USDC: price sequence within this tx (raw, scale 1e10) = [10000679085]
+
+IncreaseLiquidityEvent (deposit) in this tx: 1
+  {'amount_a': '2786123876', 'amount_b': '0', 'before_aum': '70713262037', 'before_total_volume': '404001805854', 'port_id': '0x9787a95e76530f80ff8e8dd4a851a2a266b3eadcca4e6503c6d6fa18d8129ccc', 'user_tvl': '2786123876', 'volume': '15917793138'}
+
+=== Step 7: independently confirm the ~100x manipulation for EACH of the 3 ports' priced assets ===
+fetched 500 UpdatePriceEvent entries across 10 page(s)
+of those, 315 were submitted by the attacker address on 2026-08-29
+
+distinct raw price values the attacker's own transactions pushed, by asset (scale 1e10, i.e. raw/1e10 = USD):
+  SUI: [7405000000, 7391000000, 74050000] -> real=$0.740500  fake=$0.007405  ratio=100.00x
+  USDC: [10021940552, 10018916957, 10015612517, 10006005907, 10000679085, 10000410464, 10000100000, 9986988011, 9981166861, 9974310178, 9973577706] -> real=$1.002194  fake=$0.997358  ratio=1.00x
+  ETH: [24406300000000, 244063000000] -> real=$2440.630000  fake=$24.406300  ratio=100.00x
+  IKA: [21450000, 20164480, 20152707, 20136898, 20072969, 19635064, 214500, 201644, 201527, 201368, 200729] -> real=$0.002145  fake=$0.000020  ratio=106.86x
+
+=== Step 8: coin decimals, read live via suix_getCoinMetadata, not assumed ===
+  IKA      (7262fb2f7a3a14c8...): 9 decimals, symbol=IKA
+  USDC     (dba34672e30cb065...): 6 decimals, symbol=USDC
+  SUI      (0000000000000000...): 9 decimals, symbol=SUI
+  ETH      (d0e89b2af5e49107...): 8 decimals, symbol=ETH
+
+=== Step 9: net amount withdrawn minus deposited by the attacker, per port, native units ===
+
+port 0x320ca75b93419d306bfc5db266952e52fb5c81b5ad05372039123a7822b1d0ea  (USDC/ETH)
+  withdraw calls: 7  deposit calls: 7
+  USDC: withdrawn=24626683110  deposited=24645544573  net=-18861463 raw (-18.861463 native) -> $-18.86
+  ETH: withdrawn=77345418  deposited=0  net=77345418 raw (0.773454 native) -> $1,887.72
+  PORT TOTAL realized profit: $1,868.85
+
+port 0x8c8a0203bb4ecb49b7ea3b96822826408eb7a5d27a232f630dc04f08f6bc45c3  (IKA/SUI)
+  withdraw calls: 13  deposit calls: 13
+  IKA: withdrawn=3310237387089246  deposited=0  net=3310237387089246 raw (3,310,237.387089 native) -> $7,100.46
+  SUI: withdrawn=43704340038012  deposited=43804802387207  net=-100462349195 raw (-100.462349 native) -> $-74.39
+  PORT TOTAL realized profit: $7,026.07
+
+port 0x9787a95e76530f80ff8e8dd4a851a2a266b3eadcca4e6503c6d6fa18d8129ccc  (USDC/SUI)
+  withdraw calls: 43  deposit calls: 43
+  USDC: withdrawn=224926113878  deposited=225728175717  net=-802061839 raw (-802.061839 native) -> $-802.06
+  SUI: withdrawn=112778798368549  deposited=0  net=112778798368549 raw (112,778.798369 native) -> $83,512.70
+  PORT TOTAL realized profit: $82,710.64
+
+=== TOTAL realized profit across all 3 ports: $91,605.56 ===
+
+=== Step 10: cross-check the ETH leg against the attacker's own DEX swap-out transaction ===
+swap-out transaction found: Da67fbc4CrTiAESEtKHxwqWNKsyFNSvF2PxKgwNKWZ6r (2026-08-29 05:42:32.810000 UTC)
+  balance change for 0xd0e89b2af5e4910726fbcd8b8dd37bb79b29e5f83f7491bca830e94f7f226d29::eth::ETH: -77345418 raw
+  this project's own independently-computed net ETH for the USDC/ETH port: 77345418 raw -> exact match: True
+
+=== Step 11: the vault's own price-deviation guard, read live (open question, see Caveats) ===
+vault_config::GlobalConfig.max_price_deviation_bps (current, live): 200 bps (2.00%) -- a ~9,900% single-transaction move would exceed any plausible reading of this cap; whether this field existed/was enforced at exploit time is not established here, see README Caveats.
+
+=== Step 12: attacker's current balance -- funds no longer sit at the exploit address ===
+  SAIL_TEST  balance now: 0 raw (50 coin objects)
+  SUI        balance now: 980830 raw (2 coin objects)
+  OSAIL_01OCT2026 balance now: 20046654954 raw (63 coin objects)
+  PRE_SAIL   balance now: 0 raw (63 coin objects)
+  USDC       balance now: 40284 raw (3 coin objects)
+
+=== Step 13: compare against DefiLlama's own tracked entry and press's figure ===
+  DefiLlama: date=2026-08-29 chain=['Sui'] amount=None classification=Oracle Manipulation / Oracle Misconfiguration
+
+Press figure (Yellow/CryptoTimes/Cointelegraph, no on-chain support shown): ~$91,000
+This reconstruction's independently-computed total: $91,605.56 (+0.67% vs press)
+
+See README.md for the full reconstruction and every caveat.

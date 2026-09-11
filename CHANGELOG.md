@@ -4,6 +4,62 @@ One entry per addition or correction to this repo. Each incident added
 with `add_new_entry.py` gets tagged as a matching GitHub release, see
 "Get notified of new postmortems" in `README.md`.
 
+## 2026-09-11 (20)
+
+- Added a 34th incident: Full Sail (Sui Vaults) Switchboard-oracle vault
+  drain, Sui, 2026-08-29. Found via DefiLlama's hacks feed (tracked as
+  "Full Sail", Sui, "Oracle Manipulation" / "Oracle Misconfiguration",
+  with **no dollar amount at all** -- `amount: null`) and cross-checked
+  against press (Yellow, CryptoTimes, Cointelegraph), which reports
+  "roughly $91,000" across "three vaults" but names no attacker address,
+  transaction hash, or which three vaults, attributing the root cause to
+  the same broader Switchboard oracle-signing compromise this repo
+  already covers for Virtue Protocol on IOTA
+  (`virtue-iota-switchboard-oracle/`). None of the press claims were
+  taken on faith. Started from Full Sail's own published npm SDK package
+  (`@fullsailfinance/sdk`, fetched live as a tarball from
+  registry.npmjs.org, not a block explorer), whose minified bundle
+  embeds three network configs; the script specifically locates the
+  `mainnet-production` block (a naive first-match regex would silently
+  grab `mainnet-dev`'s addresses instead) to extract the vault package ID
+  and five config object IDs, all confirmed live on Sui mainnet via a
+  third-party public JSON-RPC node (Mysten Labs' own public fullnode has
+  deprecated JSON-RPC in favor of GraphQL/gRPC). Found the attacker
+  address and all three affected vaults independently, not from press:
+  paginated the vault package's own `WithdrawEvent` log for 2026-08-29
+  and clustered by sender, surfacing one address responsible for 63 of
+  the day's withdraw calls across exactly 3 distinct Port objects (USDC/
+  ETH, IKA/SUI, USDC/SUI), matching press's "three vaults" count exactly.
+  Decoded one of the attacker's own deposit transactions byte-for-byte:
+  a single atomic PTB submits a forged Switchboard price for SUI (100x
+  below real, $0.007405 vs $0.740500), calls Full Sail's own
+  `port::calculate_aum` and `port::deposit` while that fake price is
+  live, then restores the real price in the same transaction -- and
+  independently confirmed the same exact ~100x pattern for ETH
+  ($24.41 vs $2,440.63) and, pair-by-pair, for IKA too, while USDC (the
+  untouched quote asset) shows only ordinary sub-1% feed noise, ruling
+  out a blanket "whole feed compromised" reading in favor of "exactly the
+  asset each vault needed skewed." Summed the attacker's own
+  `WithdrawEvent` minus `IncreaseLiquidityEvent` amounts per vault across
+  the full attack window (this nets out each vault's own repeated
+  deposit/withdraw recycling automatically) and converted at the chain's
+  own restored oracle price, landing on $91,605.56 total, 0.67% above
+  press's unsourced $91,000 estimate, independently computed rather than
+  reconciled to match it. Cross-checked the ETH leg a second, entirely
+  separate way: a swap-out transaction found by scanning the attacker's
+  own follow-up activity shows a balance change of exactly -77345418 raw
+  ETH through Full Sail's own DEX-aggregation router, matching this
+  project's own ledger-summed net ETH figure to the last wei. Also
+  confirmed the attacker's wallet currently holds only dust and zero ETH/
+  IKA (funds moved out), and read Full Sail's own live
+  `vault_config::GlobalConfig.max_price_deviation_bps` (currently 200 bps
+  / 2%), flagged as an open question rather than a resolved root cause
+  since whether that guard existed or was wired into the exploited code
+  path at attack time was not established. This entry is a genuine
+  discovery/quantification, not a correction of an existing DefiLlama
+  number, since DefiLlama tracks the incident with no dollar figure to
+  correct.
+
 ## 2026-09-11 (19)
 
 - Added a 33rd incident: Secured Finance (JPYC Lending Market) TokenVault
