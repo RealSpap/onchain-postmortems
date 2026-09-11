@@ -1,0 +1,16 @@
+Rootstock syBTC (0xB52E582263c1d0189b3cc1402c1B7205b7F2E9Ba). The public Rootstock node does not expose eth_getLogs, so the mints are located by bisecting totalSupply().
+
+supply immediately before the jump: 195101329 raw (1.95101329 syBTC)
+supply at head: 18446744073709551616 raw (184467440737.09552002 syBTC)
+head supply equals 2^64 exactly: True
+
+per-block supply changes from the jump onward:
+  block 9229602  2026-09-11T04:28:56Z  delta +4611686018427388234  (2^62 +330)
+      receiveRequestV2Signed tx 0xf5c8880a60a3b6a6abb331e2b7f577c0a922ff54f0c9699caae12b9cef0db907
+  block 9229604  2026-09-11T04:29:44Z  delta +4611686018427388234  (2^62 +330)
+      receiveRequestV2Signed tx 0xeca688bb6ee0e72250933f2c2b137b865c8a2f0ce894ca07577eede57ef4d9eb
+  block 9229606  2026-09-11T04:30:45Z  delta +4611686018427388234  (2^62 +330)
+      receiveRequestV2Signed tx 0x0ab435fd5852c756ab76c78332c2d079e1638f0bd651970bf93244d4ada112c3
+  block 9229610  2026-09-11T04:32:25Z  delta +4611686018427388234  (2^62 +330)
+      receiveRequestV2Signed tx 0x716f6884387d717a2336035df717ead70b0ab6f0e3eefa0ad84370038547306a
+  block 9229612  2026-09-11T04:34:15Z  delta -195102649

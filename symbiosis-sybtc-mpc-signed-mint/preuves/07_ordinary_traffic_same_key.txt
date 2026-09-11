@@ -1,0 +1,16 @@
+Ordinary-sized syBTC mints inside the same MPC window, blocks 25945769 to 25951768
+
+If the exploit key were an attacker-only key, none of these everyday user mints would carry it.
+
+0x2203b93c6f2987de9e5749bcd6fddf814e6fac98aebd7e68e42f0214dc381650 block 25945770  amount 998527 raw (0.00998527 syBTC)
+    signer 0x855eeeae34d08597db031094efbd8b6d15f849f6   same key as the exploit mints: True
+0xb86c20ee8407ababa0642f9ba2f294db9c698c7893d917f2c5cc1e828aea514e block 25945771  amount 19978544 raw (0.19978544 syBTC)
+    signer 0x855eeeae34d08597db031094efbd8b6d15f849f6   same key as the exploit mints: True
+0x31afd6609181f546157e1e40541dcd87d327e638e75767824d09e1567dc029c6 block 25945947  amount 5497981 raw (0.05497981 syBTC)
+    signer 0x855eeeae34d08597db031094efbd8b6d15f849f6   same key as the exploit mints: True
+0x9c559cb28e5108f8600ef092e669de8074ad9971a3de9c948c462d35a622fdb4 block 25945948  amount 3344024 raw (0.03344024 syBTC)
+    signer 0x855eeeae34d08597db031094efbd8b6d15f849f6   same key as the exploit mints: True
+0x42b63272fede73bb78e1fd185dff56e334e7f898c8d4a75e04789d3433c0b085 block 25945952  amount 49948230 raw (0.49948230 syBTC)
+    signer 0x855eeeae34d08597db031094efbd8b6d15f849f6   same key as the exploit mints: True
+0x8523951bc5f898000baaaa73576fe535af4ccbd2a7365c4a4cc47b57371dde84 block 25945982  amount 350506 raw (0.00350506 syBTC)
+    signer 0x855eeeae34d08597db031094efbd8b6d15f849f6   same key as the exploit mints: True

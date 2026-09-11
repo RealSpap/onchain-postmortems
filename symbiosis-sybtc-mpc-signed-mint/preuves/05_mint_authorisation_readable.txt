@@ -1,0 +1,45 @@
+Who signed each oversized mint, and was that key the bridge's own MPC in that block?
+
+The signed preimage is taken from Symbiosis's own BridgeV2.sol (lines 111-112 at HEAD):
+  keccak256(bytes.concat("receiveRequestV2", callData, bytes20(receiveSide), bytes32(chainid), bytes20(bridge)))
+
+0x059fe1a963f16e9a9f0f58176fc5ccd0d6c5dc012a7212f17265d803269eac6d block 25951769 2026-09-11T04:28:47Z
+    relayer EOA       0x67f9b3e561383493b3f874feae0c53c2cd23851d
+    bridge            0x5523985926aa12ba58dc5ad00ddca99678d7227e
+    amount            4611686018427388234  (2^62 +330)
+    beneficiary       0x025122b60470eee9e7947fbd922fe0d35f5d3ba2
+    chainIdFrom       3652501241
+    recovered signer  0x855eeeae34d08597db031094efbd8b6d15f849f6
+    mpc() that block  0x855eeeae34d08597db031094efbd8b6d15f849f6
+    signer IS live mpc: True
+
+0xb32b32adb6162fbae947a6b090ade92a9d9c190635e63de4ac61e920168473b9 block 25951770 2026-09-11T04:28:59Z
+    relayer EOA       0x67f9b3e561383493b3f874feae0c53c2cd23851d
+    bridge            0x5523985926aa12ba58dc5ad00ddca99678d7227e
+    amount            4611686018427388234  (2^62 +330)
+    beneficiary       0x025122b60470eee9e7947fbd922fe0d35f5d3ba2
+    chainIdFrom       3652501241
+    recovered signer  0x855eeeae34d08597db031094efbd8b6d15f849f6
+    mpc() that block  0x855eeeae34d08597db031094efbd8b6d15f849f6
+    signer IS live mpc: True
+
+0x5c72bc5ed1c76991262de7357a50e33616d7ede9681329d134f569371a066575 block 25951771 2026-09-11T04:29:11Z
+    relayer EOA       0x67f9b3e561383493b3f874feae0c53c2cd23851d
+    bridge            0x5523985926aa12ba58dc5ad00ddca99678d7227e
+    amount            4611686018427388234  (2^62 +330)
+    beneficiary       0x025122b60470eee9e7947fbd922fe0d35f5d3ba2
+    chainIdFrom       3652501241
+    recovered signer  0x855eeeae34d08597db031094efbd8b6d15f849f6
+    mpc() that block  0x855eeeae34d08597db031094efbd8b6d15f849f6
+    signer IS live mpc: True
+
+0x7809abbb58169307827381ce8a13dfe49f117ba2f92e29c2fb6c2c59277309bc block 25951773 2026-09-11T04:29:35Z
+    relayer EOA       0x67f9b3e561383493b3f874feae0c53c2cd23851d
+    bridge            0x5523985926aa12ba58dc5ad00ddca99678d7227e
+    amount            4611686018427388234  (2^62 +330)
+    beneficiary       0x025122b60470eee9e7947fbd922fe0d35f5d3ba2
+    chainIdFrom       3652501241
+    recovered signer  0x855eeeae34d08597db031094efbd8b6d15f849f6
+    mpc() that block  0x855eeeae34d08597db031094efbd8b6d15f849f6
+    signer IS live mpc: True
+

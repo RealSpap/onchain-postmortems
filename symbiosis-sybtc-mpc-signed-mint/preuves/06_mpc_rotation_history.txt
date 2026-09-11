@@ -1,0 +1,12 @@
+mpc() on BridgeV2 0x5523985926aa12ba58dc5ad00ddca99678d7227e, sampled across the scan window and then bisected to the exact block of each change
+
+first observed value in window:
+  block 25930000  2026-09-08T03:36:47Z  0xc24480484369d36921b1343edb2d6c0a9abfd7c2
+
+changes:
+  block 25931022  2026-09-08T07:01:35Z  -> 0xed44d13dbfe160bff53d89932294a7fce4a5b385
+  block 25938188  2026-09-09T07:01:35Z  -> 0x91a614e561fe6c8e054f207eab7e66eb7693b884
+  block 25945362  2026-09-10T07:01:23Z  -> 0x855eeeae34d08597db031094efbd8b6d15f849f6
+  block 25952529  2026-09-11T07:01:11Z  -> 0xd890729b7ed7724fbe6e1f1804ac93114e3abb28
+
+current head value: 0xd890729b7ed7724fbe6e1f1804ac93114e3abb28

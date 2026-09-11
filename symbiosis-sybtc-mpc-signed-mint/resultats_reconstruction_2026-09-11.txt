@@ -1,0 +1,84 @@
+Symbiosis syBTC unbacked mint, independent reconstruction
+crypto self-test: True
+
+[1] Symbiosis's own deployment list
+  wrote preuves/00_symbiosis_own_sybtc_deployments.json
+  syBTC on chains: [1, 30, 56, 324, 4114]
+
+[2] live totalSupply on each of them
+  wrote preuves/01_sybtc_supply_all_chains.txt
+
+[3] oversized mints on Ethereum
+  wrote preuves/02_ethereum_mint_events_raw.json
+  wrote preuves/03_ethereum_mints_readable.txt
+  found 4
+
+[4] who authorised them
+  wrote preuves/04_mint_authorisation_decoded.json
+  wrote preuves/05_mint_authorisation_readable.txt
+  distinct recovered signers: {'0x855eeeae34d08597db031094efbd8b6d15f849f6'}
+  every signer was the live mpc(): True
+
+[5] how that key got there
+  wrote preuves/06_mpc_rotation_history.txt
+  block 25931022 2026-09-08T07:01:35Z -> 0xed44d13dbfe160bff53d89932294a7fce4a5b385
+  block 25938188 2026-09-09T07:01:35Z -> 0x91a614e561fe6c8e054f207eab7e66eb7693b884
+  block 25945362 2026-09-10T07:01:23Z -> 0x855eeeae34d08597db031094efbd8b6d15f849f6
+  block 25952529 2026-09-11T07:01:11Z -> 0xd890729b7ed7724fbe6e1f1804ac93114e3abb28
+
+[6] did the same key sign ordinary user traffic
+  wrote preuves/07_ordinary_traffic_same_key.txt
+  ordinary mints carrying the same key: 6 of 6
+
+[7] cash-out
+  wrote preuves/08_cashout_transfer_legs.json
+  wrote preuves/09_cashout_readable.txt
+  4.38897292 WBTC out, 184467440728.45449829 syBTC in
+  wrote preuves/10_wbtc_price_at_cashout.json
+  WBTC price at that second: 77076.12 USD -> 338285.00 USD extracted
+
+[8] BNB Chain
+  wrote preuves/11_bnbchain_mint_events_raw.json
+  wrote preuves/12_bnbchain_mints_readable.txt
+  oversized mints on BNB Chain: 4
+
+[9] Rootstock
+  wrote preuves/13_rootstock_mints_by_supply_bisect.txt
+  wrote preuves/14_rootstock_authorisation.txt
+  Rootstock supply now: 18446744073709551616 (2^64 exactly: True)
+  Rootstock signer: 0x855eeeae34d08597db031094efbd8b6d15f849f6 (live mpc then: 0x855eeeae34d08597db031094efbd8b6d15f849f6)
+
+[10] protocol source and DefiLlama record
+  wrote preuves/15_symbiosis_BridgeV2_source.sol
+  wrote preuves/16_bridge_signature_check_snippet.txt
+  BridgeV2 enforces onlySignedByMPC: True
+  wrote preuves/17_defillama_hacks_record.json
+  DefiLlama rows for Symbiosis: [{"date": 1788998400, "name": "Symbiosis", "classification": "Bridge & Cross-Chain", "technique": "Unbacked Cross-Chain Mint", "amount": 336000, "chain": ["BSC", "Ethereum"], "bridgeHack": true, "targetType": "DeFi Protocol", "source": "", "returnedFunds": null, "defillamaId": "1594", "language": "Solidity"}]
+  wrote preuves/18_totals.txt
+
+TOTALS, all recomputed above, nothing hard-coded
+
+per-mint amount            4611686018427388234 raw  (2^62 +330)
+mints on Ethereum          4
+mints on BNB Chain         4
+mints on Rootstock         4
+mints in total             12 across 3 chains
+total unbacked minted      55340232221128658808 raw  = 553402322211.29 syBTC
+still outstanding today    55340205835575267433 raw  = 553402058355.75 syBTC
+
+realised by the attacker   4.38897292 WBTC
+WBTC price at that second  77076.12 USD
+realised in USD            338285.00
+
+ratio minted to realised   1.261e+11
+
+chains Symbiosis lists a syBTC deployment on: [1, 30, 56, 324, 4114]
+chains actually inflated:                     [1, 30, 56]
+
+[11] adversarial self-check
+  wrote preuves/19_adversarial_selfcheck.txt
+  [1] keccak256("") matches the published vector: True
+  [2] preimage sensitivity, a correct preimage must be fragile
+  [3] cross-day control, an unrelated mint under a DIFFERENT mpc key
+  [4] WBTC figure re-derived from balanceOf, not from the receipt logs
+  [5] Rootstock supply cross-checked against Blockscout's own indexer, a separate path from the RPC used above

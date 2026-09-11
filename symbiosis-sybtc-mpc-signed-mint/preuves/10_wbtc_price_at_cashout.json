@@ -1,0 +1,16 @@
+{
+  "query": "https://coins.llama.fi/prices/historical/1789101323/ethereum:0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
+  "response": {
+    "coins": {
+      "ethereum:0x2260fac5e5542a773aa44fbcfedf7c193bc2c599": {
+        "decimals": 8,
+        "symbol": "WBTC",
+        "price": 77076.11941373718,
+        "timestamp": 1789101300,
+        "confidence": 0.99
+      }
+    }
+  },
+  "wbtc_out": 4.38897292,
+  "usd_at_that_timestamp": 338285.00088557875
+}

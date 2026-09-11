@@ -1,0 +1,32 @@
+Adversarial checks on this reconstruction's own headline claims
+
+[1] keccak256("") matches the published vector: True
+
+[2] preimage sensitivity, a correct preimage must be fragile
+    correct preimage   -> 0x855eeeae34d08597db031094efbd8b6d15f849f6
+    one callData byte flipped -> 0xa86fddcd7fc839cad2e5879fbdc0f139a7260bff
+    wrong chain id (56)       -> 0xfc5d35de8e8472fd1fbd7d3e07b87703a38760c7
+    recovery moves when the preimage is disturbed: True
+
+[3] cross-day control, an unrelated mint under a DIFFERENT mpc key
+    tx        0xaf3b41dad4baa420c95f10c00238c7caf1705a54f05b518ffd2d44cbbdce5931
+    block     25945295  2026-09-10T06:47:47Z
+    recovered 0x91a614e561fe6c8e054f207eab7e66eb7693b884
+    mpc then  0x91a614e561fe6c8e054f207eab7e66eb7693b884
+    match     True
+    A wrong preimage could not match two different keys on two different days.
+
+[4] WBTC figure re-derived from balanceOf, not from the receipt logs
+    balance before block 25951801: 49605
+    balance after         : 438946897
+    delta                 : 438897292
+    log-derived figure    : 438897292
+    agree                 : True
+
+[5] Rootstock supply cross-checked against Blockscout's own indexer, a separate path from the RPC used above
+    symbol       SYBTC
+    decimals     8
+    total_supply 18446744073709551616
+    holders      24
+    equals 2^64  True
+

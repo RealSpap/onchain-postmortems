@@ -1,0 +1,11 @@
+Rootstock authorisation check, chain id 30
+
+mint tx            0xf5c8880a60a3b6a6abb331e2b7f577c0a922ff54f0c9699caae12b9cef0db907
+block              9229602  2026-09-11T04:28:56Z
+relayer EOA        0x67f9b3e561383493b3f874feae0c53c2cd23851d
+bridge             0xda8057acb94905eb6025120cb2c38415fd81bfeb
+amount in payload  4611686018427388234  (2^62 +330)
+recovered signer   0x855eeeae34d08597db031094efbd8b6d15f849f6
+mpc() before mint  0x855eeeae34d08597db031094efbd8b6d15f849f6
+mpc() now          0xd890729b7ed7724fbe6e1f1804ac93114e3abb28
+signer IS live mpc: True

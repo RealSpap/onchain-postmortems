@@ -1,0 +1,18 @@
+TOTALS, all recomputed above, nothing hard-coded
+
+per-mint amount            4611686018427388234 raw  (2^62 +330)
+mints on Ethereum          4
+mints on BNB Chain         4
+mints on Rootstock         4
+mints in total             12 across 3 chains
+total unbacked minted      55340232221128658808 raw  = 553402322211.29 syBTC
+still outstanding today    55340205835575267433 raw  = 553402058355.75 syBTC
+
+realised by the attacker   4.38897292 WBTC
+WBTC price at that second  77076.12 USD
+realised in USD            338285.00
+
+ratio minted to realised   1.261e+11
+
+chains Symbiosis lists a syBTC deployment on: [1, 30, 56, 324, 4114]
+chains actually inflated:                     [1, 30, 56]

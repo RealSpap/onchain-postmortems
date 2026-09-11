@@ -1,0 +1,45 @@
+Excerpt of Symbiosis's own BridgeV2.sol showing that the MPC signature covers the whole callData, amount included.
+Source: https://raw.githubusercontent.com/symbiosis-finance/core-contracts/HEAD/contracts/synth-core/bridge/BridgeV2.sol
+
+ function currentChainId() public view returns (uint256) {
+        return block.chainid;
+    }
+
+    /// ** MPC functions **
+
+    /**
+     * @notice Receives requests
+     */
+    function receiveRequestV2(bytes memory _callData, address _receiveSide)
+    external
+    onlyMPC
+    {
+        _processRequest(_callData, _receiveSide);
+    }
+
+    /**
+     * @notice Receives requests
+     */
+    function receiveRequestV2Signed(bytes memory _callData, address _receiveSide, bytes memory signature)
+    external
+    onlySignedByMPC(keccak256(bytes.concat("receiveRequestV2", _callData, bytes20(_receiveSide),
+        bytes32(block.chainid), bytes20(address(this)))), signature)
+    {
+        _processRequest(_callData, _receiveSide);
+    }
+
+    /// ** TRANSMITTER functions **
+
+    /**
+     * @notice transmits request
+     */
+    function transmitRequestV2(
+        bytes memory _callData,
+        address _receiveSide,
+        address _oppositeBridge,
+        uint256 _chainId
+    ) public onlyTransmitter {
+        emit OracleRequest(
+            address(this),
+            _callData,
+            _recei

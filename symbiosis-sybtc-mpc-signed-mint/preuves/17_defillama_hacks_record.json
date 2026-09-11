@@ -1,0 +1,19 @@
+[
+  {
+    "date": 1788998400,
+    "name": "Symbiosis",
+    "classification": "Bridge & Cross-Chain",
+    "technique": "Unbacked Cross-Chain Mint",
+    "amount": 336000,
+    "chain": [
+      "BSC",
+      "Ethereum"
+    ],
+    "bridgeHack": true,
+    "targetType": "DeFi Protocol",
+    "source": "",
+    "returnedFunds": null,
+    "defillamaId": "1594",
+    "language": "Solidity"
+  }
+]

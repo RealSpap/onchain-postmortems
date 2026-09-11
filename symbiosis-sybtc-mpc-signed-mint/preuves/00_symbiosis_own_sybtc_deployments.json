@@ -1,0 +1,27 @@
+{
+  "1": {
+    "address": "0x01a8b61E7b03891a736B5DF865E0EF9C511850ad",
+    "decimals": 8,
+    "chainFromId": 3652501241
+  },
+  "56": {
+    "address": "0xA67c48F86Fc6d0176Dca38883CA8153C76a532c7",
+    "decimals": 8,
+    "chainFromId": 3652501241
+  },
+  "324": {
+    "address": "0xED0c95EBe5a3E687cB2224687024FeC6518E683e",
+    "decimals": 8,
+    "chainFromId": null
+  },
+  "30": {
+    "address": "0xB52E582263c1d0189b3cc1402c1B7205b7F2E9Ba",
+    "decimals": 8,
+    "chainFromId": 3652501241
+  },
+  "4114": {
+    "address": "0x384157027B1CDEAc4e26e3709667BB28735379Bb",
+    "decimals": 8,
+    "chainFromId": 3652501241
+  }
+}
