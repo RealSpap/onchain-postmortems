@@ -28,9 +28,9 @@ lost in the merge.
 
 | | |
 |---|---|
-| Incidents covered | 35, independently reconstructed on-chain, see the index for detail |
-| Cumulative loss, recomputed | About $780.9M across the 35 incidents ($780,904,796 exactly, sum of the figures in the index below). At least one entry is a known floor, so the real total is higher. |
-| Corrections made | 22 entries below correct, reconcile, or newly surface a press or DefiLlama figure, label, date, or classification (16 corrections, 4 reconciliations, 2 discoveries not previously priced by DefiLlama at all). See Corrections to press and DefiLlama below. |
+| Incidents covered | 36, independently reconstructed on-chain, see the index for detail |
+| Cumulative loss, recomputed | About $781.3M across the 36 incidents ($781,327,047 exactly, sum of the figures in the index below). At least one entry is a known floor, so the real total is higher. |
+| Corrections made | 23 entries below correct, reconcile, or newly surface a press or DefiLlama figure, label, date, or classification (17 corrections, 4 reconciliations, 2 discoveries not previously priced by DefiLlama at all). See Corrections to press and DefiLlama below. |
 | Method | Each subfolder keeps its original Python reconstruction script, its `registre_hypotheses.csv` falsification registry, and its script's raw output in `resultats_*.txt`, so every figure below can be checked against the file that produced it |
 | License | MIT across all 35 entries, single author (s_pap, 2026) |
 
@@ -75,7 +75,7 @@ exact figure decoded from source data.
 
 ### 2026
 
-**2026 total: $780,904,796** across 35 incidents (6 months, April through September). At least one entry this year is a known floor, so the true total is higher.
+**2026 total: $781,327,047** across 36 incidents (6 months, April through September). At least one entry this year is a known floor, so the true total is higher.
 
 #### September 2026 (current month)
 
@@ -84,11 +84,12 @@ exact figure decoded from source data.
 | Liquid Network | 2026-09-06 / 09-07 | ≥ 46,568,719 [^liquid-rangeproof-cache] | Bitcoin + Liquid | Bridge | Range-proof cache-key collision in Elements let a peg-out register as fully backed; the federation's real multisig then genuinely signed the BTC release | [liquid-rangeproof-cache/](liquid-rangeproof-cache/) |
 | Notional Finance (V1 Escrow) | 2026-09-03 / 09-04 | 1,727,782 [^notional] | Ethereum | Rounding/Math-Bug | uint128 overflow/downcast in the legacy V1 Escrow contract's collateral valuation | [notional-v1-escrow/](notional-v1-escrow/) |
 | XRP Healthcare (XRPH Wallet) | 2026-09-03 / 09-04 | ≥ 445,198 [^xrph-wallet-key-compromise] | XRP Ledger + Ethereum | Key-Compromise | Mass wallet-side private-key compromise (not an XRPL protocol bug) swept thousands of externally-owned wallets to one collector, laundered via NEAR Intents into Ethereum and settled as DAI | [xrph-wallet-key-compromise/](xrph-wallet-key-compromise/) |
+| WealthManagementV2 | 2026-09-08 | ≥ 422,251 [^wealthmanagementv2-selfowned-proxy-drain] | BSC | Access-Control | Attacker-deployed, attacker-owned EIP-1967 proxy repeatedly called a withdraw() sweep function to drain a shared claim/interest pool contract to a collector wallet | [wealthmanagementv2-selfowned-proxy-drain/](wealthmanagementv2-selfowned-proxy-drain/) |
 | Cozy V2 | 2026-09-02 / 09-07 | 174,311 [^cozy] | Optimism | Oracle | False answers to the UMA Optimistic Oracle left uncontested during its 5-day dispute window | [cozy-v2-optimism/](cozy-v2-optimism/) |
 | Secured Finance (JPYC Lending Market) | 2026-09-05/09-06 | ≈ 45,445 [^securedfinance-jpyc-tokenvault-selflend] | Ethereum | Access-Control | Flash-loan-funded self-matched lend/borrow position on the JPYC market let TokenVault's collateral accounting treat the just-deposited amount as withdrawable, before the flash loan was repaid | [securedfinance-jpyc-tokenvault-selflend/](securedfinance-jpyc-tokenvault-selflend/) |
 | Reddio (RedSonic Vault) | 2026-09-05 | ≈ 22,748 [^redsonic-vault-share-registration] | Ethereum | Access-Control | Permissionless registerErc20() let an unprivileged caller register a second share class over the same pooled collateral, letting a flash-loan-funded deposit be redeemed for more than it was worth | [redsonic-vault-share-registration/](redsonic-vault-share-registration/) |
 
-**September 2026 subtotal: $48,984,203** across 6 incidents. Includes 2 known floor figures (Liquid Network, XRP Healthcare (XRPH Wallet)), so the true total is higher.
+**September 2026 subtotal: $49,406,454** across 7 incidents. Includes 3 known floor figures (Liquid Network, XRP Healthcare (XRPH Wallet), WealthManagementV2), so the true total is higher.
 
 #### August 2026
 
@@ -189,12 +190,13 @@ exact figure decoded from source data.
 [^securedfinance-jpyc-tokenvault-selflend]: Two flash-loan-funded, self-matched lend/borrow transactions on Secured Finance's JPYC market drained 4,360,902.135130 JPYC from TokenVault (decoded directly from JPYC's own Transfer events, cross-checked against TokenVault's Deposit/Withdraw events), $45,444.97 at CoinGecko's theft-day price. DefiLlama tracks this incident as "Secured Finance Lending", $104,000, "Oracle Manipulation"/"Spot Price Manipulation" with an empty source field; this project's figure is 0.44x DefiLlama's, an unreconciled gap, and no oracle read appears in either transaction, contradicting DefiLlama's own classification. 91% of the attacker's realized ETH proceeds were routed through Tornado Cash. See `securedfinance-jpyc-tokenvault-selflend/README.md`. External source: https://api.llama.fi/hacks.
 [^fullsail-switchboard-vault-drain]: A compromised Switchboard oracle signing key let an attacker submit a forged price inside a Full Sail transaction that also legitimately updates the same feed and calls `port::deposit`, pushing SUI/ETH/IKA to almost exactly 100x below their real price (independently confirmed for all three, not just one), depositing while the fake price was active, then restoring the real price and withdrawing the resulting oversized position, across 3 vaults (USDC/ETH, IKA/SUI, USDC/SUI) -- the attacker address and all three vaults found by clustering the vault package's own on-chain events, not from press, which names neither. Net (withdrawn minus deposited) across the 3 vaults, converted at the chain's own restored oracle price: $91,605.56, cross-checked exactly (to the wei) against a separate DEX swap-out transaction for the ETH leg. Press reports "roughly $91,000" (Yellow, CryptoTimes, Cointelegraph) with no on-chain support shown; DefiLlama tracks this incident with no dollar figure at all (`amount: null`), so this entry is a genuine quantification, not a correction of an existing number. See `fullsail-switchboard-vault-drain/README.md`. External sources: https://yellow.com/news/full-sail-91k-sui-hack, https://www.cryptotimes.io/2026/08/30/full-sail-confirms-sui-vault-losses-as-switchboard-halts-4-chains/.
 [^drift-protocol-durable-nonce-admin-hijack]: Two Squads multisig signers were social-engineered into pre-signing durable-nonce transactions weeks earlier; broadcasting them overwrote Drift's own on-chain admin key (confirmed via the program's own "admin: X -> Y" log line, not a press claim), which then listed a fabricated "CarbonVote" (CVT) token as collateral (mint independently derived from the hijack transaction's own inner instructions, not supplied by press, and confirmed via live Metaplex metadata) and raised the withdraw guard on at least 23 real spot markets over about 2 hours. $295,706,374.93 is Drift's own stated total (drift.trade, fetched live), matching DefiLlama's tracked $295,000,000; a representative sample of the real-asset outflow (USDT and USDS legs) independently matches Drift's own per-asset figures to within 0.002%. See `drift-protocol-durable-nonce-admin-hijack/README.md`. External source: https://www.drift.trade/updates/incident-recovery-update-april-16-2026-now.
+[^wealthmanagementv2-selfowned-proxy-drain]: No press-disclosed transaction hash or contract address exists for this incident; starting from only the attacker EOA press names, 4 `withdraw(address,uint256,address)` calls, decoded from their own receipts' real Transfer events (not from the calls' own calldata argument, which does not equal the amount actually moved), move exactly 422,315.000000 real BSC-USDT from an attacker-deployed, attacker-owned EIP-1967 proxy to one collector address, $422,251.40 at CoinGecko's 2026-09-08 historical price, about 16.0x DefiLlama's tracked $26,414. That collector still holds 250,000.00202223 USDT three days later. The proxy's own `owner()` has been the attacker's own EOA since the same session that deployed it, and the implementation's `owner()`, called directly, returns the zero address, contradicting DefiLlama's "Key Compromise" classification: there is no prior owner for a leaked key to have taken anything from. Reported as a floor: only nonces 0-41 of the attacker's 252 lifetime transactions were exhaustively decoded. See `wealthmanagementv2-selfowned-proxy-drain/README.md`. External source: https://api.llama.fi/hacks.
 
 ## Corrections to press and DefiLlama
 
 Every figure in the Index above is recomputed from each subfolder's own
 source files, then checked against whatever press or DefiLlama already
-published. The 22 rows below are the cases where that check turned up a
+published. The 23 rows below are the cases where that check turned up a
 real gap: a wrong number, a wrong label, a wrong date, a wrong
 classification, or (for Aquifer, Maya Protocol, Virtue Protocol, and
 Float Protocol) a reconciled gap neither side is really "wrong" about, or
@@ -227,6 +229,7 @@ in the linked subfolder; this table gives the headline gap only.
 | Oraichain (ICS-20 EVM Precompile) | DefiLlama's flat $1,000,000 (empty source field) matches neither reading | The self-referential precompile bug actually minted 1,509,949,343 ORAI (peak supply 78.00x baseline, reversed in one block 4.5 hours later); the confirmed still-missing floor, priced from only the 2 legs proven to have left Oraichain's own reach, is $4,461.73, two orders of magnitude below DefiLlama's number | [oraichain-ics20-precompile-selfmint/](oraichain-ics20-precompile-selfmint/) |
 | Secured Finance (JPYC Lending Market) | DefiLlama classifies this "Oracle Manipulation" / "Spot Price Manipulation" and tracks $104,000, empty source field | Neither of the 2 confirmed exploit transactions reads any price oracle; this is a collateral-accounting bug in TokenVault, and the independently re-derived drain (4,360,902.135130 JPYC, $45,444.97) is 0.44x DefiLlama's tracked figure, an unreconciled gap | [securedfinance-jpyc-tokenvault-selflend/](securedfinance-jpyc-tokenvault-selflend/) |
 | Full Sail (Sui Vaults) | DefiLlama tracks this incident with no dollar figure at all (`amount: null`); press reports "roughly $91,000" with no on-chain support shown | Independently found the attacker address, all 3 affected vaults, and the exact ~100x price manipulation for each of SUI/ETH/IKA from the chain itself; net realized profit across the 3 vaults is $91,605.56, cross-checked to the wei against a separate swap transaction (a discovery, not a correction, and 0.67% above the unsourced press estimate) | [fullsail-switchboard-vault-drain/](fullsail-switchboard-vault-drain/) |
+| WealthManagementV2 | DefiLlama classifies this "Key Compromise" / "Private Key Compromised" and tracks $26,414 | The exploited proxy was deployed and owned by the attacker's own EOA from its own genesis (confirmed live and via the full decoded transaction sequence, with no ownership-transfer event anywhere) -- nothing was compromised, there was no prior owner; 4 decoded `withdraw()` calls alone move $422,251.40, about 16.0x DefiLlama's tracked figure | [wealthmanagementv2-selfowned-proxy-drain/](wealthmanagementv2-selfowned-proxy-drain/) |
 
 ## Structure
 
@@ -327,8 +330,8 @@ tips with a tx hash or block number attached get looked at first.
   from an old summary without checking it against those files. When a
   subfolder's source data doesn't support a full dollar total, the table
   says so in a footnote instead of inventing one.
-- Six entries (Sandbox, Balancer V1, Liquid Network, Maya Protocol,
-  COLDCARD, Coinsbuy) report a dollar figure that is a known floor, not a
+- Seven entries (Sandbox, Balancer V1, Liquid Network, Maya Protocol,
+  COLDCARD, Coinsbuy, WealthManagementV2) report a dollar figure that is a known floor, not a
   complete total, because their source repo found a wider scope than the
   press without converting every recovered amount to dollars, (Liquid
   Network) left some smaller destination addresses untraced, (Maya
@@ -339,7 +342,10 @@ tips with a tx hash or block number attached get looked at first.
   named-security-team's own preliminary total, or (Coinsbuy) confirmed the
   Tron leg in full but only one Ethereum-side transaction, with the
   remainder routing through an intermediary address this repo could not
-  independently attribute to Coinsbuy. Read the linked subfolder for the
+  independently attribute to Coinsbuy, or (WealthManagementV2) exhaustively
+  decoded only nonces 0-41 of the attacker's 252 lifetime transactions, so
+  further rounds using other proxy instances elsewhere in that history
+  cannot be ruled out. Read the linked subfolder for the
   full accounting in native units.
 - The Tectonic, Moonwell, and Liquid Network entries report the confirmed
   unrecoverable or still-uncovered figure, not the higher, gross amount

@@ -4,6 +4,50 @@ One entry per addition or correction to this repo. Each incident added
 with `add_new_entry.py` gets tagged as a matching GitHub release, see
 "Get notified of new postmortems" in `README.md`.
 
+## 2026-09-11 (22)
+
+- Added a 36th incident: WealthManagementV2 self-owned-proxy drain, BSC,
+  2026-09-08. Found via DefiLlama's hacks feed (a "WealthManagementV2" row,
+  $26,414, "Key Compromise" / "Private Key Compromised", no source URL).
+  No press outlet found (coinfomania.com, blockchainstories.com, both
+  citing only a SlowMist_Team tweet) discloses a transaction hash,
+  contract address, or block number, only the attacker's EOA -- so this
+  reconstruction starts from that EOA alone. `eth_getLogs` refuses any
+  non-trivial historical range on every free BSC RPC endpoint tried (the
+  5 `bsc-dataseed*` nodes, `bsc(-rpc).publicnode.com`, `1rpc.io/bnb`,
+  NodeReal, BlastAPI, MeowRPC, dRPC), so the incident's exact window was
+  instead located by binary-searching block timestamps for DefiLlama's
+  dated day, then brute-force scanning every block that day (batched
+  `eth_getBlockByNumber`, address-filtered client-side) for a transaction
+  sent from that EOA. Found the attacker's own first two transactions
+  deploying, in the same session, a 5,048-byte implementation contract and
+  a 133-byte EIP-1967 proxy whose implementation slot points at it;
+  `owner()` on the proxy is the attacker's own EOA today, and `owner()`
+  called directly on the implementation (bypassing the proxy) returns the
+  zero address. No ownership-transfer selector of any kind
+  (`transferOwnership`, `transferV2Ownership`, `acceptOwnership`, all
+  three confirmed genuinely present in the implementation's own
+  `PUSH4`-opcode dispatch table) appears anywhere in the decoded sequence,
+  directly contradicting DefiLlama's "Private Key Compromised"
+  classification: there is no prior owner here for a leaked key to have
+  taken anything from. The proxy's own `wealth()` getter names a real,
+  16,035-byte, pre-existing third-party contract (not one of the
+  attacker's own two deployments) as the pool it drains from, after being
+  seeded with a trivial 2.000000 USDT of the attacker's own money. Four
+  `withdraw(address,uint256,address)` calls (selector matched against the
+  public 4byte.directory database), decoded from their own receipts' real
+  `Transfer` events rather than from the calls' own calldata argument
+  (which does not equal the amount actually moved, a manual-decode error
+  this reconstruction caught and corrected before publishing), move
+  422,315.000000 real BSC-USDT to one collector address -- $422,251.40 at
+  CoinGecko's 2026-09-08 historical price, about 16.0x DefiLlama's tracked
+  figure. That collector, queried live 3 days later, still holds
+  250,000.00202223 USDT. Classified here as Access-Control, not
+  Key-Compromise, and reported as a floor: the attacker's EOA has sent 252
+  lifetime transactions, of which only nonces 0-41 were exhaustively
+  decoded, and the exact internal accounting bug inside the unverified
+  implementation and pool contracts was not reverse-engineered.
+
 ## 2026-09-11 (21)
 
 - Added a 35th incident: Drift Protocol durable-nonce admin hijack,

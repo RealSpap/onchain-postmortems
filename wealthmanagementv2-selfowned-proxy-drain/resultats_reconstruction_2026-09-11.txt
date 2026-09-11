@@ -1,0 +1,163 @@
+=== Step 0: DefiLlama's own hacks feed entry for this incident ===
+{
+  "date": 1788825600,
+  "name": "WealthManagementV2",
+  "classification": "Key Compromise",
+  "technique": "Private Key Compromised",
+  "amount": 26414,
+  "chain": [
+    "BSC"
+  ],
+  "bridgeHack": false,
+  "targetType": "DeFi Protocol",
+  "source": "",
+  "returnedFunds": null,
+  "defillamaId": null,
+  "language": "Solidity"
+}
+
+=== Step 1: the attacker EOA a press article cites -- checked, not trusted ===
+Press-cited attacker EOA: 0xe439422afdd247503f75b4143c4a973eced04a36
+eth_getTransactionCount(latest) today: 252 (a real, active address, not a single-use throwaway; only a SUBSET of its lifetime transactions, identified below by exhaustive same-day block scan, belong to this incident)
+
+=== Step 2: locating the incident's own UTC day, by binary search on block timestamps ===
+2026-09-08 UTC spans blocks 120586565 (2026-09-08T00:00:00Z) to 120778489 (2026-09-09T00:00:00Z), 191924 blocks
+
+=== Step 3: brute-force, address-filtered scan of a narrow sub-window ===
+(the full-day scan that located this incident is not reproduced here for runtime;
+ it is described in the README and covers blocks 120618000-120700000. This script
+ instead re-verifies the exact narrow window that scan found, directly.)
+  ...scanned through block 120619000 (0 matches so far)
+  ...scanned through block 120619100 (2 matches so far)
+  ...scanned through block 120619200 (2 matches so far)
+  ...scanned through block 120619300 (2 matches so far)
+  ...scanned through block 120619400 (2 matches so far)
+  ...scanned through block 120619500 (2 matches so far)
+  ...scanned through block 120619600 (2 matches so far)
+  ...scanned through block 120619700 (2 matches so far)
+  ...scanned through block 120619800 (2 matches so far)
+  ...scanned through block 120619900 (2 matches so far)
+  ...scanned through block 120620000 (2 matches so far)
+  ...scanned through block 120620100 (2 matches so far)
+  ...scanned through block 120620200 (2 matches so far)
+  ...scanned through block 120620300 (2 matches so far)
+  ...scanned through block 120620400 (2 matches so far)
+  ...scanned through block 120620500 (3 matches so far)
+  ...scanned through block 120620600 (3 matches so far)
+  ...scanned through block 120620700 (4 matches so far)
+  ...scanned through block 120620800 (6 matches so far)
+  ...scanned through block 120620900 (6 matches so far)
+  ...scanned through block 120621000 (6 matches so far)
+  ...scanned through block 120621100 (8 matches so far)
+  ...scanned through block 120621200 (8 matches so far)
+  ...scanned through block 120621300 (10 matches so far)
+  ...scanned through block 120621400 (11 matches so far)
+  ...scanned through block 120621500 (11 matches so far)
+  ...scanned through block 120621600 (12 matches so far)
+  ...scanned through block 120621700 (14 matches so far)
+  ...scanned through block 120621800 (14 matches so far)
+  ...scanned through block 120621900 (15 matches so far)
+  ...scanned through block 120622000 (15 matches so far)
+  ...scanned through block 120622100 (17 matches so far)
+  ...scanned through block 120622200 (18 matches so far)
+  ...scanned through block 120622300 (19 matches so far)
+  ...scanned through block 120622400 (20 matches so far)
+  ...scanned through block 120622500 (21 matches so far)
+  ...scanned through block 120622600 (23 matches so far)
+  ...scanned through block 120622700 (23 matches so far)
+  ...scanned through block 120622800 (25 matches so far)
+  ...scanned through block 120622900 (25 matches so far)
+  ...scanned through block 120623000 (27 matches so far)
+  ...scanned through block 120623100 (27 matches so far)
+  ...scanned through block 120623200 (28 matches so far)
+  ...scanned through block 120623300 (29 matches so far)
+  ...scanned through block 120623400 (29 matches so far)
+  ...scanned through block 120623500 (31 matches so far)
+  ...scanned through block 120623600 (32 matches so far)
+  ...scanned through block 120623700 (32 matches so far)
+  ...scanned through block 120623800 (33 matches so far)
+  ...scanned through block 120623900 (34 matches so far)
+  ...scanned through block 120624000 (35 matches so far)
+  ...scanned through block 120624100 (36 matches so far)
+  ...scanned through block 120624200 (37 matches so far)
+  ...scanned through block 120624300 (37 matches so far)
+  ...scanned through block 120624400 (39 matches so far)
+  ...scanned through block 120624500 (40 matches so far)
+  ...scanned through block 120624600 (41 matches so far)
+  ...scanned through block 120624700 (41 matches so far)
+  ...scanned through block 120624800 (42 matches so far)
+  ...scanned through block 120624900 (42 matches so far)
+Found 42 transactions from 0xe439422afdd247503f75b4143c4a973eced04a36 in blocks 120618900-120624900 (nonces 0-41)
+Window: 2026-09-08T04:03:44Z to 2026-09-08T04:46:29Z
+
+=== Step 4: the first two transactions are contract CREATIONs -- confirmed via the
+    receipt's own contractAddress field, not computed/assumed ===
+  nonce 0: tx 0x668ba58fb8d64557e082827dbaf7dbfa6a1c31cf4a3a56100410a5f32323b85f
+    status: 0x1, contractAddress: 0xaae7600005d8054bde7aaa80ec43d3feee34fa5b
+  nonce 1: tx 0xe7a0ac1160abec89404e95661da93a59c10380e004b2397a32b00e8a62b63a60
+    status: 0x1, contractAddress: 0xafb73746ab72c34da59633129bb3b0e74a0d6c0a
+  -> nonce 0 deployed the IMPLEMENTATION contract: 0xaae7600005d8054bde7aaa80ec43d3feee34fa5b
+  -> nonce 1 deployed a PROXY contract: 0xafb73746ab72c34da59633129bb3b0e74a0d6c0a
+  Both deployed and, as Step 5 confirms, both owned by the attacker's own EOA.
+  No pre-existing 'WealthManagementV2' deployment or ownership-transfer event was
+  found anywhere in this transaction set: the attacker built this contract pair
+  from scratch, in the same session as the drain.
+
+=== Step 5: confirming the proxy is a real EIP-1967 minimal proxy pointing at that ===
+    implementation, and that its owner() is the attacker's own address ===
+  eth_getCode(0xafb73746ab72c34da59633129bb3b0e74a0d6c0a) length: 133 bytes
+  EIP-1967 implementation slot reads: 0xaae7600005d8054bde7aaa80ec43d3feee34fa5b
+  matches the deployed implementation address: True
+  owner() on the proxy today: 0xe439422afdd247503f75b4143c4a973eced04a36
+  matches the attacker EOA: True
+  owner() called directly on the implementation (not via the proxy): 0x0000000000000000000000000000000000000000
+  (zero address -- expected: an implementation meant only to be delegatecalled)
+
+=== Step 6: the implementation's own dispatch table, read from its raw bytecode ===
+    (proves the selectors below are real, live functions -- not guessed)
+  8da5cb5b (owner()): present in dispatch table = True
+  f2fde38b (transferOwnership(address)): present in dispatch table = True
+  75d752b3 (transferV2Ownership(address)): present in dispatch table = True
+  79ba5097 (acceptOwnership()): present in dispatch table = True
+  2f48ab7d (usdt()): present in dispatch table = True
+  72975ea2 (wealth()): present in dispatch table = True
+  a62e64a3 (invest(uint8,uint256)): present in dispatch table = True
+  69328dec (withdraw(address,uint256,address)): present in dispatch table = True
+
+=== Step 7: the proxy's own usdt() and wealth() getters, called live ===
+  usdt(): 0x55d398326f99059ff775485246999027b3197955  == real BSC-USDT: True
+  wealth(): 0x7b5dda5135811ec0870a75a04d0e1807edc3c93d
+  eth_getCode(wealth()) length: 16035 bytes -- a real, substantial, pre-existing contract, NOT among the attacker's own nonce-0/nonce-1 deployments above
+
+=== Step 8: the funding trail -- how the freshly-deployed proxy got its first USDT ===
+  nonce 4 (0x24c681aa8cf64a56e38819e0ef4cf672d917543fb27bf9cb5a0e0585dd89cd35): direct USDT transfer, calldata: 0xa9059cbb000000000000000000000000afb73746ab72c34da59633129bb3b0e74a0d6c0a...
+  transfer amount decoded from calldata: 2.0 USDT (a trivial self-funding seed, not remotely close to the amount later extracted)
+
+=== Step 9: the four explicit withdraw() calls -- decoded from RECEIPTS, not calldata ===
+    (calldata arguments to withdraw() do not equal the amount actually moved;
+     only the token contract's own emitted Transfer event is authoritative)
+  nonce 6  2026-09-08T04:18:27Z  tx 0xe33c8a47bc845db023cf1640514691d01e365dc3c0197a8527bbe2fd7283fd3f
+    Transfer 0xafb73746ab72c34da59633129bb3b0e74a0d6c0a -> 0x6daa9ee0e594a4ac30765942bb8d99ba27e7a58f: 1.000000 USDT
+  nonce 7  2026-09-08T04:18:59Z  tx 0xed52424f7afed86277fa38d9c4fbf3830ef49752eae373b1b4c47d2ab8fed8b0
+    Transfer 0xafb73746ab72c34da59633129bb3b0e74a0d6c0a -> 0x6daa9ee0e594a4ac30765942bb8d99ba27e7a58f: 210,959.000000 USDT
+  nonce 14  2026-09-08T04:24:50Z  tx 0x8b584128f4da87a5cf4aa103c69233c3eca10affca46b5bd40d72d3d8067618c
+    Transfer 0xafb73746ab72c34da59633129bb3b0e74a0d6c0a -> 0x6daa9ee0e594a4ac30765942bb8d99ba27e7a58f: 184,800.000000 USDT
+  nonce 41  2026-09-08T04:46:29Z  tx 0x8533329b680848614c83cafc23d9fe62f87a84c1a639d57734a8a1815ee8a73b
+    Transfer 0xafb73746ab72c34da59633129bb3b0e74a0d6c0a -> 0x6daa9ee0e594a4ac30765942bb8d99ba27e7a58f: 26,555.000000 USDT
+
+  TOTAL confirmed via 4 withdraw() Transfer events: 422,315.000000 USDT
+  All 4 withdrawals went to a single address: {'0x6daa9ee0e594a4ac30765942bb8d99ba27e7a58f'}
+
+=== Step 10: the collector's current, live state ===
+  Current USDT balance of 0x6daa9ee0e594a4ac30765942bb8d99ba27e7a58f: 250,000.002022
+  Collector's own outgoing tx count: 8 (low -- consistent with a mostly-passive collector, not a busy exchange wallet)
+  Collector's BNB balance: 0.0247610720470451 (dust, gas-only)
+
+=== Step 11: is the shared Wealth pool now drained? ===
+  Current USDT balance of the wealth() pool 0x7b5dda5135811ec0870a75a04d0e1807edc3c93d: 5.019239
+
+=== Step 12: USD conversion, CoinGecko's own historical snapshot ===
+  USDT/USD, CoinGecko daily snapshot 2026-09-08 (theft day): 0.9998494087849482
+  422315.0 USDT @ that price -> $422,251.40
+  DefiLlama's own tracked figure for this incident: $26,414
+  Ratio: 15.99x DefiLlama's tracked figure
