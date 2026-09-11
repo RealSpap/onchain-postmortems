@@ -1,0 +1,84 @@
+=== Step 1: read Weft's own official DefiLlama TVL adapter, Weft's own PR, not a block explorer ===
+Source: github.com/DefiLlama/DefiLlama-Adapters (raw.githubusercontent.com)
+
+  lendingPool   = component_rdx1czmr02yl4da709ceftnm9dnmag7rthu0tu78wmtsn5us9j02d9d0xn
+  lendingMarket = component_rdx1cpy6putj5p7937clqgcgutza7k53zpha039n9u5hkk0ahh4stdmq4w
+
+=== Step 2: confirm mainnet's last real ledger state, live, via the official Gateway API ===
+  network: mainnet  state_version: 557840622
+  proposer_round_timestamp (Gateway's own live head): 2026-08-31T21:19:06.179Z
+  (mainnet has been halted since 2026-08-31, an unrelated Hyperlane-vault-access
+   incident -- see this project's radix-hyperlane-vault-access-drain/ entry -- so
+   every query below pins at_ledger_state to state_version 557840622,
+   the last state that existed before that halt, confirmed live just above.)
+
+=== Step 3: find the attack transaction by filtering the Gateway's own transaction ===
+    stream on lendingMarket, not copied from any article -- there is no article
+  73 committed transactions touched lendingMarket 2026-08-29..08-31
+  top 3 transactions by total absolute balance-change volume:
+          121,840,406.34  2026-08-30T18:02:58.28Z  txid_rdx12lsyuggs587xt7m9uxjedtkdtz0lcnzh85g2w4x6wwdq3cuyhccs8ls3kc
+            7,742,124.08  2026-08-31T05:34:29.576Z  txid_rdx1zu37yejre74k6mea7pp4ehex3dcqzhtn2jt52g60w5dstc0g3lzqxldhuz
+            2,437,632.22  2026-08-31T00:17:57.187Z  txid_rdx1yrrxsya3ezlm0300w9f4le8x76fusu6j4j3xeaj578wq52t0zw9qgadde8
+  -> largest transaction: txid_rdx12lsyuggs587xt7m9uxjedtkdtz0lcnzh85g2w4x6wwdq3cuyhccs8ls3kc (this is the attack)
+
+=== Step 4: decode the attack transaction's own receipt events live ===
+  intent_hash: txid_rdx12lsyuggs587xt7m9uxjedtkdtz0lcnzh85g2w4x6wwdq3cuyhccs8ls3kc
+  round_timestamp: 2026-08-30T18:02:58.28Z  state_version: 557336173
+  attacker account (positive fungible balance change): account_rdx129ttjjx95zlmqlcnwd4rvrepjz2lry4rhwsph5xjtjhk5ajzkczmxa
+  MintNonFungibleResourceEvent: {}
+  SwapEvent: 70.6 XRD -> 539,703.171058 of resource_rdx1t5kmyj54jt85malva7fxdrnpvgfgs623yt7ywdaval25vrdlmnwe97  (rate: 0.0001308126 XRD per unit)
+  MintNonFungibleResourceEvent: {}
+  FlashRemoveCollateralEvent: {None: [('cdp_id', '#1138#'), ('res_address', 'resource_rdx1t5kmyj54jt85malva7fxdrnpvgfgs623yt7ywdaval25vrdlmnwe97'), ('amount', '539703.171057886068001932')]}
+  PoolProtectedBorrowEvent: {None: [('res_address', 'resource_rdx1thksg5ng70g9mmy9ne7wz0sc7auzrrwy7fmgcxzel2gvp8pj0xxfmf'), ('amount', '47280000'), ('badge_id', None)]}
+  PoolProtectedBorrowEvent: {None: [('res_address', 'resource_rdx1tknxxxxxxxxxradxrdxxxxxxxxx009923554798xxxxxxxxxradxrd'), ('amount', '13100500'), ('badge_id', None)]}
+  BorrowEvent: {None: [('cdp_id', '#1138#'), ('res_address', 'resource_rdx1thksg5ng70g9mmy9ne7wz0sc7auzrrwy7fmgcxzel2gvp8pj0xxfmf'), ('amount', '47280000')]}
+  BorrowEvent: {None: [('cdp_id', '#1138#'), ('res_address', 'resource_rdx1tknxxxxxxxxxradxrdxxxxxxxxx009923554798xxxxxxxxxradxrd'), ('amount', '13100500')]}
+
+  Borrowed (from BorrowEvent, decoded directly): {'resource_rdx1thksg5ng70g9mmy9ne7wz0sc7auzrrwy7fmgcxzel2gvp8pj0xxfmf': 47280000.0, 'resource_rdx1tknxxxxxxxxxradxrdxxxxxxxxx009923554798xxxxxxxxxradxrd': 13100500.0}
+  LSULP resource: resource_rdx1thksg5ng70g9mmy9ne7wz0sc7auzrrwy7fmgcxzel2gvp8pj0xxfmf
+  LSULP borrowed: 47,280,000.000000   XRD borrowed: 13,100,500.000000
+  (the collateral posted, 539,703.171058 of resource_rdx1t5kmyj54jt85malva7fxdrnpvgfgs623yt7ywdaval25vrdlmnwe97, is a different resource
+   than either borrowed asset -- confirmed HUG below via its own on-chain metadata)
+
+=== Step 5: confirm the identity of both the collateral and the borrowed asset, live, via their own on-chain metadata ===
+  resource_rdx1t5kmyj54jt85malva7fxdrnpvgfgs623yt7ywdaval25vrdlmnwe97  [collateral posted (from the swap)]
+    name='Hug'  symbol='HUG'  description='Hug The World'
+    total_supply=100000000000
+  resource_rdx1thksg5ng70g9mmy9ne7wz0sc7auzrrwy7fmgcxzel2gvp8pj0xxfmf  [asset borrowed]
+    name='LSU Pool LP'  symbol='LSULP'  description='Liquidity token for the LSU Pool'
+    total_supply=217144821.603191785364697256
+
+=== Step 6: confirm LSULP's own theft-day price via Weft's own on-chain price-feed component ===
+    (component address found in Weft's own official DefiLlama adapter as the
+     'priceFeed' for this resource in the sibling Weft V1 adapter file)
+  Gateway resolved this to state_version 557336173 (at/just before the attack tx)
+  Weft's own CaviarLsuPriceFeedProxy: 1 LSULP = 1.224027421309258 XRD  (oracle's own internal timestamp: 2026-08-30 18:02:00Z)
+
+=== Step 7: read the CDP's own on-chain state, live, to confirm the aftermath ===
+  NonFungible mints in this tx, in order: ['resource_rdx1nt22yfvhuuhxww7jnnml5ec3yt5pkxh0qlghm6f0hz46z2wfk80s9r', 'resource_rdx1ng4qjg5yec433ckp2xpdgvc6j4gpjexx42svly67dmyt5mx80f68as']
+  CDP collection (Wefty V2 NFT) minted by this tx: resource_rdx1nt22yfvhuuhxww7jnnml5ec3yt5pkxh0qlghm6f0hz46z2wfk80s9r  (total_supply=898, a real ongoing collection)
+  CDP #1138#: is_burned=False  last_updated_at_state_version=557445107
+  outstanding loan units (still owed, per the CDP's own stored state):
+    LSULP: 47202009.98088728231749256
+    XRD: 11877595.354958977382851087
+  remaining collateral units (per the CDP's own stored state):
+    resource_rdx1t5kmyj54jt85malva7fxdrnpvgfgs623yt7ywdaval25vrdlmnwe97: 0.000000000000016501  (this is the HUG resource: True)
+
+=== Step 8: find and net out the one partial liquidation that followed, live ===
+  liquidation tx: txid_rdx1kt5f3vfq47thgnh49ykzffqd7243w6z6dw23dfwygqrphj7yafjquxp7hz  2026-08-30T23:45:57.784Z
+  CDPRepayForLiquidationEvent: 51.127952505660406764 LSULP repaid
+  CDPRemoveCollateralForLiquidation: 539703.171057886067444531 of resource_rdx1t5kmyj54jt85malva7fxdrnpvgfgs623yt7ywdaval25vrdlmnwe97 seized
+
+=== Step 9: price the net loss at theft-day rates ===
+  LSULP borrowed:            47,280,000.000000
+  LSULP repaid at liquidation: -51.127953
+  LSULP net still owed:      47,279,948.872047  x 1.224027421309258 XRD/LSULP = 57,871,953.897486 XRD
+  XRD borrowed (unrepaid):   13,100,500.000000
+  Total XRD-equivalent net loss: 70,972,453.897486 XRD
+  CoinGecko XRD price, 2026-08-30: $0.0008678415160464539
+  TOTAL independently reconstructed net loss: $61,592.84
+
+  DefiLlama tracked figure ('Weft V2' row): $47,200  (source field: (empty))
+  difference: +30.49%
+
+Done.

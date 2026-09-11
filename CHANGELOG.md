@@ -4,6 +4,42 @@ One entry per addition or correction to this repo. Each incident added
 with `add_new_entry.py` gets tagged as a matching GitHub release, see
 "Get notified of new postmortems" in `README.md`.
 
+## 2026-09-11 (23)
+
+- Added a 37th incident: Weft Finance (Weft V2) HUG collateral
+  manipulation, Radix, 2026-08-30. Found via DefiLlama's hacks feed (a
+  "Weft V2" row, $47,200, "Oracle Manipulation" / "Spot Price
+  Manipulation", empty source field). No press coverage, rekt.news entry,
+  security-firm writeup, or official Weft statement was found anywhere for
+  this incident by direct search; the only two Weft-related security
+  stories that exist publicly are an unrelated 2025 Hacken ethical-hacking
+  audit case study and the separate, already-covered Aug 2026 Switchboard
+  oracle-key compromise (Sui/Aptos/IOTA/Movement, not Radix). Built
+  entirely from the chain: starting from Weft's own PR into DefiLlama's
+  TVL-adapter repository (not a block explorer) for the two live "Weft V2"
+  component addresses, filtered the Radix Gateway's own transaction stream
+  for every transaction touching the lending market across 2026-08-29
+  through 08-31 (73 transactions) and ranked by total balance-change
+  volume to find the attack transaction independently, rather than
+  starting from a tx hash. Decoded live: a single atomic transaction swaps
+  a trivial 70.6 XRD into 539,703.17 units of an obscure 100-billion-
+  supply meme token ("Hug", HUG) through one thin CaviarNine pool, posts
+  the HUG as CDP collateral (Wefty V2 NFT #1138), borrows 47,280,000
+  LSULP (CaviarNine's real liquid-staking pool token, confirmed correctly
+  priced the whole time via Weft's own on-chain price-feed component) and
+  13,100,500 XRD against it, then removes the HUG collateral again in the
+  same transaction. The CDP's own on-chain data, read live 6 days later
+  (the last state before Radix mainnet's own unrelated 2026-08-31 halt,
+  already documented in radix-hyperlane-vault-access-drain/), confirms
+  real outstanding debt in both borrowed assets against 0.0000000000000165
+  HUG of collateral. One partial liquidation followed 5h43m later,
+  repaying only 51.13 of the 47,280,000 LSULP owed (0.0001%) in exchange
+  for the near-worthless remaining HUG. Net of that liquidation, priced at
+  Weft's own on-chain LSULP/XRD rate and CoinGecko's 2026-08-30 XRD price,
+  the independently reconstructed loss is $61,592.84, about 30.5% above
+  DefiLlama's tracked figure -- an unreconciled gap, since DefiLlama's own
+  source field for this row is empty.
+
 ## 2026-09-11 (22)
 
 - Added a 36th incident: WealthManagementV2 self-owned-proxy drain, BSC,
