@@ -4,6 +4,54 @@ One entry per addition or correction to this repo. Each incident added
 with `add_new_entry.py` gets tagged as a matching GitHub release, see
 "Get notified of new postmortems" in `README.md`.
 
+## 2026-09-11 (17)
+
+- Added a 31st incident: Coreum (XRPL Bridge) deposit forgery, XRP Ledger +
+  Coreum, 2026-08-09. Found via a web search for recent security-firm
+  writeups (CoinDesk and Decrypt both carry independent, mainstream
+  coverage); DefiLlama separately tracks the same incident as "Coreum
+  Bridge", $200,000, "Bridge & Cross-Chain" / "Bridge Logic Flaw". A first
+  attempt this round anchored on a different, also XRPSCAN-verified
+  "Coreum"/"Issuer" XRPL account (rcoreNywaoz2ZCQ8Lg2EbSLnGuRBmun6D) and
+  was a genuine dead end: that account's balance sat flat at 472.89 XRP
+  for the entire year sampled, and it turned out to be blackholed (master
+  key disabled, null RegularKey, zero owned ledger objects -- no
+  SignerList at all), structurally incapable of signing anything. The
+  second, genuinely different on-chain angle that resolved it: querying
+  the bridge's OWN smart contract on Coreum's mainnet (a live CosmWasm
+  `{"config":{}}` query, cross-checked against CoreumFoundation's own
+  `token-registry` GitHub repo to confirm the contract address itself is
+  the shared issuer for all 10 mainnet XRPL-originated assets) returned
+  the bridge's own `bridge_xrpl_address`
+  (rxXXXeMX8Gy5YvibvGLnQJ1XKKD7UswM1), a 17-of-28 `evidence_threshold`,
+  and `bridge_state: halted` -- matching press's own "17 of 28 relayer
+  keys" description independently, from the bridge's own primary source.
+  A direct before/after ledger-snapshot balance comparison (independent
+  of any transaction-list indexer's completeness) confirms the bridge's
+  own reserve fell by exactly 199,916.334320 XRP over the incident
+  window. `account_tx` against the public s2.ripple.com endpoint proved
+  genuinely unreliable within this session (4 separate fetches of the
+  identical ledger range returned 4112, 4000, 4111, and 4088 raw records);
+  `reconstruct_exploit.py` handles this by retrying the fetch until the
+  resulting balance-changing subset sums to exactly that ground-truth
+  figure rather than trusting any single fetch, which matched on the
+  first attempt on the run that produced this entry: 94 real payouts
+  (each carrying exactly 17 Signers), split 107,397.5 XRP to one attacker
+  address and 92,518.8 XRP to a second, 199,916.300000 XRP delivered in
+  total -- matching press's own per-destination and total figures to the
+  exact XRP. The forged-deposit mechanism itself is decoded directly from
+  one representative transaction's own raw memo bytes: a self-transfer of
+  the bridge's own already-issued wrapped-token IOU between the two
+  attacker addresses, carrying the bridge's own real deposit-tag JSON
+  format, that never touched the bridge's reserve address at all. Loss
+  figure: $207,699.83 at CoinGecko's 2026-08-09 historical XRP price,
+  about 3.8% above DefiLlama's tracked $200,000 (ordinary daily-price
+  variance, not a mechanism or classification error, so not listed as a
+  correction). Not independently re-traced this round: the downstream
+  laundering path press describes (ETH via THORChain to Tornado Cash), and
+  no official Coreum/TX blog postmortem, since docs.tx.org returned HTTP
+  403 to this project's tooling.
+
 ## 2026-09-11 (16)
 
 - Added a 30th incident: Coinsbuy (hot-wallet drain), Ethereum + Tron,

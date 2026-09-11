@@ -1,0 +1,66 @@
+=== Step 0: the bridge contract address, cross-checked against CoreumFoundation's own token-registry ===
+  https://raw.githubusercontent.com/CoreumFoundation/token-registry/master/mainnet/assets.json
+  10 mainnet XRPL-originated assets share the Coreum-side issuer core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz: ['XRP', 'SOLO', 'RLUSD', 'ELS', 'VGB', 'EQL', 'OXP', 'SIGMA', 'ROLL', 'bwif']
+
+=== Step 1: the bridge contract's OWN live config (CosmWasm smart-query, Coreum mainnet LCD) ===
+  bridge_xrpl_address : rxXXXeMX8Gy5YvibvGLnQJ1XKKD7UswM1
+  bridge_state        : halted
+  evidence_threshold  : 17
+  relayers registered : 28
+
+=== Step 1b: why the FIRST attempt this round (a different Coreum-branded account) was a dead end ===
+  rcoreNywaoz2ZCQ8Lg2EbSLnGuRBmun6D: disableMasterKey=True, RegularKey=rrrrrrrrrrrrrrrrrrrrBZbvji, OwnerCount=0
+  Master key disabled, RegularKey is the null placeholder, and OwnerCount is 0 (no SignerList object exists): this account is structurally incapable of signing anything, let alone the 94 multisig-authorized payments press describes. It is a blackholed legacy token issuer, not the live bridge custody account. Confirms Step 1's bridge_xrpl_address was the right correction.
+
+=== Step 2: rxXXXeMX8Gy5YvibvGLnQJ1XKKD7UswM1's own account state, live ===
+  Balance today        : 763.543911 XRP
+  disableMasterKey     : True
+  OwnerCount (trustlines/tickets/signer list) : 227
+  TicketCount           : 216
+
+=== Step 3: independently locating the 2026-08-09 exploit-window ledger range (binary search, not hardcoded) ===
+  2026-08-09T19:00:00+00:00 -> ledger 106183085
+  2026-08-09T21:30:00+00:00   -> ledger 106185405
+
+=== Step 4: DIRECT balance-snapshot ground truth (independent of account_tx enumeration entirely) ===
+  Balance at ledger 106183085 (2026-08-09T19:00:00+00:00Z): 200,409.878544 XRP
+  Balance at ledger 106185405 (2026-08-09T21:30:00+00:00Z):   493.544224 XRP
+  Ground-truth reduction over the window (cryptographically committed in each ledger's own AccountRoot state, independent of any transaction-list indexer): 199,916.334320 XRP
+
+=== Step 5: full account_tx over that window for rxXXXeMX8Gy5YvibvGLnQJ1XKKD7UswM1, chunked, retried against Step 4's ground truth ===
+  (raw account_tx record counts over this window were NOT reproducible run-to-run against
+   this public endpoint during this project's research -- 4112, 4000, 4111 and 4088 total
+   records observed on 4 separate fetches of the identical range, all of it noise from OTHER
+   users' trust-line activity touching this heavily-used account's many issued currencies, not
+   the bridge's own XRP balance. Rather than trust any single fetch, this step retries the
+   fetch until the resulting balance-changing subset sums to EXACTLY Step 4's independent
+   ledger-snapshot ground truth -- a check that does not depend on account_tx's own
+   completeness at all, since it is derived straight from two ledgers' own committed state.)
+  attempt 1: 4112 raw txs -> 104 balance-changing, summing to 199,916.334320 XRP reduction (MATCHES ground truth)
+
+  Of 104 total balance-changing transactions on the bridge's own XRP balance:
+  10 are fee-only entries (no real value moved -- multisig probe/setup traffic)
+  94 are real outbound payments (delta <= -1000 drops, tesSUCCESS)
+
+=== Step 6: the real drain, summed independently by destination ===
+  rfXSfH2q4zhGWdw45nYcWfjvFN5ZfwE1U6: 107,397.500000 XRP across 47 payments
+  rwt8PJhyXWgW8uwmTjmQ7Rw89tJHELFgb5: 92,518.800000 XRP across 47 payments
+  TOTAL delivered (excl. fees): 199,916.300000 XRP across 94 payments
+  TOTAL balance reduction (incl. fees): 199,916.331020 XRP
+  Window: first real drain 2026-08-09T19:26:30Z, last 2026-08-09T20:53:50Z  (87.3 min); counting from the first probe transaction (2026-08-09T19:16:42Z) to the last drain: 97.1 min
+  Every signed payout carries exactly 17 Signers, matching Step 1's evidence_threshold of 17-of-28.
+
+=== Step 7: the forged-deposit mechanism, decoded directly from one representative memo ===
+  tx 3DB7E443981B9757DB878DE7A2079AFE2D69EA08BF532D46CE5B74A4D5BC73C5: rfXSfH2q4zhGWdw45nYcWfjvFN5ZfwE1U6 -> rwt8PJhyXWgW8uwmTjmQ7Rw89tJHELFgb5
+  Amount: 100 of currency 'coreum7c8eb29e07' (issuer rxXXXeMX8Gy5YvibvGLnQJ1XKKD7UswM1 -- the bridge itself, an already-issued wrapped-token IOU, NOT native XRP)
+  Memo (hex-decoded)  : {"type":"coreumbridge-xrpl-v1","coreum_recipient":"core1e7y6qwktg7l6ajr8e2eal5j4dnc2jyceftnjce"}
+  This is the bridge's OWN real deposit-memo format (type=coreumbridge-xrpl-v1, coreum_recipient=<a real Coreum address>), attached to a transfer that never touched rxXXXeMX8Gy5YvibvGLnQJ1XKKD7UswM1 at all -- exactly the forged-deposit mechanism press describes: a self-transfer of the bridge's own currency, tagged to look like a genuine deposit.
+
+=== Step 8: historical XRP/USD price and the independently-confirmed total ===
+  CoinGecko XRP/USD, 2026-08-09: 1.0389339261257766
+  199,916.300000 XRP x $1.038934 = $207,699.83
+  DefiLlama's own tracked figure for this incident ("Coreum Bridge", api.llama.fi/hacks): $200,000
+
+=== Step 9: is the bridge still halted, and has the reserve moved since? ===
+  bridge_state today   : halted
+  Balance today         : 763.543911 XRP (Step 2 snapshot, moments earlier in this same run, was 763.543911 XRP)

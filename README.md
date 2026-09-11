@@ -28,11 +28,11 @@ lost in the merge.
 
 | | |
 |---|---|
-| Incidents covered | 30, independently reconstructed on-chain, see the index for detail |
-| Cumulative loss, recomputed | About $484.8M across the 30 incidents ($484,849,208 exactly, sum of the figures in the index below). At least one entry is a known floor, so the real total is higher. |
+| Incidents covered | 31, independently reconstructed on-chain, see the index for detail |
+| Cumulative loss, recomputed | About $485.1M across the 31 incidents ($485,056,908 exactly, sum of the figures in the index below). At least one entry is a known floor, so the real total is higher. |
 | Corrections made | 19 entries below correct, reconcile, or newly surface a press or DefiLlama figure, label, date, or classification (14 corrections, 4 reconciliations, 1 discovery not previously tracked by DefiLlama at all). See Corrections to press and DefiLlama below. |
 | Method | Each subfolder keeps its original Python reconstruction script, its `registre_hypotheses.csv` falsification registry, and its script's raw output in `resultats_*.txt`, so every figure below can be checked against the file that produced it |
-| License | MIT across all 30 entries, single author (s_pap, 2026) |
+| License | MIT across all 31 entries, single author (s_pap, 2026) |
 
 ## Table of contents
 
@@ -75,7 +75,7 @@ exact figure decoded from source data.
 
 ### 2026
 
-**2026 total: $484,849,208** across 30 incidents (6 months, April through September). At least one entry this year is a known floor, so the true total is higher.
+**2026 total: $485,056,908** across 31 incidents (6 months, April through September). At least one entry this year is a known floor, so the true total is higher.
 
 #### September 2026 (current month)
 
@@ -107,9 +107,10 @@ exact figure decoded from source data.
 | Avici (Rain Card Collateral) | 2026-08-28 | ≈ 500,859 [^avici-rain-collateral-withdraw] | Solana | Access-Control | Forged dual-signature authorization (Ed25519 instruction-offset reuse) on a shared Rain card-collateral program let one attacker-controlled signature satisfy a two-signer withdrawal check | [avici-rain-collateral-withdraw/](avici-rain-collateral-withdraw/) |
 | MORE Markets (Ankr ankrFLOW E-Mode) | 2026-08-31 | ≈ 415,398 [^more-markets-ankrflow-emode] | Flow EVM | Access-Control | Ankr's ankrFLOW liquid-staking contract let unbacked ankrFLOW be minted via a recursive stake/restake loop, supplied as E-Mode collateral to drain MORE Markets' WFLOW reserve | [more-markets-ankrflow-emode/](more-markets-ankrflow-emode/) |
 | Balancer V1 (legacy pools) | 2026-08-30 / 08-31 | ≥ 234,000 [^balancer] | Ethereum | Rounding/Math-Bug | Rounding error on unmaintained V1 pools, repeated 1-satoshi joins | [balancer-v1-rounding/](balancer-v1-rounding/) |
+| Coreum (XRPL Bridge) | 2026-08-09 | ≈ 207,700 [^coreum-xrpl-bridge-deposit-forgery] | XRP Ledger + Coreum | Bridge | Relayers accepted a self-transfer of the bridge's own already-issued wrapped-token IOU, carrying a forged bridge-deposit memo, as proof of a real XRP deposit, without ever checking that XRP reached the bridge's own reserve account | [coreum-xrpl-bridge-deposit-forgery/](coreum-xrpl-bridge-deposit-forgery/) |
 | Float Protocol (Hypervisor Vaults) | 2026-08-31 | ≈ 25,870 [^float-protocol-hypervisor-spot-manipulation] | Ethereum | Oracle | Flash-loan-funded Uniswap V3 slot0 manipulation distorted two Gamma-style Hypervisor vaults' share pricing, letting deposit/withdraw pairs straddling the skewed price redeem more value than deposited | [float-protocol-hypervisor-spot-manipulation/](float-protocol-hypervisor-spot-manipulation/) |
 
-**August 2026 subtotal: $46,323,192** across 15 incidents. Includes 5 known floor figures (Coinsbuy, Cosmos EVM (MANTRA / TAC / KiiChain), Maya Protocol (MAYAChain), Sandbox (SAND / OFT), Balancer V1 (legacy pools)), so the true total is higher.
+**August 2026 subtotal: $46,530,892** across 16 incidents. Includes 5 known floor figures (Coinsbuy, Cosmos EVM (MANTRA / TAC / KiiChain), Maya Protocol (MAYAChain), Sandbox (SAND / OFT), Balancer V1 (legacy pools)), so the true total is higher.
 
 #### July 2026
 
@@ -179,6 +180,7 @@ exact figure decoded from source data.
 [^redsonic-vault-share-registration]: An attacker flash-loaned WETH from Balancer, then immediately called the unprivileged `registerErc20(address)` on Reddio's RedSonic Vault's Diamond proxy (confirmed live as a real, currently-installed selector, not assumed from a write-up), registering Lido stETH as a second share class before ever depositing into the vault's existing rsvETH product. Only after that registration did a ~1,130 ETH deposit mint rsvETH shares that could then be redeemed for 9.254631141072739 ETH more than they were deposited for, decoded directly from the vault's own paired deposit/withdraw events. The attacker's own EOA held 9.261768945208 ETH immediately after the exploit block; at CoinGecko's 2026-09-05 price that is $22,747.69, within 0.23% of DefiLlama's tracked $22,800. A live simulation confirms the same call still succeeds today from any unprivileged address. See `redsonic-vault-share-registration/README.md`. External sources: https://docs.reddio.com/zkevm/staking, https://api.llama.fi/hacks.
 [^float-protocol-hypervisor-spot-manipulation]: A flash-loan-funded Uniswap V3 `slot0` manipulation, confirmed via the WETH contract's own `Withdrawal` event and independently cross-checked against the attacker EOA's own balance delta (two archive RPC providers agree), nets exactly 10.706591043820923 ETH, matching SlowMist's own reported "10.71 ETH" to the stated precision. At CoinGecko's 2026-08-31 daily price that is $25,869.71, about 7.6% below DefiLlama's tracked $28,000 (same defillamaId as Float Protocol's unrelated Jan-2022 exploit); an intraday-interpolated price gives $26,189.43 instead, about 6.5% below. See `float-protocol-hypervisor-spot-manipulation/README.md`. External source: https://crypto.news/float-protocol-hit-by-28k-flash-loan-attack-through-uniswap-v3-manipulation/.
 [^coinsbuy-wallet-drain]: Unauthorized withdrawals drained named Coinsbuy hot wallets on Ethereum and Tron within under an hour. The Tron leg is independently summed in full from a live TronGrid query: 6,037,005.00 USDT landed on the attacker's Tron collector, matching rekt.news's own figure to the cent. The Ethereum leg is confirmed only in part: one direct 77 ETH transfer (worth $147,489.48 at CoinGecko's 2026-08-09 price) from a Blockscout-tagged Coinsbuy hot wallet to the attacker's Ethereum collector, verified via raw JSON-RPC on 2 endpoints; the remainder of rekt.news's claimed 360.8 ETH Ethereum-side total (210.8 ETH via FixedFloat, 150 ETH via ChangeNOW) routes through an unlabeled intermediary address this project could not independently attribute to Coinsbuy, so it is not counted. Combined independently-confirmed floor: $6,184,494.48. rekt.news's own total is $8.07M; DefiLlama tracks $7,900,000. Coinsbuy's own official statement confirms the incident and a full reimbursement from its own reserves but discloses no technical detail. See `coinsbuy-wallet-drain/README.md`. External sources: https://rekt.news/coinsbuy-rekt/, https://coinsbuy.com/news/official-statement-on-the-august-9-security-incident/.
+[^coreum-xrpl-bridge-deposit-forgery]: Relayers credited a self-transfer of the bridge's own already-issued wrapped-token IOU, carrying a forged bridge-deposit memo (decoded directly from the transaction's own raw bytes), as a real XRP deposit. A direct before/after ledger-snapshot comparison (independent of any transaction-list indexer) confirms the bridge's own reserve fell by exactly 199,916.334320 XRP; enumerating the 94 individual payouts behind that (every one carrying the contract's own 17-of-28 signer threshold) finds 199,916.300000 XRP delivered to 2 attacker addresses (107,397.5 and 92,518.8 XRP, matching press to the exact XRP), $207,699.83 at CoinGecko's 2026-08-09 price, about 3.8% above DefiLlama's tracked $200,000. See `coreum-xrpl-bridge-deposit-forgery/README.md`. External sources: https://www.coindesk.com/tech/2026/08/12/xrp-bridge-drained-for-usd200-000-after-software-mistook-fake-deposits-for-real-ones, https://decrypt.co/375441/xrp-drained-tx-bridge.
 
 ## Corrections to press and DefiLlama
 
