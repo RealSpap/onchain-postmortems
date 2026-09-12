@@ -1,0 +1,21 @@
+ether.fi AtomicQueue exploit — attacker cash-out to Tornado Cash
+attacker EOA: 0xa5CC6e490Bce9185fA47b421f2EaC677A83B64Ea
+destination : 0xd90e2f925da726b50c4ed8d0fb90ad053324f31b (labelled 'TornadoRouter' on Blockscout)
+the attacker swapped the drained liquidETH/USDC to ETH inside the exploit tx (nonce 0),
+then dispersed the proceeds to Tornado Cash in 11 deposits over ~5 minutes:
+
+nonce  time (UTC)             value ETH   to
+   0  2026-09-11T07:20:11     0.0000  
+   1  2026-09-11T07:23:11    10.0000  0xd90e2f925da726b50c4ed8d0fb90ad053324f31b
+   2  2026-09-11T07:23:23     1.0000  0xd90e2f925da726b50c4ed8d0fb90ad053324f31b
+   3  2026-09-11T07:23:59     1.0000  0xd90e2f925da726b50c4ed8d0fb90ad053324f31b
+   4  2026-09-11T07:24:47     1.0000  0xd90e2f925da726b50c4ed8d0fb90ad053324f31b
+   5  2026-09-11T07:25:11     1.0000  0xd90e2f925da726b50c4ed8d0fb90ad053324f31b
+   6  2026-09-11T07:25:35     1.0000  0xd90e2f925da726b50c4ed8d0fb90ad053324f31b
+   7  2026-09-11T07:25:59     0.1000  0xd90e2f925da726b50c4ed8d0fb90ad053324f31b
+   8  2026-09-11T07:26:23     0.1000  0xd90e2f925da726b50c4ed8d0fb90ad053324f31b
+   9  2026-09-11T07:26:47     0.1000  0xd90e2f925da726b50c4ed8d0fb90ad053324f31b
+  10  2026-09-11T07:27:23     0.1000  0xd90e2f925da726b50c4ed8d0fb90ad053324f31b
+  11  2026-09-11T07:27:59     0.1000  0xd90e2f925da726b50c4ed8d0fb90ad053324f31b
+
+total sent to TornadoRouter: 15.5000 ETH (one 10, five 1, five 0.1) — matches press exactly.

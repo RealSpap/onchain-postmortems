@@ -1,0 +1,17 @@
+ether.fi AtomicQueue exploit — adversarial self-check
+the reconstruction derives the loss two independent ways and asserts they reconcile:
+
+  A) sum of Transfer logs from the 11 victims into the attacker's solver contract:
+     14.445541086626480620 liquidETH + 7.047848 USDC
+  B) the attacker EOA's own native-ETH balance delta plus gas (what they walked away with):
+     15.453645063 ETH
+
+these are different measurements (token outflow from victims vs. ETH gained by the attacker
+after the in-transaction swap to ETH). They reconcile through the liquidETH/ETH realized rate
+of 1.069787, which the script asserts lies in the sane 1.00-1.15 band. A fabricated or mis-scaled
+figure on either side would push the implied rate out of that band and fail the assertion.
+
+the script also asserts, live: the exploit tx was a contract creation (tx.to == None); the
+attacker's nonce was 0 before it; every drained wallet has code; a 300-liquidETH code-less
+approver was left untouched; and all 11 (wallet,token) positions were reimbursed to within dust.
+see 09_reconstruction_output.txt for the captured run.

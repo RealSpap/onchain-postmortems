@@ -1,0 +1,34 @@
+ether.fi Liquid — DefiLlama hacks feed record vs on-chain reality
+
+DefiLlama record (https://api.llama.fi/hacks, grep name=="ether.fi Liquid"):
+{
+ "date": 1789084800,
+ "name": "ether.fi Liquid",
+ "classification": "Access Control",
+ "technique": "Arbitrary External Call",
+ "amount": 43260,
+ "chain": [
+  "Ethereum"
+ ],
+ "bridgeHack": false,
+ "targetType": "DeFi Protocol",
+ "source": "",
+ "returnedFunds": null,
+ "defillamaId": "4429",
+ "parentProtocolId": "parent#ether-fi",
+ "language": "Solidity"
+}
+
+DefiLlama date field 1789084800 decodes to 2026-09-11T00:00:00Z (2026-09-11).
+On-chain exploit block 25952624 timestamp: 2026-09-11T07:20:11Z. The date is correct (same day).
+
+DefiLlama amount: 43260 USD.
+On-chain realized: attacker gross 15.453645063 ETH (EOA balance delta 15.452960135 + gas 0.000684929),
+which also equals the sum of drained value (14.4455 liquidETH-equiv + 7.05 USDC).
+ETH/USD at 2026-09-11T07:20Z (coins.llama.fi, coingecko:ethereum, confidence 0.99): 2459.2370891934406
+  -> realized value = 15.453645063 * 2459.2371 + 7.047848 USDC = ~$38,011.
+  -> DefiLlama's $43,260 is ~14% high; it implies an ETH price of ~$2,799, not the ~$2,459 that
+     DefiLlama's OWN price oracle reports for that timestamp. Press (CryptoTimes) reported ~$38,000,
+     which reconciles with the on-chain figure. The classification/technique
+     ('Access Control' / 'Arbitrary External Call') is accurate.
+DefiLlama returnedFunds: null, though all 11 wallets were reimbursed on-chain within ~9h (see 05).

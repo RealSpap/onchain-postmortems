@@ -1,0 +1,59 @@
+AtomicQueue.sol — verified source (compiler 0.8.21+commit.d9974bed), the vulnerable solve()
+contract: 0xd45884b592e316eb816199615a95c182f75dea07 (non-proxy, immutable, no owner()/pause())
+
+The `solver` argument is caller-supplied and is NEVER required to equal msg.sender.
+Loop 2 executes  want.safeTransferFrom(solver, users[i], assetsToUser)  which pulls the WANT
+token out of `solver` using solver's standing approval to the queue. By naming a victim as
+`solver`, and placing a self-request that offers a worthless token and wants the victim's token,
+the attacker redirects the victim's stale approval to themselves.
+
+Note the finishSolve call between the two loops:
+  IAtomicSolver(solver).finishSolve(runData, msg.sender, offer, want, assetsToOffer, assetsForWant);
+This high-level external call reverts on a code-less address, so only a `solver` WITH code
+(a contract or an EIP-7702-delegated account) can be drained via this path.
+
+ 190:     function solve(
+ 191:         ERC20 offer,
+ 192:         ERC20 want,
+ 193:         address[] calldata users,
+ 194:         bytes calldata runData,
+ 195:         address solver
+ 196:     ) external nonReentrant {
+ 197:         // Save offer asset decimals.
+ 198:         uint8 offerDecimals = offer.decimals();
+ 199: 
+ 200:         uint256 assetsToOffer;
+ 201:         uint256 assetsForWant;
+ 202:         for (uint256 i; i < users.length; ++i) {
+ 203:             AtomicRequest storage request = userAtomicRequest[users[i]][offer][want];
+ 204: 
+ 205:             if (request.inSolve) revert AtomicQueue__UserRepeated(users[i]);
+ 206:             if (block.timestamp > request.deadline) revert AtomicQueue__RequestDeadlineExceeded(users[i]);
+ 207:             if (request.offerAmount == 0) revert AtomicQueue__ZeroOfferAmount(users[i]);
+ 208: 
+ 209:             // User gets whatever their atomic price * offerAmount is.
+ 210:             assetsForWant += _calculateAssetAmount(request.offerAmount, request.atomicPrice, offerDecimals);
+ 211: 
+ 212:             // If all checks above passed, the users request is valid and should be fulfilled.
+ 213:             assetsToOffer += request.offerAmount;
+ 214:             request.inSolve = true;
+ 215:             // Transfer shares from user to solver.
+ 216:             offer.safeTransferFrom(users[i], solver, request.offerAmount);
+ 217:         }
+ 218: 
+ 219:         IAtomicSolver(solver).finishSolve(runData, msg.sender, offer, want, assetsToOffer, assetsForWant);
+ 220: 
+ 221:         for (uint256 i; i < users.length; ++i) {
+ 222:             AtomicRequest storage request = userAtomicRequest[users[i]][offer][want];
+ 223: 
+ 224:             if (request.inSolve) {
+ 225:                 // We know that the minimum price and deadline arguments are satisfied since this can only be true if they were.
+ 226: 
+ 227:                 // Send user their share of assets.
+ 228:                 uint256 assetsToUser = _calculateAssetAmount(request.offerAmount, request.atomicPrice, offerDecimals);
+ 229: 
+ 230:                 want.safeTransferFrom(solver, users[i], assetsToUser);
+ 231: 
+ 232:                 emit AtomicRequestFulfilled(
+ 233:                     users[i],
+ 234:                     address(offer),

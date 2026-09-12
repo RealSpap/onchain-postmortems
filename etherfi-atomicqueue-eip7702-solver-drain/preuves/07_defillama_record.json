@@ -1,0 +1,17 @@
+{
+ "date": 1789084800,
+ "name": "ether.fi Liquid",
+ "classification": "Access Control",
+ "technique": "Arbitrary External Call",
+ "amount": 43260,
+ "chain": [
+  "Ethereum"
+ ],
+ "bridgeHack": false,
+ "targetType": "DeFi Protocol",
+ "source": "",
+ "returnedFunds": null,
+ "defillamaId": "4429",
+ "parentProtocolId": "parent#ether-fi",
+ "language": "Solidity"
+}

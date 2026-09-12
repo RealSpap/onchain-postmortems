@@ -1,0 +1,36 @@
+== ether.fi Liquid AtomicQueue exploit — live reconstruction ==
+
+exploit tx 0x7cbe0b4349513fed6d03ba8bf9ed708e10e07a501d10b5f344a25ae10595599b
+  block 25952624 @ 1789111211 status=1 to=None (None=creation)
+
+11 victim wallets; drained 14.445541086626480620 liquidETH + 7.047848 USDC
+
+all drained wallets have code (solve() calls finishSolve on the named solver):
+  0x047e7CFA2702f95DE867A86a74CaF60E2DdBFF72    61b  contract
+  0x0EACbaA94AEcc4e51d299a99915F64EE96F3b468    23b  EIP-7702
+  0x0ec7E8C2DDdEC157589208D19feF4927607CCfD1   230b  contract
+  0x1226C76300A2a611182c08614B260c88bd6DB3B1    61b  contract
+  0x13B90df23158808185B247aB61EDe61b75d49E23    23b  EIP-7702
+  0x2cFb075E8FC0D99837653629B0A3d527f0769a1A    23b  EIP-7702
+  0x4D4Ef453CF782926825F5768499C7e02DaA3A9E7    23b  EIP-7702
+  0x516E726f53576Ee00Db9B96291CDD0F7EB5F8Cc7    23b  EIP-7702
+  0x69da29127BC31909c26080105B585345DDe847D4    23b  EIP-7702
+  0xEaBf4c3eA4bDef8A1eEf812296023D866D6E0F1A    61b  contract
+  0xeE8D39AB46C685889B3E4A31347deDB5739D553D    23b  EIP-7702
+
+skipped approver 0x0a807c667c11809c00d05c4d9ad46a50fd63b2d2: bal=300.7925 liquidETH allow=482.0820 code=EOA
+
+attacker gross realized = 15.453645063 ETH  (~$38,004 + 7.05 USDC)
+
+on-chain reimbursement:
+  11/11 (wallet,token) positions reimbursed to within dust
+
+cash-out: attacker nonces 1..11 send ETH to TornadoRouter 0xd90e2f925da726b50c4ed8d0fb90ad053324f31b
+
+[adversarial self-check]
+  A) drained liquidETH 14.445541 + USDC 7.05
+  B) attacker ETH gain 15.453645 ETH (balance delta + gas)
+  implied liquidETH/ETH realized rate = 1.069787 (expected ~1.05-1.09)
+  OK: the two independent derivations reconcile.
+
+== reconstruction complete ==

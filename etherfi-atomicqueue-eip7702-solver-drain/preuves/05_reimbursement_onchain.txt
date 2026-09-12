@@ -1,0 +1,28 @@
+ether.fi AtomicQueue exploit — on-chain reimbursement of all 11 victims
+press (CryptoTimes, 2026-09-11) reported only the CEO's *pledge* to reimburse and noted
+"formal post-mortem documentation with transaction hashes remained outstanding at publication".
+the reimbursement had in fact already executed on-chain ~9 hours after the exploit.
+
+payer (disperser): 0xf6c612c745ba4546075db62902c1eb3255cdae28  (GnosisSafeProxy multisig)
+funded by EOA    : 0x46cba1e9b1e5db32da28428f2fb85587bcb785e7
+reimbursement txs: 0x997b606356b89810d92ebdab9d4701bd2eeba9b2f9c42734337e5e458e37093c (16:28:23 UTC)
+                   0x80568d08c06544609ba316622cece74e15dc479dce48b73928219d5a1fb9c278 (16:34:11 UTC)
+                   0x70b11dfe100388ade001d97e6a83d854aafe20c2e739a8b67bfdf840bd9b7028 (16:35:59 UTC)
+exploit was 2026-09-11 07:20:11 UTC; reimbursement ~9.1-9.3 hours later.
+
+victim                                       token  drained            reimbursed          delta(raw)
+0x69da29127bc31909c26080105b585345dde847d4  LIQ    12366762997907905993  12366763000000000000  +2092094007
+0x1226c76300a2a611182c08614b260c88bd6db3b1  LIQ    1872359702113513087  1872359702000000000  -113513087
+0xee8d39ab46c685889b3e4a31347dedb5739d553d  LIQ    108561548097609073  108561548100000000  +2390927
+0x0eacbaa94aecc4e51d299a99915f64ee96f3b468  LIQ    71654265569543118   71654265570000000   +456882
+0x13b90df23158808185b247ab61ede61b75d49e23  LIQ    10559405683080560   10559405680000000   -3080560
+0x0ec7e8c2dddec157589208d19fef4927607ccfd1  LIQ    9912991721213508    9912991721000000    -213508
+0x516e726f53576ee00db9b96291cdd0f7eb5f8cc7  LIQ    3565365329596464    3565365330000000    +403536
+0x4d4ef453cf782926825f5768499c7e02daa3a9e7  LIQ    1606368347210355    1606368347000000    -210355
+0x2cfb075e8fc0d99837653629b0a3d527f0769a1a  LIQ    558441856808074     558441856800000     -8074
+0x047e7cfa2702f95de867a86a74caf60e2ddbff72  USDC   5692181             5692181             +0
+0xeabf4c3ea4bdef8a1eef812296023d866d6e0f1a  USDC   1355667             1355667             +0
+
+every wallet was made whole; small positive deltas on some rows are round-number over-payments
+by the payer (e.g. 12.366763 paid vs 12.366762997907905993 taken). DefiLlama's hacks feed still
+records returnedFunds: null for this incident.
