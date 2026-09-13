@@ -1,0 +1,3811 @@
+{
+ "items": [
+  {
+   "address": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "block_hash": "0x31bcff7695ee1600f9fc6e66e672ea65c0ea7a111e0e3e6f5f49d39adaa33ce2",
+   "block_number": 12574318,
+   "data": "0x0000000000000000000000000000000000000000000000000000000000000001",
+   "decoded": {
+    "method_call": "ReservePaused(address indexed asset, bool paused)",
+    "method_id": "e188d542",
+    "parameters": [
+     {
+      "indexed": true,
+      "name": "asset",
+      "type": "address",
+      "value": "0x3100000000000000000000000000000000000006"
+     },
+     {
+      "indexed": false,
+      "name": "paused",
+      "type": "bool",
+      "value": "true"
+     }
+    ]
+   },
+   "index": 38,
+   "smart_contract": {
+    "ens_domain_name": null,
+    "hash": "0x89318B8d8CB08e2537a3edb290D592E880e03147",
+    "implementations": [
+     {
+      "address_hash": "0x29fcB43b46531BcA003ddC8FCB67FFE91900C762",
+      "name": "SafeL2"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "master_copy",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "topics": [
+    "0xe188d542a5f11925d3a3af33703cdd30a43cb3e8066a3cf68b1b57f61a5a94b5",
+    "0x0000000000000000000000003100000000000000000000000000000000000006",
+    null,
+    null
+   ],
+   "transaction_hash": "0x7e925316d6fd854869078c1e5c785105fc58f15824a85bf8cb0c8a8dc2201d55"
+  },
+  {
+   "address": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "block_hash": "0x31bcff7695ee1600f9fc6e66e672ea65c0ea7a111e0e3e6f5f49d39adaa33ce2",
+   "block_number": 12574318,
+   "data": "0x0000000000000000000000000000000000000000000000000000000000000000",
+   "decoded": {
+    "method_call": "ReservePaused(address indexed asset, bool paused)",
+    "method_id": "e188d542",
+    "parameters": [
+     {
+      "indexed": true,
+      "name": "asset",
+      "type": "address",
+      "value": "0x3100000000000000000000000000000000000006"
+     },
+     {
+      "indexed": false,
+      "name": "paused",
+      "type": "bool",
+      "value": "false"
+     }
+    ]
+   },
+   "index": 27,
+   "smart_contract": {
+    "ens_domain_name": null,
+    "hash": "0x89318B8d8CB08e2537a3edb290D592E880e03147",
+    "implementations": [
+     {
+      "address_hash": "0x29fcB43b46531BcA003ddC8FCB67FFE91900C762",
+      "name": "SafeL2"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "master_copy",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "topics": [
+    "0xe188d542a5f11925d3a3af33703cdd30a43cb3e8066a3cf68b1b57f61a5a94b5",
+    "0x0000000000000000000000003100000000000000000000000000000000000006",
+    null,
+    null
+   ],
+   "transaction_hash": "0x7e925316d6fd854869078c1e5c785105fc58f15824a85bf8cb0c8a8dc2201d55"
+  },
+  {
+   "address": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "block_hash": "0x31bcff7695ee1600f9fc6e66e672ea65c0ea7a111e0e3e6f5f49d39adaa33ce2",
+   "block_number": 12574318,
+   "data": "0x0000000000000000000000003b6d46141d1ce86ef22b2700130b42c5399545f00000000000000000000000001623f5ece2120115c7d3b9fafe58b4fe0d4f7912",
+   "decoded": {
+    "method_call": "ReserveInterestRateStrategyChanged(address indexed asset, address oldStrategy, address newStrategy)",
+    "method_id": "db8dada5",
+    "parameters": [
+     {
+      "indexed": true,
+      "name": "asset",
+      "type": "address",
+      "value": "0x3100000000000000000000000000000000000006"
+     },
+     {
+      "indexed": false,
+      "name": "oldStrategy",
+      "type": "address",
+      "value": "0x3B6D46141D1cE86Ef22b2700130b42C5399545F0"
+     },
+     {
+      "indexed": false,
+      "name": "newStrategy",
+      "type": "address",
+      "value": "0x1623F5ecE2120115C7d3b9Fafe58b4FE0D4f7912"
+     }
+    ]
+   },
+   "index": 26,
+   "smart_contract": {
+    "ens_domain_name": null,
+    "hash": "0x89318B8d8CB08e2537a3edb290D592E880e03147",
+    "implementations": [
+     {
+      "address_hash": "0x29fcB43b46531BcA003ddC8FCB67FFE91900C762",
+      "name": "SafeL2"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "master_copy",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "topics": [
+    "0xdb8dada53709ce4988154324196790c2e4a60c377e1256790946f83b87db3c33",
+    "0x0000000000000000000000003100000000000000000000000000000000000006",
+    null,
+    null
+   ],
+   "transaction_hash": "0x7e925316d6fd854869078c1e5c785105fc58f15824a85bf8cb0c8a8dc2201d55"
+  },
+  {
+   "address": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "block_hash": "0x31bcff7695ee1600f9fc6e66e672ea65c0ea7a111e0e3e6f5f49d39adaa33ce2",
+   "block_number": 12574318,
+   "data": "0x0000000000000000000000000000000000000000000000000000000000000001",
+   "decoded": {
+    "method_call": "ReservePaused(address indexed asset, bool paused)",
+    "method_id": "e188d542",
+    "parameters": [
+     {
+      "indexed": true,
+      "name": "asset",
+      "type": "address",
+      "value": "0xE045e6c36cF77FAA2CfB54466D71A3aEF7bbE839"
+     },
+     {
+      "indexed": false,
+      "name": "paused",
+      "type": "bool",
+      "value": "true"
+     }
+    ]
+   },
+   "index": 25,
+   "smart_contract": {
+    "ens_domain_name": null,
+    "hash": "0x89318B8d8CB08e2537a3edb290D592E880e03147",
+    "implementations": [
+     {
+      "address_hash": "0x29fcB43b46531BcA003ddC8FCB67FFE91900C762",
+      "name": "SafeL2"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "master_copy",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "topics": [
+    "0xe188d542a5f11925d3a3af33703cdd30a43cb3e8066a3cf68b1b57f61a5a94b5",
+    "0x000000000000000000000000e045e6c36cf77faa2cfb54466d71a3aef7bbe839",
+    null,
+    null
+   ],
+   "transaction_hash": "0x7e925316d6fd854869078c1e5c785105fc58f15824a85bf8cb0c8a8dc2201d55"
+  },
+  {
+   "address": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "block_hash": "0x31bcff7695ee1600f9fc6e66e672ea65c0ea7a111e0e3e6f5f49d39adaa33ce2",
+   "block_number": 12574318,
+   "data": "0x0000000000000000000000000000000000000000000000000000000000000000",
+   "decoded": {
+    "method_call": "ReservePaused(address indexed asset, bool paused)",
+    "method_id": "e188d542",
+    "parameters": [
+     {
+      "indexed": true,
+      "name": "asset",
+      "type": "address",
+      "value": "0xE045e6c36cF77FAA2CfB54466D71A3aEF7bbE839"
+     },
+     {
+      "indexed": false,
+      "name": "paused",
+      "type": "bool",
+      "value": "false"
+     }
+    ]
+   },
+   "index": 14,
+   "smart_contract": {
+    "ens_domain_name": null,
+    "hash": "0x89318B8d8CB08e2537a3edb290D592E880e03147",
+    "implementations": [
+     {
+      "address_hash": "0x29fcB43b46531BcA003ddC8FCB67FFE91900C762",
+      "name": "SafeL2"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "master_copy",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "topics": [
+    "0xe188d542a5f11925d3a3af33703cdd30a43cb3e8066a3cf68b1b57f61a5a94b5",
+    "0x000000000000000000000000e045e6c36cf77faa2cfb54466d71a3aef7bbe839",
+    null,
+    null
+   ],
+   "transaction_hash": "0x7e925316d6fd854869078c1e5c785105fc58f15824a85bf8cb0c8a8dc2201d55"
+  },
+  {
+   "address": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "block_hash": "0x31bcff7695ee1600f9fc6e66e672ea65c0ea7a111e0e3e6f5f49d39adaa33ce2",
+   "block_number": 12574318,
+   "data": "0x000000000000000000000000cd4e39a9ba2e63ee6bfa6565f360869191ef13740000000000000000000000001623f5ece2120115c7d3b9fafe58b4fe0d4f7912",
+   "decoded": {
+    "method_call": "ReserveInterestRateStrategyChanged(address indexed asset, address oldStrategy, address newStrategy)",
+    "method_id": "db8dada5",
+    "parameters": [
+     {
+      "indexed": true,
+      "name": "asset",
+      "type": "address",
+      "value": "0xE045e6c36cF77FAA2CfB54466D71A3aEF7bbE839"
+     },
+     {
+      "indexed": false,
+      "name": "oldStrategy",
+      "type": "address",
+      "value": "0xcd4E39A9ba2e63EE6bFa6565F360869191EF1374"
+     },
+     {
+      "indexed": false,
+      "name": "newStrategy",
+      "type": "address",
+      "value": "0x1623F5ecE2120115C7d3b9Fafe58b4FE0D4f7912"
+     }
+    ]
+   },
+   "index": 13,
+   "smart_contract": {
+    "ens_domain_name": null,
+    "hash": "0x89318B8d8CB08e2537a3edb290D592E880e03147",
+    "implementations": [
+     {
+      "address_hash": "0x29fcB43b46531BcA003ddC8FCB67FFE91900C762",
+      "name": "SafeL2"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "master_copy",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "topics": [
+    "0xdb8dada53709ce4988154324196790c2e4a60c377e1256790946f83b87db3c33",
+    "0x000000000000000000000000e045e6c36cf77faa2cfb54466d71a3aef7bbe839",
+    null,
+    null
+   ],
+   "transaction_hash": "0x7e925316d6fd854869078c1e5c785105fc58f15824a85bf8cb0c8a8dc2201d55"
+  },
+  {
+   "address": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "block_hash": "0x31bcff7695ee1600f9fc6e66e672ea65c0ea7a111e0e3e6f5f49d39adaa33ce2",
+   "block_number": 12574318,
+   "data": "0x0000000000000000000000000000000000000000000000000000000000000001",
+   "decoded": {
+    "method_call": "ReservePaused(address indexed asset, bool paused)",
+    "method_id": "e188d542",
+    "parameters": [
+     {
+      "indexed": true,
+      "name": "asset",
+      "type": "address",
+      "value": "0x8D82c4E3c936C7B5724A382a9c5a4E6Eb7aB6d5D"
+     },
+     {
+      "indexed": false,
+      "name": "paused",
+      "type": "bool",
+      "value": "true"
+     }
+    ]
+   },
+   "index": 12,
+   "smart_contract": {
+    "ens_domain_name": null,
+    "hash": "0x89318B8d8CB08e2537a3edb290D592E880e03147",
+    "implementations": [
+     {
+      "address_hash": "0x29fcB43b46531BcA003ddC8FCB67FFE91900C762",
+      "name": "SafeL2"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "master_copy",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "topics": [
+    "0xe188d542a5f11925d3a3af33703cdd30a43cb3e8066a3cf68b1b57f61a5a94b5",
+    "0x0000000000000000000000008d82c4e3c936c7b5724a382a9c5a4e6eb7ab6d5d",
+    null,
+    null
+   ],
+   "transaction_hash": "0x7e925316d6fd854869078c1e5c785105fc58f15824a85bf8cb0c8a8dc2201d55"
+  },
+  {
+   "address": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "block_hash": "0x31bcff7695ee1600f9fc6e66e672ea65c0ea7a111e0e3e6f5f49d39adaa33ce2",
+   "block_number": 12574318,
+   "data": "0x0000000000000000000000000000000000000000000000000000000000000000",
+   "decoded": {
+    "method_call": "ReservePaused(address indexed asset, bool paused)",
+    "method_id": "e188d542",
+    "parameters": [
+     {
+      "indexed": true,
+      "name": "asset",
+      "type": "address",
+      "value": "0x8D82c4E3c936C7B5724A382a9c5a4E6Eb7aB6d5D"
+     },
+     {
+      "indexed": false,
+      "name": "paused",
+      "type": "bool",
+      "value": "false"
+     }
+    ]
+   },
+   "index": 2,
+   "smart_contract": {
+    "ens_domain_name": null,
+    "hash": "0x89318B8d8CB08e2537a3edb290D592E880e03147",
+    "implementations": [
+     {
+      "address_hash": "0x29fcB43b46531BcA003ddC8FCB67FFE91900C762",
+      "name": "SafeL2"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "master_copy",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "topics": [
+    "0xe188d542a5f11925d3a3af33703cdd30a43cb3e8066a3cf68b1b57f61a5a94b5",
+    "0x0000000000000000000000008d82c4e3c936c7b5724a382a9c5a4e6eb7ab6d5d",
+    null,
+    null
+   ],
+   "transaction_hash": "0x7e925316d6fd854869078c1e5c785105fc58f15824a85bf8cb0c8a8dc2201d55"
+  },
+  {
+   "address": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "block_hash": "0x31bcff7695ee1600f9fc6e66e672ea65c0ea7a111e0e3e6f5f49d39adaa33ce2",
+   "block_number": 12574318,
+   "data": "0x000000000000000000000000cd4e39a9ba2e63ee6bfa6565f360869191ef13740000000000000000000000001623f5ece2120115c7d3b9fafe58b4fe0d4f7912",
+   "decoded": {
+    "method_call": "ReserveInterestRateStrategyChanged(address indexed asset, address oldStrategy, address newStrategy)",
+    "method_id": "db8dada5",
+    "parameters": [
+     {
+      "indexed": true,
+      "name": "asset",
+      "type": "address",
+      "value": "0x8D82c4E3c936C7B5724A382a9c5a4E6Eb7aB6d5D"
+     },
+     {
+      "indexed": false,
+      "name": "oldStrategy",
+      "type": "address",
+      "value": "0xcd4E39A9ba2e63EE6bFa6565F360869191EF1374"
+     },
+     {
+      "indexed": false,
+      "name": "newStrategy",
+      "type": "address",
+      "value": "0x1623F5ecE2120115C7d3b9Fafe58b4FE0D4f7912"
+     }
+    ]
+   },
+   "index": 1,
+   "smart_contract": {
+    "ens_domain_name": null,
+    "hash": "0x89318B8d8CB08e2537a3edb290D592E880e03147",
+    "implementations": [
+     {
+      "address_hash": "0x29fcB43b46531BcA003ddC8FCB67FFE91900C762",
+      "name": "SafeL2"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "master_copy",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "topics": [
+    "0xdb8dada53709ce4988154324196790c2e4a60c377e1256790946f83b87db3c33",
+    "0x0000000000000000000000008d82c4e3c936c7b5724a382a9c5a4e6eb7ab6d5d",
+    null,
+    null
+   ],
+   "transaction_hash": "0x7e925316d6fd854869078c1e5c785105fc58f15824a85bf8cb0c8a8dc2201d55"
+  },
+  {
+   "address": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "block_hash": "0x045536f161462230340a1d89d01b7069b688470c0eda5853d5849aaf35262dbb",
+   "block_number": 12428650,
+   "data": "0x0000000000000000000000000000000000000000000000000000000000000001",
+   "decoded": {
+    "method_call": "ReservePaused(address indexed asset, bool paused)",
+    "method_id": "e188d542",
+    "parameters": [
+     {
+      "indexed": true,
+      "name": "asset",
+      "type": "address",
+      "value": "0xdA67B4284609d2d48e5d10cfAc411572727dc1eD"
+     },
+     {
+      "indexed": false,
+      "name": "paused",
+      "type": "bool",
+      "value": "true"
+     }
+    ]
+   },
+   "index": 4,
+   "smart_contract": {
+    "ens_domain_name": null,
+    "hash": "0x89318B8d8CB08e2537a3edb290D592E880e03147",
+    "implementations": [
+     {
+      "address_hash": "0x29fcB43b46531BcA003ddC8FCB67FFE91900C762",
+      "name": "SafeL2"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "master_copy",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "topics": [
+    "0xe188d542a5f11925d3a3af33703cdd30a43cb3e8066a3cf68b1b57f61a5a94b5",
+    "0x000000000000000000000000da67b4284609d2d48e5d10cfac411572727dc1ed",
+    null,
+    null
+   ],
+   "transaction_hash": "0x3b303d23d5040e35cb9f92363a3b27342861b62f6c8455b8e8870aaf6008be52"
+  },
+  {
+   "address": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "block_hash": "0x045536f161462230340a1d89d01b7069b688470c0eda5853d5849aaf35262dbb",
+   "block_number": 12428650,
+   "data": "0x0000000000000000000000000000000000000000000000000000000000000001",
+   "decoded": {
+    "method_call": "ReservePaused(address indexed asset, bool paused)",
+    "method_id": "e188d542",
+    "parameters": [
+     {
+      "indexed": true,
+      "name": "asset",
+      "type": "address",
+      "value": "0x8D82c4E3c936C7B5724A382a9c5a4E6Eb7aB6d5D"
+     },
+     {
+      "indexed": false,
+      "name": "paused",
+      "type": "bool",
+      "value": "true"
+     }
+    ]
+   },
+   "index": 3,
+   "smart_contract": {
+    "ens_domain_name": null,
+    "hash": "0x89318B8d8CB08e2537a3edb290D592E880e03147",
+    "implementations": [
+     {
+      "address_hash": "0x29fcB43b46531BcA003ddC8FCB67FFE91900C762",
+      "name": "SafeL2"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "master_copy",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "topics": [
+    "0xe188d542a5f11925d3a3af33703cdd30a43cb3e8066a3cf68b1b57f61a5a94b5",
+    "0x0000000000000000000000008d82c4e3c936c7b5724a382a9c5a4e6eb7ab6d5d",
+    null,
+    null
+   ],
+   "transaction_hash": "0x3b303d23d5040e35cb9f92363a3b27342861b62f6c8455b8e8870aaf6008be52"
+  },
+  {
+   "address": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "block_hash": "0x045536f161462230340a1d89d01b7069b688470c0eda5853d5849aaf35262dbb",
+   "block_number": 12428650,
+   "data": "0x0000000000000000000000000000000000000000000000000000000000000001",
+   "decoded": {
+    "method_call": "ReservePaused(address indexed asset, bool paused)",
+    "method_id": "e188d542",
+    "parameters": [
+     {
+      "indexed": true,
+      "name": "asset",
+      "type": "address",
+      "value": "0x3100000000000000000000000000000000000006"
+     },
+     {
+      "indexed": false,
+      "name": "paused",
+      "type": "bool",
+      "value": "true"
+     }
+    ]
+   },
+   "index": 2,
+   "smart_contract": {
+    "ens_domain_name": null,
+    "hash": "0x89318B8d8CB08e2537a3edb290D592E880e03147",
+    "implementations": [
+     {
+      "address_hash": "0x29fcB43b46531BcA003ddC8FCB67FFE91900C762",
+      "name": "SafeL2"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "master_copy",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "topics": [
+    "0xe188d542a5f11925d3a3af33703cdd30a43cb3e8066a3cf68b1b57f61a5a94b5",
+    "0x0000000000000000000000003100000000000000000000000000000000000006",
+    null,
+    null
+   ],
+   "transaction_hash": "0x3b303d23d5040e35cb9f92363a3b27342861b62f6c8455b8e8870aaf6008be52"
+  },
+  {
+   "address": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "block_hash": "0x045536f161462230340a1d89d01b7069b688470c0eda5853d5849aaf35262dbb",
+   "block_number": 12428650,
+   "data": "0x0000000000000000000000000000000000000000000000000000000000000001",
+   "decoded": {
+    "method_call": "ReservePaused(address indexed asset, bool paused)",
+    "method_id": "e188d542",
+    "parameters": [
+     {
+      "indexed": true,
+      "name": "asset",
+      "type": "address",
+      "value": "0xE045e6c36cF77FAA2CfB54466D71A3aEF7bbE839"
+     },
+     {
+      "indexed": false,
+      "name": "paused",
+      "type": "bool",
+      "value": "true"
+     }
+    ]
+   },
+   "index": 1,
+   "smart_contract": {
+    "ens_domain_name": null,
+    "hash": "0x89318B8d8CB08e2537a3edb290D592E880e03147",
+    "implementations": [
+     {
+      "address_hash": "0x29fcB43b46531BcA003ddC8FCB67FFE91900C762",
+      "name": "SafeL2"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "master_copy",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "topics": [
+    "0xe188d542a5f11925d3a3af33703cdd30a43cb3e8066a3cf68b1b57f61a5a94b5",
+    "0x000000000000000000000000e045e6c36cf77faa2cfb54466d71a3aef7bbe839",
+    null,
+    null
+   ],
+   "transaction_hash": "0x3b303d23d5040e35cb9f92363a3b27342861b62f6c8455b8e8870aaf6008be52"
+  },
+  {
+   "address": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "block_hash": "0x8bcb236a6d6b57f40cd3cd250fe50047af5ca43cc8d07ec04667fb37022f2a8a",
+   "block_number": 10665824,
+   "data": "0x0000000000000000000000000000000000000000000000000000000000001d4c000000000000000000000000000000000000000000000000000000000000203a0000000000000000000000000000000000000000000000000000000000002af8",
+   "decoded": {
+    "method_call": "CollateralConfigurationChanged(address indexed asset, uint256 ltv, uint256 liquidationThreshold, uint256 liquidationBonus)",
+    "method_id": "637febbd",
+    "parameters": [
+     {
+      "indexed": true,
+      "name": "asset",
+      "type": "address",
+      "value": "0xdA67B4284609d2d48e5d10cfAc411572727dc1eD"
+     },
+     {
+      "indexed": false,
+      "name": "ltv",
+      "type": "uint256",
+      "value": "7500"
+     },
+     {
+      "indexed": false,
+      "name": "liquidationThreshold",
+      "type": "uint256",
+      "value": "8250"
+     },
+     {
+      "indexed": false,
+      "name": "liquidationBonus",
+      "type": "uint256",
+      "value": "11000"
+     }
+    ]
+   },
+   "index": 1,
+   "smart_contract": {
+    "ens_domain_name": null,
+    "hash": "0x89318B8d8CB08e2537a3edb290D592E880e03147",
+    "implementations": [
+     {
+      "address_hash": "0x29fcB43b46531BcA003ddC8FCB67FFE91900C762",
+      "name": "SafeL2"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "master_copy",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "topics": [
+    "0x637febbda9275aea2e85c0ff690444c8d87eb2e8339bbede9715abcc89cb0995",
+    "0x000000000000000000000000da67b4284609d2d48e5d10cfac411572727dc1ed",
+    null,
+    null
+   ],
+   "transaction_hash": "0x67cb4ab3b95fdcae4b8b42c1d91f40e235731ce4f44b798206ebe9f0afe50e0b"
+  },
+  {
+   "address": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "block_hash": "0x433a720f5874eac160f714095d2f114a5d7da2e16720d4f94b442b1a1eda9187",
+   "block_number": 10407045,
+   "data": "0x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003e8",
+   "decoded": {
+    "method_call": "LiquidationProtocolFeeChanged(address indexed asset, uint256 oldFee, uint256 newFee)",
+    "method_id": "b5b0a963",
+    "parameters": [
+     {
+      "indexed": true,
+      "name": "asset",
+      "type": "address",
+      "value": "0xdA67B4284609d2d48e5d10cfAc411572727dc1eD"
+     },
+     {
+      "indexed": false,
+      "name": "oldFee",
+      "type": "uint256",
+      "value": "0"
+     },
+     {
+      "indexed": false,
+      "name": "newFee",
+      "type": "uint256",
+      "value": "1000"
+     }
+    ]
+   },
+   "index": 16,
+   "smart_contract": {
+    "ens_domain_name": null,
+    "hash": "0x89318B8d8CB08e2537a3edb290D592E880e03147",
+    "implementations": [
+     {
+      "address_hash": "0x29fcB43b46531BcA003ddC8FCB67FFE91900C762",
+      "name": "SafeL2"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "master_copy",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "topics": [
+    "0xb5b0a963825337808b6e3154de8e98027595a5cad4219bb3a9bc55b192f4b391",
+    "0x000000000000000000000000da67b4284609d2d48e5d10cfac411572727dc1ed",
+    null,
+    null
+   ],
+   "transaction_hash": "0x92a8e91668284ba1689deedf6e05c6a3ed3da56c2ee5a9f64b54e615989a106e"
+  },
+  {
+   "address": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "block_hash": "0x433a720f5874eac160f714095d2f114a5d7da2e16720d4f94b442b1a1eda9187",
+   "block_number": 10407045,
+   "data": "0x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005dc",
+   "decoded": {
+    "method_call": "ReserveFactorChanged(address indexed asset, uint256 oldReserveFactor, uint256 newReserveFactor)",
+    "method_id": "b46e2b82",
+    "parameters": [
+     {
+      "indexed": true,
+      "name": "asset",
+      "type": "address",
+      "value": "0xdA67B4284609d2d48e5d10cfAc411572727dc1eD"
+     },
+     {
+      "indexed": false,
+      "name": "oldReserveFactor",
+      "type": "uint256",
+      "value": "0"
+     },
+     {
+      "indexed": false,
+      "name": "newReserveFactor",
+      "type": "uint256",
+      "value": "1500"
+     }
+    ]
+   },
+   "index": 14,
+   "smart_contract": {
+    "ens_domain_name": null,
+    "hash": "0x89318B8d8CB08e2537a3edb290D592E880e03147",
+    "implementations": [
+     {
+      "address_hash": "0x29fcB43b46531BcA003ddC8FCB67FFE91900C762",
+      "name": "SafeL2"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "master_copy",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "topics": [
+    "0xb46e2b82b0c2cf3d7d9dece53635e165c53e0eaa7a44f904d61a2b7174826aef",
+    "0x000000000000000000000000da67b4284609d2d48e5d10cfac411572727dc1ed",
+    null,
+    null
+   ],
+   "transaction_hash": "0x92a8e91668284ba1689deedf6e05c6a3ed3da56c2ee5a9f64b54e615989a106e"
+  },
+  {
+   "address": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "block_hash": "0x433a720f5874eac160f714095d2f114a5d7da2e16720d4f94b442b1a1eda9187",
+   "block_number": 10407045,
+   "data": "0x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001e8480",
+   "decoded": {
+    "method_call": "SupplyCapChanged(address indexed asset, uint256 oldSupplyCap, uint256 newSupplyCap)",
+    "method_id": "02636026",
+    "parameters": [
+     {
+      "indexed": true,
+      "name": "asset",
+      "type": "address",
+      "value": "0xdA67B4284609d2d48e5d10cfAc411572727dc1eD"
+     },
+     {
+      "indexed": false,
+      "name": "oldSupplyCap",
+      "type": "uint256",
+      "value": "0"
+     },
+     {
+      "indexed": false,
+      "name": "newSupplyCap",
+      "type": "uint256",
+      "value": "2000000"
+     }
+    ]
+   },
+   "index": 12,
+   "smart_contract": {
+    "ens_domain_name": null,
+    "hash": "0x89318B8d8CB08e2537a3edb290D592E880e03147",
+    "implementations": [
+     {
+      "address_hash": "0x29fcB43b46531BcA003ddC8FCB67FFE91900C762",
+      "name": "SafeL2"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "master_copy",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "topics": [
+    "0x0263602682188540a2d633561c0b4453b7d8566285e99f9f6018b8ef2facef49",
+    "0x000000000000000000000000da67b4284609d2d48e5d10cfac411572727dc1ed",
+    null,
+    null
+   ],
+   "transaction_hash": "0x92a8e91668284ba1689deedf6e05c6a3ed3da56c2ee5a9f64b54e615989a106e"
+  },
+  {
+   "address": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "block_hash": "0x433a720f5874eac160f714095d2f114a5d7da2e16720d4f94b442b1a1eda9187",
+   "block_number": 10407045,
+   "data": "0x0000000000000000000000000000000000000000000000000000000000001d4c000000000000000000000000000000000000000000000000000000000000203a0000000000000000000000000000000000000000000000000000000000002904",
+   "decoded": {
+    "method_call": "CollateralConfigurationChanged(address indexed asset, uint256 ltv, uint256 liquidationThreshold, uint256 liquidationBonus)",
+    "method_id": "637febbd",
+    "parameters": [
+     {
+      "indexed": true,
+      "name": "asset",
+      "type": "address",
+      "value": "0xdA67B4284609d2d48e5d10cfAc411572727dc1eD"
+     },
+     {
+      "indexed": false,
+      "name": "ltv",
+      "type": "uint256",
+      "value": "7500"
+     },
+     {
+      "indexed": false,
+      "name": "liquidationThreshold",
+      "type": "uint256",
+      "value": "8250"
+     },
+     {
+      "indexed": false,
+      "name": "liquidationBonus",
+      "type": "uint256",
+      "value": "10500"
+     }
+    ]
+   },
+   "index": 10,
+   "smart_contract": {
+    "ens_domain_name": null,
+    "hash": "0x89318B8d8CB08e2537a3edb290D592E880e03147",
+    "implementations": [
+     {
+      "address_hash": "0x29fcB43b46531BcA003ddC8FCB67FFE91900C762",
+      "name": "SafeL2"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "master_copy",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "topics": [
+    "0x637febbda9275aea2e85c0ff690444c8d87eb2e8339bbede9715abcc89cb0995",
+    "0x000000000000000000000000da67b4284609d2d48e5d10cfac411572727dc1ed",
+    null,
+    null
+   ],
+   "transaction_hash": "0x92a8e91668284ba1689deedf6e05c6a3ed3da56c2ee5a9f64b54e615989a106e"
+  },
+  {
+   "address": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "block_hash": "0x433a720f5874eac160f714095d2f114a5d7da2e16720d4f94b442b1a1eda9187",
+   "block_number": 10407045,
+   "data": "0x00000000000000000000000045e20cc5fcf512a2ba836bdf328531df762ed9d2000000000000000000000000b746b7991ff43c9efd11b8f756bc3912e266d35f000000000000000000000000cd4e39a9ba2e63ee6bfa6565f360869191ef1374",
+   "decoded": {
+    "method_call": "ReserveInitialized(address indexed asset, address indexed aToken, address stableDebtToken, address variableDebtToken, address interestRateStrategyAddress)",
+    "method_id": "3a0ca721",
+    "parameters": [
+     {
+      "indexed": true,
+      "name": "asset",
+      "type": "address",
+      "value": "0xdA67B4284609d2d48e5d10cfAc411572727dc1eD"
+     },
+     {
+      "indexed": true,
+      "name": "aToken",
+      "type": "address",
+      "value": "0x8528D73Db249D5bEA5892157280061336046af8E"
+     },
+     {
+      "indexed": false,
+      "name": "stableDebtToken",
+      "type": "address",
+      "value": "0x45e20Cc5fcF512a2bA836BDf328531dF762Ed9d2"
+     },
+     {
+      "indexed": false,
+      "name": "variableDebtToken",
+      "type": "address",
+      "value": "0xB746B7991Ff43C9eFD11b8F756Bc3912E266d35f"
+     },
+     {
+      "indexed": false,
+      "name": "interestRateStrategyAddress",
+      "type": "address",
+      "value": "0xcd4E39A9ba2e63EE6bFa6565F360869191EF1374"
+     }
+    ]
+   },
+   "index": 8,
+   "smart_contract": {
+    "ens_domain_name": null,
+    "hash": "0x89318B8d8CB08e2537a3edb290D592E880e03147",
+    "implementations": [
+     {
+      "address_hash": "0x29fcB43b46531BcA003ddC8FCB67FFE91900C762",
+      "name": "SafeL2"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "master_copy",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "topics": [
+    "0x3a0ca721fc364424566385a1aa271ed508cc2c0949c2272575fb3013a163a45f",
+    "0x000000000000000000000000da67b4284609d2d48e5d10cfac411572727dc1ed",
+    "0x0000000000000000000000008528d73db249d5bea5892157280061336046af8e",
+    null
+   ],
+   "transaction_hash": "0x92a8e91668284ba1689deedf6e05c6a3ed3da56c2ee5a9f64b54e615989a106e"
+  },
+  {
+   "address": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "block_hash": "0x627ce0688931a27cea43e8f98854b2ec5110d50cc63c573bf88faafdd372561f",
+   "block_number": 9161303,
+   "data": "0x0000000000000000000000000000000000000000000000000000000000000000",
+   "decoded": {
+    "method_call": "ReservePaused(address indexed asset, bool paused)",
+    "method_id": "e188d542",
+    "parameters": [
+     {
+      "indexed": true,
+      "name": "asset",
+      "type": "address",
+      "value": "0x8D82c4E3c936C7B5724A382a9c5a4E6Eb7aB6d5D"
+     },
+     {
+      "indexed": false,
+      "name": "paused",
+      "type": "bool",
+      "value": "false"
+     }
+    ]
+   },
+   "index": 0,
+   "smart_contract": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "topics": [
+    "0xe188d542a5f11925d3a3af33703cdd30a43cb3e8066a3cf68b1b57f61a5a94b5",
+    "0x0000000000000000000000008d82c4e3c936c7b5724a382a9c5a4e6eb7ab6d5d",
+    null,
+    null
+   ],
+   "transaction_hash": "0x072fef1611fd6c0cc882af924663061e362f3e050377f46b937533a51d0b3259"
+  },
+  {
+   "address": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "block_hash": "0x5953c917cd65f30e6eca3fbc7bfa9a19ce6af2eb7cda4f2dbdbcd54c37762f77",
+   "block_number": 9161302,
+   "data": "0x0000000000000000000000000000000000000000000000000000000000000000",
+   "decoded": {
+    "method_call": "ReservePaused(address indexed asset, bool paused)",
+    "method_id": "e188d542",
+    "parameters": [
+     {
+      "indexed": true,
+      "name": "asset",
+      "type": "address",
+      "value": "0x3100000000000000000000000000000000000006"
+     },
+     {
+      "indexed": false,
+      "name": "paused",
+      "type": "bool",
+      "value": "false"
+     }
+    ]
+   },
+   "index": 0,
+   "smart_contract": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "topics": [
+    "0xe188d542a5f11925d3a3af33703cdd30a43cb3e8066a3cf68b1b57f61a5a94b5",
+    "0x0000000000000000000000003100000000000000000000000000000000000006",
+    null,
+    null
+   ],
+   "transaction_hash": "0x90930d32c9e11b0f36d47d1b03e4dd174ee51b9b708127d977737a61965b5e14"
+  },
+  {
+   "address": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "block_hash": "0x89c1fd2d96b7acd153447a07b9dffbfce8b28a2d877c059c9ca8f3e7eacf08ca",
+   "block_number": 9161301,
+   "data": "0x0000000000000000000000000000000000000000000000000000000000000000",
+   "decoded": {
+    "method_call": "ReservePaused(address indexed asset, bool paused)",
+    "method_id": "e188d542",
+    "parameters": [
+     {
+      "indexed": true,
+      "name": "asset",
+      "type": "address",
+      "value": "0xE045e6c36cF77FAA2CfB54466D71A3aEF7bbE839"
+     },
+     {
+      "indexed": false,
+      "name": "paused",
+      "type": "bool",
+      "value": "false"
+     }
+    ]
+   },
+   "index": 0,
+   "smart_contract": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "topics": [
+    "0xe188d542a5f11925d3a3af33703cdd30a43cb3e8066a3cf68b1b57f61a5a94b5",
+    "0x000000000000000000000000e045e6c36cf77faa2cfb54466d71a3aef7bbe839",
+    null,
+    null
+   ],
+   "transaction_hash": "0x1e0d5c1f0f4c7129985ad4d74e996aed6d055dde7e6056e66870ed364d33a7e6"
+  },
+  {
+   "address": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "block_hash": "0x16fc8ce87b1a967754cdf93a5ae5d2f0434646586899731ba31e27eb702be2a8",
+   "block_number": 9161299,
+   "data": "0x",
+   "decoded": {
+    "method_call": "VariableDebtTokenUpgraded(address indexed asset, address indexed proxy, address indexed implementation)",
+    "method_id": "9439658a",
+    "parameters": [
+     {
+      "indexed": true,
+      "name": "asset",
+      "type": "address",
+      "value": "0x8D82c4E3c936C7B5724A382a9c5a4E6Eb7aB6d5D"
+     },
+     {
+      "indexed": true,
+      "name": "proxy",
+      "type": "address",
+      "value": "0x5Eea9a01eec0B56935EFC77fc144b0826936F09C"
+     },
+     {
+      "indexed": true,
+      "name": "implementation",
+      "type": "address",
+      "value": "0xcE57089B32a5A279AB521cB50512e1185B3bba62"
+     }
+    ]
+   },
+   "index": 2,
+   "smart_contract": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "topics": [
+    "0x9439658a562a5c46b1173589df89cf001483d685bad28aedaff4a88656292d81",
+    "0x0000000000000000000000008d82c4e3c936c7b5724a382a9c5a4e6eb7ab6d5d",
+    "0x0000000000000000000000005eea9a01eec0b56935efc77fc144b0826936f09c",
+    "0x000000000000000000000000ce57089b32a5a279ab521cb50512e1185b3bba62"
+   ],
+   "transaction_hash": "0xe675c6bc910d5879e52daab70caf573e1b27f38cf4d9ab78b735c6b2e26d5c03"
+  },
+  {
+   "address": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "block_hash": "0x543499bbfe4ce0b0a17fc3ac1aa32b6a7086432c0572ae03224e40923b24bbed",
+   "block_number": 9161298,
+   "data": "0x",
+   "decoded": {
+    "method_call": "VariableDebtTokenUpgraded(address indexed asset, address indexed proxy, address indexed implementation)",
+    "method_id": "9439658a",
+    "parameters": [
+     {
+      "indexed": true,
+      "name": "asset",
+      "type": "address",
+      "value": "0x3100000000000000000000000000000000000006"
+     },
+     {
+      "indexed": true,
+      "name": "proxy",
+      "type": "address",
+      "value": "0x26a26a31920fac5Df7243123Cf6cF79d069c2783"
+     },
+     {
+      "indexed": true,
+      "name": "implementation",
+      "type": "address",
+      "value": "0xcE57089B32a5A279AB521cB50512e1185B3bba62"
+     }
+    ]
+   },
+   "index": 2,
+   "smart_contract": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "topics": [
+    "0x9439658a562a5c46b1173589df89cf001483d685bad28aedaff4a88656292d81",
+    "0x0000000000000000000000003100000000000000000000000000000000000006",
+    "0x00000000000000000000000026a26a31920fac5df7243123cf6cf79d069c2783",
+    "0x000000000000000000000000ce57089b32a5a279ab521cb50512e1185b3bba62"
+   ],
+   "transaction_hash": "0x16f3f658d03b792c581dbea9993fa66829a8d5ce33f6eeb2416c7f8f2c26ae10"
+  },
+  {
+   "address": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "block_hash": "0xae490e3954fc4148004597e1c1b5be6eeefe02ae1f4ade59ab6120b080e89343",
+   "block_number": 9161297,
+   "data": "0x",
+   "decoded": {
+    "method_call": "VariableDebtTokenUpgraded(address indexed asset, address indexed proxy, address indexed implementation)",
+    "method_id": "9439658a",
+    "parameters": [
+     {
+      "indexed": true,
+      "name": "asset",
+      "type": "address",
+      "value": "0xE045e6c36cF77FAA2CfB54466D71A3aEF7bbE839"
+     },
+     {
+      "indexed": true,
+      "name": "proxy",
+      "type": "address",
+      "value": "0xD191C82a7bfb37e251fE2CA85777315a360164ab"
+     },
+     {
+      "indexed": true,
+      "name": "implementation",
+      "type": "address",
+      "value": "0xcE57089B32a5A279AB521cB50512e1185B3bba62"
+     }
+    ]
+   },
+   "index": 2,
+   "smart_contract": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "topics": [
+    "0x9439658a562a5c46b1173589df89cf001483d685bad28aedaff4a88656292d81",
+    "0x000000000000000000000000e045e6c36cf77faa2cfb54466d71a3aef7bbe839",
+    "0x000000000000000000000000d191c82a7bfb37e251fe2ca85777315a360164ab",
+    "0x000000000000000000000000ce57089b32a5a279ab521cb50512e1185b3bba62"
+   ],
+   "transaction_hash": "0xe58e2d3cfed225805b909753243628550516a303bf76b5ddd14cc0d7af53aea1"
+  },
+  {
+   "address": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "block_hash": "0x6dfa035e2a3fa3e4b203fd949179795439d33e118438e76851ddf20abdbe451e",
+   "block_number": 9161296,
+   "data": "0x",
+   "decoded": {
+    "method_call": "ATokenUpgraded(address indexed asset, address indexed proxy, address indexed implementation)",
+    "method_id": "a76f6541",
+    "parameters": [
+     {
+      "indexed": true,
+      "name": "asset",
+      "type": "address",
+      "value": "0x8D82c4E3c936C7B5724A382a9c5a4E6Eb7aB6d5D"
+     },
+     {
+      "indexed": true,
+      "name": "proxy",
+      "type": "address",
+      "value": "0xBA2a69b92e0071924c387A200409B658E4f6cac8"
+     },
+     {
+      "indexed": true,
+      "name": "implementation",
+      "type": "address",
+      "value": "0x62Ff719aBCaedEad9055BA980FCE3821eBdDA694"
+     }
+    ]
+   },
+   "index": 2,
+   "smart_contract": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "topics": [
+    "0xa76f65411ec66a7fb6bc467432eb14767900449ae4469fa295e4441fe5e1cb73",
+    "0x0000000000000000000000008d82c4e3c936c7b5724a382a9c5a4e6eb7ab6d5d",
+    "0x000000000000000000000000ba2a69b92e0071924c387a200409b658e4f6cac8",
+    "0x00000000000000000000000062ff719abcaedead9055ba980fce3821ebdda694"
+   ],
+   "transaction_hash": "0xe473cb44f0c7038c5758cace629555ba2125914b7ea6aeadae1e0493c627daae"
+  },
+  {
+   "address": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "block_hash": "0x5d190e3e5fcf69326ca583dce67f1c9396625f96ce5ba5bf82c936a6b254d70d",
+   "block_number": 9161295,
+   "data": "0x",
+   "decoded": {
+    "method_call": "ATokenUpgraded(address indexed asset, address indexed proxy, address indexed implementation)",
+    "method_id": "a76f6541",
+    "parameters": [
+     {
+      "indexed": true,
+      "name": "asset",
+      "type": "address",
+      "value": "0x3100000000000000000000000000000000000006"
+     },
+     {
+      "indexed": true,
+      "name": "proxy",
+      "type": "address",
+      "value": "0x21EdC56532b6E92E676aA260B2a1f968B20EB1F5"
+     },
+     {
+      "indexed": true,
+      "name": "implementation",
+      "type": "address",
+      "value": "0x62Ff719aBCaedEad9055BA980FCE3821eBdDA694"
+     }
+    ]
+   },
+   "index": 2,
+   "smart_contract": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "topics": [
+    "0xa76f65411ec66a7fb6bc467432eb14767900449ae4469fa295e4441fe5e1cb73",
+    "0x0000000000000000000000003100000000000000000000000000000000000006",
+    "0x00000000000000000000000021edc56532b6e92e676aa260b2a1f968b20eb1f5",
+    "0x00000000000000000000000062ff719abcaedead9055ba980fce3821ebdda694"
+   ],
+   "transaction_hash": "0x2d4376fec977632dbb9ca3cd5828445ce79c842518f5543f599772e5156e7b33"
+  },
+  {
+   "address": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "block_hash": "0xbea0c4e098a7740f693bd14d859c27b60965cffa00ebb0be2922117975380727",
+   "block_number": 9161294,
+   "data": "0x",
+   "decoded": {
+    "method_call": "ATokenUpgraded(address indexed asset, address indexed proxy, address indexed implementation)",
+    "method_id": "a76f6541",
+    "parameters": [
+     {
+      "indexed": true,
+      "name": "asset",
+      "type": "address",
+      "value": "0xE045e6c36cF77FAA2CfB54466D71A3aEF7bbE839"
+     },
+     {
+      "indexed": true,
+      "name": "proxy",
+      "type": "address",
+      "value": "0x01465912C8cEc266237050f429fE1b88dAa56C0A"
+     },
+     {
+      "indexed": true,
+      "name": "implementation",
+      "type": "address",
+      "value": "0x62Ff719aBCaedEad9055BA980FCE3821eBdDA694"
+     }
+    ]
+   },
+   "index": 2,
+   "smart_contract": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "topics": [
+    "0xa76f65411ec66a7fb6bc467432eb14767900449ae4469fa295e4441fe5e1cb73",
+    "0x000000000000000000000000e045e6c36cf77faa2cfb54466d71a3aef7bbe839",
+    "0x00000000000000000000000001465912c8cec266237050f429fe1b88daa56c0a",
+    "0x00000000000000000000000062ff719abcaedead9055ba980fce3821ebdda694"
+   ],
+   "transaction_hash": "0xfb5408ecf86de7834b170cd0090d3d07517b10b4440b1bd6eca7ce081b1eb9f5"
+  },
+  {
+   "address": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "block_hash": "0x30cfcdbf18ea2e6cf364e88f611256fa814d400b3ec3bef9cb7c551ae4301f6e",
+   "block_number": 9161293,
+   "data": "0x0000000000000000000000000000000000000000000000000000000000000001",
+   "decoded": {
+    "method_call": "ReservePaused(address indexed asset, bool paused)",
+    "method_id": "e188d542",
+    "parameters": [
+     {
+      "indexed": true,
+      "name": "asset",
+      "type": "address",
+      "value": "0x8D82c4E3c936C7B5724A382a9c5a4E6Eb7aB6d5D"
+     },
+     {
+      "indexed": false,
+      "name": "paused",
+      "type": "bool",
+      "value": "true"
+     }
+    ]
+   },
+   "index": 0,
+   "smart_contract": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "topics": [
+    "0xe188d542a5f11925d3a3af33703cdd30a43cb3e8066a3cf68b1b57f61a5a94b5",
+    "0x0000000000000000000000008d82c4e3c936c7b5724a382a9c5a4e6eb7ab6d5d",
+    null,
+    null
+   ],
+   "transaction_hash": "0x63577f9dcaaa1114c8e60487bcf738b650c372fbe09a2abf79c7f0b348f6b21f"
+  },
+  {
+   "address": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "block_hash": "0xc5bec932b68e05d391daa33602336cfc03879c8ec8e2e300c4ba2408d5501157",
+   "block_number": 9161292,
+   "data": "0x0000000000000000000000000000000000000000000000000000000000000001",
+   "decoded": {
+    "method_call": "ReservePaused(address indexed asset, bool paused)",
+    "method_id": "e188d542",
+    "parameters": [
+     {
+      "indexed": true,
+      "name": "asset",
+      "type": "address",
+      "value": "0x3100000000000000000000000000000000000006"
+     },
+     {
+      "indexed": false,
+      "name": "paused",
+      "type": "bool",
+      "value": "true"
+     }
+    ]
+   },
+   "index": 0,
+   "smart_contract": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "topics": [
+    "0xe188d542a5f11925d3a3af33703cdd30a43cb3e8066a3cf68b1b57f61a5a94b5",
+    "0x0000000000000000000000003100000000000000000000000000000000000006",
+    null,
+    null
+   ],
+   "transaction_hash": "0x031751edac10d33a08efa48b12492a07016145873520581c9573e897ecb6fddd"
+  },
+  {
+   "address": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "block_hash": "0xeab9e25851e636696f48bd59ca96e501c440798ae071fac87998fefc922c47d7",
+   "block_number": 9161291,
+   "data": "0x0000000000000000000000000000000000000000000000000000000000000001",
+   "decoded": {
+    "method_call": "ReservePaused(address indexed asset, bool paused)",
+    "method_id": "e188d542",
+    "parameters": [
+     {
+      "indexed": true,
+      "name": "asset",
+      "type": "address",
+      "value": "0xE045e6c36cF77FAA2CfB54466D71A3aEF7bbE839"
+     },
+     {
+      "indexed": false,
+      "name": "paused",
+      "type": "bool",
+      "value": "true"
+     }
+    ]
+   },
+   "index": 0,
+   "smart_contract": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "topics": [
+    "0xe188d542a5f11925d3a3af33703cdd30a43cb3e8066a3cf68b1b57f61a5a94b5",
+    "0x000000000000000000000000e045e6c36cf77faa2cfb54466d71a3aef7bbe839",
+    null,
+    null
+   ],
+   "transaction_hash": "0xe506e06a87d178d76931b6ad8e81a73fb4336ecb829148657a3d9959639d1c74"
+  },
+  {
+   "address": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "block_hash": "0xd38f066d4604eb8ee56bc49f591163632905d21ece421681ee0d075c444942e4",
+   "block_number": 2971671,
+   "data": "0x",
+   "decoded": {
+    "method_call": "ATokenUpgraded(address indexed asset, address indexed proxy, address indexed implementation)",
+    "method_id": "a76f6541",
+    "parameters": [
+     {
+      "indexed": true,
+      "name": "asset",
+      "type": "address",
+      "value": "0x8D82c4E3c936C7B5724A382a9c5a4E6Eb7aB6d5D"
+     },
+     {
+      "indexed": true,
+      "name": "proxy",
+      "type": "address",
+      "value": "0xBA2a69b92e0071924c387A200409B658E4f6cac8"
+     },
+     {
+      "indexed": true,
+      "name": "implementation",
+      "type": "address",
+      "value": "0x2Ec995d521D5248c15B874a5cfB80c65a7dc63F7"
+     }
+    ]
+   },
+   "index": 2,
+   "smart_contract": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "topics": [
+    "0xa76f65411ec66a7fb6bc467432eb14767900449ae4469fa295e4441fe5e1cb73",
+    "0x0000000000000000000000008d82c4e3c936c7b5724a382a9c5a4e6eb7ab6d5d",
+    "0x000000000000000000000000ba2a69b92e0071924c387a200409b658e4f6cac8",
+    "0x0000000000000000000000002ec995d521d5248c15b874a5cfb80c65a7dc63f7"
+   ],
+   "transaction_hash": "0x7501848ef22953cb7c94e2c8cd8fd6959bc061b5d279e2e1ba94f4dd594d6d9e"
+  },
+  {
+   "address": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "block_hash": "0x152efff45e7f4c9c347b343c91cf93e1dead34bc37b6df4ee5639a9c1565b216",
+   "block_number": 2971670,
+   "data": "0x",
+   "decoded": {
+    "method_call": "ATokenUpgraded(address indexed asset, address indexed proxy, address indexed implementation)",
+    "method_id": "a76f6541",
+    "parameters": [
+     {
+      "indexed": true,
+      "name": "asset",
+      "type": "address",
+      "value": "0x3100000000000000000000000000000000000006"
+     },
+     {
+      "indexed": true,
+      "name": "proxy",
+      "type": "address",
+      "value": "0x21EdC56532b6E92E676aA260B2a1f968B20EB1F5"
+     },
+     {
+      "indexed": true,
+      "name": "implementation",
+      "type": "address",
+      "value": "0x2Ec995d521D5248c15B874a5cfB80c65a7dc63F7"
+     }
+    ]
+   },
+   "index": 2,
+   "smart_contract": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "topics": [
+    "0xa76f65411ec66a7fb6bc467432eb14767900449ae4469fa295e4441fe5e1cb73",
+    "0x0000000000000000000000003100000000000000000000000000000000000006",
+    "0x00000000000000000000000021edc56532b6e92e676aa260b2a1f968b20eb1f5",
+    "0x0000000000000000000000002ec995d521d5248c15b874a5cfb80c65a7dc63f7"
+   ],
+   "transaction_hash": "0xbc15a6e43089c73ccac86ef679243ca209dd07eff93ef501a36660e056b5f6b8"
+  },
+  {
+   "address": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "block_hash": "0x412c3d614b3cc73ed72a363257f97fc74ac5d2ca5d96d46ec79832d85afe22aa",
+   "block_number": 2971669,
+   "data": "0x",
+   "decoded": {
+    "method_call": "ATokenUpgraded(address indexed asset, address indexed proxy, address indexed implementation)",
+    "method_id": "a76f6541",
+    "parameters": [
+     {
+      "indexed": true,
+      "name": "asset",
+      "type": "address",
+      "value": "0xE045e6c36cF77FAA2CfB54466D71A3aEF7bbE839"
+     },
+     {
+      "indexed": true,
+      "name": "proxy",
+      "type": "address",
+      "value": "0x01465912C8cEc266237050f429fE1b88dAa56C0A"
+     },
+     {
+      "indexed": true,
+      "name": "implementation",
+      "type": "address",
+      "value": "0x2Ec995d521D5248c15B874a5cfB80c65a7dc63F7"
+     }
+    ]
+   },
+   "index": 2,
+   "smart_contract": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "topics": [
+    "0xa76f65411ec66a7fb6bc467432eb14767900449ae4469fa295e4441fe5e1cb73",
+    "0x000000000000000000000000e045e6c36cf77faa2cfb54466d71a3aef7bbe839",
+    "0x00000000000000000000000001465912c8cec266237050f429fe1b88daa56c0a",
+    "0x0000000000000000000000002ec995d521d5248c15b874a5cfb80c65a7dc63f7"
+   ],
+   "transaction_hash": "0x044c63adaba4f9eb2bd28cb735f03b50130c6f3854fd31127c331aedcb47e4aa"
+  },
+  {
+   "address": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "block_hash": "0x8a86b559e9d154265e2d16e17fb064906bed4439ac596cce72e5d937210d6740",
+   "block_number": 2968990,
+   "data": "0x0000000000000000000000003602e27ae5880b51fcf05e137da09a490f61475e0000000000000000000000003b6d46141d1ce86ef22b2700130b42c5399545f0",
+   "decoded": {
+    "method_call": "ReserveInterestRateStrategyChanged(address indexed asset, address oldStrategy, address newStrategy)",
+    "method_id": "db8dada5",
+    "parameters": [
+     {
+      "indexed": true,
+      "name": "asset",
+      "type": "address",
+      "value": "0x3100000000000000000000000000000000000006"
+     },
+     {
+      "indexed": false,
+      "name": "oldStrategy",
+      "type": "address",
+      "value": "0x3602e27aE5880B51FcF05e137da09a490F61475E"
+     },
+     {
+      "indexed": false,
+      "name": "newStrategy",
+      "type": "address",
+      "value": "0x3B6D46141D1cE86Ef22b2700130b42C5399545F0"
+     }
+    ]
+   },
+   "index": 0,
+   "smart_contract": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "topics": [
+    "0xdb8dada53709ce4988154324196790c2e4a60c377e1256790946f83b87db3c33",
+    "0x0000000000000000000000003100000000000000000000000000000000000006",
+    null,
+    null
+   ],
+   "transaction_hash": "0xa1f2e73753503ee19e0e5983940aa50592c077158d2f908ec113d485dda0741c"
+  },
+  {
+   "address": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "block_hash": "0xddab95f80f1405e233f5d0f023e3f1f644d47b4507b4714965b8841f48084f97",
+   "block_number": 2808760,
+   "data": "0x00000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000000",
+   "decoded": {
+    "method_call": "EModeAssetCategoryChanged(address indexed asset, uint8 oldCategoryId, uint8 newCategoryId)",
+    "method_id": "5bb69795",
+    "parameters": [
+     {
+      "indexed": true,
+      "name": "asset",
+      "type": "address",
+      "value": "0x8D82c4E3c936C7B5724A382a9c5a4E6Eb7aB6d5D"
+     },
+     {
+      "indexed": false,
+      "name": "oldCategoryId",
+      "type": "uint8",
+      "value": "1"
+     },
+     {
+      "indexed": false,
+      "name": "newCategoryId",
+      "type": "uint8",
+      "value": "0"
+     }
+    ]
+   },
+   "index": 0,
+   "smart_contract": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "topics": [
+    "0x5bb69795b6a2ea222d73a5f8939c23471a1f85a99c7ca43c207f1b71f10c6264",
+    "0x0000000000000000000000008d82c4e3c936c7b5724a382a9c5a4e6eb7ab6d5d",
+    null,
+    null
+   ],
+   "transaction_hash": "0x74a468c79575e9e4b65c2502c2a4006b86d9a158176c2125f721a1f8b8073b92"
+  },
+  {
+   "address": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "block_hash": "0x8b57816230f1ac85248aee319bf4b2f0635d02cf95c0fbd9e12be216b8c2ed0e",
+   "block_number": 2808200,
+   "data": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001",
+   "decoded": {
+    "method_call": "EModeAssetCategoryChanged(address indexed asset, uint8 oldCategoryId, uint8 newCategoryId)",
+    "method_id": "5bb69795",
+    "parameters": [
+     {
+      "indexed": true,
+      "name": "asset",
+      "type": "address",
+      "value": "0x8D82c4E3c936C7B5724A382a9c5a4E6Eb7aB6d5D"
+     },
+     {
+      "indexed": false,
+      "name": "oldCategoryId",
+      "type": "uint8",
+      "value": "0"
+     },
+     {
+      "indexed": false,
+      "name": "newCategoryId",
+      "type": "uint8",
+      "value": "1"
+     }
+    ]
+   },
+   "index": 0,
+   "smart_contract": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "topics": [
+    "0x5bb69795b6a2ea222d73a5f8939c23471a1f85a99c7ca43c207f1b71f10c6264",
+    "0x0000000000000000000000008d82c4e3c936c7b5724a382a9c5a4e6eb7ab6d5d",
+    null,
+    null
+   ],
+   "transaction_hash": "0x45d6aafe181f543207fc45c95446937c2716532c426dbb13d5c8821942400d9f"
+  },
+  {
+   "address": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "block_hash": "0xd8b65a4753acbdb38d70b4d8bffe8bd6f8a373762030912584a2549ec8f1b641",
+   "block_number": 2808199,
+   "data": "0x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003e8",
+   "decoded": {
+    "method_call": "LiquidationProtocolFeeChanged(address indexed asset, uint256 oldFee, uint256 newFee)",
+    "method_id": "b5b0a963",
+    "parameters": [
+     {
+      "indexed": true,
+      "name": "asset",
+      "type": "address",
+      "value": "0x8D82c4E3c936C7B5724A382a9c5a4E6Eb7aB6d5D"
+     },
+     {
+      "indexed": false,
+      "name": "oldFee",
+      "type": "uint256",
+      "value": "0"
+     },
+     {
+      "indexed": false,
+      "name": "newFee",
+      "type": "uint256",
+      "value": "1000"
+     }
+    ]
+   },
+   "index": 0,
+   "smart_contract": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "topics": [
+    "0xb5b0a963825337808b6e3154de8e98027595a5cad4219bb3a9bc55b192f4b391",
+    "0x0000000000000000000000008d82c4e3c936c7b5724a382a9c5a4e6eb7ab6d5d",
+    null,
+    null
+   ],
+   "transaction_hash": "0x80b4fa2cfd24a75198dd3df896f74b82efb6bb1122e7941a7207745fcc83a3d6"
+  },
+  {
+   "address": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "block_hash": "0x3c75cbb7be958efd0610b74731329ae946a275cf2d568bd4865e47ba350d67f7",
+   "block_number": 2808198,
+   "data": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000487ab0",
+   "decoded": {
+    "method_call": "BorrowCapChanged(address indexed asset, uint256 oldBorrowCap, uint256 newBorrowCap)",
+    "method_id": "c51aca57",
+    "parameters": [
+     {
+      "indexed": true,
+      "name": "asset",
+      "type": "address",
+      "value": "0x8D82c4E3c936C7B5724A382a9c5a4E6Eb7aB6d5D"
+     },
+     {
+      "indexed": false,
+      "name": "oldBorrowCap",
+      "type": "uint256",
+      "value": "0"
+     },
+     {
+      "indexed": false,
+      "name": "newBorrowCap",
+      "type": "uint256",
+      "value": "4750000"
+     }
+    ]
+   },
+   "index": 0,
+   "smart_contract": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "topics": [
+    "0xc51aca575985d521c5072ad11549bad77013bb786d57f30f94b40ed8f8dc9bc4",
+    "0x0000000000000000000000008d82c4e3c936c7b5724a382a9c5a4e6eb7ab6d5d",
+    null,
+    null
+   ],
+   "transaction_hash": "0xd62e8c17c9c2c9289ee224806c51fa578fe57e959c6d8b2795781ebe6fd91551"
+  },
+  {
+   "address": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "block_hash": "0xa1e464cb8fc0364febc42d36d4277d6ca9124cefe06f2e9ee38672766d4b09aa",
+   "block_number": 2808197,
+   "data": "0x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004c4b40",
+   "decoded": {
+    "method_call": "SupplyCapChanged(address indexed asset, uint256 oldSupplyCap, uint256 newSupplyCap)",
+    "method_id": "02636026",
+    "parameters": [
+     {
+      "indexed": true,
+      "name": "asset",
+      "type": "address",
+      "value": "0x8D82c4E3c936C7B5724A382a9c5a4E6Eb7aB6d5D"
+     },
+     {
+      "indexed": false,
+      "name": "oldSupplyCap",
+      "type": "uint256",
+      "value": "0"
+     },
+     {
+      "indexed": false,
+      "name": "newSupplyCap",
+      "type": "uint256",
+      "value": "5000000"
+     }
+    ]
+   },
+   "index": 0,
+   "smart_contract": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "topics": [
+    "0x0263602682188540a2d633561c0b4453b7d8566285e99f9f6018b8ef2facef49",
+    "0x0000000000000000000000008d82c4e3c936c7b5724a382a9c5a4e6eb7ab6d5d",
+    null,
+    null
+   ],
+   "transaction_hash": "0x43c411688c1543eae2e7ad49196ad17e0023fd2337818378f1f735ea3fcf1e28"
+  },
+  {
+   "address": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "block_hash": "0x7ca5776f1aa268b418af273b41667b570f2ca01b87e8a8cab665d501e8f60f3f",
+   "block_number": 2808196,
+   "data": "0x0000000000000000000000000000000000000000000000000000000000001f4000000000000000000000000000000000000000000000000000000000000023280000000000000000000000000000000000000000000000000000000000002904",
+   "decoded": {
+    "method_call": "CollateralConfigurationChanged(address indexed asset, uint256 ltv, uint256 liquidationThreshold, uint256 liquidationBonus)",
+    "method_id": "637febbd",
+    "parameters": [
+     {
+      "indexed": true,
+      "name": "asset",
+      "type": "address",
+      "value": "0x8D82c4E3c936C7B5724A382a9c5a4E6Eb7aB6d5D"
+     },
+     {
+      "indexed": false,
+      "name": "ltv",
+      "type": "uint256",
+      "value": "8000"
+     },
+     {
+      "indexed": false,
+      "name": "liquidationThreshold",
+      "type": "uint256",
+      "value": "9000"
+     },
+     {
+      "indexed": false,
+      "name": "liquidationBonus",
+      "type": "uint256",
+      "value": "10500"
+     }
+    ]
+   },
+   "index": 0,
+   "smart_contract": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "topics": [
+    "0x637febbda9275aea2e85c0ff690444c8d87eb2e8339bbede9715abcc89cb0995",
+    "0x0000000000000000000000008d82c4e3c936c7b5724a382a9c5a4e6eb7ab6d5d",
+    null,
+    null
+   ],
+   "transaction_hash": "0x8ebf8982b5ad4b56b34b0e4d06d7df0bee3c44b8233176276443b206a850aeb3"
+  },
+  {
+   "address": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "block_hash": "0x19a9cd2c38f7bcd0828c834135daba62faa3a9943b0bd7982a7ffbae076116ed",
+   "block_number": 2808195,
+   "data": "0x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003e8",
+   "decoded": {
+    "method_call": "ReserveFactorChanged(address indexed asset, uint256 oldReserveFactor, uint256 newReserveFactor)",
+    "method_id": "b46e2b82",
+    "parameters": [
+     {
+      "indexed": true,
+      "name": "asset",
+      "type": "address",
+      "value": "0x8D82c4E3c936C7B5724A382a9c5a4E6Eb7aB6d5D"
+     },
+     {
+      "indexed": false,
+      "name": "oldReserveFactor",
+      "type": "uint256",
+      "value": "0"
+     },
+     {
+      "indexed": false,
+      "name": "newReserveFactor",
+      "type": "uint256",
+      "value": "1000"
+     }
+    ]
+   },
+   "index": 0,
+   "smart_contract": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "topics": [
+    "0xb46e2b82b0c2cf3d7d9dece53635e165c53e0eaa7a44f904d61a2b7174826aef",
+    "0x0000000000000000000000008d82c4e3c936c7b5724a382a9c5a4e6eb7ab6d5d",
+    null,
+    null
+   ],
+   "transaction_hash": "0xe46f96d2f20f7f15abc1a6ae0bfca40b8b71cea3eee68bcba641bd1c34c17953"
+  },
+  {
+   "address": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "block_hash": "0x0aa2cae27191840b5c08fafc1bf5d7764e7ba8857bb4ed9cd4e271f9e18ff5d8",
+   "block_number": 2808194,
+   "data": "0x0000000000000000000000000000000000000000000000000000000000000000",
+   "decoded": {
+    "method_call": "ReserveStableRateBorrowing(address indexed asset, bool enabled)",
+    "method_id": "0b64d094",
+    "parameters": [
+     {
+      "indexed": true,
+      "name": "asset",
+      "type": "address",
+      "value": "0x8D82c4E3c936C7B5724A382a9c5a4E6Eb7aB6d5D"
+     },
+     {
+      "indexed": false,
+      "name": "enabled",
+      "type": "bool",
+      "value": "false"
+     }
+    ]
+   },
+   "index": 0,
+   "smart_contract": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "topics": [
+    "0x0b64d0941719acd363f1a6be3d8525d8ec9d71738f7445aabcd88d7939b472e7",
+    "0x0000000000000000000000008d82c4e3c936c7b5724a382a9c5a4e6eb7ab6d5d",
+    null,
+    null
+   ],
+   "transaction_hash": "0x662f209d5f03f3b2983631554c8b05c9a328ebe3f657233cfe3cf038ac4d25ea"
+  },
+  {
+   "address": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "block_hash": "0x36bfb332fc945ca38282f1ed927bad5d5bde658c46f64b01112d7ea862f29729",
+   "block_number": 2808193,
+   "data": "0x0000000000000000000000000000000000000000000000000000000000000001",
+   "decoded": {
+    "method_call": "ReserveBorrowing(address indexed asset, bool enabled)",
+    "method_id": "2443ba28",
+    "parameters": [
+     {
+      "indexed": true,
+      "name": "asset",
+      "type": "address",
+      "value": "0x8D82c4E3c936C7B5724A382a9c5a4E6Eb7aB6d5D"
+     },
+     {
+      "indexed": false,
+      "name": "enabled",
+      "type": "bool",
+      "value": "true"
+     }
+    ]
+   },
+   "index": 0,
+   "smart_contract": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "topics": [
+    "0x2443ba28e8d1d88d531a3d90b981816a4f3b3c7f1fd4085c6029e81d1b7a570d",
+    "0x0000000000000000000000008d82c4e3c936c7b5724a382a9c5a4e6eb7ab6d5d",
+    null,
+    null
+   ],
+   "transaction_hash": "0x2bc9770f878d4f031349b125dc260ce5d71289193e900e65be6fcef04104af43"
+  },
+  {
+   "address": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "block_hash": "0xe5c5c35f838e5bb3661bbbde18df01e1325b6a4686c49fd2ba0b1f100cfff56f",
+   "block_number": 2808192,
+   "data": "0x000000000000000000000000315080f2711aa7d9521b71afb7081332a28d0dcb0000000000000000000000005eea9a01eec0b56935efc77fc144b0826936f09c000000000000000000000000cd4e39a9ba2e63ee6bfa6565f360869191ef1374",
+   "decoded": {
+    "method_call": "ReserveInitialized(address indexed asset, address indexed aToken, address stableDebtToken, address variableDebtToken, address interestRateStrategyAddress)",
+    "method_id": "3a0ca721",
+    "parameters": [
+     {
+      "indexed": true,
+      "name": "asset",
+      "type": "address",
+      "value": "0x8D82c4E3c936C7B5724A382a9c5a4E6Eb7aB6d5D"
+     },
+     {
+      "indexed": true,
+      "name": "aToken",
+      "type": "address",
+      "value": "0xBA2a69b92e0071924c387A200409B658E4f6cac8"
+     },
+     {
+      "indexed": false,
+      "name": "stableDebtToken",
+      "type": "address",
+      "value": "0x315080F2711AA7d9521B71aFB7081332A28d0dcb"
+     },
+     {
+      "indexed": false,
+      "name": "variableDebtToken",
+      "type": "address",
+      "value": "0x5Eea9a01eec0B56935EFC77fc144b0826936F09C"
+     },
+     {
+      "indexed": false,
+      "name": "interestRateStrategyAddress",
+      "type": "address",
+      "value": "0xcd4E39A9ba2e63EE6bFa6565F360869191EF1374"
+     }
+    ]
+   },
+   "index": 3,
+   "smart_contract": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "topics": [
+    "0x3a0ca721fc364424566385a1aa271ed508cc2c0949c2272575fb3013a163a45f",
+    "0x0000000000000000000000008d82c4e3c936c7b5724a382a9c5a4e6eb7ab6d5d",
+    "0x000000000000000000000000ba2a69b92e0071924c387a200409b658e4f6cac8",
+    null
+   ],
+   "transaction_hash": "0xab41244df05783b2b8381cbebea93ea30b270fbee058e63805667058ae9660f6"
+  },
+  {
+   "address": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "block_hash": "0xf71ec3c96cd505ce60320be3444432e803b1fdf023484c8f174fd3dc91a3d329",
+   "block_number": 2757218,
+   "data": "0x00000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000000",
+   "decoded": {
+    "method_call": "EModeAssetCategoryChanged(address indexed asset, uint8 oldCategoryId, uint8 newCategoryId)",
+    "method_id": "5bb69795",
+    "parameters": [
+     {
+      "indexed": true,
+      "name": "asset",
+      "type": "address",
+      "value": "0xE045e6c36cF77FAA2CfB54466D71A3aEF7bbE839"
+     },
+     {
+      "indexed": false,
+      "name": "oldCategoryId",
+      "type": "uint8",
+      "value": "1"
+     },
+     {
+      "indexed": false,
+      "name": "newCategoryId",
+      "type": "uint8",
+      "value": "0"
+     }
+    ]
+   },
+   "index": 0,
+   "smart_contract": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "topics": [
+    "0x5bb69795b6a2ea222d73a5f8939c23471a1f85a99c7ca43c207f1b71f10c6264",
+    "0x000000000000000000000000e045e6c36cf77faa2cfb54466d71a3aef7bbe839",
+    null,
+    null
+   ],
+   "transaction_hash": "0x352c03952d4eab99a7bcc11dcb26791db1ebcb626ea3413d45db44f3e646a201"
+  },
+  {
+   "address": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "block_hash": "0xd85276cd1b0eb69b38d3e8d8699494b7d5b3010f5f1e5e62b8bbe77c14d490e1",
+   "block_number": 2756920,
+   "data": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001",
+   "decoded": {
+    "method_call": "EModeAssetCategoryChanged(address indexed asset, uint8 oldCategoryId, uint8 newCategoryId)",
+    "method_id": "5bb69795",
+    "parameters": [
+     {
+      "indexed": true,
+      "name": "asset",
+      "type": "address",
+      "value": "0xE045e6c36cF77FAA2CfB54466D71A3aEF7bbE839"
+     },
+     {
+      "indexed": false,
+      "name": "oldCategoryId",
+      "type": "uint8",
+      "value": "0"
+     },
+     {
+      "indexed": false,
+      "name": "newCategoryId",
+      "type": "uint8",
+      "value": "1"
+     }
+    ]
+   },
+   "index": 0,
+   "smart_contract": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "topics": [
+    "0x5bb69795b6a2ea222d73a5f8939c23471a1f85a99c7ca43c207f1b71f10c6264",
+    "0x000000000000000000000000e045e6c36cf77faa2cfb54466d71a3aef7bbe839",
+    null,
+    null
+   ],
+   "transaction_hash": "0x0a80ed2a6cb87695edeea7c065e35b6c849135637cc5a4c973950f8933f8785a"
+  },
+  {
+   "address": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "block_hash": "0xb150ef966c4817d4c1c295f2d41c59ff1af475c0959aaef10d54ba8818a6a3a6",
+   "block_number": 2756919,
+   "data": "0x00000000000000000000000000000000000000000000000000000000000025e400000000000000000000000000000000000000000000000000000000000026480000000000000000000000000000000000000000000000000000000000002774000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000a0000000000000000000000000000000000000000000000000000000000000000b537461626c65636f696e73000000000000000000000000000000000000000000",
+   "decoded": {
+    "method_call": "EModeCategoryAdded(uint8 indexed categoryId, uint256 ltv, uint256 liquidationThreshold, uint256 liquidationBonus, address oracle, string label)",
+    "method_id": "0acf8b4a",
+    "parameters": [
+     {
+      "indexed": true,
+      "name": "categoryId",
+      "type": "uint8",
+      "value": "1"
+     },
+     {
+      "indexed": false,
+      "name": "ltv",
+      "type": "uint256",
+      "value": "9700"
+     },
+     {
+      "indexed": false,
+      "name": "liquidationThreshold",
+      "type": "uint256",
+      "value": "9800"
+     },
+     {
+      "indexed": false,
+      "name": "liquidationBonus",
+      "type": "uint256",
+      "value": "10100"
+     },
+     {
+      "indexed": false,
+      "name": "oracle",
+      "type": "address",
+      "value": "0x0000000000000000000000000000000000000000"
+     },
+     {
+      "indexed": false,
+      "name": "label",
+      "type": "string",
+      "value": "Stablecoins"
+     }
+    ]
+   },
+   "index": 0,
+   "smart_contract": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "topics": [
+    "0x0acf8b4a3cace10779798a89a206a0ae73a71b63acdd3be2801d39c2ef7ab3cb",
+    "0x0000000000000000000000000000000000000000000000000000000000000001",
+    null,
+    null
+   ],
+   "transaction_hash": "0x87463f88c9162ff0a653f7cc817523b1aae2cb0a32a508e5029821d3835cb3ba"
+  },
+  {
+   "address": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "block_hash": "0x10eb0d61febcc8e9b7d6caa77b7d7266591344815df105723976bf6c29bd6c53",
+   "block_number": 2756918,
+   "data": "0x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003e8",
+   "decoded": {
+    "method_call": "LiquidationProtocolFeeChanged(address indexed asset, uint256 oldFee, uint256 newFee)",
+    "method_id": "b5b0a963",
+    "parameters": [
+     {
+      "indexed": true,
+      "name": "asset",
+      "type": "address",
+      "value": "0x3100000000000000000000000000000000000006"
+     },
+     {
+      "indexed": false,
+      "name": "oldFee",
+      "type": "uint256",
+      "value": "0"
+     },
+     {
+      "indexed": false,
+      "name": "newFee",
+      "type": "uint256",
+      "value": "1000"
+     }
+    ]
+   },
+   "index": 0,
+   "smart_contract": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "topics": [
+    "0xb5b0a963825337808b6e3154de8e98027595a5cad4219bb3a9bc55b192f4b391",
+    "0x0000000000000000000000003100000000000000000000000000000000000006",
+    null,
+    null
+   ],
+   "transaction_hash": "0xebb18dbdb298612da804aaba40233dab216f0db64f9827e623907747f1a7399b"
+  },
+  {
+   "address": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "block_hash": "0xf91fe0f1df6889500df9e670950f71f08c29ef5c92c49cf9a2ad17165c80a444",
+   "block_number": 2756917,
+   "data": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000034",
+   "decoded": {
+    "method_call": "BorrowCapChanged(address indexed asset, uint256 oldBorrowCap, uint256 newBorrowCap)",
+    "method_id": "c51aca57",
+    "parameters": [
+     {
+      "indexed": true,
+      "name": "asset",
+      "type": "address",
+      "value": "0x3100000000000000000000000000000000000006"
+     },
+     {
+      "indexed": false,
+      "name": "oldBorrowCap",
+      "type": "uint256",
+      "value": "0"
+     },
+     {
+      "indexed": false,
+      "name": "newBorrowCap",
+      "type": "uint256",
+      "value": "52"
+     }
+    ]
+   },
+   "index": 0,
+   "smart_contract": {
+    "ens_domain_name": null,
+    "hash": "0x6864042da4A5BBEb2a98e910599964C9d8B7B684",
+    "implementations": [
+     {
+      "address_hash": "0xD71D2b9ad714121439fC55C45995952e1a676B0B",
+      "name": "PoolConfigurator"
+     }
+    ],
+    "is_contract": true,
+    "is_scam": false,
+    "is_verified": false,
+    "metadata": null,
+    "name": null,
+    "private_tags": [],
+    "proxy_type": "eip1967",
+    "public_tags": [],
+    "reputation": "ok",
+    "watchlist_names": []
+   },
+   "topics": [
+    "0xc51aca575985d521c5072ad11549bad77013bb786d57f30f94b40ed8f8dc9bc4",
+    "0x0000000000000000000000003100000000000000000000000000000000000006",
+    null,
+    null
+   ],
+   "transaction_hash": "0xe59843fb72e0820716b86497df313cd0b74b5a80b0353303ef7fe56efc35e22d"
+  }
+ ],
+ "next_page_params": {
+  "index": 0,
+  "block_number": 2756917,
+  "items_count": 50
+ }
+}

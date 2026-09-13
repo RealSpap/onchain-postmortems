@@ -28,9 +28,9 @@ lost in the merge.
 
 | | |
 |---|---|
-| Incidents covered | 40, independently reconstructed on-chain, see the index for detail |
-| Cumulative loss, recomputed | About $783.7M across the 40 incidents ($783,696,294 exactly, sum of the figures in the index below). At least one entry is a known floor, so the real total is higher. |
-| Corrections made | 24 entries below correct, reconcile, or newly surface a press or DefiLlama figure, label, date, or classification (18 corrections, 4 reconciliations, 2 discoveries not previously priced by DefiLlama at all). See Corrections to press and DefiLlama below. |
+| Incidents covered | 41, independently reconstructed on-chain, see the index for detail |
+| Cumulative loss, recomputed | About $783.8M across the 41 incidents ($783,836,324 exactly, sum of the figures in the index below). At least one entry is a known floor, so the real total is higher. |
+| Corrections made | 26 entries below correct, reconcile, or newly surface a press or DefiLlama figure, label, date, or classification (20 corrections, 4 reconciliations, 2 discoveries not previously priced by DefiLlama at all). See Corrections to press and DefiLlama below. |
 | Method | Each subfolder keeps its original Python reconstruction script, its `registre_hypotheses.csv` falsification registry, and its script's raw output in `resultats_*.txt`, so every figure below can be checked against the file that produced it |
 | License | MIT across all 35 entries, single author (s_pap, 2026) |
 
@@ -75,7 +75,7 @@ exact figure decoded from source data.
 
 ### 2026
 
-**2026 total: $783,696,294** across 40 incidents (6 months, April through September). At least one entry this year is a known floor, so the true total is higher.
+**2026 total: $783,836,324** across 41 incidents (6 months, April through September). At least one entry this year is a known floor, so the true total is higher.
 
 #### September 2026 (current month)
 
@@ -87,11 +87,12 @@ exact figure decoded from source data.
 | WealthManagementV2 | 2026-09-08 | ≥ 422,251 [^wealthmanagementv2-selfowned-proxy-drain] | BSC | Access-Control | Attacker-deployed, attacker-owned EIP-1967 proxy repeatedly called a withdraw() sweep function to drain a shared claim/interest pool contract to a collector wallet | [wealthmanagementv2-selfowned-proxy-drain/](wealthmanagementv2-selfowned-proxy-drain/) |
 | Symbiosis | 2026-09-11 | ≥ 338,285 [^symbiosis-sybtc-mpc-signed-mint] | Ethereum, BNB Chain, Rootstock | Bridge | Twelve unbacked syBTC mints authorised by the bridge's own live MPC signing key, across three chains | [symbiosis-sybtc-mpc-signed-mint/](symbiosis-sybtc-mpc-signed-mint/) |
 | Cozy V2 | 2026-09-02 / 09-07 | 174,311 [^cozy] | Optimism | Oracle | False answers to the UMA Optimistic Oracle left uncontested during its 5-day dispute window | [cozy-v2-optimism/](cozy-v2-optimism/) |
+| Zentra Finance | 2026-09-09 | ≈ 140,030 [^zentra-finance-atoken-burn-clamp] | Citrea | Rounding/Math-Bug | Aave v3 fork aToken _burnScaled capped the burn to the caller's balance, so repayWithATokens with zero aTokens cleared 140,000 ctUSD of debt while burning nothing; cap added by a 2026-06-25 upgrade | [zentra-finance-atoken-burn-clamp/](zentra-finance-atoken-burn-clamp/) |
 | Secured Finance (JPYC Lending Market) | 2026-09-05/09-06 | ≈ 45,445 [^securedfinance-jpyc-tokenvault-selflend] | Ethereum | Access-Control | Flash-loan-funded self-matched lend/borrow position on the JPYC market let TokenVault's collateral accounting treat the just-deposited amount as withdrawable, before the flash loan was repaid | [securedfinance-jpyc-tokenvault-selflend/](securedfinance-jpyc-tokenvault-selflend/) |
 | ether.fi Liquid (AtomicQueue) | 2026-09-11 | ≈ 38,004 [^etherfi-atomicqueue-eip7702-solver-drain] | Ethereum | Access-Control | Legacy Veda AtomicQueue.solve() never checks solver==msg.sender; attacker named victims as solver to spend their stale approvals. Reachable only for code-bearing accounts (9 of 11 were EIP-7702), fully reimbursed on-chain | [etherfi-atomicqueue-eip7702-solver-drain/](etherfi-atomicqueue-eip7702-solver-drain/) |
 | Reddio (RedSonic Vault) | 2026-09-05 | ≈ 22,748 [^redsonic-vault-share-registration] | Ethereum | Access-Control | Permissionless registerErc20() let an unprivileged caller register a second share class over the same pooled collateral, letting a flash-loan-funded deposit be redeemed for more than it was worth | [redsonic-vault-share-registration/](redsonic-vault-share-registration/) |
 
-**September 2026 subtotal: $49,782,743** across 9 incidents. Includes 4 known floor figures (Liquid Network, XRP Healthcare (XRPH Wallet), WealthManagementV2, Symbiosis), so the true total is higher.
+**September 2026 subtotal: $49,922,773** across 10 incidents. Includes 4 known floor figures (Liquid Network, XRP Healthcare (XRPH Wallet), WealthManagementV2, Symbiosis), so the true total is higher.
 
 #### August 2026
 
@@ -199,12 +200,13 @@ exact figure decoded from source data.
 [^barnbridge-dormant-dao-controller-swap]: 1,877,869.183182 USDC + 51,759.121322 USDT + 1,736.920247 DAI = $1,931,365.22 across 17 extraction transactions from 10 SMART Yield pools, decoded directly from the Governance contract's own proposal-execution receipts — 2.49x BlockSec's and DefiLlama's reported $776,000 (one of the seventeen transactions, correctly identified but not the total). A separate $3,001,678.69 in unattributed flows through a third, unrelated Controller from 2026-08-22 is excluded from this figure. See `barnbridge-dormant-dao-controller-swap/README.md`.
 [^symbiosis-sybtc-mpc-signed-mint]: 438,897,292 raw WBTC, that is 4.38897292 WBTC, taken out of one Uniswap V4 swap at Ethereum block 25951802 (2026-09-11 04:35:23 UTC), re-derived twice: once by summing the receipt's own Transfer legs and once by reading `balanceOf` on the beneficiary either side of that block, the two agreeing exactly (`preuves/09_cashout_readable.txt` and `preuves/19_adversarial_selfcheck.txt`). At DefiLlama's own WBTC price for that block's timestamp, $77,076.12, that is $338,285, reconciling DefiLlama's tracked $336,000 to within 0.7%. Reported as a floor: the twelve mints created 553,402,322,211.29 syBTC against a pre-incident backed float under nine syBTC on the two chains where it could be read, and whether the holders of that float are made whole is not something chain data answers. The scope correction is separate from the figure: DefiLlama lists two chains and the press eight bridge transactions, while Rootstock was inflated by four more mints of the identical amount, signed by the same key, inside the same four minutes, taking the count to twelve across three chains. See `symbiosis-sybtc-mpc-signed-mint/README.md`. External source: https://api.llama.fi/hacks.
 [^etherfi-atomicqueue-eip7702-solver-drain]: 14.445541086626480620 liquidETH plus 7.047848 USDC drained from 11 wallets, realized by the attacker as 15.453645063 ETH (EOA balance delta plus gas), which at the 2,459.24 dollars/ETH price DefiLlama's own coins oracle reports for 2026-09-11 07:20 UTC is about 38,004 dollars; DefiLlama's hacks feed lists 43,260 dollars, roughly 14 percent high (it implies about 2,799 dollars/ETH, unsupported by its own oracle). All 11 wallets were reimbursed on-chain within about 9 hours, though DefiLlama still records returnedFunds null. See etherfi-atomicqueue-eip7702-solver-drain/README.md and preuves/07_defillama_vs_onchain.txt. External source: https://www.cryptotimes.io/2026/09/11/ether-fi-loses-15-45-eth-in-legacy-atomicqueue-exploit-ceo-pledges-full-user-reimbursement/.
+[^zentra-finance-atoken-burn-clamp]: 139,999.999999 ctUSD plus 29.999999 USDC.e left Zentra's two affected reserves in one transaction at Citrea block 12428145 (2026-09-09 12:59:37 UTC), 140,029.999998 stablecoin units re-derived two ways that agree to the unit: once from the ctUSD and USDC.e balances held by the two aTokens either side of that block, once by netting the attack contract's own transfers with the aTokens (`zentra-finance-atoken-burn-clamp/preuves/09_reconstruction_output.txt`, and again from Blockscout's token-transfer index in `preuves/12_adversarial_verification_pass.txt`). Priced at $1 per stablecoin that is $140,030, matching DefiLlama's tracked figure to the dollar; the ~$143,000 carried by press does not reproduce from chain data. See `zentra-finance-atoken-burn-clamp/README.md`. External source: https://api.llama.fi/hacks.
 
 ## Corrections to press and DefiLlama
 
 Every figure in the Index above is recomputed from each subfolder's own
 source files, then checked against whatever press or DefiLlama already
-published. The 24 rows below are the cases where that check turned up a
+published. The 26 rows below are the cases where that check turned up a
 real gap: a wrong number, a wrong label, a wrong date, a wrong
 classification, or (for Aquifer, Maya Protocol, Virtue Protocol, and
 Float Protocol) a reconciled gap neither side is really "wrong" about, or
@@ -240,6 +242,7 @@ in the linked subfolder; this table gives the headline gap only.
 | WealthManagementV2 | DefiLlama classifies this "Key Compromise" / "Private Key Compromised" and tracks $26,414 | The exploited proxy was deployed and owned by the attacker's own EOA from its own genesis (confirmed live and via the full decoded transaction sequence, with no ownership-transfer event anywhere) -- nothing was compromised, there was no prior owner; 4 decoded `withdraw()` calls alone move $422,251.40, about 16.0x DefiLlama's tracked figure | [wealthmanagementv2-selfowned-proxy-drain/](wealthmanagementv2-selfowned-proxy-drain/) |
 | Weft Finance (Weft V2) | DefiLlama tracks $47,200 with an empty source field; no press or protocol statement exists anywhere for this incident | Independently reconstructed net loss (47,280,000 LSULP borrowed minus the 51.13 LSULP repaid at the one partial liquidation that followed, plus 13,100,500 unrepaid XRD, priced via Weft's own on-chain price-feed component and CoinGecko's 2026-08-30 XRD rate) is $61,592.84, about 30.5% above DefiLlama's figure; the CDP's own on-chain data still shows this real debt against 0.0000000000000165 HUG of collateral | [weft-finance-hug-collateral-manipulation/](weft-finance-hug-collateral-manipulation/) |
 | ether.fi Liquid (AtomicQueue) | Press reported the ~$38K/15.45 ETH headline but not why those 11 wallets; DefiLlama tracks $43,260 (~14% high) and returnedFunds null | Every drained wallet has code, 9 of 11 are EIP-7702 accounts; solve() calls finishSolve() on the named solver so code-less EOAs are unreachable (the attacker left a 300-liquidETH EOA approver untouched); all 11 wallets were reimbursed on-chain to within dust ~9h later | [etherfi-atomicqueue-eip7702-solver-drain/](etherfi-atomicqueue-eip7702-solver-drain/) |
+| Zentra Finance (ctUSD reserve) | Press reported ~$143,000 from the ctUSD reserve only, with the attack vector undisclosed; DefiLlama labels it "Rounding Error" | The chain shows 140,029.999998 stablecoin units leaving two reserves (ctUSD and, via the same path, USDC.e), matching DefiLlama's $140,030 exactly and not the press figure. No rounding error was exploited: a cap added to the aToken's _burnScaled by a 2026-06-25 upgrade turned a zero-balance burn into a silent no-op, so repayWithATokens cleared 140,000 ctUSD of debt while burning nothing | [zentra-finance-atoken-burn-clamp/](zentra-finance-atoken-burn-clamp/) |
 
 ## Structure
 

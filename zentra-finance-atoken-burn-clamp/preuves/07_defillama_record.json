@@ -1,0 +1,16 @@
+{
+ "date": 1788912000,
+ "name": "Zentra Finance",
+ "classification": "Token & Share Accounting",
+ "technique": "Rounding Error",
+ "amount": 140030,
+ "chain": [
+  "Citrea"
+ ],
+ "bridgeHack": false,
+ "targetType": "DeFi Protocol",
+ "source": "",
+ "returnedFunds": null,
+ "defillamaId": "7419",
+ "language": "Solidity"
+}

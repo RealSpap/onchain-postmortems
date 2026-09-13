@@ -1,0 +1,16 @@
+Attempted counterfactual replay (NOT used as evidence for any claim).
+
+Method: eth_call on the Citrea RPC at block 12428144 (state before the exploit block), from
+the attacker EOA, calldata of the exploit tx, with a state override installing the attack
+contract's runtime code (read at block 12428145) and its only non-zero storage slot (slot 0 = 1).
+Variant A: no further override. Variant B: zctUSD proxy EIP-1967 slot pointed at the pre-upgrade
+implementation 0x2ec995d521d5248c15b874a5cfb80c65a7dc63f7. Variant C: same for zUSDC only.
+
+Result: all three variants revert with custom error data 0x0dc10197, including variant A,
+which should reproduce the real exploit. The revert therefore comes from something the replay
+does not reproduce (an unidentified check in the attacker's own contract or a block-context
+difference), and says nothing about the aToken implementations.
+
+Consequence: the statement that the pre-2026-06-25 implementation would have reverted rests on
+reading its verified source (03d, 03e: checked Solidity 0.8.19 subtraction in _burn with no cap
+in _burnScaled), not on a successful simulation.

@@ -1,0 +1,52 @@
+Press and DefiLlama claims, as retrieved 2026-09-13, and what the chain says.
+(Paraphrased summaries; see URLs. Zentra's own post-mortem document was NOT opened
+before or during the reconstruction; its wording is known only through the press
+summaries below, which were read after the on-chain reconstruction was complete,
+except for the exploit tx hash and timestamp, which were the starting anchor.)
+
+Sources
+  [CT]  https://www.cryptotimes.io/2026/09/12/zentra-finance-reports-143k-exploit-affecting-ctusd-reserve/
+  [CE]  https://crypto-economy.com/zentra-finance-hit-by-exploit-as-ctusd-reserve-is-drained-on-citrea/
+  [PAN] https://panews.io/articles/01a08993-9ccb-7679-a40f-33217fc1319f  (403 on direct fetch; content seen only via search-engine summary)
+  [DL]  https://api.llama.fi/hacks  (record in 07_defillama_record.json)
+
+1. Loss "about $143,000" [CT][CE]
+   Chain: the two reserves lost 139,999.999999 ctUSD + 29.999999 USDC.e = 140,029.999998
+   stablecoin units (09_reconstruction_output.txt, "what left the reserves", two methods agree).
+   DefiLlama's 140030 matches to the dollar. $143K is ~2.1% above anything the chain shows;
+   its origin is not reproducible from on-chain data.
+
+2. "Zentra has not indicated that other reserves were affected" [CT]; breach "focused
+   exclusively on" the ctUSD contract [CE]
+   Chain: the USDC.e reserve was hit by the same path in the same tx (Borrow 30 USDC.e,
+   Repay useATokens=true 30.000001 while holding ~0 zUSDC, Burn event 30.000001, zUSDC
+   scaledTotalSupply unchanged). Small (29.999999 USDC.e) but it shows the flaw is not
+   specific to ctUSD.
+
+3. Attack vector "not made public" [CT][CE]; later summaries of Zentra's post-mortem [PAN, via
+   search summary]: inconsistent accounting between Pool, aToken and debt token during
+   repayWithATokens; "in a specific edge case" the debt path completed while the aToken burn
+   was reduced to zero; flash-loaned USDC used as temporary collateral.
+   Chain + verified source: agrees, and pins it down. The "edge case" is simply a caller whose
+   aToken balance is ZERO: _burnScaled caps amountScaled to scaledBalance (0) after the
+   non-zero check, so _burn burns 0 and the Burn event still reports the full amount. The cap
+   arrived with the aToken implementation upgrade of 2026-06-25; the previous implementation
+   has no cap and would underflow-revert.
+
+4. Funds traced to "a specific wallet", not publicly named [CT][CE]
+   Chain: Zentra's on-chain message (08_zentra_onchain_messages.txt) went first to Ethereum
+   address 0x4eb55301d7848750059300e5ca62ec8de3b4f56a, which holds 55.182877225991682053 ETH
+   (nonce 9, unchanged since 2026-09-08). That address is the one that sent the attacker EOA
+   its first ETH (0.004249243687652093 ETH, 2026-09-08 21:16:23 UTC) about 15h40m before the
+   exploit, and it received 55.182876157279836053 ETH from the attacker at 2026-09-09
+   13:16:59 UTC.
+
+5. Recovery address 0x0A66f2D0c603A6E9C23b64Ea29525B7E6F5609B8, deadline 2026-09-14 12:00 UTC [CT][CE]
+   Chain (2026-09-13 ~10:20 UTC): 0 ctUSD and 0 USDC.e on Citrea; 0.0008999999 ETH on
+   Ethereum. No return observed. The funder wallet has sent no transaction since 2026-09-08.
+
+6. DefiLlama technique "Rounding Error" [DL]
+   Chain + source: no rounding error was exploited. The exploited line is a cap added to
+   absorb a 1-wei rounding overshoot; with a zero balance it turns an insufficient-balance
+   revert into a silent zero burn. Classification is defensible as "Token & Share Accounting",
+   less so as "Rounding Error".

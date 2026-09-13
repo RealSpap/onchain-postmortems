@@ -1,0 +1,36 @@
+tx 0x31ca0dfcbcb7b340bb997e469c6bde73caafd702d568fe7af880b865a2f8ea94
+Ethereum block 25954683 (2026-09-11 14:12:47 UTC)
+from 0x76be77a14e8bdf7fb6dfb05bf1b8ac0b21c2f860
+to   0x4eb55301d7848750059300e5ca62ec8de3b4f56a
+input decoded as UTF-8:
+
+This message is from Zentra Finance. It concerns the 9 September 2026 exploit of our ctUSD reserve on Citrea, transaction 0x9ac5df7e93988cd977e4b1b0564f559ec3096db2fe1abdd97e45c348e3074aa1. We have traced the proceeds to this address.
+
+We propose the following: return the funds to 0x0A66f2D0c603A6E9C23b64Ea29525B7E6F5609B8 in exchange for a bounty. The specific terms can be negotiated. Once we confirm that the returned funds meet the agreed terms, Zentra will not take legal action or investigative measures against you in connection with this incident.
+
+If you are willing to cooperate, reply to this message on chain to 0x76Be77A14E8bDf7fb6dfb05Bf1B8AC0B21c2F860 before 14 September 2026 at 12:00 UTC. We also monitor blockscan chat as a communication path.
+
+Failure to reply by then will be considered unwillingness to cooperate, and the matter will be escalated.
+
+Zentra will then use all technical, on-chain and legal means to identify and hold the attacker accountable. In that case the bounty will instead be used to reward verified informants.
+
+----------------------------------------------------------------------
+
+tx 0xfa8d3ab1de310964fff9ca3804d22782f338f154d3a1d53fc373a4c2340064a2
+Ethereum block 25954693 (2026-09-11 14:14:47 UTC)
+from 0x76be77a14e8bdf7fb6dfb05bf1b8ac0b21c2f860
+to   0xa73d72d6a858df742fe756da5cb61c2288a95c17
+input decoded as UTF-8:
+
+This message is from Zentra Finance. It concerns the 9 September 2026 exploit of our ctUSD reserve on Citrea, transaction 0x9ac5df7e93988cd977e4b1b0564f559ec3096db2fe1abdd97e45c348e3074aa1. We have traced the proceeds to this address.
+
+We propose the following: return the funds to 0x0A66f2D0c603A6E9C23b64Ea29525B7E6F5609B8 in exchange for a bounty. The specific terms can be negotiated. Once we confirm that the returned funds meet the agreed terms, Zentra will not take legal action or investigative measures against you in connection with this incident.
+
+If you are willing to cooperate, reply to this message on chain to 0x76Be77A14E8bDf7fb6dfb05Bf1B8AC0B21c2F860 before 14 September 2026 at 12:00 UTC. We also monitor blockscan chat as a communication path.
+
+Failure to reply by then will be considered unwillingness to cooperate, and the matter will be escalated.
+
+Zentra will then use all technical, on-chain and legal means to identify and hold the attacker accountable. In that case the bounty will instead be used to reward verified informants.
+
+----------------------------------------------------------------------
+
