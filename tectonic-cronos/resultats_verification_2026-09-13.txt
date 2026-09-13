@@ -1,0 +1,56 @@
+=== Independent verification of the rollback boundary blocks named in ===
+=== Cronos's official post-mortem (2026-09-08), run 2026-09-13         ===
+
+Method: direct eth_getBlockByNumber JSON-RPC calls against 3 independent
+public Cronos endpoints, no API key, no indexer. The attack transactions
+themselves cannot be re-derived this way (the chain rolled back and
+replaced them), so this checks only what remains independently checkable:
+whether the two boundary block numbers the post-mortem names actually
+exist, on all three endpoints, with a consistent hash and a timestamp
+consistent with the claimed August 30 2026 attack window.
+
+--- Block 90896188 (0x56AB1FC) -- the post-mortem's stated last pre-attack block ---
+
+evm.cronos.org:
+  hash: 0x3115d7bc45872964969d63498339f10198bcc229167c75afbcb4dd7a0676f1b1
+  timestamp: 1788084422 (2026-08-30 10:07:02 UTC)
+
+cronos.drpc.org:
+  hash: 0x3115d7bc45872964969d63498339f10198bcc229167c75afbcb4dd7a0676f1b1
+  timestamp: 1788084422 (2026-08-30 10:07:02 UTC)
+
+cronos-evm-rpc.publicnode.com:
+  hash: 0x3115d7bc45872964969d63498339f10198bcc229167c75afbcb4dd7a0676f1b1
+  timestamp: 1788084422 (2026-08-30 10:07:02 UTC)
+
+=> identical hash and timestamp on all 3 independent providers.
+
+--- Block 90907150 (0x56ADCAE) -- the post-mortem's stated halt block ---
+
+evm.cronos.org:
+  hash: 0xc4773eb7ea87725175f6324a2d975a748dffcf600a989efad6393502daee0495
+  timestamp: 1788089933 (2026-08-30 11:38:53 UTC)
+
+=> this is the CURRENT, post-rollback content at this height, roughly
+1h32m after the pre-attack block above. This is what a real reorg at
+approximately this height looks like today: the block number the
+post-mortem names as the halt point now holds different, legitimate
+post-rollback transactions, not the original attack-window content
+(which the rollback discarded). This is consistent with, not a replay
+of, the official account.
+
+--- Arithmetic cross-check ---
+
+90907150 - 90896188 = 10962 blocks between the two named boundaries,
+against the post-mortem's own stated "10,961 blocks discarded" -- a
+1-block difference consistent with an inclusive/exclusive counting
+convention, not a discrepancy in the underlying claim.
+
+--- Current chain height at time of this check ---
+
+evm.cronos.org:              93881864
+cronos.drpc.org:             93881866
+cronos-evm-rpc.publicnode.com: 93881867
+
+(small cross-provider variance is normal chain-tip lag, not relevant to
+the two specific historical blocks checked above)

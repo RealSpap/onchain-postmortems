@@ -1,0 +1,47 @@
+=== Sources checked for the Tectonic (Cronos) exploit, 2026-09-13 ===
+=== (finding the now-published official post-mortem this entry was  ===
+=== originally written without)                                     ===
+
+Primary source (used for the dollar figures and block numbers in this
+entry's registry):
+  The Block, "Cronos says $9.2 million remains unrecovered after
+  Tectonic exploit, chain rollback"
+  https://www.theblock.co/news/ecosystems/2026-09-08-cronos-post-mortem-413724
+  Published 2026-09-08 01:51 EDT. Reports directly on Cronos's own
+  official post-mortem (not an independent press estimate): $120.4M
+  borrowed across 9 markets, halt at block 90907150, rollback to block
+  90896188 (10,961 blocks discarded), $111.2M reversed, $9.19M (7.6%
+  of affected value) left Cronos before the halt and remains
+  unrecovered.
+
+This supersedes the earlier, less precise figures this entry originally
+carried ($120M+ borrowed, ~11,000 blocks, $8.3M unrecoverable), which
+were the best available estimates before Cronos's official post-mortem
+was published. The earlier figures were themselves reasonable given
+what existed at the time; this is a normal update as better primary
+information became available, the same pattern already documented for
+several other entries in this repo (e.g. Ostium, where 3 conflicting
+press estimates were later settled by the protocol's own investigation).
+
+Corroborating press (consistent with each other and with the official
+figures on the core mechanism, checked for convergence rather than
+treated as independent proof):
+  - CoinDesk: https://www.coindesk.com/tech/2026/08/31/cronos-halts-blockchain-after-usd75-million-lending-exploit-hits-lending-app-tectonic
+  - KuCoin: https://www.kucoin.com/blog/en-cronos-network-halts-after-75m-tectonic-exploit-how-tonic-price-manipulation-drained-a-major-lending-protocol
+  - crypto.news: https://crypto.news/cronos-rolled-back-chain-75-million-hack-tectonic/
+  - CryptoTimes: https://www.cryptotimes.io/2026/08/31/cronos-halts-entire-blockchain-after-75m-tectonic-exploit-only-6m-escapes/
+  - shattered.io: https://shattered.io/cronos-tectonic-exploit-blockchain-halt-2026/
+
+Note on the earlier press figures above ($75M borrowed, $6M escaped):
+these are from August 31, the day after the exploit, before Cronos's
+own investigation concluded. The official 2026-09-08 post-mortem's
+$120.4M and $9.19M figures are more complete and are what this entry
+now uses; the August 31 figures are kept here only as a record of what
+was reported in the first 24 hours, not as competing current claims.
+
+What this project could NOT do for this entry, disclosed rather than
+worked around: independently re-derive the attack transactions
+themselves from raw chain data, the way every other entry in this repo
+does. Cronos's rollback discarded the blocks that contained them, so
+they are not retrievable via any live RPC call today. See H5 in
+registre_hypotheses.csv.
