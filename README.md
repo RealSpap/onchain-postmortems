@@ -40,6 +40,7 @@ lost in the merge.
 ## Table of contents
 
 - [Index](#index)
+- [Monthly digests](#monthly-digests)
 <!-- TOC:YEARS:START -->
   - [2026](#2026)
     - [September 2026 (current month)](#september-2026-current-month)
@@ -205,6 +206,14 @@ exact figure decoded from source data.
 [^etherfi-atomicqueue-eip7702-solver-drain]: 14.445541086626480620 liquidETH plus 7.047848 USDC drained from 11 wallets, realized by the attacker as 15.453645063 ETH (EOA balance delta plus gas), which at the 2,459.24 dollars/ETH price DefiLlama's own coins oracle reports for 2026-09-11 07:20 UTC is about 38,004 dollars; DefiLlama's hacks feed lists 43,260 dollars, roughly 14 percent high (it implies about 2,799 dollars/ETH, unsupported by its own oracle). All 11 wallets were reimbursed on-chain within about 9 hours, though DefiLlama still records returnedFunds null. See etherfi-atomicqueue-eip7702-solver-drain/README.md and preuves/07_defillama_vs_onchain.txt. External source: https://www.cryptotimes.io/2026/09/11/ether-fi-loses-15-45-eth-in-legacy-atomicqueue-exploit-ceo-pledges-full-user-reimbursement/.
 [^zentra-finance-atoken-burn-clamp]: 139,999.999999 ctUSD plus 29.999999 USDC.e left Zentra's two affected reserves in one transaction at Citrea block 12428145 (2026-09-09 12:59:37 UTC), 140,029.999998 stablecoin units re-derived two ways that agree to the unit: once from the ctUSD and USDC.e balances held by the two aTokens either side of that block, once by netting the attack contract's own transfers with the aTokens (`zentra-finance-atoken-burn-clamp/preuves/09_reconstruction_output.txt`, and again from Blockscout's token-transfer index in `preuves/12_adversarial_verification_pass.txt`). Priced at $1 per stablecoin that is $140,030, matching DefiLlama's tracked figure to the dollar; the ~$143,000 carried by press does not reproduce from chain data. See `zentra-finance-atoken-burn-clamp/README.md`. External source: https://api.llama.fi/hacks.
 
+## Monthly digests
+
+A recurring monthly roundup, one file per month, published once that month closes: headline loss total, breakdown by root-cause technique, the three biggest incidents, and a full linked table. Same independent, on-chain-first discipline as every individual entry, just aggregated.
+
+- [August 2026](digests/2026-08.md): first edition, 19 incidents, at least $46.7M
+
+Full history: [`digests/`](digests/)
+
 ## Corrections to press and DefiLlama
 
 Every figure in the Index above is recomputed from each subfolder's own
@@ -253,6 +262,7 @@ in the linked subfolder; this table gives the headline gap only.
 onchain-postmortems/
   README.md                          this file
   add_new_entry.py                   scaffolds a new subfolder and updates the index
+  digests/                            one monthly roundup file per month (2026-08.md, ...)
   LICENSE                            MIT, s_pap 2026
   <incident-slug>/
     README.md                        full writeup, "at a glance", method, caveats
