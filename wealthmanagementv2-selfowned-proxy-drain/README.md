@@ -28,6 +28,20 @@ later, still holds a quarter million dollars of it.
 | Still sitting, 3 days later | The collector address holds 250,000.002022 USDT today (2026-09-11), with only 8 lifetime outgoing transactions and dust BNB -- consistent with a purpose-built collector, not a busy exchange wallet reused across unrelated users |
 | Classification correction | DefiLlama and the only press coverage found both frame this as a compromised owner key. This reconstruction finds the opposite: the exploited proxy's `owner()` has been the attacker's own EOA since the same session that deployed it (confirmed live and via the full decoded transaction sequence), and its implementation contract's `owner()`, called directly, returns the zero address -- there is no prior legitimate owner for anything to have been taken from |
 
+```mermaid
+flowchart LR
+    ATTACKER["Attacker EOA<br/>0xe439...4a36"]
+    PROXY["Self-owned proxy (EIP-1967)<br/>0xafb7...6c0a<br/>owner() = attacker EOA"]
+    POOL["Third-party wealth pool<br/>0x7b5d...c93d<br/>pre-existing, not attacker-deployed"]
+    COLLECTOR["Collector EOA<br/>0x6daa...a58f<br/>holds 250,000.002022 USDT<br/>(live, 2026-09-11)"]
+
+    ATTACKER -->|"deploys implementation + proxy<br/>(nonces 0-1); owns proxy from genesis"| PROXY
+    PROXY -.->|"calls withdraw() x4<br/>(pulls USDT from)"| POOL
+    PROXY -->|"422,315.00 USDT total<br/>(4 withdraw() calls: nonces 6, 7, 14, 41)<br/>about $422,251.40, about 16x DefiLlama's $26,414"| COLLECTOR
+```
+
+*Fig. 1: fund flow, addresses truncated for display. The dashed edge is the withdraw() call target named by the proxy's own wealth() getter; the solid edges are the actual USDT movements read from decoded transaction receipts.*
+
 ## The method
 
 ```bash
