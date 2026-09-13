@@ -13,6 +13,22 @@ Independent on-chain reconstruction of the governance exploit against Term Finan
 | A precision press missed | The 6-day-1-hour gap between `propose()` and `executeProposal()` matches the "normal delay elapsed, no veto" account better than the competing "attacker reset the delay to zero" account some outlets gave |
 | What's still open | The exact mechanism by which TERM token voting power was acquired was not traced to a single transaction; the governance/proposal contract's source code was not read, only its call sequence and bytecode size |
 
+```mermaid
+flowchart LR
+    A1["Fresh attacker wallet<br/>0xa908b3...612B<br/>tx count: 0"] -->|"deploys"| A2["145-byte contract<br/>0x64E477...b4dF"]
+    A2 -->|"propose()<br/>05:25:35 UTC"| A3["Governance proposal"]
+    A3 -->|"voteFor(), self-vote<br/>+72s later"| A4["Proposal self-voted"]
+    A4 -->|"6d 1h 12s timelock<br/>elapses, no veto"| A5["executeProposal()<br/>2026-08-23 06:25:47 UTC"]
+    A5 -->|"drains"| A6["ETH Meta Vault<br/>0x26fCb5...7Db2<br/>2,841.745 WETH removed<br/>97.1% of pre-drain TVL"]
+    A6 -->|"WETH.withdraw()"| A7["Native ETH"]
+    A7 -->|"sends 1 ETH, then<br/>2,841.237 ETH"| C1["Shared destination<br/>0xD5183d...Fc13"]
+
+    B1["Second wallet<br/>0x686457...0691<br/>tx count: 13"] -->|"sweeps, single tx"| B2["5 USDC strategy vault contracts<br/>Total: 1,679,639.290442 USDC"]
+    B2 -->|"swap"| B3["1,679,642.454089 DAI"]
+    B3 -->|"forwards"| C1
+```
+*Fig. 1: fund flow reconstructed on-chain; addresses truncated for display (0x1234...abcd).*
+
 ## The method
 
 ```bash
