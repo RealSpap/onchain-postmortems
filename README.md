@@ -10,15 +10,10 @@ chain data: `eth_getLogs`, decoded transaction receipts, live `eth_call`
 reads. When press coverage or DefiLlama gets a number, a scope, or a label
 wrong, this repo says so and shows the on-chain proof.
 
-One example of what that means in practice: DefiLlama tracked
-WealthManagementV2 as a $26,414 "private key compromise." It was never
-compromised. The proxy contract was deployed and owned by the attacker's
-own wallet from the moment it went live, confirmed on-chain with no
-ownership-transfer event anywhere, and the real drain across four decoded
-`withdraw()` calls was $422,251.40, about 16x DefiLlama's tracked figure.
-See [wealthmanagementv2-selfowned-proxy-drain/](wealthmanagementv2-selfowned-proxy-drain/)
-for the full transaction-level proof, or the full list of 26 such cases
-below.
+One example: DefiLlama tracked WealthManagementV2 as a $26,414 "private
+key compromise"; the real on-chain drain was $422,251.40, about 16x
+higher, one of 26 cases in the [Corrections to press and
+DefiLlama](#corrections-to-press-and-defillama) table below.
 
 By the same author: [@RealSpap on X](https://x.com/RealSpap), [Dune
 profile](https://dune.com/s_pap), and
@@ -31,11 +26,10 @@ release. Prefer RSS? This repo's release feed is a plain Atom URL, no
 account needed: https://github.com/RealSpap/onchain-postmortems/releases.atom
 
 This repo brings together 8 postmortems that used to live in 8 separate
-GitHub repos. The merge is justified because one repo per incident doesn't
-scale: 8 repos today and 50 tomorrow would mean 50 places to search instead
-of one. Each incident keeps its own subfolder with its script, its
-hypothesis registry, and its raw proof files. Nothing was summarized or
-lost in the merge.
+GitHub repos, merged so incident count doesn't turn into repo count; see
+the mapping in [Structure](#structure) below. Each incident still keeps
+its own subfolder with its script, hypothesis registry, and raw proof
+files, nothing summarized or lost in the merge.
 
 ## At a glance
 
@@ -237,34 +231,34 @@ dollar figure) an incident DefiLlama does not price. Full detail,
 including the exact transactions and event logs behind each figure, lives
 in the linked subfolder; this table gives the headline gap only.
 
-| Incident | What press/DefiLlama got wrong | What this repo found | Link |
-|---|---|---|---|
-| Sandbox (SAND / OFT) | Press figure covers the Ethereum leg only | Real amount is about 5.2x higher, 405.83 gross WETH across Base and Ethereum, though no dollar total is assigned for lack of a reliable native-unit conversion | [sandbox-oft-delegate-hijack/](sandbox-oft-delegate-hijack/) |
-| Balancer V1 (legacy pools) | DefiLlama and press figure cover 1 pool only | The same wallet drained 4 pools the same night; the other 3 are quantified only in kind, for lack of a price feed | [balancer-v1-rounding/](balancer-v1-rounding/) |
-| Notional Finance (V1 Escrow) | DefiLlama's own feed labels the exploited contract "V2" | The exploited contract is actually V1; the dollar amount itself matches DefiLlama exactly | [notional-v1-escrow/](notional-v1-escrow/) |
-| Cozy V2 | Cozy's own figure ($170,186) and DefiLlama's ($163,326, exactly one of two claim transactions) both undercount | Verified on-chain total is $174,311.01, confirmed two independent ways | [cozy-v2-optimism/](cozy-v2-optimism/) |
-| Cosmos EVM (MANTRA / TAC / KiiChain) | Cosmos Labs' own post-mortem cites the wrong block number for the KiiChain anchor transaction | The real block is 9355107, not 9355102, confirmed on two RPC endpoints | [cosmos-evm-vesting-underflow/](cosmos-evm-vesting-underflow/) |
-| Allbridge (CCTP Forged Message) | SlowMist's own post-mortem states the wrong date (July 26); DefiLlama's $191,000 conflates 3 different figures into one | The exploit happened July 25; Router loss, attacker profit, and gross balance are 3 separate numbers ($190,156 real loss, $189,752 net profit, $191,000-ish gross balance) | [allbridge-cctp-forged-message/](allbridge-cctp-forged-message/) |
-| Liquid Network | The project's own incident report cites 15:53:10 UTC for the exploit block | That block's own chain-recorded timestamp is 13:53:10 UTC, two hours earlier; this entry also reports the still-missing floor (598.50 BTC) rather than DefiLlama's pre-return gross figure | [liquid-rangeproof-cache/](liquid-rangeproof-cache/) |
-| Aquifer | DefiLlama's $2,469,729 sits about 2% above this entry's theft-day figure | Re-pricing the identical on-chain amount one day later, when the attacker actually moved it, lands within 0.05% of DefiLlama's number, pinning down which moment DefiLlama priced it at (a reconciliation, not an error) | [aquifer-sweeper-arbitrary-call/](aquifer-sweeper-arbitrary-call/) |
-| Maya Protocol (MAYAChain) | DefiLlama's $1,700,000 sits about 21% above this entry's BTC-only figure | The gap traces to a specific, still-unconverted 8.87M CACAO balance sitting in the attacker's own wallet (a reconciliation, not an error) | [mayachain-cacao-slash-drain/](mayachain-cacao-slash-drain/) |
-| Gravity Bridge | DefiLlama classifies this "Key Compromise" / "Validator Key Compromised" | Every validator signature on the payout batches was genuine; the registry was poisoned via a permissionless function call with a missing collision check, not a compromised key | [gravity-bridge-denom-poisoning/](gravity-bridge-denom-poisoning/) |
-| MORE Markets (Ankr ankrFLOW E-Mode) | Blockaid's initial "$9.3M" estimate was repeated across most outlets that covered it | A full scan of the Pool's own event log finds exactly one transaction, totaling $415,398.47, matching DefiLlama's separately-tracked $410,000 (listed under "Ankr") within 1.32% | [more-markets-ankrflow-emode/](more-markets-ankrflow-emode/) |
-| Verus-Ethereum Bridge | Press (via Blockaid/cryptotimes.io) described 2 exploits as hitting the same contract through the same import route, implying one reused bug | VerusCoin's own writeup states the two exploits shared only a general bug category, not the same specific mechanism | [verus-ethereum-bridge-forged-proof/](verus-ethereum-bridge-forged-proof/) |
-| Ostium (PrivatePriceUpKeep Compromise) | Press carried 3 conflicting estimates ($18M, ~$22M, ~$24M) before Ostium's own investigation settled on $23,752,746 | An independent scan of the Vault's event log lands on $23,752,641.68, within 0.0004% of Ostium's own final figure | [ostium-oracle-forwarder-compromise/](ostium-oracle-forwarder-compromise/) |
-| Nomic (nBTC / Osmosis allBTC) | DefiLlama dates this incident 2026-09-09, the disclosure date | The mint itself happened 2026-06-25T21:49:59 UTC, 76 days earlier; DefiLlama's $3,150,000 also prices the full mint at a current BTC rate rather than the theft-day rate | [nomic-nbtc-ibc-selfmint/](nomic-nbtc-ibc-selfmint/) |
-| XRP Healthcare (XRPH Wallet) | Not tracked in DefiLlama's hacks feed at all | Independently re-derived totals (267,679.863641 XRP; 445,197.999216 DAI) land within 0.006% and 1.5% of the two figures the source article itself gives (a discovery, not a correction) | [xrph-wallet-key-compromise/](xrph-wallet-key-compromise/) |
-| Lazy Summer Protocol | DefiLlama dates this incident 2026-07-05T00:00:00Z | The exploit transaction's own block timestamp is 2026-07-06T05:17:59Z, 29.3 hours later; the amount and classification both check out independently | [lazy-summer-stale-ark-donation/](lazy-summer-stale-ark-donation/) |
-| Kelp DAO (rsETH / LayerZero DVN) | DefiLlama tracks $293,000,000 and LayerZero's own statement says "approximately $290M" | This entry's own reconstruction confirms exactly 116,500 rsETH moved; priced at theft-day rate that is $273,377,225, while a second cross-check via Kelp's own oracle backing rate gives $301,716,067, bracketing both public figures from either side | [kelpdao-rseth-layerzero-rpc-spoofing/](kelpdao-rseth-layerzero-rpc-spoofing/) |
-| Virtue Protocol (VUSD CDP) | Virtue's own press-relayed figure ($455,103) is the face-value VUSD debt cleared, well below DefiLlama's tracked $894,500 | The debt-cleared figure matches Virtue's own account almost exactly (independently re-derived: $455,102.94), but the real-user collateral actually seized during the crash-triggered liquidation cascade is worth roughly double that at theft-day prices (independently re-derived: ≈$848,457), much closer to DefiLlama's figure (a reconciliation, not an error) | [virtue-iota-switchboard-oracle/](virtue-iota-switchboard-oracle/) |
-| Float Protocol (Hypervisor Vaults) | DefiLlama's $28,000 sits 6.5-7.6% above this entry's independently re-derived figure | The exploit transaction's own WETH `Withdrawal` event and the attacker EOA's own balance delta agree, to the wei, on 10.706591043820923 ETH; converting that at CoinGecko's daily or intraday price gives $25,869.71-$26,189.43, and neither side of the gap can be shown as wrong from public data alone (a reconciliation, not an error) | [float-protocol-hypervisor-spot-manipulation/](float-protocol-hypervisor-spot-manipulation/) |
-| Oraichain (ICS-20 EVM Precompile) | DefiLlama's flat $1,000,000 (empty source field) matches neither reading | The self-referential precompile bug actually minted 1,509,949,343 ORAI (peak supply 78.00x baseline, reversed in one block 4.5 hours later); the confirmed still-missing floor, priced from only the 2 legs proven to have left Oraichain's own reach, is $4,461.73, two orders of magnitude below DefiLlama's number | [oraichain-ics20-precompile-selfmint/](oraichain-ics20-precompile-selfmint/) |
-| Secured Finance (JPYC Lending Market) | DefiLlama classifies this "Oracle Manipulation" / "Spot Price Manipulation" and tracks $104,000, empty source field | Neither of the 2 confirmed exploit transactions reads any price oracle; this is a collateral-accounting bug in TokenVault, and the independently re-derived drain (4,360,902.135130 JPYC, $45,444.97) is 0.44x DefiLlama's tracked figure, an unreconciled gap | [securedfinance-jpyc-tokenvault-selflend/](securedfinance-jpyc-tokenvault-selflend/) |
-| Full Sail (Sui Vaults) | DefiLlama tracks this incident with no dollar figure at all (`amount: null`); press reports "roughly $91,000" with no on-chain support shown | Independently found the attacker address, all 3 affected vaults, and the exact ~100x price manipulation for each of SUI/ETH/IKA from the chain itself; net realized profit across the 3 vaults is $91,605.56, cross-checked to the wei against a separate swap transaction (a discovery, not a correction, and 0.67% above the unsourced press estimate) | [fullsail-switchboard-vault-drain/](fullsail-switchboard-vault-drain/) |
-| WealthManagementV2 | DefiLlama classifies this "Key Compromise" / "Private Key Compromised" and tracks $26,414 | The exploited proxy was deployed and owned by the attacker's own EOA from its own genesis (confirmed live and via the full decoded transaction sequence, with no ownership-transfer event anywhere) -- nothing was compromised, there was no prior owner; 4 decoded `withdraw()` calls alone move $422,251.40, about 16.0x DefiLlama's tracked figure | [wealthmanagementv2-selfowned-proxy-drain/](wealthmanagementv2-selfowned-proxy-drain/) |
-| Weft Finance (Weft V2) | DefiLlama tracks $47,200 with an empty source field; no press or protocol statement exists anywhere for this incident | Independently reconstructed net loss (47,280,000 LSULP borrowed minus the 51.13 LSULP repaid at the one partial liquidation that followed, plus 13,100,500 unrepaid XRD, priced via Weft's own on-chain price-feed component and CoinGecko's 2026-08-30 XRD rate) is $61,592.84, about 30.5% above DefiLlama's figure; the CDP's own on-chain data still shows this real debt against 0.0000000000000165 HUG of collateral | [weft-finance-hug-collateral-manipulation/](weft-finance-hug-collateral-manipulation/) |
-| ether.fi Liquid (AtomicQueue) | Press reported the ~$38K/15.45 ETH headline but not why those 11 wallets; DefiLlama tracks $43,260 (~14% high) and returnedFunds null | Every drained wallet has code, 9 of 11 are EIP-7702 accounts; solve() calls finishSolve() on the named solver so code-less EOAs are unreachable (the attacker left a 300-liquidETH EOA approver untouched); all 11 wallets were reimbursed on-chain to within dust ~9h later | [etherfi-atomicqueue-eip7702-solver-drain/](etherfi-atomicqueue-eip7702-solver-drain/) |
-| Zentra Finance (ctUSD reserve) | Press reported ~$143,000 from the ctUSD reserve only, with the attack vector undisclosed; DefiLlama labels it "Rounding Error" | The chain shows 140,029.999998 stablecoin units leaving two reserves (ctUSD and, via the same path, USDC.e), matching DefiLlama's $140,030 exactly and not the press figure. No rounding error was exploited: a cap added to the aToken's _burnScaled by a 2026-06-25 upgrade turned a zero-balance burn into a silent no-op, so repayWithATokens cleared 140,000 ctUSD of debt while burning nothing | [zentra-finance-atoken-burn-clamp/](zentra-finance-atoken-burn-clamp/) |
+| Incident | Gap (old -> found) | Link |
+|---|---|---|
+| Sandbox (SAND / OFT) | Press: Ethereum leg only. Found: 5.2x higher, 405.83 gross WETH across Base and Ethereum; no dollar total assigned | [sandbox-oft-delegate-hijack/](sandbox-oft-delegate-hijack/) |
+| Balancer V1 (legacy pools) | DefiLlama/press: 1 pool. Found: same wallet drained 4 pools that night; the other 3 quantified only in kind, no price feed | [balancer-v1-rounding/](balancer-v1-rounding/) |
+| Notional Finance (V1 Escrow) | DefiLlama's feed labels the contract "V2". Found: actually V1; the dollar amount itself matches DefiLlama exactly | [notional-v1-escrow/](notional-v1-escrow/) |
+| Cozy V2 | Cozy: $170,186. DefiLlama: $163,326 (one of two claim txns). Found: verified on-chain total $174,311.01, two independent ways | [cozy-v2-optimism/](cozy-v2-optimism/) |
+| Cosmos EVM (MANTRA / TAC / KiiChain) | Cosmos Labs' own post-mortem cites block 9355102 for the KiiChain anchor tx. Found: real block is 9355107, on two RPC endpoints | [cosmos-evm-vesting-underflow/](cosmos-evm-vesting-underflow/) |
+| Allbridge (CCTP Forged Message) | SlowMist dates it July 26; DefiLlama's $191,000 conflates 3 figures. Found: exploit was July 25; loss $190,156, profit $189,752, gross ~$191,000 | [allbridge-cctp-forged-message/](allbridge-cctp-forged-message/) |
+| Liquid Network | Own report cites 15:53:10 UTC for the exploit block. Found: real chain timestamp 13:53:10 UTC, two hours earlier; floor is 598.50 BTC still missing, not DefiLlama's gross pre-return figure | [liquid-rangeproof-cache/](liquid-rangeproof-cache/) |
+| Aquifer | DefiLlama's $2,469,729 sits ~2% above the theft-day figure. Found: pricing it one day later, when funds moved, lands within 0.05% (reconciliation, not error) | [aquifer-sweeper-arbitrary-call/](aquifer-sweeper-arbitrary-call/) |
+| Maya Protocol (MAYAChain) | DefiLlama's $1,700,000 sits ~21% above the BTC-only figure. Found: gap traces to a still-unconverted 8.87M CACAO in the attacker's wallet (reconciliation, not error) | [mayachain-cacao-slash-drain/](mayachain-cacao-slash-drain/) |
+| Gravity Bridge | DefiLlama classifies this "Key Compromise" / "Validator Key Compromised". Found: every signature was genuine; the registry was poisoned via a missing collision check, not a stolen key | [gravity-bridge-denom-poisoning/](gravity-bridge-denom-poisoning/) |
+| MORE Markets (Ankr ankrFLOW E-Mode) | Blockaid's initial "$9.3M" estimate spread widely. Found: one transaction, $415,398.47, matching DefiLlama's separately-tracked $410,000 (under "Ankr") within 1.32% | [more-markets-ankrflow-emode/](more-markets-ankrflow-emode/) |
+| Verus-Ethereum Bridge | Press (Blockaid/cryptotimes.io) implied one reused bug via the same import route across 2 exploits. Found: VerusCoin's own writeup says they share only a general bug category | [verus-ethereum-bridge-forged-proof/](verus-ethereum-bridge-forged-proof/) |
+| Ostium (PrivatePriceUpKeep Compromise) | Press: 3 conflicting estimates ($18M, ~$22M, ~$24M) before Ostium settled on $23,752,746. Found: independent scan lands on $23,752,641.68, within 0.0004% | [ostium-oracle-forwarder-compromise/](ostium-oracle-forwarder-compromise/) |
+| Nomic (nBTC / Osmosis allBTC) | DefiLlama dates this 2026-09-09 (disclosure date). Found: mint happened 2026-06-25T21:49:59 UTC, 76 days earlier; DefiLlama's $3,150,000 also uses a current, not theft-day, BTC rate | [nomic-nbtc-ibc-selfmint/](nomic-nbtc-ibc-selfmint/) |
+| XRP Healthcare (XRPH Wallet) | Not tracked in DefiLlama's hacks feed at all. Found: independent totals (267,679.863641 XRP; 445,197.999216 DAI) land within 0.006% and 1.5% of the source article's own figures (a discovery, not a correction) | [xrph-wallet-key-compromise/](xrph-wallet-key-compromise/) |
+| Lazy Summer Protocol | DefiLlama dates this 2026-07-05T00:00:00Z. Found: exploit's own block timestamp is 2026-07-06T05:17:59Z, 29.3 hours later; amount and classification check out | [lazy-summer-stale-ark-donation/](lazy-summer-stale-ark-donation/) |
+| Kelp DAO (rsETH / LayerZero DVN) | DefiLlama: $293,000,000. LayerZero: "approximately $290M". Found: 116,500 rsETH moved, $273,377,225 at theft-day rate or $301,716,067 via Kelp's own oracle rate, bracketing both | [kelpdao-rseth-layerzero-rpc-spoofing/](kelpdao-rseth-layerzero-rpc-spoofing/) |
+| Virtue Protocol (VUSD CDP) | Virtue's press figure ($455,103) is face-value debt cleared, below DefiLlama's $894,500. Found: debt-cleared matches Virtue ($455,102.94); collateral seized is ≈$848,457, closer to DefiLlama (reconciliation) | [virtue-iota-switchboard-oracle/](virtue-iota-switchboard-oracle/) |
+| Float Protocol (Hypervisor Vaults) | DefiLlama's $28,000 sits 6.5-7.6% above the re-derived figure. Found: WETH event and EOA delta agree, to the wei, on 10.706591043820923 ETH ($25,869.71-$26,189.43); neither side provably wrong (reconciliation) | [float-protocol-hypervisor-spot-manipulation/](float-protocol-hypervisor-spot-manipulation/) |
+| Oraichain (ICS-20 EVM Precompile) | DefiLlama's flat $1,000,000 matches neither reading. Found: bug minted 1,509,949,343 ORAI (78.00x baseline), reversed 4.5 hours later; confirmed floor from only 2 legs proven to have left is $4,461.73 | [oraichain-ics20-precompile-selfmint/](oraichain-ics20-precompile-selfmint/) |
+| Secured Finance (JPYC Lending Market) | DefiLlama labels this "Oracle Manipulation" / "Spot Price Manipulation", $104,000. Found: no oracle read occurs, a TokenVault accounting bug; drain is 4,360,902.135130 JPYC, $45,444.97, 0.44x DefiLlama's figure | [securedfinance-jpyc-tokenvault-selflend/](securedfinance-jpyc-tokenvault-selflend/) |
+| Full Sail (Sui Vaults) | DefiLlama: no dollar figure (`amount: null`); press: "roughly $91,000" unsourced. Found: attacker and all 3 vaults; net profit $91,605.56, 0.67% above the press estimate (a discovery, not a correction) | [fullsail-switchboard-vault-drain/](fullsail-switchboard-vault-drain/) |
+| WealthManagementV2 | DefiLlama classifies this "Key Compromise" / "Private Key Compromised", $26,414. Found: proxy was attacker-owned from genesis, no ownership transfer, nothing compromised; 4 withdraw() calls move $422,251.40, ~16.0x | [wealthmanagementv2-selfowned-proxy-drain/](wealthmanagementv2-selfowned-proxy-drain/) |
+| Weft Finance (Weft V2) | DefiLlama: $47,200, empty source, no press/protocol statement exists. Found: reconstructed net loss $61,592.84, ~30.5% above DefiLlama's figure; CDP still shows this debt against near-zero HUG collateral | [weft-finance-hug-collateral-manipulation/](weft-finance-hug-collateral-manipulation/) |
+| ether.fi Liquid (AtomicQueue) | Press: ~$38K/15.45 ETH headline, not why those 11 wallets; DefiLlama: $43,260 (~14% high), returnedFunds null. Found: 9 of 11 wallets are EIP-7702; a 300-liquidETH EOA approver was left untouched; all 11 reimbursed within ~9h | [etherfi-atomicqueue-eip7702-solver-drain/](etherfi-atomicqueue-eip7702-solver-drain/) |
+| Zentra Finance (ctUSD reserve) | Press: ~$143,000, attack vector undisclosed; DefiLlama labels it "Rounding Error". Found: 140,029.999998 stablecoin units left two reserves, matching DefiLlama's $140,030 exactly; a burn-cap bug, not a rounding error | [zentra-finance-atoken-burn-clamp/](zentra-finance-atoken-burn-clamp/) |
 
 ## Falsifiable hypotheses, not just claims
 
@@ -331,41 +325,15 @@ python3 add_new_entry.py \
   --readme-url "https://example.com/postmortem"
 ```
 
-This scaffolds three files: a stub README, an empty
-`registre_hypotheses.csv`, and a stub `reconstruct_exploit.py`, in a new
-`new-protocol-incident/` folder. It then inserts a new row into the Index
-above, under the year/month section that matches `--date`'s own year and
-month (creating that section first if this is its first entry), sorted by
-loss within the month.
-
-From the Index itself, never from a hardcoded number, it also recomputes:
-
-- that month's subtotal and that year's subtotal
-- the overall cumulative total and incident count in "At a glance"
-- the table of contents' year/month list
-- the "(current month)" label, moved to whichever month is now
-  chronologically latest
-
-It appends a placeholder footnote for the new slug too. See
-`add_new_entry.py --help` for the full list of options.
-
-Two flags carry a judgment call of their own:
-
-- **`--loss-known-partial`**, for an incident like Sandbox or Balancer V1
-  above, where the real loss is known to exceed the figure that can
-  actually be sourced.
-- **`--category`**, which must be one of the controlled tags already in
-  use (Bridge, Oracle, Governance, Key-Compromise, Donation-Attack,
-  Access-Control, Rounding/Math-Bug); the script rejects anything else.
-  If none genuinely fits a new incident, add the new tag to
-  `VALID_CATEGORIES` in `add_new_entry.py` by hand first, a deliberate
-  decision, not a free-text escape hatch.
-
-The script doesn't touch the "Corrections made" and "License" lines in the
-"at a glance" block, or the "Corrections to press and DefiLlama" section,
-those are human judgment calls (does this new incident actually correct
-the press, is it actually MIT), not mechanical totals. Update them
-yourself if needed.
+This scaffolds a stub README, `registre_hypotheses.csv`, and
+`reconstruct_exploit.py`; inserts the new row into the Index in the right
+year/month section; and recomputes every subtotal, the cumulative total,
+the table of contents, and the "(current month)" label straight from the
+Index data, never from a hardcoded number. Run `add_new_entry.py --help`
+for the full flag reference, including `--loss-known-partial` and the
+controlled `--category` tags; it never touches the "Corrections made" /
+"License" lines or the Corrections table, which stay human judgment
+calls.
 
 ## Scope
 
@@ -395,39 +363,28 @@ tips with a tx hash or block number attached get looked at first.
   from an old summary without checking it against those files. When a
   subfolder's source data doesn't support a full dollar total, the table
   says so in a footnote instead of inventing one.
-- 12 entries (Sandbox, Balancer V1, Liquid Network, Maya Protocol,
-  COLDCARD, Coinsbuy, WealthManagementV2, XRP Healthcare, Symbiosis,
-  Cosmos EVM (MANTRA / TAC / KiiChain), Oraichain (ICS-20 EVM Precompile),
-  Verus-Ethereum Bridge) report a dollar figure that is a known floor, not
-  a complete total: (Sandbox, Balancer V1) their source repo found a wider
-  scope than the press without converting every recovered amount to
-  dollars, (Liquid Network) left some smaller destination addresses
-  untraced, (Maya Protocol) found a real, still-unconverted balance
-  sitting in the attacker's own wallet that this repo declined to price
-  for lack of a sourceable historical rate, (COLDCARD) independently
-  traced only the first of a reported 4 theft waves, about a third of the
-  named-security-team's own preliminary total, (Coinsbuy) confirmed the
-  Tron leg in full but only one Ethereum-side transaction, with the
-  remainder routing through an intermediary address this repo could not
-  independently attribute to Coinsbuy, (WealthManagementV2) exhaustively
-  decoded only nonces 0-41 of the attacker's 252 lifetime transactions, so
-  further rounds using other proxy instances elsewhere in that history
-  cannot be ruled out, (XRP Healthcare) the traced fund flow covers 3,630
-  of the 4,011 wallets XRP Healthcare's own count says were swept,
-  (Symbiosis) the figure prices only the realized cash-out, leaving the
-  now-unbacked syBTC float on three chains unresolved, (Cosmos EVM) the
-  primary source itself declines to name 3 of the 6 chains it says were
-  hit, (Oraichain) only the two legs independently confirmed to have left
-  Oraichain's own reach are priced, not the ORAI bridged to Injective or
-  locked as lending collateral, or (Verus-Ethereum Bridge) a second,
-  2026-07-23 exploit against the same contract (tracked by DefiLlama at
-  $7,530,000) is confirmed but deliberately not priced here. Read the
-  linked subfolder for the full accounting in native units.
-- The Tectonic, Moonwell, and Liquid Network entries report the confirmed
-  unrecoverable or still-uncovered figure, not the higher, gross amount
-  borrowed or extracted before liquidations or, for Tectonic, a chain
-  rollback, and for Liquid Network, a large partial return the next day.
-  Both readings are given in the footnote and in the linked subfolder.
+- 12 entries report a dollar figure that is a known floor, not a complete
+  total. Read the linked subfolder for the full accounting in native
+  units.
+
+| Protocol | Why it's a floor | Link |
+|---|---|---|
+| Sandbox | Wider scope found than press; not all converted to dollars | [sandbox-oft-delegate-hijack/](sandbox-oft-delegate-hijack/) |
+| Balancer V1 (legacy pools) | Same: wider scope than press, not fully priced | [balancer-v1-rounding/](balancer-v1-rounding/) |
+| Liquid Network | Some smaller destination addresses left untraced | [liquid-rangeproof-cache/](liquid-rangeproof-cache/) |
+| Maya Protocol (MAYAChain) | Unconverted CACAO balance in attacker's wallet, no rate | [mayachain-cacao-slash-drain/](mayachain-cacao-slash-drain/) |
+| COLDCARD (Weak Seed RNG) | Only 1st of 4 theft waves traced, about a third | [coldcard-rng-seed-theft/](coldcard-rng-seed-theft/) |
+| Coinsbuy | Tron leg full; only one Ethereum tx attributable | [coinsbuy-wallet-drain/](coinsbuy-wallet-drain/) |
+| WealthManagementV2 | Only nonces 0-41 of 252 lifetime txns decoded | [wealthmanagementv2-selfowned-proxy-drain/](wealthmanagementv2-selfowned-proxy-drain/) |
+| XRP Healthcare (XRPH Wallet) | Covers 3,630 of 4,011 wallets XRP Healthcare counted | [xrph-wallet-key-compromise/](xrph-wallet-key-compromise/) |
+| Symbiosis | Prices only the realized cash-out; syBTC float unresolved | [symbiosis-sybtc-mpc-signed-mint/](symbiosis-sybtc-mpc-signed-mint/) |
+| Cosmos EVM (MANTRA / TAC / KiiChain) | Source itself withholds 3 of the 6 chains hit | [cosmos-evm-vesting-underflow/](cosmos-evm-vesting-underflow/) |
+| Oraichain (ICS-20 EVM Precompile) | Prices only 2 legs; excludes Injective-bridged/locked ORAI | [oraichain-ics20-precompile-selfmint/](oraichain-ics20-precompile-selfmint/) |
+| Verus-Ethereum Bridge | 2nd exploit (2026-07-23, $7,530,000 per DefiLlama) not priced | [verus-ethereum-bridge-forged-proof/](verus-ethereum-bridge-forged-proof/) |
+
+- Tectonic, Moonwell, and Liquid Network report the confirmed
+  unrecoverable or still-uncovered figure, not the higher gross amount;
+  see each entry's own footnote for both readings.
 - `tectonic-cronos/` is the only subfolder without a `resultats_*.txt` or
   a `registre_hypotheses.csv`: its script is a tool for reading the
   chain's current state (`tectonic_risk_snapshot.py`), not a replay of the
