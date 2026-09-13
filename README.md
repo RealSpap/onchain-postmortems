@@ -17,7 +17,8 @@ on-chain research into who actually controls DeFi admin keys.
 
 Get notified of new postmortems: click Watch, then Custom, then Releases
 only, on this repo's GitHub page. Every new incident gets tagged as a
-release.
+release. Prefer RSS? This repo's release feed is a plain Atom URL, no
+account needed: https://github.com/RealSpap/onchain-postmortems/releases.atom
 
 This repo brings together 8 postmortems that used to live in 8 separate
 GitHub repos. The merge is justified because one repo per incident doesn't
