@@ -31,6 +31,31 @@ below directly from the chain.
 | DefiLlama's tracked figure | "Oraichain", $1,000,000, dated 2026-08-08, "Bridge & Cross-Chain" / "Unbacked Cross-Chain Mint", empty source field |
 | Verified independently | The full 31-transaction mint sequence and its exact totals, live on Oraichain's own RPC; the ICS-20 precompile's identity from `cosmos/evm`'s own GitHub source; the cash-out address's full 17-transaction laundering trail; the two CW20 tokens drained (USDT, USDC) via their own live `token_info`; the two bridged-out IBC vouchers (ATOM, OSMO) via Oraichain's own live denom-trace endpoint; the exact single-block height where total supply was reversed; both sister-chain balances (Cosmos Hub, Osmosis) today, showing the ATOM/OSMO leg was further dispersed, not sitting recoverable |
 
+Fig. 1: fund flow, addresses truncated for display.
+
+```mermaid
+flowchart TD
+    ATT["Attacker address<br/>orai1ckf...r0vf54"]
+    PRE["ICS-20 precompile<br/>0x0000...0802"]
+    CASH["Cash-out / consolidation address<br/>orai1vyg...945wrq"]
+    INJ["Injective address<br/>inj1w79x...mwlmds"]
+    DEX["OraiDEX pools<br/>9 pools, 1 tx"]
+    HUB["Cosmos Hub address<br/>cosmos1v...kxzdzn"]
+    OSM["Osmosis address<br/>osmo1vyg...7a3a5p"]
+    LEND["On-chain lending market<br/>collateral"]
+    ETH["Ethereum address memo<br/>0xf3C341...CE7D10"]
+
+    ATT -->|"24x self-referential IBC-transfer call<br/>sender = receiver, escrows sender balance"| PRE
+    PRE -->|"erroneous coinbase mint credits identical<br/>amount back, balance roughly doubles each call<br/>89.999995 to 754,974,669.602687 ORAI<br/>24 calls in 10 minutes"| ATT
+    ATT -->|"31st tx: coinbase mint moves<br/>1,509,949,343.000000 ORAI"| CASH
+    CASH -->|"600,000,000 ORAI IBC'd<br/>100M then 500M"| INJ
+    CASH -->|"swaps drain<br/>3,544.927472 USDT + 2,840.396029 USDC"| DEX
+    DEX -->|"IBC voucher bridged onward<br/>3,161.082810 ATOM"| HUB
+    DEX -->|"IBC voucher bridged onward<br/>5,438.198605 OSMO"| OSM
+    CASH -->|"deposit_collateral then lock_collateral<br/>59,255,027.190012 ORAI"| LEND
+    CASH -->|"225,991-unit USDC-tagged leg via<br/>Oraichain legacy bridge, not re-traced on Ethereum"| ETH
+```
+
 ## The method
 
 Starting anchor: 0xposed.io's short radar note
