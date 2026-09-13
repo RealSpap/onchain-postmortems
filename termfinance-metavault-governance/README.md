@@ -59,7 +59,7 @@ The wallet that executed the ETH Meta Vault drain, `0xa908b3472d76e7744baB0A5911
 | 6 | 05:26:47 | Calls `voteFor()`, a self-vote, 72 seconds later |
 | 7 | **2026-08-23** 06:25:47 | Calls `executeProposal()`, draining the ETH Meta Vault |
 | 8 | 06:27:23 | Calls `WETH.withdraw()`, unwrapping to native ETH |
-| 9-10 | 06:30:23 - 06:31:47 | Sends 1 ETH, then 2,841.237 ETH, to one final address |
+| 9-10 | 06:30:23 - 06:31:47 | Sends 1 ETH, then 2,841.237 ETH, to one final address (2,842.237 ETH combined, the figure used elsewhere in this document) |
 
 The 145-byte contract this wallet deployed at nonce 2 (`0x64E477800051EFb06Ae4086f4b258b270668b4dF`) is the same contract that later executed `propose()`, `voteFor()`, and `executeProposal()`, meaning the attacker deployed their own proposal-execution module rather than reusing a pre-existing one belonging to Term Labs; its small size is consistent with a minimal proxy pattern, though this project did not read its source. This project also did not decode `propose()`'s calldata to identify the exact function it scheduled on the vault, only that `executeProposal()` six days later produced the WETH transfer documented above.
 
@@ -80,7 +80,7 @@ The USDC side of the exploit was executed by a different wallet, `0x686457a7468B
 | `0x1c731c75c40ca22920957e5260d959d96c259027` | 454,046.261367 |
 | **Total** | **1,679,639.290442 USDC** |
 
-This total matches shattered.io's press figure of "1,679,639 USDC" almost to the cent, now independently attributed to five specific vault-side contracts rather than a single rounded number. Four minutes later this wallet received 1,679,642.454089 DAI from a swap, and five minutes after that forwarded the entire amount to `0xD5183d8BfC65a50863C62aF2538198A8288FFc13`, the same address the ETH-side wallet sent its 2,842.237 ETH to. Two operationally distinct wallets converging on one destination within 25 minutes of each other independently confirms that address as the real beneficiary, regardless of how any single press source identified it.
+This total matches shattered.io's press figure of "1,679,639 USDC" almost to the cent, now independently attributed to five specific vault-side contracts rather than a single rounded number. Four minutes later this wallet received 1,679,642.454089 DAI from a swap, and five minutes after that forwarded the entire amount to `0xD5183d8BfC65a50863C62aF2538198A8288FFc13`, the same address the ETH-side wallet sent its 2,842.237 ETH to (combined across the two transactions in the table above, 1 ETH then 2,841.237 ETH). Two operationally distinct wallets converging on one destination within 25 minutes of each other independently confirms that address as the real beneficiary, regardless of how any single press source identified it.
 
 ### A caught methodology lesson: verify even a specific-looking claim before using it
 
