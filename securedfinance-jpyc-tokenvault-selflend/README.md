@@ -26,6 +26,38 @@ happened.
 | A real correction | Not an oracle exploit: both fills happened at unremarkable unit prices on Secured Finance's own order book, and neither transaction reads any price feed. This is a collateral-accounting bug in `TokenVault`/`DepositManagementLogic`, confirmed by reading Secured Finance's own currently-live Solidity source |
 | What's still open | The DefiLlama figure is not reconciled (see Caveats); 8 other transactions active on the same two contracts in the surrounding 72 hours are not conclusively cleared or implicated, and are reported here as an open question, not folded into the total either way |
 
+```mermaid
+flowchart TD
+    subgraph TX1["Tx 1 -- 2026-09-05 23:55:35 UTC"]
+        U1["Uniswap V4 PoolManager<br/>0x0000...8a90"]
+        C1["Attacker contract<br/>deployed in same tx"]
+        TV1["TokenVault 0xB747...9393<br/>deposit, self-matched lend/borrow,<br/>then withdraw more than deposited"]
+        U1 -->|"flash loan<br/>4,414,172.81 JPYC"| C1
+        C1 -->|"deposits flash-loaned JPYC"| TV1
+        C1 -.->|"flash loan repaid in full, same tx"| U1
+    end
+
+    subgraph TX2["Tx 2 -- 2026-09-06 00:53:59 UTC, 58 min later"]
+        U2["Uniswap V4 PoolManager<br/>0x0000...8a90"]
+        C2["Attacker contract<br/>deployed in same tx"]
+        TV2["TokenVault 0xB747...9393<br/>deposit, lend order matched by<br/>2nd attacker address, then<br/>withdraw more than deposited"]
+        U2 -->|"flash loan<br/>8,668,491.39 JPYC"| C2
+        C2 -->|"deposits flash-loaned JPYC"| TV2
+        C2 -.->|"flash loan repaid in full, same tx"| U2
+    end
+
+    EOA["Attacker EOA<br/>0xefb0...59d3<br/>4,360,902.14 JPYC drained total"]
+    TV1 -->|"nets 113,249.31 JPYC"| EOA
+    TV2 -->|"nets 4,247,652.82 JPYC"| EOA
+    EOA -->|"swap via 1inch v6"| ETH["ETH proceeds<br/>11.1257 ETH total"]
+    ETH -->|"91%: 10.1 ETH, 2 deposits"| TC["Tornado Cash router<br/>0xd90e...F31b"]
+    ETH -->|"0.1 ETH"| RL["Relay bridge deposit<br/>0x4cD0...BC31"]
+    ETH -->|"0.3 ETH"| PT["Plain transfer to EOA<br/>no code"]
+    ETH -->|"0.690316 ETH remains"| EOA
+```
+
+*Fig. 1: fund flow reconstructed above; long 0x addresses truncated for display (0x1234...abcd).*
+
 ## The method
 
 ```bash
