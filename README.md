@@ -10,6 +10,16 @@ chain data: `eth_getLogs`, decoded transaction receipts, live `eth_call`
 reads. When press coverage or DefiLlama gets a number, a scope, or a label
 wrong, this repo says so and shows the on-chain proof.
 
+One example of what that means in practice: DefiLlama tracked
+WealthManagementV2 as a $26,414 "private key compromise." It was never
+compromised. The proxy contract was deployed and owned by the attacker's
+own wallet from the moment it went live, confirmed on-chain with no
+ownership-transfer event anywhere, and the real drain across four decoded
+`withdraw()` calls was $422,251.40, about 16x DefiLlama's tracked figure.
+See [wealthmanagementv2-selfowned-proxy-drain/](wealthmanagementv2-selfowned-proxy-drain/)
+for the full transaction-level proof, or the full list of 26 such cases
+below.
+
 By the same author: [@RealSpap on X](https://x.com/RealSpap), [Dune
 profile](https://dune.com/s_pap), and
 [multisig-overlap-showcase](https://github.com/RealSpap/multisig-overlap-showcase),
@@ -255,6 +265,25 @@ in the linked subfolder; this table gives the headline gap only.
 | Weft Finance (Weft V2) | DefiLlama tracks $47,200 with an empty source field; no press or protocol statement exists anywhere for this incident | Independently reconstructed net loss (47,280,000 LSULP borrowed minus the 51.13 LSULP repaid at the one partial liquidation that followed, plus 13,100,500 unrepaid XRD, priced via Weft's own on-chain price-feed component and CoinGecko's 2026-08-30 XRD rate) is $61,592.84, about 30.5% above DefiLlama's figure; the CDP's own on-chain data still shows this real debt against 0.0000000000000165 HUG of collateral | [weft-finance-hug-collateral-manipulation/](weft-finance-hug-collateral-manipulation/) |
 | ether.fi Liquid (AtomicQueue) | Press reported the ~$38K/15.45 ETH headline but not why those 11 wallets; DefiLlama tracks $43,260 (~14% high) and returnedFunds null | Every drained wallet has code, 9 of 11 are EIP-7702 accounts; solve() calls finishSolve() on the named solver so code-less EOAs are unreachable (the attacker left a 300-liquidETH EOA approver untouched); all 11 wallets were reimbursed on-chain to within dust ~9h later | [etherfi-atomicqueue-eip7702-solver-drain/](etherfi-atomicqueue-eip7702-solver-drain/) |
 | Zentra Finance (ctUSD reserve) | Press reported ~$143,000 from the ctUSD reserve only, with the attack vector undisclosed; DefiLlama labels it "Rounding Error" | The chain shows 140,029.999998 stablecoin units leaving two reserves (ctUSD and, via the same path, USDC.e), matching DefiLlama's $140,030 exactly and not the press figure. No rounding error was exploited: a cap added to the aToken's _burnScaled by a 2026-06-25 upgrade turned a zero-balance burn into a silent no-op, so repayWithATokens cleared 140,000 ctUSD of debt while burning nothing | [zentra-finance-atoken-burn-clamp/](zentra-finance-atoken-burn-clamp/) |
+
+## Falsifiable hypotheses, not just claims
+
+Every subfolder keeps a `registre_hypotheses.csv`: every claim behind
+that entry's writeup, broken into individually falsifiable hypotheses,
+each with an exact locator (a file and line number in that entry's own
+`resultats_*.txt`), a concrete falsification test, and a confidence
+level. Nothing in a README above is asserted without a row here backing
+it.
+
+One real row, from `drift-protocol-durable-nonce-admin-hijack/registre_hypotheses.csv`:
+
+| Key | Hypothesis | Locator | Falsification test | Confidence |
+|---|---|---|---|---|
+| H8 | The fake collateral mint (`G84LEhbNMR1yYbHgHbnNYNSK8mpTKcazh5jcW5yMPQKo`), derived purely from another hypothesis's own transaction inner instructions, not press-supplied, has `decimals=9`, live supply ~750,000,000 (within 0.0000004% of press's "750 million" claim), `mintAuthority=null`, and its own live Metaplex metadata decodes to name "CarbonVote Token", symbol "CVT" | `resultats_reconstruction_2026-09-11.txt:68-77` | Re-run `reconstruct_exploit.py` steps 5-6 against a different Solana RPC; a different supply, decimals, or metadata name/symbol would invalidate this | High |
+
+Anyone can re-run that exact test against a different RPC endpoint
+themselves; the hypothesis is only trusted here because it hasn't broken
+yet, not because it was written by this project.
 
 ## Structure
 
