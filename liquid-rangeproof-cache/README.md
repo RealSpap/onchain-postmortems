@@ -22,6 +22,25 @@ address) and Elements' own GitHub repository.
 | Verified independently | 4,007.82220180 BTC net left the federation's own reserve address across 3 transactions on 2026-09-06, each spent with 11 valid signatures against the federation's real multisig script. 3,400.00000000 BTC came back on 2026-09-07. 598.50041569 BTC remains at the same source address, live, as of this reconstruction |
 | A primary-source citation caught | Liquid Network's own incident report states the exploit happened at "15:53:10 UTC" in block 4,050,336; that block's own chain-recorded timestamp, read live, is 13:53:10 UTC, two hours earlier |
 
+Fig. 1: fund flow, addresses and tx hashes truncated for display.
+
+```mermaid
+flowchart TD
+    A["Forged peg-out<br/>(range-proof cache collision in Elements)"] --> C["Federation 11-of-15 multisig<br/>(genuine functionary signatures)"]
+    C --> D["Federation BTC reserve address<br/>bc1qdlld6a…uhwxxr"]
+
+    D -->|"tx 8db751a6…8a7b140<br/>2026-09-06 14:28:56 UTC"| E["Main outflow tx<br/>4,019.44426085 BTC in, 83 inputs<br/>4,002.66609035 BTC net out"]
+    D -->|"tx 1e5c0fbb…176b3998d<br/>16:01:28 UTC"| F["4.14039943 BTC"]
+    D -->|"tx cb1a2b59…f87e403e<br/>16:48:45 UTC"| G["1.01571202 BTC"]
+
+    E -->|"3,996.01834922 BTC"| H["bc1qgslsyd…c6wt7p"]
+    E -->|"2.65138358 BTC"| I["Untraced address"]
+    E -->|"3.99601658 BTC"| J["Untraced address"]
+
+    K["Source address<br/>bc1ql4mfu6…yqjlte"] -->|"3,400.00000000 BTC returned<br/>tx a6d697a252…49a46d<br/>2026-09-07 16:09:25 UTC"| D
+    K -->|"598.49955894 BTC change<br/>balance 598.50041569 BTC as of 2026-09-10"| L["598.50041569 BTC still unrecovered<br/>(floor, not full total)"]
+```
+
 ## The method
 
 ```bash
