@@ -27,6 +27,33 @@ sample of the real-asset outflow straight from Solana mainnet.
 | Press/DefiLlama figure | DefiLlama: "Drift Trade", $295,000,000, Solana, classification "Access Control", technique "Proxy Upgrade Hijack". Drift's own official "Incident Recovery Update - April 16, 2026" (drift.trade) states $295,706,374.93 across 19 stolen assets, led by JLP ($159.3M) and USDC ($71.4M) |
 | Verified independently | The admin-change instruction, its exact timestamp, and the durable-nonce pre-sign step, read directly from Drift's own program logs; the fake collateral mint independently derived (not press-supplied) and confirmed via live Metaplex metadata to be named "CarbonVote Token" / "CVT" with a ~750M supply; at least 23 separate withdraw-guard-threshold changes across roughly 2 hours; a representative sample of the real-asset outflow (USDT and USDS legs) matching Drift's own official per-asset figures to within 0.002% |
 
+```mermaid
+flowchart LR
+    A["Two of five Squads multisig signers pre-sign durable-nonce transactions weeks before the attack"]
+    B["16:05:18 UTC: durable-nonce account 7s7s6s...tAeC advanced; Squads VaultTransactionCreate + ProposalCreate + first ProposalApprove banked"]
+    C["16:05:19 UTC: second ProposalApprove banked, VaultTransactionExecute calls Drift program dRifty...33UH"]
+    D["UpdateAdmin executes: admin AiLGdN...PKrW to H7PiGq...7ZgL (no multisig needed once installed)"]
+    E["16:05:39 UTC: InitializeSpotMarket (spot market 63) lists fake mint G84LEh...PQKo as 'CarbonVote Token' (CVT) collateral"]
+    F["Same transaction: UpdateWithdrawGuardThreshold x5 on real markets 19, 0, 27, 17, 4 raised to 500,000,000,000,000 (at least 23 changes total by 18:05:01 UTC); withdrawal circuit breakers disabled"]
+    G["16:08:13 UTC: attacker wallet HkGz4K...pZES starts receiving real collateral, first JLP mint 27G8Mt...idD4, Drift's largest stolen asset ($159.3M)"]
+    U1["Swapped via Solana AMM pools into USDT"]
+    U2["Swapped via Solana AMM pools into USDS"]
+    U3["Swapped via Solana AMM pools into USDC (broader, unsampled scan)"]
+    H["Consolidation address 8ubo4H...rGxw"]
+    I["Matches Drift's official total: $295,706,374.93 across 19 assets"]
+
+    A --> B --> C --> D --> E --> F --> G
+    G --> U1
+    G --> U2
+    G --> U3
+    U1 -->|"sample: 5,648,410.24 USDT, within 0.002% of Drift's $5,648,410.13"| H
+    U2 -->|"sample: 5,254,017.07 USDS, within 0.002% of Drift's $5,254,126.13"| H
+    U3 -->|"over $103M USDC, consistent with Drift's $71.4M USDC + swapped JLP"| H
+    H --> I
+```
+
+*Fig. 1: fund flow, addresses truncated for display.*
+
 ## The method
 
 ```bash
