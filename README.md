@@ -1,5 +1,7 @@
 # On-Chain Postmortems
 
+**The headline number: $783.8M in DeFi and on-chain losses, independently recomputed from raw chain data across 41 reconstructed incidents.**
+
 Independent forensic reconstructions, done entirely on-chain, of DeFi
 security incidents and on-chain incidents more broadly. Each entry starts
 from a primary source of the protocol involved (its own GitHub deployment
@@ -32,7 +34,7 @@ lost in the merge.
 | Cumulative loss, recomputed | About $783.8M across the 41 incidents ($783,836,324 exactly, sum of the figures in the index below). At least one entry is a known floor, so the real total is higher. |
 | Corrections made | 26 entries below correct, reconcile, or newly surface a press or DefiLlama figure, label, date, or classification (20 corrections, 4 reconciliations, 2 discoveries not previously priced by DefiLlama at all). See Corrections to press and DefiLlama below. |
 | Method | Each subfolder keeps its original Python reconstruction script, its `registre_hypotheses.csv` falsification registry, and its script's raw output in `resultats_*.txt`, so every figure below can be checked against the file that produced it |
-| License | MIT across all 35 entries, single author (s_pap, 2026) |
+| License | MIT across all 41 entries, single author (s_pap, 2026) |
 
 ## Table of contents
 
@@ -197,7 +199,7 @@ exact figure decoded from source data.
 [^drift-protocol-durable-nonce-admin-hijack]: Two Squads multisig signers were social-engineered into pre-signing durable-nonce transactions weeks earlier; broadcasting them overwrote Drift's own on-chain admin key (confirmed via the program's own "admin: X -> Y" log line, not a press claim), which then listed a fabricated "CarbonVote" (CVT) token as collateral (mint independently derived from the hijack transaction's own inner instructions, not supplied by press, and confirmed via live Metaplex metadata) and raised the withdraw guard on at least 23 real spot markets over about 2 hours. $295,706,374.93 is Drift's own stated total (drift.trade, fetched live), matching DefiLlama's tracked $295,000,000; a representative sample of the real-asset outflow (USDT and USDS legs) independently matches Drift's own per-asset figures to within 0.002%. See `drift-protocol-durable-nonce-admin-hijack/README.md`. External source: https://www.drift.trade/updates/incident-recovery-update-april-16-2026-now.
 [^wealthmanagementv2-selfowned-proxy-drain]: No press-disclosed transaction hash or contract address exists for this incident; starting from only the attacker EOA press names, 4 `withdraw(address,uint256,address)` calls, decoded from their own receipts' real Transfer events (not from the calls' own calldata argument, which does not equal the amount actually moved), move exactly 422,315.000000 real BSC-USDT from an attacker-deployed, attacker-owned EIP-1967 proxy to one collector address, $422,251.40 at CoinGecko's 2026-09-08 historical price, about 16.0x DefiLlama's tracked $26,414. That collector still holds 250,000.00202223 USDT three days later. The proxy's own `owner()` has been the attacker's own EOA since the same session that deployed it, and the implementation's `owner()`, called directly, returns the zero address, contradicting DefiLlama's "Key Compromise" classification: there is no prior owner for a leaked key to have taken anything from. Reported as a floor: only nonces 0-41 of the attacker's 252 lifetime transactions were exhaustively decoded. See `wealthmanagementv2-selfowned-proxy-drain/README.md`. External source: https://api.llama.fi/hacks.
 [^weft-finance-hug-collateral-manipulation]: DefiLlama's hacks feed lists this incident with an empty source field, so this entry starts entirely from Weft's own official DefiLlama TVL adapter (Weft's own PR, not a block explorer) and reconstructs the rest from the chain: a single swap of 70.6 XRD into 539,703.17 units of an obscure meme token ("Hug", HUG) through one thin CaviarNine pool, posted as CDP collateral, unlocked a borrow of 47,280,000 LSULP and 13,100,500 XRD, after which the HUG collateral was removed in the same transaction. The CDP's own on-chain data, read live, confirms the aftermath 6 days later: real outstanding loan units in both assets against 0.0000000000000165 HUG of collateral, functionally zero. Net of the one partial liquidation that followed (51.13 of the 47,280,000 LSULP repaid), the independently reconstructed loss is $61,592.84 at CoinGecko's 2026-08-30 XRD price and Weft's own on-chain LSULP/XRD price-feed rate, about 30.5% above DefiLlama's tracked $47,200. See `weft-finance-hug-collateral-manipulation/README.md`. External source: https://api.llama.fi/hacks.
-[^barnbridge-dormant-dao-controller-swap]: 1,877,869.183182 USDC + 51,759.121322 USDT + 1,736.920247 DAI = $1,931,365.22 across 17 extraction transactions from 10 SMART Yield pools, decoded directly from the Governance contract's own proposal-execution receipts — 2.49x BlockSec's and DefiLlama's reported $776,000 (one of the seventeen transactions, correctly identified but not the total). A separate $3,001,678.69 in unattributed flows through a third, unrelated Controller from 2026-08-22 is excluded from this figure. See `barnbridge-dormant-dao-controller-swap/README.md`.
+[^barnbridge-dormant-dao-controller-swap]: 1,877,869.183182 USDC + 51,759.121322 USDT + 1,736.920247 DAI = $1,931,365.22 across 17 extraction transactions from 10 SMART Yield pools, decoded directly from the Governance contract's own proposal-execution receipts, 2.49x BlockSec's and DefiLlama's reported $776,000 (one of the seventeen transactions, correctly identified but not the total). A separate $3,001,678.69 in unattributed flows through a third, unrelated Controller from 2026-08-22 is excluded from this figure. See `barnbridge-dormant-dao-controller-swap/README.md`.
 [^symbiosis-sybtc-mpc-signed-mint]: 438,897,292 raw WBTC, that is 4.38897292 WBTC, taken out of one Uniswap V4 swap at Ethereum block 25951802 (2026-09-11 04:35:23 UTC), re-derived twice: once by summing the receipt's own Transfer legs and once by reading `balanceOf` on the beneficiary either side of that block, the two agreeing exactly (`preuves/09_cashout_readable.txt` and `preuves/19_adversarial_selfcheck.txt`). At DefiLlama's own WBTC price for that block's timestamp, $77,076.12, that is $338,285, reconciling DefiLlama's tracked $336,000 to within 0.7%. Reported as a floor: the twelve mints created 553,402,322,211.29 syBTC against a pre-incident backed float under nine syBTC on the two chains where it could be read, and whether the holders of that float are made whole is not something chain data answers. The scope correction is separate from the figure: DefiLlama lists two chains and the press eight bridge transactions, while Rootstock was inflated by four more mints of the identical amount, signed by the same key, inside the same four minutes, taking the count to twelve across three chains. See `symbiosis-sybtc-mpc-signed-mint/README.md`. External source: https://api.llama.fi/hacks.
 [^etherfi-atomicqueue-eip7702-solver-drain]: 14.445541086626480620 liquidETH plus 7.047848 USDC drained from 11 wallets, realized by the attacker as 15.453645063 ETH (EOA balance delta plus gas), which at the 2,459.24 dollars/ETH price DefiLlama's own coins oracle reports for 2026-09-11 07:20 UTC is about 38,004 dollars; DefiLlama's hacks feed lists 43,260 dollars, roughly 14 percent high (it implies about 2,799 dollars/ETH, unsupported by its own oracle). All 11 wallets were reimbursed on-chain within about 9 hours, though DefiLlama still records returnedFunds null. See etherfi-atomicqueue-eip7702-solver-drain/README.md and preuves/07_defillama_vs_onchain.txt. External source: https://www.cryptotimes.io/2026/09/11/ether-fi-loses-15-45-eth-in-legacy-atomicqueue-exploit-ceo-pledges-full-user-reimbursement/.
 [^zentra-finance-atoken-burn-clamp]: 139,999.999999 ctUSD plus 29.999999 USDC.e left Zentra's two affected reserves in one transaction at Citrea block 12428145 (2026-09-09 12:59:37 UTC), 140,029.999998 stablecoin units re-derived two ways that agree to the unit: once from the ctUSD and USDC.e balances held by the two aTokens either side of that block, once by netting the attack contract's own transfers with the aTokens (`zentra-finance-atoken-burn-clamp/preuves/09_reconstruction_output.txt`, and again from Blockscout's token-transfer index in `preuves/12_adversarial_verification_pass.txt`). Priced at $1 per stablecoin that is $140,030, matching DefiLlama's tracked figure to the dollar; the ~$143,000 carried by press does not reproduce from chain data. See `zentra-finance-atoken-burn-clamp/README.md`. External source: https://api.llama.fi/hacks.
@@ -289,25 +291,35 @@ python3 add_new_entry.py \
   --readme-url "https://example.com/postmortem"
 ```
 
-This scaffolds `new-protocol-incident/` with a stub README, an empty
-`registre_hypotheses.csv`, and a stub `reconstruct_exploit.py`, then
-inserts a new row into the Index above, under the year/month section that
-matches `--date`'s own year and month (creating that year or month section
-first if this is its first entry), sorted by loss within the month. It
-then recomputes, from the Index itself and never from a hardcoded number:
-that month's subtotal, that year's subtotal, the overall cumulative total
-and incident count in "At a glance", and the table of contents' year/month
-list. It also moves the "(current month)" label to whichever month is now
-chronologically latest, and appends a placeholder footnote for the new
-slug. See `add_new_entry.py --help` for the full list of options, and use
-`--loss-known-partial` for an incident like Sandbox or Balancer V1 above,
-where the real loss is known to exceed the figure that can actually be
-sourced. `--category` must be one of the controlled tags already in use
-(Bridge, Oracle, Governance, Key-Compromise, Donation-Attack,
-Access-Control, Rounding/Math-Bug); the script rejects anything else. If
-none genuinely fits a new incident, add the new tag to `VALID_CATEGORIES`
-in `add_new_entry.py` by hand first, a deliberate decision, not a
-free-text escape hatch.
+This scaffolds three files: a stub README, an empty
+`registre_hypotheses.csv`, and a stub `reconstruct_exploit.py`, in a new
+`new-protocol-incident/` folder. It then inserts a new row into the Index
+above, under the year/month section that matches `--date`'s own year and
+month (creating that section first if this is its first entry), sorted by
+loss within the month.
+
+From the Index itself, never from a hardcoded number, it also recomputes:
+
+- that month's subtotal and that year's subtotal
+- the overall cumulative total and incident count in "At a glance"
+- the table of contents' year/month list
+- the "(current month)" label, moved to whichever month is now
+  chronologically latest
+
+It appends a placeholder footnote for the new slug too. See
+`add_new_entry.py --help` for the full list of options.
+
+Two flags carry a judgment call of their own:
+
+- **`--loss-known-partial`**, for an incident like Sandbox or Balancer V1
+  above, where the real loss is known to exceed the figure that can
+  actually be sourced.
+- **`--category`**, which must be one of the controlled tags already in
+  use (Bridge, Oracle, Governance, Key-Compromise, Donation-Attack,
+  Access-Control, Rounding/Math-Bug); the script rejects anything else.
+  If none genuinely fits a new incident, add the new tag to
+  `VALID_CATEGORIES` in `add_new_entry.py` by hand first, a deliberate
+  decision, not a free-text escape hatch.
 
 The script doesn't touch the "Corrections made" and "License" lines in the
 "at a glance" block, or the "Corrections to press and DefiLlama" section,
@@ -343,23 +355,34 @@ tips with a tx hash or block number attached get looked at first.
   from an old summary without checking it against those files. When a
   subfolder's source data doesn't support a full dollar total, the table
   says so in a footnote instead of inventing one.
-- Seven entries (Sandbox, Balancer V1, Liquid Network, Maya Protocol,
-  COLDCARD, Coinsbuy, WealthManagementV2) report a dollar figure that is a known floor, not a
-  complete total, because their source repo found a wider scope than the
-  press without converting every recovered amount to dollars, (Liquid
-  Network) left some smaller destination addresses untraced, (Maya
-  Protocol) found a real, still-unconverted balance sitting in the
-  attacker's own wallet that this repo declined to price for lack of a
-  sourceable historical rate, (COLDCARD) independently traced only the
-  first of a reported 4 theft waves, about a third of the
-  named-security-team's own preliminary total, or (Coinsbuy) confirmed the
+- 12 entries (Sandbox, Balancer V1, Liquid Network, Maya Protocol,
+  COLDCARD, Coinsbuy, WealthManagementV2, XRP Healthcare, Symbiosis,
+  Cosmos EVM (MANTRA / TAC / KiiChain), Oraichain (ICS-20 EVM Precompile),
+  Verus-Ethereum Bridge) report a dollar figure that is a known floor, not
+  a complete total: (Sandbox, Balancer V1) their source repo found a wider
+  scope than the press without converting every recovered amount to
+  dollars, (Liquid Network) left some smaller destination addresses
+  untraced, (Maya Protocol) found a real, still-unconverted balance
+  sitting in the attacker's own wallet that this repo declined to price
+  for lack of a sourceable historical rate, (COLDCARD) independently
+  traced only the first of a reported 4 theft waves, about a third of the
+  named-security-team's own preliminary total, (Coinsbuy) confirmed the
   Tron leg in full but only one Ethereum-side transaction, with the
   remainder routing through an intermediary address this repo could not
-  independently attribute to Coinsbuy, or (WealthManagementV2) exhaustively
+  independently attribute to Coinsbuy, (WealthManagementV2) exhaustively
   decoded only nonces 0-41 of the attacker's 252 lifetime transactions, so
   further rounds using other proxy instances elsewhere in that history
-  cannot be ruled out. Read the linked subfolder for the
-  full accounting in native units.
+  cannot be ruled out, (XRP Healthcare) the traced fund flow covers 3,630
+  of the 4,011 wallets XRP Healthcare's own count says were swept,
+  (Symbiosis) the figure prices only the realized cash-out, leaving the
+  now-unbacked syBTC float on three chains unresolved, (Cosmos EVM) the
+  primary source itself declines to name 3 of the 6 chains it says were
+  hit, (Oraichain) only the two legs independently confirmed to have left
+  Oraichain's own reach are priced, not the ORAI bridged to Injective or
+  locked as lending collateral, or (Verus-Ethereum Bridge) a second,
+  2026-07-23 exploit against the same contract (tracked by DefiLlama at
+  $7,530,000) is confirmed but deliberately not priced here. Read the
+  linked subfolder for the full accounting in native units.
 - The Tectonic, Moonwell, and Liquid Network entries report the confirmed
   unrecoverable or still-uncovered figure, not the higher, gross amount
   borrowed or extracted before liquidations or, for Tectonic, a chain
@@ -384,19 +407,25 @@ Every entry in this repo is an independent, factual reconstruction of
 publicly available on-chain data (transaction receipts, decoded logs,
 live contract reads) as of the date noted per entry, not a security
 audit, and not affiliated with, commissioned by, or endorsed by any
-protocol, auditor, or outlet named in a subfolder. Statements about who
-sent, received, or drained funds are based solely on on-chain records and
-publicly disclosed information cited inline, so no claim of wrongdoing
-beyond what that cited on-chain data shows is made or implied against any
-named address or entity. Nothing in this repo is legal, financial, or
-investment advice. Each entry reflects a snapshot in time: on-chain
-balances, labels, and follow-up transactions can and do change after
-publication, and entries are not updated automatically to reflect such
-changes. Any individual or entity named in an entry who believes a fact
-about them is inaccurate is invited to contact the author with supporting
-evidence for a prompt, transparent correction. Readers should
-independently verify all cited addresses, transactions, and figures
-before relying on them.
+protocol, auditor, or outlet named in a subfolder.
+
+- **No claim beyond the data.** Statements about who sent, received, or
+  drained funds are based solely on on-chain records and publicly
+  disclosed information cited inline, so no claim of wrongdoing beyond
+  what that cited on-chain data shows is made or implied against any
+  named address or entity.
+- **Not advice.** Nothing in this repo is legal, financial, or investment
+  advice.
+- **A snapshot, not a live feed.** Each entry reflects a point in time:
+  on-chain balances, labels, and follow-up transactions can and do change
+  after publication, and entries are not updated automatically to reflect
+  such changes.
+- **Corrections welcome.** Any individual or entity named in an entry who
+  believes a fact about them is inaccurate is invited to contact the
+  author with supporting evidence for a prompt, transparent correction.
+
+Readers should independently verify all cited addresses, transactions,
+and figures before relying on them.
 
 ## License
 
