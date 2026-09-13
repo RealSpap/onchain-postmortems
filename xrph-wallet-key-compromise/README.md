@@ -35,6 +35,31 @@ transaction history, which the article itself does not attempt.
 | Verified independently | Every hop of the fund flow, XRPL and Ethereum, re-fetched live and matching the source article to the second at every timestamp checked; a full independent pagination of the collector's own transaction history (10,936 transactions), not present in any source; the DAI balance confirmed still sitting untouched 6 days later |
 | Not independently confirmed | The root-cause mechanism (weak, non-random private-key generation plus a staking feature allegedly leaking seed phrases to XRP Healthcare's own server) rests entirely on xrpl.to's own, unreproduced decompilation of the wallet app; no XRP Healthcare GitHub source repo exists to check it against directly |
 
+```mermaid
+flowchart LR
+    VX["3,630 distinct sending addresses<br/>(native XRP victim wallets)"]
+    VT["Victim token holdings<br/>(XRPH, XRPHAI, RLUSD, USDT, USDC)"]
+    COL["XRPL collector address<br/>first funded 2026-09-03T21:36:32Z"]
+    ND["NEAR Intents deposit address"]
+    W2["Second XRPL wallet"]
+    ETHA["Ethereum address<br/>(the attacker's address)"]
+    SWAP["Uniswap swap"]
+    DAI["445,197.999216 DAI<br/>still untouched, checked 2026-09-10"]
+    FEE["ryouhapPYV...xvQiVt<br/>(unidentified, plausibly a DEX fee address)"]
+
+    VX -->|"6,030 Payments,<br/>267,679.863641 XRP total"| COL
+    VT -->|"4,258 token Payments,<br/>liquidated to XRP on XRPL order book"| COL
+    COL -->|"307,000 XRP<br/>2026-09-04T00:42:32Z"| ND
+    ND -->|"306,998.99999 XRP<br/>9s later"| W2
+    W2 -->|"175.80878485237295 ETH<br/>18s later"| ETHA
+    W2 -->|"2.6481672253280544 ETH<br/>2026-09-04T01:04:35Z"| ETHA
+    COL -.->|"13 payments,<br/>about 217 XRP"| FEE
+    ETHA -->|"178.0 ETH in<br/>2026-09-04T01:10:11Z"| SWAP
+    SWAP -->|"445,197.999216 DAI out"| DAI
+```
+
+*Fig. 1: fund flow across XRPL and Ethereum, hop-by-hop with timestamps from the table below; the fee-address line is dotted because that destination is not independently identified. Addresses abbreviated for display.*
+
 ## The method
 
 ```bash
