@@ -24,6 +24,17 @@ final figure.
 | Verified independently | 8 transactions, decoded directly from the Vault contract's own USDC `Transfer` log: 7 of them (excluding a small 897.8008 USDC "test" cycle 25 seconds before the main attack) total **$23,752,641.6764**, within **$104.32 (0.0004%)** of Ostium's own $23,752,746; DefiLlama's own tracked figure, $23,750,000, sits within 0.01% of the same number |
 | What's still open | The exact fixed-point price values inside the attacker's signed reports are not independently decoded (Ostium's `OstiumVerifier` report ABI is not public); the downstream Kyber-swap/Tornado-Cash laundering route press describes is not independently retraced. See Caveats |
 
+```mermaid
+flowchart LR
+    A["Compromised off-chain credential<br/>(Ostium's own price-oracle signer)"] -->|"submits self-authored,<br/>validly-signed BTC/USD price reports"| B["PrivatePriceUpKeep forwarder<br/>0xB71e...3d36<br/>('assumed to be trusted<br/>and operating correctly')"]
+    B -->|"forged reports open & instantly close<br/>large leveraged positions at fabricated prices"| C["Ostium OLP Vault<br/>0x20D4...7F98"]
+    C -->|"8 USDC outflow transactions;<br/>headline $23,752,641.6764<br/>(7 tx, excl. test cycle)"| D["Attacker wallet<br/>0x321df194...bfd9"]
+    D -.->|"press-reported (rekt.news), not<br/>independently retraced: swap via Kyber"| E["~12,084 ETH"]
+    E -.->|"~10,540 ETH routed through Tornado Cash<br/>across 30 intermediate wallets"| F["Tornado Cash"]
+```
+
+*Fig. 1: fund flow reconstructed from the Vault's own USDC transfer log (solid arrows); addresses truncated for display. The dashed segment is press-sourced and not independently retraced, see Caveats.*
+
 ## The method
 
 ```bash
