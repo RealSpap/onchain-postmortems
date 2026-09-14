@@ -1,0 +1,5 @@
+Source: https://panews.io/articles/01a08f74-edd7-73aa-8bac-4c7486f16091
+Fetched 2026-09-14 with a browser user-agent. JSON-LD datePublished: 2026-09-11T07:52:00.000Z. Author field: PA一线.
+
+Article body (HTML tags stripped, 92 words):
+PANews, September 11 – According to SlowMist monitoring, BSC chain project BeatXswap suffered a price manipulation attack, resulting in a loss of approximately 2.985 million BTX (about $77,500). The attacker borrowed 6 million BTX via a flash loan and sold them into the Uniswap V3 pool to suppress the price, then exploited the contract's vulnerability of using only the V3 pool's spot price as the sole pricing basis (without TWAP protection or deviation limits) by depositing USDT in two separate transactions to trigger liquidity minting, and withdrew BTX from the LP positions.

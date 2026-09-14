@@ -1,0 +1,109 @@
+=== 1. DefiLlama record ===
+  {"amount": 77512, "bridgeHack": false, "chain": ["BSC"], "classification": "Oracle Manipulation", "date": 1788912000, "defillamaId": null, "language": "Solidity", "name": "BeatXswap", "returnedFunds": null, "source": "", "targetType": "DeFi Protocol", "technique": "Spot Price Manipulation"}
+  date decodes to 2026-09-09 00:00:00 UTC
+
+=== 2. The exploit transaction ===
+  block 120873720, 2026-09-09 11:54:23 UTC, tx index 5, status 1
+  from 0x67B2f08683A735cfE6f6E57fA86909b62218C2a1 (nonce 0), contract created 0xaff5A574941981cF7F994f2820F7fA26FE031DEd, gas used 11661227
+  CREATE(created contract, nonce 1) = 0x371700b96b484b501812e92cab5a388d105a922d  (the executor that holds every flow below)
+  code size: created contract 64 bytes, executor 20738 bytes
+  Token transfers touching the executor, victims, treasury:
+    log  1 USDT 0x8f73b65b4caaf64fba2af91cc5d4a2a1318e5d8c -> 0x371700b96b484b501812e92cab5a388d105a922d 15,950.000000
+    log  2 BTX  0x238a358808379702088667322f80ac48bad5e6c4 -> 0x371700b96b484b501812e92cab5a388d105a922d 6,000,000.000000
+    log  3 USDT 0xa5db84d7bccb799fb31bd3c417d04d5bc29da96d -> 0x371700b96b484b501812e92cab5a388d105a922d 42,300.748259
+    log  4 BTX  0x371700b96b484b501812e92cab5a388d105a922d -> 0xa5db84d7bccb799fb31bd3c417d04d5bc29da96d 4,038,419.593256
+    log  7 USDT 0x371700b96b484b501812e92cab5a388d105a922d -> 0x1e647faadb05f2124bfccfc003edc06d1a90bf5d 10,000.000000
+    log  9 USDT 0x1e647faadb05f2124bfccfc003edc06d1a90bf5d -> 0xaa2ea785744b123b1e8a1679c8e7ab9b255aad94 7,500.000000
+    log 12 USDT 0x1e647faadb05f2124bfccfc003edc06d1a90bf5d -> 0xa5db84d7bccb799fb31bd3c417d04d5bc29da96d 2,499.919403
+    log 14 BTX  0x1e647faadb05f2124bfccfc003edc06d1a90bf5d -> 0xa5db84d7bccb799fb31bd3c417d04d5bc29da96d 1,240,403.080996
+    log 18 USDT 0x1e647faadb05f2124bfccfc003edc06d1a90bf5d -> 0x371700b96b484b501812e92cab5a388d105a922d 0.080597
+    log 21 USDT 0xa5db84d7bccb799fb31bd3c417d04d5bc29da96d -> 0x371700b96b484b501812e92cab5a388d105a922d 2,499.919428
+    log 22 BTX  0x371700b96b484b501812e92cab5a388d105a922d -> 0xa5db84d7bccb799fb31bd3c417d04d5bc29da96d 1,674,447.967473
+    log 25 USDT 0x371700b96b484b501812e92cab5a388d105a922d -> 0x9a7a92240fbac4030b65a6e61239928d6bcc716f 2,000.000000
+    log 27 USDT 0x9a7a92240fbac4030b65a6e61239928d6bcc716f -> 0xaa2ea785744b123b1e8a1679c8e7ab9b255aad94 1,500.000000
+    log 30 USDT 0x9a7a92240fbac4030b65a6e61239928d6bcc716f -> 0xa5db84d7bccb799fb31bd3c417d04d5bc29da96d 499.899584
+    log 32 BTX  0x9a7a92240fbac4030b65a6e61239928d6bcc716f -> 0xa5db84d7bccb799fb31bd3c417d04d5bc29da96d 1,832,090.195547
+    log 36 USDT 0x9a7a92240fbac4030b65a6e61239928d6bcc716f -> 0x371700b96b484b501812e92cab5a388d105a922d 0.100416
+    log 39 BTX  0xa5db84d7bccb799fb31bd3c417d04d5bc29da96d -> 0x371700b96b484b501812e92cab5a388d105a922d 8,779,925.426614
+    log 40 USDT 0x371700b96b484b501812e92cab5a388d105a922d -> 0xa5db84d7bccb799fb31bd3c417d04d5bc29da96d 48,750.848699
+    log 42 BTX  0x371700b96b484b501812e92cab5a388d105a922d -> 0x238a358808379702088667322f80ac48bad5e6c4 6,000,000.000000
+    log 43 USDT 0x996a155a2be7729ae90884795ea61691fbe84079 -> 0x371700b96b484b501812e92cab5a388d105a922d 2,142.196762
+    log 44 BTX  0x371700b96b484b501812e92cab5a388d105a922d -> 0x996a155a2be7729ae90884795ea61691fbe84079 82,500.000000
+    log 47 BTX  0x371700b96b484b501812e92cab5a388d105a922d -> 0x238a358808379702088667322f80ac48bad5e6c4 2,984,557.865885
+    log 48 USDT 0x238a358808379702088667322f80ac48bad5e6c4 -> 0x371700b96b484b501812e92cab5a388d105a922d 77,512.640594
+    log 51 USDT 0x371700b96b484b501812e92cab5a388d105a922d -> 0x8f73b65b4caaf64fba2af91cc5d4a2a1318e5d8c 15,950.000000
+    log 53 USDT 0x371700b96b484b501812e92cab5a388d105a922d -> 0xaff5a574941981cf7f994f2820f7fa26fe031ded 63,704.837357
+    log 54 USDT 0xaff5a574941981cf7f994f2820f7fa26fe031ded -> 0x67b2f08683a735cfe6f6e57fa86909b62218c2a1 63,704.837357
+  deposit() into V1: 10,000.000000 USDT -> treasury 7,500.000000, into LP 2,499.919403 USDT + 1,240,403.080996 BTX from V1's own reserve
+  deposit() into V2: 2,000.000000 USDT -> treasury 1,500.000000, into LP 499.899584 USDT + 1,832,090.195547 BTX from V2's own reserve
+  both deposits are inside this one transaction (log indexes 7 and 25)
+  executor USDT in 140,405.686055, out 140,405.686055, net 0.000000
+  executor BTX  in 14,779,925.426614, out 14,779,925.426614, net 0.000000
+  executor USDT to the created contract 63,704.837356523361110351, which forwards 63,704.837356523361110351 to the EOA
+  excluding the 15,950 USDT flash loan and its repayment: USDT received 124,455.686055, USDT spent 60,750.848699, profit 63,704.837357
+  PancakeSwap V3 USDT/BTX swap log 5: USDT -42,300.748259  BTX +4,038,419.593256  tick after 62072  price after 0.00201547 USDT/BTX
+  PancakeSwap V3 USDT/BTX swap log 23: USDT -2,499.919428  BTX +1,674,447.967473  tick after 82067  price after 0.00027291 USDT/BTX
+  PancakeSwap V3 USDT/BTX swap log 41: USDT +48,750.848699  BTX -8,779,925.426614  tick after 38490  price after 0.02130478 USDT/BTX
+  USDT paid to the executor by 0x238a3588...e6c4 for 2,984,557.865885 BTX beyond the 6,000,000 BTX flash repayment: 77,512.640594
+
+=== 3. Victim state around the block and now ===
+  latest block read: 121829657 (2026-09-14 11:27:48 UTC)
+  V1 0x1e647FAADb05f2124BFCcFC003EDc06D1A90bf5D: BTX 1,240,403.093401 (block 120873719) -> 0.012405 (block 120873720) -> 0.012405 (latest); paused at latest: False; owner 0x62382d13B909B611c17b54Eb19F8E5BC3d9C1e24; treasuryWallet 0xaA2EA785744b123B1e8a1679c8E7aB9B255AAD94
+  V2 0x9a7A92240FBAc4030b65A6E61239928d6Bcc716F: BTX 1,832,090.213707 (block 120873719) -> 0.018160 (block 120873720) -> 0.018160 (latest); paused at latest: False; owner 0x62382d13B909B611c17b54Eb19F8E5BC3d9C1e24; treasuryWallet 0xaA2EA785744b123B1e8a1679c8E7aB9B255AAD94
+  BTX that left both vesting reserves in the block: 3,072,493.276543
+
+=== 4. The attacker is now a registered vesting beneficiary ===
+  V1 record #26: user 0x371700b96b484b501812E92cAb5a388d105a922d, deposit 10,000 USDT, liquidityBTX 1,240,403.080996, totalVestingAmount 2,723,925.165866 BTX (= liquidityBTX x 2.196), LP tokenId 7392248, vesting 2026-09-09 11:54:23 UTC -> 2027-03-08 11:54:23 UTC, withdrawn False
+  V2 record #89: user 0x371700b96b484b501812E92cAb5a388d105a922d, deposit 2,000 USDT, liquidityBTX 1,832,090.195547, totalVestingAmount 4,023,270.069422 BTX (= liquidityBTX x 2.196), LP tokenId 7392249, vesting 2026-09-09 11:54:23 UTC -> 2027-03-08 11:54:23 UTC, withdrawn False
+  LP tokenId 7392248 owner 0x1e647FAADb05f2124BFCcFC003EDc06D1A90bf5D, ticks [56072, 68072], liquidity 214861485640288414856068 -> now about 5,874.53 USDT + 0.00 BTX
+  LP tokenId 7392249 owner 0x9a7A92240FBAc4030b65A6E61239928d6Bcc716F, ticks [76067, 88067], liquidity 116769378436784378397270 -> now about 1,174.84 USDT + 0.00 BTX
+  the two positions together: about 7,049.38 USDT, all on the USDT side
+  executor bytecode pushes selector 4e71d92d claim() as PUSH32: True
+  executor bytecode pushes selector 3ccfd60b withdraw() as PUSH32: True
+  executor bytecode pushes selector 62abebce claimBatch(uint256[]) as PUSH32: True
+  executor bytecode pushes selector 2e1a7d4d withdraw(uint256) as PUSH32: True
+
+=== 5. Who is left holding the claims ===
+  V1: 5 open pre-exploit records (ids < 26), unclaimed entitlement 1,419,572.258839 BTX, claimable at the latest block 1,315,369.373931 BTX
+    simulated claim by 0x12584Af4D2beF399E166858cd6a7504d609E4A35 (record 23, 390,233.24 BTX claimable): at latest reverts ('0xe694b68f', '0xe694b68f'); same call at block 120873719 succeeds
+  V2: 18 open pre-exploit records (ids < 89), unclaimed entitlement 1,460,758.198147 BTX, claimable at the latest block 1,426,241.192131 BTX
+    simulated claim by 0xa90d6faf5b17A83935a0d61F580929157Af97B2e (record 73, 115,422.08 BTX claimable): at latest reverts ('0xf16eeebd', '0xf16eeebd'); same call at block 120873719 succeeds
+  selector of InsufficientVestingBalance(): 0xe694b68f
+  selector of InsufficientRewardBalance(): 0xf16eeebd
+  open-record holders: 22 distinct addresses; overlap with owner/treasury/EOA/executor: False
+  total: 23 open records, 2,880,330.456986 BTX unclaimed, 2,741,610.566063 BTX claimable now against 0.030565 BTX left
+
+=== 6. Price left behind in the pool the vesting contracts read ===
+  pool factory 0x0BFbCF9fa4f9C56B0F40a671Ad40E0805A091865, fee tier 100
+  block 120873719: tick 33530, 0.03498181 USDT per BTX
+  block 120873720: tick 38490, 0.02130478 USDT per BTX
+  latest: tick 38179, 0.02197795 USDT per BTX
+
+=== 7. Cash-out ===
+  BSC nonce 1 0x6ff834a66382b1d00e0e2e67a9decfd6a085be2dbdd8094e52cf217d06426b60 block 121034939 2026-09-10 08:03:50 UTC to 0x55d398326f99059fF775485246999027B3197955 status 1
+  BSC nonce 2 0x3adecd7a075f3dca1d49fef5679f6a47d7ab0d264344d6f7fede9e85105765fa block 121035156 2026-09-10 08:05:28 UTC to 0x89c6340B1a1f4b25D36cd8B063D49045caF3f818 status 1
+    LiFiTransferStarted: bridge mayan, integrator jumper.exchange, asset 0x55d398326f99059ff775485246999027b3197955, receiver 0x67b2f08683a735cfe6f6e57fa86909b62218c2a1, minAmount 10.000000000000000000, destinationChainId 1
+  BSC nonce 3 0xc8262d7c33e0a2050c4090b461396341280b688b98c3e1dc64c2bf3ee498232f block 121035480 2026-09-10 08:07:54 UTC to 0x89c6340B1a1f4b25D36cd8B063D49045caF3f818 status 1
+    LiFiTransferStarted: bridge lifiIntents, integrator jumper.exchange, asset 0x55d398326f99059ff775485246999027b3197955, receiver 0x67b2f08683a735cfe6f6e57fa86909b62218c2a1, minAmount 63,694.837356523361110351, destinationChainId 1
+  EOA nonce on BSC at latest: 4
+  Ethereum 2026-09-10T08:07:59.000000Z 0xe618787acaae5eb1b37f1f537be5e6e81ce2a5a74a3d0789c460da22ac4f7716 USDC 0xe742F9dF04a61ac0a6aea0b87d3c3B96AC6eea88 -> 0x67B2f08683A735cfE6f6E57fA86909b62218C2a1 63,678.085614
+  Ethereum 2026-09-10T08:09:59.000000Z 0x41529723cde18033c8066fb63cb7ba19b26f559b99b49f32d9b88672c6f64320 USDC 0x67B2f08683A735cfE6f6E57fA86909b62218C2a1 -> 0xA188EEC8F81263234dA3622A406892F3D630f98c 63,678.085614
+  Ethereum 2026-09-10T08:09:59.000000Z 0x41529723cde18033c8066fb63cb7ba19b26f559b99b49f32d9b88672c6f64320 USDS 0x0000000000000000000000000000000000000000 -> 0x67B2f08683A735cfE6f6E57fA86909b62218C2a1 63,678.085614
+  Ethereum 2026-09-10T08:10:23.000000Z 0xc38bc3b1263772d16f2eaaa3bfa89cafb629c086c2f8081eeb9c675ae55a5cbe WATTOIN 0x5eef5946AD78E614bB3Ee7b9eD1097c517ae97f7 -> 0x67B2f08683A735cfE6f6E57fA86909b62218C2a1 5.000000
+  Ethereum 2026-09-10T08:11:35.000000Z 0x13aad2a91b85f79770d181c6854f65dce0d3490ad781ba66a46708ab26b02cb8 USDS 0x67B2f08683A735cfE6f6E57fA86909b62218C2a1 -> 0xf86141a5657Cf52AEB3E30eBccA5Ad3a8f714B89 63,678.085614
+  Ethereum 2026-09-10T08:11:35.000000Z 0x13aad2a91b85f79770d181c6854f65dce0d3490ad781ba66a46708ab26b02cb8 DAI 0x0000000000000000000000000000000000000000 -> 0x67B2f08683A735cfE6f6E57fA86909b62218C2a1 63,678.085614
+  Ethereum block 25975396: EOA DAI balance 63,678.085614, nonce 4
+
+=== 8. Adversarial self-checks ===
+  [OK] both vesting reserves ended the block below 0.02 BTX
+  [OK] profit computed from external flows equals what the created contract forwarded to the EOA
+  [OK] treasury received exactly 75% of both deposits
+  [OK] BTX minted into LP from the victims equals the reserve drop (within 1e-6 BTX)
+  [OK] vesting records name the executor as beneficiary
+  [OK] victims still own both LP NFTs
+  [OK] legit claims revert now and succeeded one block before the exploit
+  [OK] pool left lower than before the exploit
+  [OK] the two LI.FI transfers bridge 63,704.837357 USDT (10 + 63,694.837357) to the same address on chainId 1
+  [OK] that address holds the DAI it minted on Ethereum
+
+10/10 checks passed

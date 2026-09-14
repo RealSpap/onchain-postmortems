@@ -1,0 +1,155 @@
+ADVERSARIAL VERIFICATION PASS, 2026-09-14
+Separate script (raw JSON-RPC, no code shared with reconstruct_exploit.py), different providers where available:
+receipt from bsc-dataseed1.defibit.io, latest state from bsc-dataseed.binance.org and blastapi (the reconstruction used
+blastapi for history and dataseed for latest), Ethereum DAI balance from ethereum-rpc.publicnode.com (the reconstruction
+used tenderly + Blockscout). drpc (a second BSC archive) was rate-limited throughout.
+
+WHAT WAS RE-DERIVED AND CONFIRMED
+- Victims' BTX loss: net Transfer arithmetic on the independently fetched receipt gives V1 -1,240,403.080996 and V2
+  -1,832,090.195547. Latest balance minus in-transaction net equals the reconstruction's pre-block balances exactly
+  (1,240,403.093401 and 1,832,090.213707), so no BTX moved in or out after the block.
+- Attacker profit: EOA net +63,704,837,356,523,361,110,351 raw units (18 decimals) = 63,704.837356523361110351 USDT.
+- Aggregate check on the largest contributor (per the 2026-09-14 rule on summed figures): the largest USDT inflow to
+  the executor is 77,512.640594 from 0x238a3588...e6c4, inside the exploit transaction itself, paired in the same
+  transaction with 6,000,000 + 2,984,557.865885 BTX sent by the executor to that same address. It is the BTX sale
+  leg of this incident, not an unrelated transfer caught by a broad filter.
+- Aggregate check on "2,880,330 BTX unclaimed": the largest open record (V1 #23, 406,055.25 BTX unclaimed, started
+  2026-03-24) belongs to 0x12584af4...4a35, a plain EOA (no code, nonce 9), not the owner, treasury, attacker or
+  executor. A simulated claim from it reverts with 0xe694b68f on both dataseed and blastapi.
+- paused() = 0 on both contracts, owner 0x62382d13...1e24, via blastapi at latest.
+- Executor bytecode re-fetched from dataseed: PUSH32 selectors for claim(), withdraw(), claimBatch(uint256[]),
+  withdraw(uint256) all present.
+- Post-exploit pool price from the exploit's own Swap log: 0.021304776 USDT per BTX.
+- Ethereum: 63,678.085614 DAI, nonce 4, via publicnode.
+- PANews wording ("two separate transactions", "withdrew BTX from the LP positions", "Uniswap V3 pool", "September 11")
+  confirmed verbatim in the article body (preuves/08c), not only in a search-engine summary.
+
+ISSUES FOUND AND FIXED (fix-and-reverify attempt 1 of 2)
+1. The draft said "23 depositors". The 23 open records belong to 22 distinct addresses (one address holds a record in
+   each contract). README, press-claims file and H8 reworded; reconstruct_exploit.py now prints the distinct-holder
+   count (22) and checks for overlap with owner/treasury/attacker/executor (none). Re-run: confirmed.
+2. The draft printed the profit and bridged amount as 63,704.837356523363 / 63,694.837356523363, a float formatting
+   artifact. Exact values are ...523361110351. Script now formats exactly; H6 and H11 corrected. Re-run: confirmed.
+3. The pre-exploit pool price (0.03498181) could not be re-read from a second archive provider (drpc 429/500,
+   dataseed eth_getLogs disabled, blastapi eth_getLogs 429). Not reproducible independently in this pass, so the
+   39% drop is now flagged as single-provider in the README caveats and H10 was lowered to Moyenne.
+
+NOT RE-DERIVED IN THIS PASS
+- Source of the attacker's first 0.09975 BNB (internal transfer), already listed as open.
+- What the executor's claim()/withdraw() code paths actually do (bytecode not decompiled), already a caveat.
+
+RAW OUTPUT OF THE VERIFICATION SCRIPT
+A. receipt re-fetched from https://bsc-dataseed1.defibit.io
+  status 0x1 block 120873720 logs 55
+  net in tx V1             BTX -1,240,403.080996  USDT +0.000000
+  net in tx V2             BTX -1,832,090.195547  USDT +0.000000
+  net in tx executor       BTX +0.000000  USDT +0.000000
+  net in tx EOA            BTX +0.000000  USDT +63,704.837357
+  net in tx treasury       BTX +0.000000  USDT +9,000.000000
+  net in tx target pool    BTX +5,435.410658  USDT +6,950.000000
+  net in tx 0x238a...e6c4  BTX +2,984,557.865885  USDT -77,512.640594
+  net in tx 0x8f73...5d8c  BTX +0.000000  USDT +0.000000
+  EOA net USDT exact wei: 63704837356523361110351
+  largest USDT inflow to executor: log 147 from 0x238a358808379702088667322f80ac48bad5e6c4 77512.64059421394 txHash matches exploit: True
+  executor -> same counterparty in tx: [(141, '0xaa242a47f4cc074e59cbc7d65309b1f21202aaa3', 6000000.0), (146, '0xaa242a47f4cc074e59cbc7d65309b1f21202aaa3', 2984557.8658853797)]
+
+B. historical balances via drpc (different archive provider) and via log arithmetic
+  V1: latest (dataseed) 0.012405; pre-block (drpc failed: HTTP Error 500: Internal Server Error) None; pre implied by latest - tx net = 1,240,403.093401 (valid only if no later BTX transfers)
+  V2: latest (dataseed) 0.018160; pre-block (drpc failed: HTTP Error 429: Too Many Requests) None; pre implied by latest - tx net = 1,832,090.213707 (valid only if no later BTX transfers)
+
+C. paused() and treasury at latest via blastapi (the script used dataseed for this)
+  V1 paused 0 owner 0x62382d13b909b611c17b54eb19f8e5bc3d9c1e24
+  V2 paused 0 owner 0x62382d13b909b611c17b54eb19f8e5bc3d9c1e24
+
+D. skeptic check on the 23 'legitimate depositors'
+  open records 23 distinct addresses 22 any = owner/treasury/attacker/executor: False
+  addresses in both contracts: 1
+  largest open record: ('V1', 23, '0x12584af4d2bef399e166858cd6a7504d609e4a35', 406055.24737476953, '2026-03-24')
+  largest open depositor code size: 0 (0 = EOA)
+  its nonce: 9
+  claim sim https://bsc-dataseed.binance.org reverts {'code': 3, 'message': 'execution reverted: 0xe694b68f', 'data': '0xe694b68f'}
+  claim sim https://bsc-mainnet.public.blastapi.io reverts {'code': 3, 'message': 'execution reverted', 'data': '0xe694b68f'}
+
+E. price move from the swap log itself vs slot0 before (drpc)
+  swap log 104 USDT/BTX after 0.0020154738716009783
+  swap log 122 USDT/BTX after 0.0002729123277965222
+  swap log 140 USDT/BTX after 0.021304776409084084
+  drpc slot0 failed HTTP Error 429: Too Many Requests
+
+F. executor bytecode from dataseed, raw PUSH32 selector scan
+  claim() True
+  withdraw() True
+  claimBatch(uint256[]) True
+  withdraw(uint256) True
+
+G. Ethereum DAI via a third endpoint (cloudflare / llamarpc)
+  https://cloudflare-eth.com failed {'code': -32603, 'message': 'Internal error'}
+  https://eth.llamarpc.com failed HTTP Error 525: <none>
+  https://ethereum-rpc.publicnode.com block 25975365 DAI 63678.085614 nonce 4
+
+E2. pre-exploit price from the last Swap event before the exploit (eth_getLogs, dataseed1.defibit)
+   https://bsc-dataseed1.defibit.io failed {'code': -32005, 'message': 'limit exceeded'}
+   https://bsc-dataseed.binance.org failed {'code': -32005, 'message': 'limit exceeded'}
+E3. walking back in 200-block windows
+  err 120873521 {'code': -32005, 'message': 'limit exceeded'}
+  err 120873521 {'code': -32005, 'message': 'limit exceeded'}
+  err 120873521 {'code': -32005, 'message': 'limit exceeded'}
+  err 120873521 {'code': -32005, 'message': 'limit exceeded'}
+  err 120873521 {'code': -32005, 'message': 'limit exceeded'}
+  err 120873521 {'code': -32005, 'message': 'limit exceeded'}
+  err 120873521 {'code': -32005, 'message': 'limit exceeded'}
+  err 120873521 {'code': -32005, 'message': 'limit exceeded'}
+  err 120873521 {'code': -32005, 'message': 'limit exceeded'}
+  err 120873521 {'code': -32005, 'message': 'limit exceeded'}
+  err 120873521 {'code': -32005, 'message': 'limit exceeded'}
+  err 120873521 {'code': -32005, 'message': 'limit exceeded'}
+  err 120873521 {'code': -32005, 'message': 'limit exceeded'}
+  err 120873521 {'code': -32005, 'message': 'limit exceeded'}
+  err 120873521 {'code': -32005, 'message': 'limit exceeded'}
+  err 120873521 {'code': -32005, 'message': 'limit exceeded'}
+  err 120873521 {'code': -32005, 'message': 'limit exceeded'}
+  err 120873521 {'code': -32005, 'message': 'limit exceeded'}
+  err 120873521 {'code': -32005, 'message': 'limit exceeded'}
+  err 120873521 {'code': -32005, 'message': 'limit exceeded'}
+  err 120873521 {'code': -32005, 'message': 'limit exceeded'}
+  err 120873521 {'code': -32005, 'message': 'limit exceeded'}
+  err 120873521 {'code': -32005, 'message': 'limit exceeded'}
+  err 120873521 {'code': -32005, 'message': 'limit exceeded'}
+  err 120873521 {'code': -32005, 'message': 'limit exceeded'}
+  err 120873521 {'code': -32005, 'message': 'limit exceeded'}
+  err 120873521 {'code': -32005, 'message': 'limit exceeded'}
+  err 120873521 {'code': -32005, 'message': 'limit exceeded'}
+  err 120873521 {'code': -32005, 'message': 'limit exceeded'}
+  err 120873521 {'code': -32005, 'message': 'limit exceeded'}
+  err 120873521 {'code': -32005, 'message': 'limit exceeded'}
+  err 120873521 {'code': -32005, 'message': 'limit exceeded'}
+  err 120873521 {'code': -32005, 'message': 'limit exceeded'}
+  err 120873521 {'code': -32005, 'message': 'limit exceeded'}
+  err 120873521 {'code': -32005, 'message': 'limit exceeded'}
+  err 120873521 {'code': -32005, 'message': 'limit exceeded'}
+  err 120873521 {'code': -32005, 'message': 'limit exceeded'}
+  err 120873521 {'code': -32005, 'message': 'limit exceeded'}
+  err 120873521 {'code': -32005, 'message': 'limit exceeded'}
+  err 120873521 {'code': -32005, 'message': 'limit exceeded'}
+  err 120873521 {'code': -32005, 'message': 'limit exceeded'}
+  err 120873521 {'code': -32005, 'message': 'limit exceeded'}
+  err 120873521 {'code': -32005, 'message': 'limit exceeded'}
+  err 120873521 {'code': -32005, 'message': 'limit exceeded'}
+  err 120873521 {'code': -32005, 'message': 'limit exceeded'}
+  err 120873521 {'code': -32005, 'message': 'limit exceeded'}
+  err 120873521 {'code': -32005, 'message': 'limit exceeded'}
+  err 120873521 {'code': -32005, 'message': 'limit exceeded'}
+  err 120873521 {'code': -32005, 'message': 'limit exceeded'}
+  err 120873521 {'code': -32005, 'message': 'limit exceeded'}
+  err 120873521 {'code': -32005, 'message': 'limit exceeded'}
+  err 120873521 {'code': -32005, 'message': 'limit exceeded'}
+  err 120873521 {'code': -32005, 'message': 'limit exceeded'}
+  err 120873521 {'code': -32005, 'message': 'limit exceeded'}
+  err 120873521 {'code': -32005, 'message': 'limit exceeded'}
+  err 120873521 {'code': -32005, 'message': 'limit exceeded'}
+  err 120873521 {'code': -32005, 'message': 'limit exceeded'}
+  err 120873521 {'code': -32005, 'message': 'limit exceeded'}
+  err 120873521 {'code': -32005, 'message': 'limit exceeded'}
+  err 120873521 {'code': -32005, 'message': 'limit exceeded'}
+E4. last Swap event before the exploit via eth_getLogs (blastapi, log path instead of state path)
+  err 120872721 HTTP Error 429: Too Many Requests

@@ -1,0 +1,65 @@
+Press and tracker claims about the BeatXswap / BeatSwap (BTX) incident, checked against the chain
+Checked 2026-09-14. Chain values: preuves/09_reconstruction_output.txt (live run of reconstruct_exploit.py).
+
+SOURCES READ
+- PANews English, "Security Firm: BeatXswap Suffers Price Manipulation Attack, Losing Approximately $77,500"
+  https://panews.io/articles/01a08f74-edd7-73aa-8bac-4c7486f16091
+  (WebFetch returned HTTP 403; re-fetched with a browser user-agent on 2026-09-14 and the quoted wording confirmed verbatim
+  in the article body, dated "PANews, September 11", attributed to SlowMist monitoring; excerpt in preuves/08c)
+- Gate News (pt-br), "BeatXswap perde US$ 77.512 em ataque de emprestimo relampago causado por falha no contrato", published 12/09/2026 06:24:04, source link coinfomania.com, credits @SlowMist_Team
+  https://www.gate.com/pt-br/news/detail/BTX/beatxswap-loses-77512-in-flash-loan-exploit-via-contract-flaw-24212820
+- DeFiHackLabs PoC header, src/test/2026-09/BeatXswap_exp.sol (SunWeb3Sec/DeFiHackLabs). Used as the anchor for the
+  transaction hash only. Its header also contains a mechanism description; everything below was re-derived from the
+  receipt, the verified source and live state rather than taken from it.
+- DefiLlama hacks API record, preuves/07_defillama_record.json
+- No statement by the BeatSwap team was found (searches on 2026-09-14: official statement, compensation, pause).
+  CoinMarketCap's BeatSwap news digest mentions no incident.
+
+CLAIM-BY-CLAIM
+1. "Loss of approximately 2.985 million BTX (about $77,500)" (SlowMist via PANews / Gate: 2,984,557 BTX, US$ 77,512)
+   CHAIN: 2,984,557.865885 BTX is what the attacker sold in one leg (log 47) for 77,512.640594 USDT (log 48). It is
+   not what the victims lost and not what the attacker kept.
+   - Victims lost 3,072,493.276543 BTX (V1 1,240,403.080996 + V2 1,832,090.195547), reserve drop at block 120873720.
+   - Attacker kept 63,704.837357 USDT (log 54), after buying back BTX for 48,750.848699 USDT and paying 12,000 USDT
+     of deposits. DefiLlama's 77,512 is the gross proceeds of one sale.
+   VERDICT: figure is real but measures the gross resale leg; corrected.
+
+2. "The attacker borrowed 6 million BTX via a flash loan and sold them into the Uniswap V3 pool"
+   CHAIN: 6,000,000 BTX in (log 2) and 6,000,000 BTX repaid (log 42) to 0x238a3588...e6c4. The dumps were
+   4,038,419.593256 BTX (log 4) and 1,674,447.967473 BTX (log 22) into 0xa5db84d7...a96d, a PancakeSwap V3 pool
+   (factory 0x0BFbCF9f...1865 matches PancakeSwap's own bscMainnet.json, preuves/08b), not a Uniswap V3 pool.
+   A separate 15,950 USDT flash loan (log 1 / log 51) is not mentioned by press.
+   VERDICT: substantially right; venue mislabelled (PancakeSwap V3, a Uniswap V3 fork).
+
+3. "depositing USDT in two separate transactions to trigger liquidity minting"
+   CHAIN: both deposit() calls (10,000 USDT to V1 at log 7, 2,000 USDT to V2 at log 25) are inside the single
+   transaction 0xcc71a3bb...5799. The attacker EOA's nonce was 0 before it and 1 after.
+   VERDICT: incorrect; one transaction.
+
+4. "withdrew BTX from the LP positions" / "draining funds from liquidity provider positions"
+   CHAIN: the LP NFTs 7392248 and 7392249 were never withdrawn. They are still owned by the two vesting contracts with
+   their liquidity intact (ownerOf and positions() at latest). The BTX came out by swapping back through the pool
+   (log 39: 8,779,925.426614 BTX out for 48,750.848699 USDT in), which converted the in-range victim positions to
+   USDT. They now hold about 7,049.38 USDT.
+   VERDICT: incorrect; the positions were traded against, not withdrawn.
+
+5. Date: "September 11, 2026" appears in search summaries of SlowMist's report; Gate's article is dated 12/09/2026.
+   CHAIN: block 120873720 is 2026-09-09 11:54:23 UTC. DefiLlama's date (1788912000 = 2026-09-09) is right.
+   VERDICT: report date, not incident date.
+
+6. DeFiHackLabs "~$63.7K" attacker profit
+   CHAIN: 63,704.837357 USDT to the EOA. Matches.
+
+7. DefiLlama classification "Oracle Manipulation / Spot Price Manipulation"
+   CHAIN: _calculateQuote reads TARGET_POOL.slot0() once and sizes the BTX leg from it (preuves/02 lines 347-357).
+   VERDICT: accurate.
+
+NOT IN ANY SOURCE FOUND
+- Both contracts are still unpaused at block 121829657 (2026-09-14), with 0.012405 and 0.018160 BTX left.
+- 22 pre-existing depositors (23 open records) hold 2,880,330.456986 BTX of unclaimed vesting; any claim above the 0.03 BTX left reverts
+  (two simulated, one per contract).
+- The attack executor 0x3717...922d is itself registered as a vesting beneficiary of 6,747,195.235288 BTX, owns the
+  withdraw rights to the two LP positions from 2027-03-08, and its bytecode contains calls to claim() / withdraw().
+- The target pool's price was left at 0.02130478 USDT per BTX, 39% below the 0.03498181 it showed the block before.
+- The proceeds were bridged to Ethereum through LI.FI (jumper.exchange) and converted USDC -> USDS -> DAI, where
+  63,678.085614 DAI still sits at the attacker's address.
