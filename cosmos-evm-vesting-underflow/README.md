@@ -81,13 +81,19 @@ UTC for attack #2.
 Measuring the attacker's own EVM balance immediately before and after each
 transaction (isolating each attack to its own single-transaction block)
 gives a net gain of 600,000,035.50 OM from attack #1 alone, and a further
-120,923,932.38 OM from attack #2. MANTRA's own reported loss, repeated
-across press coverage, is "$3.6 million" without a stated OM/USD price.
-Dividing $3.6M by the attack-#1 gain alone implies a price of $0.0060/OM,
-in the same order of magnitude as OM's price at the time this was written
-($0.004418, per CoinGecko, after OM continued falling post-exploit), which
-is a plausible, if not exact, historical match. This is reported as a
-cross-check, not as independent confirmation of a historical price feed.
+120,923,932.38 OM from attack #2. MANTRA's own reported loss, as relayed
+by crypto.news, is 720.9 million OM "then valued at about $3.6 million",
+taken from two addresses. The two measured gains sum to 720,923,967.89 OM,
+which matches that token count, so the $3.6M covers both attacks, not
+attack #1 alone (an earlier version of this check divided by attack #1
+only and got $0.0060/OM). On both attacks it implies about $0.0050/OM, in
+the same order of magnitude as OM's price when this was first written
+($0.004418, per CoinGecko, after OM continued falling post-exploit). This
+is reported as a cross-check, not as independent confirmation of a
+historical price feed. It is also not in tension with Cosmos Labs'
+$5.72M six-chain total below: $3.6M values the OM taken, while $5.72M is
+what was actually converted into other assets. See
+`resultats_sources_2026-09-14.txt`.
 
 Unlike TAC, MANTRA's `bonded_tokens_pool` was not the victim: its balance
 moved by only 1 wei across attack #1's block, confirming the post-mortem's

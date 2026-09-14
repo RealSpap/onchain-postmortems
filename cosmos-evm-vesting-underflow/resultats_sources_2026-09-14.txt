@@ -1,0 +1,27 @@
+Figure-freshness review of cosmos-evm-vesting-underflow, 2026-09-14.
+
+1. DefiLlama hacks feed re-fetched (https://api.llama.fi/hacks, 2026-09-14): unchanged since 2026-09-10.
+   MANTRA Chain amount 0, TAC amount 7500000, KiiChain amount 9700000, all three with an empty "source" field.
+
+2. No newer primary source than Cosmos Labs' post-mortem (GHSA-7g4w-cg88-2cq2, 2026-08-28) was found.
+   Its ~$5.72M six-chain realized total is still the figure later press repeats
+   (crypto.news; coindoo via cryptonews.net, "Cosmos Labs Misread Bug Before $5.7M Six-Chain Hack", 2026-08-30).
+
+3. A more precise statement of MANTRA's own figure, fetched directly (not a search-engine summary):
+   https://crypto.news/cosmos-evm-vulnerability-drains-mantra-tac-and-kiichain-in-cross-chain-attacks/
+   Article text, attributed to MANTRA's own account ("according to the network"): "720.9 million MANTRA tokens
+   then valued at about $3.6 million taken from two addresses."
+
+   This entry's own on-chain measurements (resultats_reconstruction_2026-09-10.txt lines 19 and 23):
+     attack #1  600,000,035.503802 OM
+     attack #2  120,923,932.384402 OM
+     sum        720,923,967.888204 OM   -> rounds to the 720.9 million MANTRA reports
+
+   So the $3.6M covers both attacks, not attack #1 alone. The implied price on that basis is
+   3,600,000 / 720,923,967.888204 = $0.004994/OM (the 2026-09-10 version divided by attack #1 only: $0.006000/OM).
+   Still a cross-check on a rounded headline, not a verified historical price.
+
+4. Why MANTRA's $3.6M and Cosmos Labs' $5.72M are not in tension: $3.6M values the OM taken on MANTRA, while
+   the $5.72M is what attackers on all six chains converted into other assets (DEX 2.87M + CEX 2.85M, per the
+   post-mortem, section 1 of resultats_sources_2026-09-10.txt). The two are measured on different bases and are
+   not additive.
