@@ -1,0 +1,23 @@
+ajna-liquidation, figure-freshness review of 2026-09-15 (pipeline step 6)
+RPC: gateway.tenderly.co/public/mainnet, queried 2026-09-15
+
+eth_getTransactionByHash 0x8a8793963c0ef443b9a396665c3c185ded132d5f99daf7c99e87125597016e64
+  from 0x6f2f5236b10fe7162da077a2779f8b5f04b7827e  to 0x80ad419c4783a09252ad6a576ce059f51cc53d47
+  nonce 8  block 25854585
+eth_getBlockByNumber 25854585 timestamp: 2026-08-28 15:18:35 UTC
+eth_getBlockByNumber 25854888 (full txs) timestamp: 2026-08-28 16:19:11 UTC
+  only transaction from the attacker EOA in that block:
+  0x12dfde527ef62882bfabb64362c9ae0e6bfb628363bd298d0d0956c9a114e4f5 -> 0x80ad419c4783a09252ad6a576ce059f51cc53d47
+
+Finding: the README's "At a glance" row placed the 49.32 WETH extraction in block 25,854,888
+("exactly matching the press's own cited block") and the body dated it 15:17:47 UTC. The
+chain puts that transaction in block 25,854,585 at 15:18:35 UTC (15:17:47 is the attacker's
+previous call to the same contract, per resultats_timeline_attaquant_2026-09-09.txt:13-14).
+Block 25,854,888 carries the next, smaller AuctionSettle round, already described correctly
+in the README body. Both rows corrected; H7 timestamp corrected; H13 added.
+
+Freshness check of sources:
+  api.llama.fi/hacks "Ajna V2": amount 775400, source "", returnedFunds null, unchanged.
+  Web search "Ajna Finance exploit post-mortem official statement": no official post-mortem
+  with figures found; only the team's 2026-08-29 04:58 UTC notice already relayed by press
+  (cryptotimes.io, cryptoticker.io, coinalertnews.com). The $775,400 press figure stands.

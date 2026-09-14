@@ -1,0 +1,16 @@
+balancer-v1-rounding, figure-freshness review of 2026-09-15 (pipeline step 6)
+RPC: gateway.tenderly.co/public/mainnet, queried 2026-09-15
+
+eth_getTransactionCount latest:
+  operator 0x338C7Ec9BefbB451d66Fd8A468c32184f5689a41 : 40 (same as 2026-09-09, resultats_reconstruction_2026-09-09.txt:96)
+  sweep A 0x9d0d918644c057b29538eb5567f9b48befb65f33 : 28
+  sweep B 0xa86e7d84bf2d1de9497d0e8eb46a90f7e99551cc : 21
+  sweep C 0x0437fa52a192590440f885cf8e596aaa5e697ce5 : 9
+  sweep D 0xade439ade910a20854d4270d645b8a982d8f273b : 14
+  (sweep-wallet counts were not recorded on 2026-09-09, so no comparison is claimed for them)
+
+api.llama.fi/hacks "Balancer V1": amount 234000, source "", returnedFunds null, defillamaId 116, unchanged.
+
+Web search "Balancer V1 exploit post-mortem Balancer DAO statement September 2026": no official
+post-mortem or resolution found; coverage is still the 2026-09-03 on-chain notice and its
+2026-09-08 deadline (cryptotimes.io 2026-09-04, coinedition.com). The $234,000 figure stands.

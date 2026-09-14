@@ -117,7 +117,7 @@ The sender's claimed "Balancer DAO" identity is not independently confirmed beyo
 
 ### As of this research, no resolution
 
-The operator wallet's current transaction count is 40; its last-ever outgoing transaction (nonce 39) is dated 2026-09-01 07:09:11 UTC, two full days before the message above was even sent, and nothing further was found from that wallet up to this project's research date (2026-09-09), one day after the message's own deadline. None of the four cash-out wallets show a matching return transaction either. This project found no on-chain evidence that the attacker responded, cooperated, or returned any funds.
+The operator wallet's current transaction count is 40; its last-ever outgoing transaction (nonce 39) is dated 2026-09-01 07:09:11 UTC, two full days before the message above was even sent, and nothing further was found from that wallet up to this project's research date (2026-09-09), one day after the message's own deadline. None of the four cash-out wallets show a matching return transaction either. This project found no on-chain evidence that the attacker responded, cooperated, or returned any funds. Re-checked on 2026-09-15, a week after the deadline: the operator wallet's transaction count is still 40, so it has sent nothing since 2026-09-01, and DefiLlama's record still shows `returnedFunds: null`.
 
 ### Press coverage: heavy syndication, and one address match this project could not confirm from readable text
 

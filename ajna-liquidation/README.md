@@ -10,7 +10,7 @@ Independent on-chain reconstruction of the Ajna Finance liquidation-math exploit
 | Window | 2026-08-28 15:15 UTC to 2026-08-29 16:02 UTC |
 | Press figure | ~$775,400 across "seven Ethereum pools" (Defimon Alerts), no addresses published anywhere |
 | Verified independently | The exploited pools live on a second, undocumented Ajna factory, not the one on Ajna's own docs page |
-| Headline transaction | A single Balancer V2 flashloan-funded call drained 49.32 WETH (~$121,800) from the cbETH/WETH pool in one transaction, block 25,854,888, exactly matching the press's own cited block |
+| Headline transaction | A single Balancer V2 flashloan-funded call drained 49.32 WETH (~$121,800) from the cbETH/WETH pool in one transaction, block 25,854,585 (15:18:35 UTC). The block press cites as the "first extraction", 25,854,888 (16:19:11 UTC), is on the same pool but carries the attacker's next, much smaller round (~3.26 WETH net) |
 | What's still open | A clean, single attacker for all seven pools could not be confirmed; two other addresses active on the remaining six pools may be copycats or unrelated liquidation bots, named honestly rather than guessed at |
 
 ## The method
@@ -64,7 +64,7 @@ These are net balance deltas over a fixed block window, a weaker signal than a f
 
 The cbETH/WETH pool is the one the press's own timeline points to by exact block. Its WETH balance drop (49.34 to 0.46, a delta of 48.88 WETH per the table above) is accounted for almost entirely by a single transaction:
 
-- **2026-08-28 15:17:47 UTC**: a fresh externally-owned account, `0x6F2f5236b10FE7162Da077A2779f8b5f04b7827e` (nonce 10 at block 25,858,000, not a long-running bot), calls a contract it had deployed roughly 90 seconds earlier, `0x80AD419C4783A09252Ad6a576ce059f51Cc53D47` (24,328 bytes of bytecode, its second-ever transaction).
+- **2026-08-28 15:18:35 UTC** (block 25,854,585): a fresh externally-owned account, `0x6F2f5236b10FE7162Da077A2779f8b5f04b7827e` (nonce 10 at block 25,858,000, not a long-running bot), calls a contract it had deployed roughly 90 seconds earlier, `0x80AD419C4783A09252Ad6a576ce059f51Cc53D47` (24,328 bytes of bytecode, its second-ever transaction).
 - That call (tx `0x8a8793963c0ef443b9a396665c3c185ded132d5f99daf7c99e87125597016e64`) borrows a 105 WETH flashloan from the canonical Balancer V2 Vault (`0xBA12222222228d8Ba445958a75a0704d566BF2C8`), interacts with the cbETH/WETH pool's `Kick` function (the call that starts a liquidation auction), and the pool's WETH `Transfer` events, decoded directly from the receipt, show the exploit contract netting 49.3191 WETH before the same transaction repays the 105 WETH flashloan in full.
 - 49.3191 WETH captured against a 48.8810 WETH measured pool-balance drop is a gap of well under half a WETH, close enough that this single transaction is treated as explaining almost the entire loss on this pool.
 - At roughly $2,470/ETH (the same rate this research program's other work independently confirmed for late August 2026), that single transfer alone is worth **~$121,800**, about a fifth on its own of the $775,400 the press reports across all seven pools combined.
