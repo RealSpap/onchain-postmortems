@@ -1,0 +1,43 @@
+Figure-freshness review, 2026-09-16 (onchain-postmortems-pipeline step 6)
+
+1. DefiLlama api.llama.fi/hacks, re-fetched 2026-09-16:
+   "AFX Bridge", amount 24150000, chain ["Arbitrum"], classification "Key Compromise",
+   technique "Validator Key Compromised", source "" (still empty). Unchanged since 2026-09-10.
+
+2. Official AFX postmortem (new source, not found on 2026-09-10):
+   "A Detailed Post-Mortem on the AFX Security Incident", AFXTrade, Medium, dated Jul 31, 2026
+   https://medium.com/@AFXTrade/a-detailed-post-mortem-on-the-afx-security-incident-57d564ef812f
+   (cited by crypto.news, "AFX schedules Aug. 3 goodwill plan following $24.15M bridge hack")
+   Facts it states, as read on 2026-09-16:
+   - Timeline entry "July 22 21:27  Affected DEX validators co-sign the bridge-contract call;
+     assets are transferred out of the AFX-operated custody bridge" (all timestamps UTC).
+   - Origin: developer contacted July 9 by a person presenting as "Oddium Lab"; malicious
+     repository clone; JFrog Groovy plugin uploaded July 16; Ansible task via the operations
+     bastion against "a subset of DEX validator nodes" July 22 18:17.
+   - Mechanism: the payload "interfered with consensus-message handling, causing the affected
+     validators to co-sign a transaction". No statement that signing keys were exfiltrated.
+   - Attribution: "consistent with the independent attribution linking this attack to
+     UNC4899 / TraderTraitor (DPRK)".
+   - No USD loss figure, no validator count, no voting-unit figure given.
+   - States no evidence the Arbitrum network or native Arbitrum bridge was compromised.
+
+3. On-chain re-check, 2026-09-16, arb1.arbitrum.io/rpc:
+   eth_getTransactionReceipt 0x217c45c1272550e0439e53243f2987b7fb3f58b1d33c222597bbb71851b93f74
+   -> status 0x1, to 0xcb3b9a3e5668afe84dc7a864b36b845dce062e67, block 486657995 (0x1d01cfcb)
+   eth_getBlockByNumber 0x1d01cfcb -> timestamp 2026-07-22T21:26:55Z
+   -> consistent with the postmortem's "21:27" co-sign entry (rounded to the minute).
+
+Conclusion: no published figure changes. README caveats updated: an official AFX postmortem now
+exists; mechanism wording clarified (node compromise vs key exfiltration); social-engineering
+origin and attribution now attributed to both Halborn and AFX.
+
+4. Internal-consistency note (same review):
+   resultats_reconstruction_2026-09-10.txt line 40 prints "Sender/executor of both transactions:
+   0x32e3200d6e944cd9bd1c8c9865293b07206e7a01 == one of the validator addresses: False". That label
+   was wrong: reconstruct_exploit.py only checked the submission tx there. Re-fetched live
+   2026-09-16 (eth_getTransactionByHash, arb1.arbitrum.io/rpc):
+   - submission   0x217c45c1...8b93f74 from 0x32e3200d6e944cd9bd1c8c9865293b07206e7a01 (not a validator)
+   - finalization 0x50d0b3ec...436547b from 0x5553ea7bda594ade7afe91d279779a42b2b84208 (validator,
+     weight 1429, line 30 of the 2026-09-10 results)
+   README and H9 were already correct. Script label fixed and a finalization-sender check added;
+   the 2026-09-10 results file is left as the historical output it is.

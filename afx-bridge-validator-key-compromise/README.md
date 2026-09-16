@@ -168,21 +168,37 @@ funds still resting at an address this reconstruction can check.
 
 - This is independent research, not a security audit, and is not
   affiliated with AFX, Halborn, CoinDesk, or any other outlet cited above.
-- No primary source from AFX itself (an official GitHub repository,
-  contract-verification registry, or technical postmortem) was found.
-  AFX's own domain (`afx.trade`) resolves to an unrelated exchange, and
-  the incident is reconstructed entirely from raw Arbitrum/Ethereum chain
-  data plus a transaction hash a press article supplied, independently
-  verified rather than trusted (see "The method").
+- No official GitHub repository or contract-verification registry from
+  AFX itself was found, and AFX's own domain (`afx.trade`) resolves to an
+  unrelated exchange, so the incident is reconstructed entirely from raw
+  Arbitrum/Ethereum chain data plus a transaction hash a press article
+  supplied, independently verified rather than trusted (see "The method").
+  Update 2026-09-16: AFX did publish its own technical postmortem on
+  2026-07-31 ("A Detailed Post-Mortem on the AFX Security Incident",
+  medium.com/@AFXTrade), not found when this entry was first written. It
+  gives no loss figure, validator count or voting-unit figure, so none of
+  the numbers above change. Its stated co-signing time, "July 22 21:27"
+  UTC, matches the submission transaction's on-chain timestamp
+  (21:26:55 UTC, re-fetched 2026-09-16). See
+  `resultats_sources_2026-09-16.txt`.
+- Mechanism wording: AFX's own postmortem describes attacker malware
+  running on a subset of validator nodes (reached through an internal
+  Ansible operations bastion) that "interfered with consensus-message
+  handling", causing those validators to co-sign the withdrawal. It does
+  not state that signing keys were exfiltrated. "Compromised signing
+  keys" above follows DefiLlama's "Validator Key Compromised" label; the
+  on-chain evidence (5 valid validator signatures) is consistent with
+  either reading and cannot distinguish them.
 - The excluded 2-of-7 validators (the ones whose keys were *not* used,
   i.e., not necessarily the compromised set) were not individually
   identified; this would require ECDSA signer recovery against the
   bridge contract's specific message-hash/domain scheme, which was not
   reverse-engineered here for lack of a verified ABI or source.
-- The attacker's social-engineering origin and the UNC4899/TraderTraitor
-  (DPRK) attribution are reported here only as Halborn's own claim, not
-  independently confirmed; this project has no forensic method for
-  attributing an exploit to a specific threat actor.
+- The attacker's social-engineering origin (a fake "Oddium Lab" recruiter
+  approach on 2026-07-09, per AFX) and the UNC4899/TraderTraitor (DPRK)
+  attribution are reported here as the claims of Halborn and of AFX's own
+  postmortem, not independently confirmed; this project has no forensic
+  method for attributing an exploit to a specific threat actor.
 - The final destination address on Ethereum
   (`0x225a38bc71102999dd13478bfabd7c4d53f2dc17`) was not identified as
   belonging to any specific named protocol; this reconstruction confirms
