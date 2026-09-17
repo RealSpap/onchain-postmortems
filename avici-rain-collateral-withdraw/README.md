@@ -156,7 +156,15 @@ Ethereum, a claim this project did not independently trace).
   reports its own recomputation attempt as inconclusive. See
   `resultats_sampling_2026-09-10.txt` and `registre_hypotheses.csv` (H8).
   A full, exhaustive (non-sampled) sum over all 5,392 transactions would
-  settle this, and was not done here for time.
+  settle this, and was not done here for time. One point of scale when
+  reading that gap: the attacker's transactions touch all 3 program
+  deployments described below, not Avici's alone, so the loot account is
+  not necessarily an Avici-only figure. Press puts the loss across the
+  affected Rain-powered programs at roughly $1.1 million (CoinDesk,
+  2026-08-29, citing Avici's $500,800 and Tria's over $430,000 as parts of
+  it), which the $875,983.55 extrapolation undershoots rather than
+  exceeds. This is context for the sampling gap, not a re-derived total.
+  See `resultats_sources_2026-09-17.txt`.
 - **The Ed25519 signature-offset-reuse mechanism is reported as sourced,
   not independently confirmed.** crypto.news and Blockaid describe the
   root cause as the attacker manipulating a second Ed25519 verification

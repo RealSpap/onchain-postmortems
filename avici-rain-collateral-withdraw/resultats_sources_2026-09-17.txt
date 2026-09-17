@@ -1,0 +1,20 @@
+=== Figure-freshness review, 2026-09-17 ===
+
+DefiLlama hacks feed (api.llama.fi/hacks), record name==Avici, fetched live 2026-09-17:
+  amount 500859, classification "Protocol Logic", technique "Withdrawal Logic Flaw", source "" (empty), returnedFunds null.
+  Unchanged from the 2026-09-10 reconstruction.
+
+CoinDesk, 2026-08-29, "A Solana-based $1.1 million crypto card hack crashed a neobank's token 49%"
+  https://www.coindesk.com/web3/2026/08/29/a-usd1-1-million-crypto-card-hack-crashed-a-neobank-s-token-49
+  Reports the vulnerability in an outdated Rain card contract drained roughly $1.1 million across several
+  Solana-based programs, including $500,800 from 1,685 Avici users (citing Avici's X post), and that Tria
+  lost over $430,000 affecting 636 users.
+  Used only as context for the scale of the sampling gap in Caveats. The $1.1M is press, not re-derived here.
+
+AMBCrypto, 2026-08-30, relaying Avici's 2026-08-28 statement:
+  https://ambcrypto.com/avici-says-everyones-card-balance-refunded-in-full-as-rain-fixes-crypto-card-vulnerability/
+  $500,859.20 impacted card balances, 1,685 users, refunds pledged in full. No post-mortem mentioned.
+
+Search for an official Rain/Avici post-mortem (2026-09-17): none found. Secondary coverage still says no
+complete public post-mortem (source code, faulty condition, audit history) has been released.
+Conclusion: no more authoritative figure exists; published $500,859.22 stands. One clarifying phrase added.
