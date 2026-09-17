@@ -1,0 +1,86 @@
+Adversarial verification pass, Dream Health Chain award-reclaim entry
+Run 2026-09-17, against the draft written the same day.
+
+The rule applied here: a headline figure that is a SUM across many transfers is not a verified
+fact just because the query ran. Every headline claim below was re-derived by a second method
+that does not share the first one's failure mode, and the largest single contributor to each
+sum was pulled up and looked at on its own.
+
+1. "The award contract lost 568,370.746789 DHC"
+   Method A (aggregate): sum of the 778 Transfer events in the four attacker receipts, netting
+     the award contract's side. Result 568,370.746788580565912400 wei.
+   Method B (no aggregation at all): two balanceOf reads, at block 120055459 and 120055460, from
+     two independent archive providers (blastapi, nodereal), both returning the same values:
+     568,371.829157042339390458 then 1.082368461773454472. Delta 568,370.746788580565935986.
+   The two differ by 23,586 wei, that is 2.4e-14 DHC. DHC is a reflection token, so balances
+     move without emitting a Transfer; the residue is consistent with that and far too small to
+     touch any figure published here. Both are quoted, neither is rounded into the other.
+   Largest contributor, checked on its own: the 18 payouts of 21,441.825759844717792800 DHC
+     (385,952.86 DHC, half the total out). Each is a Transfer from the award contract to the
+     attacker contract inside transaction 0x037771c0..., which is one of the four transactions
+     sent by the attacker EOA in block 120055460. There is no time window, no address list and
+     no "from any sender" clause in this filter: the set is four transactions from one sender in
+     one block, so it cannot absorb unrelated traffic the way a busy-address query can.
+
+2. "The attacker realised 71,851.016708 USDT"
+   Method A: net of the USDT Transfer events across the four receipts for the EOA.
+   Method B: balanceOf(EOA) on USDT, which is 0 at block 120055459 and 71,851.016708262373165555
+     at block 120055460, from the same two archive providers, plus a third (bsc-dataseed) at the
+     latest block. Nonce 0 before, 4 after. Exact agreement, to the wei.
+   This is the figure DefiLlama tracks as $71,800 and the DeFiHackLabs PoC as "~71,851 USDT".
+     It is not disputed here, only relabelled: it is the cash-out, not the victim's loss.
+
+3. "333 claims across 5 positions, 261 of them on one position"
+   Method A (used in the draft): the call traces, counting calls to selector 0x43609f36.
+   Method B (used in the published script): the receipts' own Transfer events, grouped by amount,
+     with no reference to the traces at all. Both give 333 payouts and the same five amounts,
+     with 261 at 1,401.651994482133172200 DHC. preuves/10_claim_ledger_from_logs.txt is method B
+     printed transaction by transaction.
+   The grouping key is the payout amount, so two positions opened for the identical amount would
+     be merged. Here the five amounts differ by orders of magnitude, and the five opening
+     participations match them one for one at exactly 84.74%, so the grouping is not hiding a
+     sixth position.
+
+4. "Each claim pays 10% of the declared amount, and 328 of the 333 participations credited zero"
+   Checked both ways: the traces show the participate calls carrying 2 wei after the first, and
+     the receipts show 328 Transfer events into the contract with value exactly 0. The declared
+     amount itself never appears in a log, so the script recovers it as payout x 10 and then
+     cross-checks it against the opening leg the contract was actually credited; all five land on
+     84.740000% to eight digits, which a wrong reconstruction of the declared amount would not do.
+
+5. "The implementation was never replaced, the balance never refilled, the USDT never moved"
+   Direct single reads, no aggregation, from three providers at the latest block. All agree.
+   These are the time-sensitive claims in this entry: they are true as of block 122476848
+     (2026-09-17). They are stated with that block in the README and have to be re-read before
+     being repeated anywhere.
+
+WHAT THIS PASS COULD NOT CONFIRM, and which is therefore hedged or left out of the entry
+
+a. The identity of 0x590162bf4b50F6576a459B75309eE21D92178A10 and the relay
+   0xF82d00fC51F730F42A00F85E74895a2849ffF2Dd. The funding transaction's shape (an unshield
+   followed by a WBNB withdrawal and an internal 0.09975 BNB transfer to a nonce-0 wallet) is
+   read directly from the receipt and the call trace, and it is the shape of a privacy pool.
+   The commonly used label for these addresses was not confirmed against a primary deployment
+   record, so the entry describes the behaviour and gives the addresses, and does not name a
+   protocol.
+
+b. The award contract's real function names and its state machine. The implementation
+   (0x5abb3fe2...) is not verified on BscScan, and none of 0x7f200fee, 0xe3db9b54, 0x43609f36
+   resolve in openchain.xyz's signature database. The names used in the public PoC
+   (createAward, participateAward, claimAward) do not hash to those selectors, under any of the
+   obvious argument-type variants that were tried. So the entry names them by selector and
+   describes only what they observably do. The "status 2 reset to status 1" description in the
+   PoC is not reproduced here, because nothing in the chain data shows a status field.
+
+c. Who else had an open award position. Enumerating every historical depositor would need a full
+   log scan back to the proxy's 2022-03-15 deployment (block 16080032), which the 50,000-block
+   getLogs limit on the available providers makes expensive; it was not done. The entry therefore
+   says what the balance shows, that the contract can no longer pay anyone, and does not put a
+   number on how many people that is.
+
+d. The 5% of each declared amount that is never pulled from the caller at all. The 84.74% leg
+   into the contract is measured on all five positions; the 10.26% leg to the caller's own
+   inviter is measured on the first position's opening call only (trace of 0xd65c82da...,
+   1,438.094946338668634754 DHC against a declared 14,016.519944821331722750). Whether the
+   remaining 5% is the token's transfer tax or the award contract's own arithmetic is not
+   determined here; both legs are quoted as measured, not as a rule.

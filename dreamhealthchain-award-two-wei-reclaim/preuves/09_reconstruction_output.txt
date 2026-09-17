@@ -1,0 +1,119 @@
+====================================================================================================
+Dream Health Chain (DHC) award-reclaim exploit, BNB Chain, block 120055460
+Reconstruction run: 2026-09-17 20:24:11 UTC
+====================================================================================================
+
+1. WHAT DEFILLAMA TRACKS
+   name=Dream Health Chain amount=$71,800 chain=['BSC'] classification=Protocol Logic technique=Reward Logic Flaw date=1788566400 (2026-09-05 00:00:00 UTC) source='' returnedFunds=None
+
+2. THE ATTACKER'S TRANSACTIONS, FOUND BY SCANNING THE BLOCK
+   block 120055460 at 2026-09-05 05:34:48 UTC, 71 transactions, 4 of them from 0xD3A8D0A9F55cf679fff6F277E49AfC95B49D2B07
+   nonce 0: 0x172c1aa93ca2fffdb21ae8fd021710448f5a3cca00f0be4e1f2c452488647cc9 status=1 gasUsed=3,225,255 logs=0 CREATE 0x226923D34A10f3D54B57b9F4b685E82c6Cba968A
+   nonce 1: 0xd65c82da03c5f5a50a6184a4e1e41df9c7c7cbf00da335b80a0277132a7d5416 status=1 gasUsed=9,394,108 logs=452 call c0406226
+   nonce 2: 0x037771c05fe48def7d3f249879db97ed69f8ccd4405d0cc820983c4c9664cc51 status=1 gasUsed=11,609,848 logs=804 call 9890220b
+   nonce 3: 0xb4c89845d95fd721e6931dd223e24e8b78a9de8c3b4428251a36d9213e44c496 status=1 gasUsed=3,416,229 logs=207 call 84054d3d
+  [OK ] all four attacker transactions sit in the single block 120055460
+  [OK ] the attacker contract 0x226923D34A10f3D54B57b9F4b685E82c6Cba968A was created in that same block
+
+3. EVERY TOKEN FLOW, DECODED FROM THE RECEIPTS' OWN LOGS
+   778 Transfer events across the four transactions
+   DHC into the award contract  : 202,615.699242570204261000 from 0x226923D34A10f3D54B57b9F4b685E82c6Cba968A
+   DHC out of the award contract: 770,986.446031150770173400 to 0x226923D34A10f3D54B57b9F4b685E82c6Cba968A
+   DHC net for the award contract: -568,370.746788580565912400
+   USDT net for the attacker EOA : 71,851.016708262373165555
+   USDT net for the PancakeSwap pair: -71,831.805873218962165570
+   DHC burned to 0x…dEaD (the token's own transfer tax): 24,840.366879911469433040
+  [OK ] only the attacker's contract ever sends DHC to, or receives DHC from, the award contract
+
+4. THE SAME LOSS, READ FROM THE CONTRACT'S BALANCE INSTEAD OF FROM THE LOGS
+   award contract DHC at block 120055459: 568,371.829157042339390458
+   award contract DHC at block 120055460  : 1.082368461773454472
+   award contract DHC at block 122476896 (latest, second provider): 1.082368461773454472
+   drained in the block: 568,370.746788580565935986  (99.99981% of the balance)
+   log-derived net and balance delta differ by 23586 wei (2.36e-14 DHC): DHC is a reflection token, whose balances move without emitting a Transfer
+  [OK ] the balance delta and the log-derived net agree to within 1e-13 DHC
+  [OK ] the award contract has not been refilled since (latest == post-attack balance)
+
+5. THE CLAIM LOOP, COUNTED FROM THE PAYOUT TRANSFERS
+   333 payouts from the award contract, 5 distinct amounts:
+     21,441.825759844717792800 DHC paid 18 times  (total 385,952.863677204920270400)
+     1,401.651994482133172200 DHC paid 261 times  (total 365,831.170559836757944200)
+     1,016.342541016639623300 DHC paid 18 times  (total 18,294.165738299513219400)
+     48.174636444188718100 DHC paid 18 times  (total 867.143455995396925800)
+     2.283477767454545200 DHC paid 18 times  (total 41.102599814181813600)
+   participations that moved exactly 0 DHC: 328 of 333 (the re-participation is called with 2 wei; after the token's own transfer tax the contract is credited a Transfer of zero)
+   total paid out 770,986.446031150770173400 against 202,615.699242570204261000 paid in
+  [OK ] a claim was paid 333 times across 5 distinct payout amounts (5 award positions)
+  [OK ] the largest single position was claimed 261 times, not the 18 the public PoC describes
+  [OK ] 328 of the 333 participations moved no DHC at all into the contract
+
+6. THE THREE AWARD ENTRY POINTS, AND WHY THIS ENTRY NAMES THEM BY SELECTOR
+   0x7f200fee -> openchain.xyz: None
+   0xe3db9b54 -> openchain.xyz: None
+   0x43609f36 -> openchain.xyz: None
+   keccak("createAward(uint256)")[:4] = 0x8ef9c6ad
+   keccak("participateAward(uint256,uint256)")[:4] = 0xc36b8d90
+   keccak("claimAward(uint256)")[:4] = 0x08254f51
+  [OK ] the PoC's own function names do not hash to the selectors the attacker actually called
+
+7. THE PAYOUT RULE: EVERY CLAIM PAYS 10% OF THE AMOUNT DECLARED AT CREATION
+   the declared amount lives in the call's arguments, not in a log, so it is recovered here
+   as payout x 10 and cross-checked against the DHC the contract was actually credited:
+   claim of 21,441.825759844717792800 -> declared 214,418.257598447177928000 DHC, contract credited 181,698.031488924138576800 (84.7400% of it), claimed 18 times
+   claim of 1,401.651994482133172200 -> declared 14,016.519944821331722000 DHC, contract credited 11,877.599001241596501800 (84.7400% of it), claimed 261 times
+   claim of 1,016.342541016639623300 -> declared 10,163.425410166396233000 DHC, contract credited 8,612.486692575004168500 (84.7400% of it), claimed 18 times
+   claim of 48.174636444188718100 -> declared 481.746364441887181000 DHC, contract credited 408.231869228055197600 (84.7400% of it), claimed 18 times
+   claim of 2.283477767454545200 -> declared 22.834777674545452000 DHC, contract credited 19.350190601409816300 (84.7400% of it), claimed 18 times
+  [OK ] every payout is exactly one tenth of a declared amount of which the contract only received 84.74%
+
+8. THE POOL THE DRAINED DHC WAS SOLD INTO
+   before block 120055459: 92,688.09 USDT / 156,813.98 DHC -> 0.591070 USDT per DHC
+   after block 120055460: 20,856.28 USDT / 698,888.47 DHC -> 0.029842 USDT per DHC
+   latest block 122476896: 20,910.26 USDT / 697,099.81 DHC -> 0.029996 USDT per DHC
+   the drained 568,370.746788580565935986 DHC at the pre-attack spot price would be $335,947, which the pool was far too thin to pay
+  [OK ] the pool's USDT side fell by the attacker's realised proceeds, less what came from elsewhere
+
+9. WHERE THE ATTACKER'S CAPITAL CAME FROM
+   flash-loan pool 0x6098A5638d8D7e9Ed2f952d35B2b67c34EC6B476 version(): DPP 1.0.0
+   EOA funded by tx 0x721b3a415e4838bac03d34bbc4ca0d31dddbebb1485a67a25e3f0e54d2801e01
+     block 120052112 at 2026-09-05 05:09:41 UTC, 25 minutes before the attack, through relay 0xF82d00fC51F730F42A00F85E74895a2849ffF2Dd, unshielded from 0x590162bf4b50F6576a459B75309eE21D92178A10
+   EOA BNB at block 120055459: 0.09975 , nonce 0
+  [OK ] the attacker's wallet was empty and unused before the funding transaction
+
+10. THE STATE TODAY
+   award contract implementation at the attack block: 0x5abb3fe2a02e5d4320862944cd3a0b8f6af28ce1
+   award contract implementation at block 122476896     : 0x5abb3fe2a02e5d4320862944cd3a0b8f6af28ce1
+   proxy admin (can upgrade it)                      : 0xdcbcbed0f7d658133f584edce93e24119db5e443
+   award contract DHC balance                        : 1.082368461773454472
+   attacker EOA USDT                                 : 71,851.016708262373165555 , nonce 4
+  [OK ] the vulnerable implementation has never been replaced
+  [OK ] the attacker's USDT is exactly what the exploit produced and has not moved
+
+11. AGAINST THE ONE PUBLIC TECHNICAL ACCOUNT
+   DeFiHackLabs PR #1231 'Add DHC exploit PoC - repeatable claim due to missing claimed-flag', merged=True at 2026-09-06T03:05:43Z
+   PoC says '18x on a single position': yes
+   PoC says '~71,851 USDT': yes
+   PoC says '~568,371 DHC': yes
+   chain says: 333 claims across 5 positions, 261 on the largest one
+   chain says: attacker realised 71,851.016708262373165555 USDT, award contract lost 568,370.746788580565935986 DHC
+  [OK ] DefiLlama's tracked dollar figure is the attacker's realised USDT, within 0.1%
+
+====================================================================================================
+SELF-CHECKS
+  [OK ] all four attacker transactions sit in the single block 120055460
+  [OK ] the attacker contract 0x226923D34A10f3D54B57b9F4b685E82c6Cba968A was created in that same block
+  [OK ] only the attacker's contract ever sends DHC to, or receives DHC from, the award contract
+  [OK ] the balance delta and the log-derived net agree to within 1e-13 DHC
+  [OK ] the award contract has not been refilled since (latest == post-attack balance)
+  [OK ] a claim was paid 333 times across 5 distinct payout amounts (5 award positions)
+  [OK ] the largest single position was claimed 261 times, not the 18 the public PoC describes
+  [OK ] 328 of the 333 participations moved no DHC at all into the contract
+  [OK ] the PoC's own function names do not hash to the selectors the attacker actually called
+  [OK ] every payout is exactly one tenth of a declared amount of which the contract only received 84.74%
+  [OK ] the pool's USDT side fell by the attacker's realised proceeds, less what came from elsewhere
+  [OK ] the attacker's wallet was empty and unused before the funding transaction
+  [OK ] the vulnerable implementation has never been replaced
+  [OK ] the attacker's USDT is exactly what the exploit produced and has not moved
+  [OK ] DefiLlama's tracked dollar figure is the attacker's realised USDT, within 0.1%
+
+15/15 checks passed

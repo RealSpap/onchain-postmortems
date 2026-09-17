@@ -1,0 +1,10 @@
+{
+ "html_url": "https://github.com/SunWeb3Sec/DeFiHackLabs/pull/1231",
+ "title": "Add DHC exploit PoC - repeatable claim due to missing claimed-flag",
+ "state": "closed",
+ "merged": true,
+ "merged_at": "2026-09-06T03:05:43Z",
+ "created_at": "2026-09-05T18:37:46Z",
+ "body": "DHC's award state machine has no re-claim guard. createAward() records a fixed reward with no per-award reserve or locked collateral. participateAward() doesn't require the award to still be unclaimed, so a claimed award (status=2) can be reset back to status=1 by anyone owning the position, for as little as 0-1 wei. claimAward() then pays the same fixed reward again from the shared proxy balance, with no elapsed-time check.\r\n\r\nConfirmed empirically on-chain by reading the implementation and comparing owner vs attacker: the attacker is not the proxy owner, and the reset/claim path succeeded 18x on a single position with zero privileged access.\r\n\r\nAttack was 4 attacker txs in block 120055460, not one self-contained call: contract creation, two setup calls (prime + initial pledge/participate), then a final call that runs the 18x claim loop and dumps the drained DHC for USDT on the PancakeSwap pair. PoC forks the parent block and replays all four txs in sequence, pranked as the attacker EOA, which reproduces the attacker's exact deployed contract address.\r\n\r\nRealized profit is measured via the attacker's USDT delta (~71,851 USDT) rather than raw DHC amounts, since DHC is a reflection token and per-account DHC balances are tax-perturbed and not a clean loss figure. The proxy's DHC reserve drain (~568,371 DHC) is logged in the test as corroboration.\r\n\r\nAttack tx: https://bscscan.com/tx/0xb4c89845d95fd721e6931dd223e24e8b78a9de8c3b4428251a36d9213e44c496",
+ "user": "BhariGowda"
+}

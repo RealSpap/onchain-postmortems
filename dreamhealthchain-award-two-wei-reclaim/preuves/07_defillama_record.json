@@ -1,0 +1,18 @@
+[
+ {
+  "date": 1788566400,
+  "name": "Dream Health Chain",
+  "classification": "Protocol Logic",
+  "technique": "Reward Logic Flaw",
+  "amount": 71800,
+  "chain": [
+   "BSC"
+  ],
+  "bridgeHack": false,
+  "targetType": "DeFi Protocol",
+  "source": "",
+  "returnedFunds": null,
+  "defillamaId": null,
+  "language": "Solidity"
+ }
+]

@@ -1,0 +1,33 @@
+Claim-by-claim ledger, built only from the DHC Transfer events of the saved receipts
+(02_receipt_run.json, 02_receipt_drain.json, 02_receipt_cashout.json), independent of any
+call trace. A 'claim' is a DHC Transfer out of the award contract to the attacker contract;
+a 'participation' is one into it. Amounts in raw wei, 18 decimals.
+
+tx 0xd65c82da03c5f5a50a6184a4e1e41df9c7c7cbf00da335b80a0277132a7d5416
+   participations: 101 (100 of them crediting exactly 0 DHC), total in 11877599001241596501800
+   claims        : 101, total out 141566851442695450392200
+      1401651994482133172200 wei x 101  = 141566851442695450392200
+
+tx 0x037771c05fe48def7d3f249879db97ed69f8ccd4405d0cc820983c4c9664cc51
+   participations: 196 (194 of them crediting exactly 0 DHC), total in 190310518181499142745300
+   claims        : 196, total out 628511348532645741041800
+      21441825759844717792800 wei x 18  = 385952863677204920270400
+      1401651994482133172200 wei x 160  = 224264319117141307552000
+      1016342541016639623300 wei x 18  = 18294165738299513219400
+
+tx 0xb4c89845d95fd721e6931dd223e24e8b78a9de8c3b4428251a36d9213e44c496
+   participations: 36 (34 of them crediting exactly 0 DHC), total in 427582059829465013900
+   claims        : 36, total out 908246055809578739400
+      48174636444188718100 wei x 18  = 867143455995396925800
+      2283477767454545200 wei x 18  = 41102599814181813600
+
+TOTAL in  202615699242570204261000
+TOTAL out 770986446031150770173400
+NET       -568370746788580565912400  (568370.7467885806 DHC)
+
+Cross-check against state, read at 08_state_two_providers_2026-09-17.txt:
+  568371829157042339390458 - 1082368461773454472 = 568370746788580565935986 wei
+  log-derived net                                 = 568370746788580565912400 wei
+  difference                                      = 23586 wei
+  DHC is a reflection token: balances move without a Transfer, so the two agree to 1e-13 DHC,
+  not to the raw unit.

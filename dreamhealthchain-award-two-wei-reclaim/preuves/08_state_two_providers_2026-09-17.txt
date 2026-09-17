@@ -1,0 +1,27 @@
+Raw state reads, two independent archive providers plus one latest-state provider.
+Run: 2026-09-17 20:24:51 UTC
+
+=== blastapi(archive) https://bsc-mainnet.public.blastapi.io
+  DHC balanceOf(award contract) @    0x727e6a3 = 568371.8291570423
+  DHC balanceOf(award contract) @    0x727e6a4 = 1.0823684617734544
+  DHC balanceOf(award contract) @       latest = 1.0823684617734544
+  EIP-1967 implementation slot @ latest = 0x0000000000000000000000005abb3fe2a02e5d4320862944cd3a0b8f6af28ce1
+  USDT balanceOf(attacker EOA) @ latest = 71851.01670826238
+  nonce(attacker EOA) @ latest = 4
+
+=== nodereal(archive) https://bsc-mainnet.nodereal.io
+  DHC balanceOf(award contract) @    0x727e6a3 = 568371.8291570423
+  DHC balanceOf(award contract) @    0x727e6a4 = 1.0823684617734544
+  DHC balanceOf(award contract) @       latest = 1.0823684617734544
+  EIP-1967 implementation slot @ latest = 0x0000000000000000000000005abb3fe2a02e5d4320862944cd3a0b8f6af28ce1
+  USDT balanceOf(attacker EOA) @ latest = 71851.01670826238
+  nonce(attacker EOA) @ latest = 4
+
+=== dataseed(latest) https://bsc-dataseed.binance.org
+  DHC balanceOf(award contract) @    0x727e6a3 = {'code': -32000, 'message': 'missing trie node'}
+  DHC balanceOf(award contract) @    0x727e6a4 = {'code': -32000, 'message': 'missing trie node'}
+  DHC balanceOf(award contract) @       latest = 1.0823684617734544
+  EIP-1967 implementation slot @ latest = 0x0000000000000000000000005abb3fe2a02e5d4320862944cd3a0b8f6af28ce1
+  USDT balanceOf(attacker EOA) @ latest = 71851.01670826238
+  nonce(attacker EOA) @ latest = 4
+

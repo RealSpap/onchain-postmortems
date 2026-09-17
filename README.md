@@ -35,9 +35,9 @@ files, nothing summarized or lost in the merge.
 
 | | |
 |---|---|
-| Incidents covered | 42, independently reconstructed on-chain, see the index for detail |
-| Cumulative loss, recomputed | About $783.9M across the 42 incidents ($783,900,029 exactly, sum of the figures in the index below). At least one entry is a known floor, so the real total is higher. |
-| Corrections made | 27 entries below correct, reconcile, or newly surface a press or DefiLlama figure, label, date, or classification (21 corrections, 4 reconciliations, 2 discoveries not previously priced by DefiLlama at all). See Corrections to press and DefiLlama below. |
+| Incidents covered | 43, independently reconstructed on-chain, see the index for detail |
+| Cumulative loss, recomputed | About $784.0M across the 43 incidents ($783,971,880 exactly, sum of the figures in the index below). At least one entry is a known floor, so the real total is higher. |
+| Corrections made | 28 entries below correct, reconcile, or newly surface a press or DefiLlama figure, label, date, or classification (22 corrections, 4 reconciliations, 2 discoveries not previously priced by DefiLlama at all). See Corrections to press and DefiLlama below. |
 | Method | Each subfolder keeps its original Python reconstruction script, its `registre_hypotheses.csv` falsification registry, and its script's raw output in `resultats_*.txt`, so every figure below can be checked against the file that produced it |
 | License | MIT across all 42 entries, single author (s_pap, 2026) |
 
@@ -83,7 +83,7 @@ exact figure decoded from source data.
 
 ### 2026
 
-**2026 total: $783,900,029** across 42 incidents (6 months, April through September). At least one entry this year is a known floor, so the true total is higher.
+**2026 total: $783,971,880** across 43 incidents (6 months, April through September). At least one entry this year is a known floor, so the true total is higher.
 
 #### September 2026 (current month)
 
@@ -96,12 +96,13 @@ exact figure decoded from source data.
 | Symbiosis | 2026-09-11 | ≥ 338,285 [^symbiosis-sybtc-mpc-signed-mint] | Ethereum, BNB Chain, Rootstock | Bridge | Twelve unbacked syBTC mints authorised by the bridge's own live MPC signing key, across three chains | [symbiosis-sybtc-mpc-signed-mint/](symbiosis-sybtc-mpc-signed-mint/) |
 | Cozy V2 | 2026-09-02 / 09-07 | 174,311 [^cozy] | Optimism | Oracle | False answers to the UMA Optimistic Oracle left uncontested during its 5-day dispute window | [cozy-v2-optimism/](cozy-v2-optimism/) |
 | Zentra Finance | 2026-09-09 | ≈ 140,030 [^zentra-finance-atoken-burn-clamp] | Citrea | Rounding/Math-Bug | Aave v3 fork aToken _burnScaled capped the burn to the caller's balance, so repayWithATokens with zero aTokens cleared 140,000 ctUSD of debt while burning nothing; cap added by a 2026-06-25 upgrade | [zentra-finance-atoken-burn-clamp/](zentra-finance-atoken-burn-clamp/) |
+| Dream Health Chain | 2026-09-05 | ≈ 71,851 [^dreamhealthchain-award-two-wei-reclaim] | BSC | Rounding/Math-Bug | Award contract paid a fixed 10 percent of a position's declared amount on every claim, with no claimed-flag and no elapsed-time check, so re-entering the position for 2 wei re-armed the same payout; run 333 times across 5 positions in one block | [dreamhealthchain-award-two-wei-reclaim/](dreamhealthchain-award-two-wei-reclaim/) |
 | BeatSwap (BTX Vesting Contracts) | 2026-09-09 | ≈ 63,705 [^beatswap-vesting-slot0-reserve-drain] | BSC | Oracle | Two permissionless vesting deposit() functions sized the BTX leg of a V3 LP mint from a single PancakeSwap slot0 read; a flash-loan dump made both put their whole BTX reserve into positions the attacker bought back in the same transaction, leaving 22 depositors' vesting claims unpayable | [beatswap-vesting-slot0-reserve-drain/](beatswap-vesting-slot0-reserve-drain/) |
 | Secured Finance (JPYC Lending Market) | 2026-09-05/09-06 | ≈ 45,445 [^securedfinance-jpyc-tokenvault-selflend] | Ethereum | Access-Control | Flash-loan-funded self-matched lend/borrow position on the JPYC market let TokenVault's collateral accounting treat the just-deposited amount as withdrawable, before the flash loan was repaid | [securedfinance-jpyc-tokenvault-selflend/](securedfinance-jpyc-tokenvault-selflend/) |
 | ether.fi Liquid (AtomicQueue) | 2026-09-11 | ≈ 38,004 [^etherfi-atomicqueue-eip7702-solver-drain] | Ethereum | Access-Control | Legacy Veda AtomicQueue.solve() never checks solver==msg.sender; attacker named victims as solver to spend their stale approvals. Reachable only for code-bearing accounts (9 of 11 were EIP-7702), fully reimbursed on-chain | [etherfi-atomicqueue-eip7702-solver-drain/](etherfi-atomicqueue-eip7702-solver-drain/) |
 | Reddio (RedSonic Vault) | 2026-09-05 | ≈ 22,748 [^redsonic-vault-share-registration] | Ethereum | Access-Control | Permissionless registerErc20() let an unprivileged caller register a second share class over the same pooled collateral, letting a flash-loan-funded deposit be redeemed for more than it was worth | [redsonic-vault-share-registration/](redsonic-vault-share-registration/) |
 
-**September 2026 subtotal: $49,986,478** across 11 incidents. Includes 4 known floor figures (Liquid Network, XRP Healthcare (XRPH Wallet), WealthManagementV2, Symbiosis), so the true total is higher.
+**September 2026 subtotal: $50,058,329** across 12 incidents. Includes 4 known floor figures (Liquid Network, XRP Healthcare (XRPH Wallet), WealthManagementV2, Symbiosis), so the true total is higher.
 
 #### August 2026
 
@@ -211,6 +212,7 @@ exact figure decoded from source data.
 [^etherfi-atomicqueue-eip7702-solver-drain]: 14.445541086626480620 liquidETH plus 7.047848 USDC drained from 11 wallets, realized by the attacker as 15.453645063 ETH (EOA balance delta plus gas), which at the 2,459.24 dollars/ETH price DefiLlama's own coins oracle reports for 2026-09-11 07:20 UTC is about 38,004 dollars; DefiLlama's hacks feed lists 43,260 dollars, roughly 14 percent high (it implies about 2,799 dollars/ETH, unsupported by its own oracle). All 11 wallets were reimbursed on-chain within about 9 hours, though DefiLlama still records returnedFunds null. See etherfi-atomicqueue-eip7702-solver-drain/README.md and preuves/07_defillama_vs_onchain.txt. External source: https://www.cryptotimes.io/2026/09/11/ether-fi-loses-15-45-eth-in-legacy-atomicqueue-exploit-ceo-pledges-full-user-reimbursement/.
 [^zentra-finance-atoken-burn-clamp]: 139,999.999999 ctUSD plus 29.999999 USDC.e left Zentra's two affected reserves in one transaction at Citrea block 12428145 (2026-09-09 12:59:37 UTC), 140,029.999998 stablecoin units re-derived two ways that agree to the unit: once from the ctUSD and USDC.e balances held by the two aTokens either side of that block, once by netting the attack contract's own transfers with the aTokens (`zentra-finance-atoken-burn-clamp/preuves/09_reconstruction_output.txt`, and again from Blockscout's token-transfer index in `preuves/12_adversarial_verification_pass.txt`). Priced at $1 per stablecoin that is $140,030, matching DefiLlama's tracked figure to the dollar; the ~$143,000 carried by press does not reproduce from chain data. See `zentra-finance-atoken-burn-clamp/README.md`. External source: https://api.llama.fi/hacks.
 [^beatswap-vesting-slot0-reserve-drain]: 63,704.837356523361110351 USDT forwarded to the attacker's EOA in the exploit transaction at BNB Chain block 120873720 (2026-09-09 11:54:23 UTC), re-derived two ways that agree to the raw unit: once from the executor's external USDT inflows (124,455.686055) minus its spending (60,750.848699), once from the net Transfer arithmetic of a receipt fetched from a different provider (`beatswap-vesting-slot0-reserve-drain/preuves/09_reconstruction_output.txt` and `preuves/12_adversarial_verification_pass.txt`). USDT is priced at $1. This is the value the attacker extracted, not the victims' loss, which is 3,072,493.276543 BTX taken from two vesting reserves and is not given a single dollar figure here. DefiLlama's and SlowMist's $77,512 is the USDT one 2,984,557.865885 BTX sale leg fetched, before the attacker's 48,750.85 USDT buy-back and 12,000 USDT of deposits. See `beatswap-vesting-slot0-reserve-drain/README.md`. External source: https://panews.io/articles/01a08f74-edd7-73aa-8bac-4c7486f16091.
+[^dreamhealthchain-award-two-wei-reclaim]: 71,851.016708262373165555 USDT reached the attacker's wallet in BNB Chain block 120055460 (2026-09-05 05:34:48 UTC), re-derived two ways that agree to the wei: once by netting the USDT Transfer events of the attacker's four receipts, once from `balanceOf` on the EOA either side of that block (`dreamhealthchain-award-two-wei-reclaim/preuves/09_reconstruction_output.txt` and `preuves/08_state_two_providers_2026-09-17.txt`). USDT is priced at $1, and DefiLlama's tracked $71,800 is the same cash-out to within 0.1%. It is not the victim's loss: the award contract went from 568,371.829157 DHC to 1.082368 DHC in that one block, 568,370.746789 DHC or 99.99981% of its balance, a token amount this entry does not convert to a single dollar figure because the only pool for it held 92,688 USDT and the attacker's own selling took its price down 95% inside the block. The correction is to the mechanism's scale, not to the dollar number: the only public technical account, DeFiHackLabs PR #1231 (merged 2026-09-06), describes the reset-and-claim path as run "18x on a single position", where the chain shows 333 claims across 5 positions, 261 of them on the first one, and 328 of the 333 re-entries crediting the contract with exactly 0 DHC. See `dreamhealthchain-award-two-wei-reclaim/README.md`. External sources: https://api.llama.fi/hacks, https://github.com/SunWeb3Sec/DeFiHackLabs/pull/1231.
 
 ## Monthly digests
 
@@ -224,7 +226,7 @@ Full history: [`digests/`](digests/)
 
 Every figure in the Index above is recomputed from each subfolder's own
 source files, then checked against whatever press or DefiLlama already
-published. The 27 rows below are the cases where that check turned up a
+published. The 28 rows below are the cases where that check turned up a
 real gap: a wrong number, a wrong label, a wrong date, a wrong
 classification, or (for Aquifer, Maya Protocol, Virtue Protocol, and
 Float Protocol) a reconciled gap neither side is really "wrong" about, or
@@ -235,6 +237,7 @@ in the linked subfolder; this table gives the headline gap only.
 
 | Incident | Gap (old -> found) | Link |
 |---|---|---|
+| Dream Health Chain | Public PoC: reset-and-claim run "18x on a single position". Found: 333 claims across 5 positions, 261 on the first alone, and DefiLlama's $71,800 is the cash-out, not the 568,370.75 DHC (99.99981% of the balance) the contract lost | [dreamhealthchain-award-two-wei-reclaim/](dreamhealthchain-award-two-wei-reclaim/) |
 | Sandbox (SAND / OFT) | Press: Ethereum leg only. Found: 5.2x higher, 405.83 gross WETH across Base and Ethereum; no dollar total assigned | [sandbox-oft-delegate-hijack/](sandbox-oft-delegate-hijack/) |
 | Balancer V1 (legacy pools) | DefiLlama/press: 1 pool. Found: same wallet drained 4 pools that night; the other 3 quantified only in kind, no price feed | [balancer-v1-rounding/](balancer-v1-rounding/) |
 | Notional Finance (V1 Escrow) | DefiLlama's feed labels the contract "V2". Found: actually V1; the dollar amount itself matches DefiLlama exactly | [notional-v1-escrow/](notional-v1-escrow/) |
