@@ -1,0 +1,94 @@
+== Zentra Finance ctUSD reserve exploit, Citrea: live reconstruction ==
+
+exploit tx 0x9ac5df7e93988cd977e4b1b0564f559ec3096db2fe1abdd97e45c348e3074aa1
+  block 12428145 @ 2026-09-09 12:59:37 UTC, from 0xa73d72d6a858df742fe756da5cb61c2288a95c17 to 0x8d85840f4c05a5d7385498f2a75daa54c6507b4b
+  block contains 2 txs: ['0x1f86da14f2d5543fbba2695d6de1a516cee76400ed43265c8ddc621665598f8c', '0x9ac5df7e93988cd977e4b1b0564f559ec3096db2fe1abdd97e45c348e3074aa1']
+
+  pool / aToken events in order:
+    log 10 Supply   USDC.e 200,000.000000
+    log 18 Borrow   ctUSD  140,000.000000
+    log 25 Burn     zctUSD 140,000.000001 (event value; index 1012226838275314944113071008)
+    log 26 Repay    ctUSD  140,000.000001 useATokens=True
+    log 30 Burn     zUSDC  199,999.999999 (event value; index 1010991052967584263628034382)
+    log 32 Withdraw USDC.e 199,999.999999
+    log 38 Supply   ctUSD  50.000000
+    log 46 Borrow   USDC.e 30.000000
+    log 51 Burn     zUSDC  30.000001 (event value; index 1010991052967584263628034382)
+    log 52 Repay    USDC.e 30.000001 useATokens=True
+    log 56 Burn     zctUSD 49.999999 (event value; index 1012226838275314944113071008)
+    log 58 Withdraw ctUSD  49.999999
+
+== the aToken burn that burned nothing ==
+  zctUSD: scaledTotalSupply 1357533941399 -> 1357533941399 (delta 0); attack contract scaled balance after = 0
+  zUSDC: scaledTotalSupply 156947677899 -> 156947677899 (delta 0); attack contract scaled balance after = 0
+  The contract held no zctUSD before its ctUSD repay (none minted earlier in the tx), yet Repay(useATokens=true) cleared 140,000.000001 ctUSD of debt.
+  The Burn event reports the full value; the scaled supply shows nothing was burned.
+
+== verified source: the clamp ==
+  impl 0x62ff719abcaedead9055ba980fce3821ebdda694 (AToken, v0.8.19+commit.7dd6d404): clamp present = True
+  impl 0x2ec995d521d5248c15b874a5cfb80c65a7dc63f7 (ATokenV2, v0.8.19+commit.7dd6d404): clamp present = False
+  --- current _burnScaled (excerpt) ---
+   uint256 amountScaled = _scaleForBurn(amount, index);
+       require(amountScaled != 0, Errors.INVALID_BURN_AMOUNT);
+   
+       uint256 scaledBalance = super.balanceOf(user);
+       // Safety guard: ceil-rounding the burn (aToken withdraw/liquidation) can overshoot
+       // the user's scaled balance by 1 wei because SupplyLogic sizes `amount` with a
+       // half-up rayMul. Cap the scaled burn to avoid underflowing `_burn` on withdraw(max)
+       // / full liquidation. For floor-rounding callers (vToken repay) this is a no-op.
+       if (amountScaled > scaledBalance) {
+         amountScaled = scaledBalance;
+       }
+       uint256 balanceIncrease = _balanceFromScaled(scaledBalance, index) -
+         _balanceFromScaled(scaledBalance, _userState[user].additionalData);
+   
+       _userState[user].additionalData = index.toUint128();
+   
+       _burn(user, amountScaled.toUint128());
+   
+
+== when the clamp went live ==
+  zctUSD Upgraded -> 0x2ec995d521d5248c15b874a5cfb80c65a7dc63f7 at block 2971671 (2026-02-02 14:48 UTC) tx 0x7501848ef22953cb7c94e2c8cd8fd6959bc061b5d279e2e1ba94f4dd594d6d9e
+  zctUSD Upgraded -> 0x62ff719abcaedead9055ba980fce3821ebdda694 at block 9161296 (2026-06-25 22:01 UTC) tx 0xe473cb44f0c7038c5758cace629555ba2125914b7ea6aeadae1e0493c627daae
+  zctUSD Upgraded -> 0x41b70b89faaa44a98b4fe5c02630856c241811f8 at block 12746471 (2026-09-16 21:50 UTC) tx 0x372509f01bd19f0bd9ec7c574faba02b3378834283cb9b358c10c2d3b5d0b369
+  zctUSD implementation at latest block: 0x41b70b89faaa44a98b4fe5c02630856c241811f8
+  zUSDC Upgraded -> 0x2ec995d521d5248c15b874a5cfb80c65a7dc63f7 at block 2971669 (2026-02-02 14:48 UTC) tx 0x044c63adaba4f9eb2bd28cb735f03b50130c6f3854fd31127c331aedcb47e4aa
+  zUSDC Upgraded -> 0x62ff719abcaedead9055ba980fce3821ebdda694 at block 9161294 (2026-06-25 22:01 UTC) tx 0xfb5408ecf86de7834b170cd0090d3d07517b10b4440b1bd6eca7ce081b1eb9f5
+  zUSDC Upgraded -> 0x41b70b89faaa44a98b4fe5c02630856c241811f8 at block 12746471 (2026-09-16 21:50 UTC) tx 0x372509f01bd19f0bd9ec7c574faba02b3378834283cb9b358c10c2d3b5d0b369
+  zUSDC implementation at latest block: 0x41b70b89faaa44a98b4fe5c02630856c241811f8
+
+== implementation live today ==
+  impl 0x41b70b89faaa44a98b4fe5c02630856c241811f8 (AToken, verified=True): clamp present = True, overshoot bounded to 1 scaled unit = True, post-clamp zero-burn rejected = True
+
+== what left the reserves ==
+  ctUSD held by zctUSD: 147,152.479895 -> 7,152.479896  (-139,999.999999)
+  USDC.e held by zUSDC: 32,318.019686 -> 32,288.019687  (-29.999999)
+  method A (reserve cash deltas): 140,029.999998 stablecoin units
+
+== the hole left in the ctUSD reserve ==
+  before: supplier claims (zctUSD) 1,374,132.285615 | cash 147,152.479895 + variable debt 1,227,018.414225 = 1,374,170.894120 | backing gap -38.608505 (-0.00%)
+  after: supplier claims (zctUSD) 1,374,132.289353 | cash 7,152.479896 + variable debt 1,227,018.418379 = 1,234,170.898275 | backing gap 139,961.391078 (10.19%)
+
+== pause state ==
+  ctUSD at 12428144: active=1 frozen=0 paused=0
+  ctUSD at latest: active=1 frozen=0 paused=1
+  USDC.e at 12428144: active=1 frozen=0 paused=0
+  USDC.e at latest: active=1 frozen=0 paused=1
+
+== cash-out ==
+  Citrea swap 0xdd0c7777d1…: 139,999.999999 ctUSD -> 139,940.792477 USDC.e to the EOA
+  Citrea OFT send 0xa88d1f4c15…: 139,959.692499 USDC.e burned toward LayerZero eid 30101 (Ethereum)
+  Ethereum block 25940052: 139,959.692499 USDC swapped via MetaMask Swaps for 55.160465780922437311 ETH
+  0xb6a9b5bc4b…: 55.182876157279836053 ETH  attacker -> 0x4eb55301d7848750059300e5ca62ec8de3b4f56a
+  0x65b65150b3…: 0.004249243687652093 ETH  0x4eb55301d7848750059300e5ca62ec8de3b4f56a -> attacker (block 25935274, the day before)
+  funder at Ethereum block 25996322: balance 55.118876951619856472 ETH, nonce 12
+
+== Zentra's on-chain messages ==
+  0x31ca0dfcbc… 0x76be77a14e8bdf7fb6dfb05bf1b8ac0b21c2f860 -> 0x4eb55301d7848750059300e5ca62ec8de3b4f56a (block 25954683): This message is from Zentra Finance. It concerns the 9 September 2026 exploit of our ctUSD reserve on Citrea, …
+  0xfa8d3ab1de… 0x76be77a14e8bdf7fb6dfb05bf1b8ac0b21c2f860 -> 0xa73d72d6a858df742fe756da5cb61c2288a95c17 (block 25954693): This message is from Zentra Finance. It concerns the 9 September 2026 exploit of our ctUSD reserve on Citrea, …
+
+DefiLlama record: amount 140030, technique Rounding Error, chain ['Citrea']
+
+== adversarial self-check: loss recomputed from the attack contract's own transfers ==
+  method B: ctUSD net 139,999.999999 + USDC.e net 29.999999 = 140,029.999998
+  OK: both methods give 140,029.999998
