@@ -17,9 +17,9 @@ never from a block-explorer name search.
 |---|---|
 | Incident | Governance takeover of an abandoned DAO, used to swap the Controller of every SMART Yield provider and drain live ERC-20 approvals, Ethereum mainnet |
 | Window | 2026-07-06 08:08:11 UTC (first BOND stake) to 2026-07-23 17:34:35 UTC (last extraction), 17 days 9 hours |
-| Press figure | ~$776K in USDC, ~50 users, one transaction (BlockSec); DefiLlama: $776,000, dated 2026-07-14 |
+| Press figure | ~$776K in USDC, ~50 users, one transaction (BlockSec); DefiLlama: $776,000, dated 2026-07-14; ~$777,000 across two sweeps (Blockaid, published after this entry, see 2026-09-18 note below) |
 | Verified independently | **$1,931,365.22** — 1,877,869.183182 USDC + 51,759.121322 USDT + 1,736.920247 DAI, across 17 extraction transactions |
-| Correction to press | The published figure is one transaction out of seventeen. The 774,943.379409 USDC of tx `0xd191fead…` is real and exactly matches the "50 users" claim (50 distinct source wallets, counted leg by leg), but it is 40% of the total |
+| Correction to press | The published figure is at most two transactions out of seventeen. BlockSec and DefiLlama price the incident from `0xd191fead…` alone (774,943.379409 USDC, and its "50 users" is exactly right: 50 distinct source wallets, counted leg by leg); Blockaid additionally names `0x7d722637…` (1,632.168524 USDC). The two together are 776,575.547933 USDC, 40.2% of the total |
 | Correction to DefiLlama | Feed dates the incident 2026-07-14 00:00:00 UTC. The first extraction is at block 25,535,120, 2026-07-15 02:39:47 UTC. The feed is a day early; BlockSec's July 15 is right |
 | Discovery not in any source found | Proposals 15 and 16 were also executed. Proposal 16 transferred `owner`/`dao` of **ten** core BarnBridge contracts, including the Barn staking contract itself, to the attacker EOA |
 | Still live today | Partially. At block 25,955,104 (2026-09-11 15:37:47 UTC) all ten proposal-16 targets are still owned by the attacker EOA, and every SmartYield *token* contract still points at the attacker-installed Controller. But the bb_cUSDC *pool* contract itself (the fund-custody address, same one H11 traces the theft to) now points at a third, unattributed Controller instead — see 'What's still open' below |
@@ -254,8 +254,11 @@ down and the keys are left with a smart contract that will hand them to
 whoever shows up with enough tokens. A dormant DAO is not an unowned
 protocol; it is a protocol whose owner is for sale at the market price of its
 governance token. BlockSec's own figure for that price here is 0.335 ETH for
-about 32,795 BOND. The consideration that bought $1.9M of other people's
-money was roughly a thousand dollars.
+about 32,795 BOND; Blockaid, writing later, prices the 32,000 BOND the
+attacker locked at about $600. Neither figure was re-derived here and the two
+measure slightly different things, but on either of them the consideration
+that bought $1.9M of other people's money was a few hundred to about a
+thousand dollars.
 
 It also sits next to `termfinance-metavault-governance` already in this repo,
 which is the same class of bug on live governance rather than abandoned
@@ -287,7 +290,21 @@ governance.
   percentage or the purchase price.
 - No official BarnBridge post-mortem was found (38 repositories enumerated on
   their GitHub organisation, plus a targeted search). Absence of a finding is
-  not proof of absence.
+  not proof of absence. Re-checked 2026-09-18: still none.
+- Source review, 2026-09-18. Blockaid has since published a full write-up
+  ("Governance Takeovers: How $22M Was Drained and How to Stop Them"), where
+  on 2026-09-11 this project had only their pre-drain approval alert on X.
+  It is the first source found here to publish the *second* transaction hash,
+  `0x7d722637a58a7117dbca0182ec26d74e2be0c1052ac319f0150bc056e528d238`, and it
+  prices the incident at "$777,000" / "approximately $776,600 across two
+  sweeps". That transaction was already in this project's own evidence
+  (`preuves/05_outflow_tx_classification.txt`, row 2 of the extraction table)
+  and was re-fetched and re-confirmed independently on 2026-09-18; see
+  `resultats_sources_2026-09-18.txt`. The headline correction is unchanged:
+  two of seventeen transactions, 40.2% of the verified total. DefiLlama's
+  record was re-fetched the same day and is byte-identical to
+  `preuves/12_defillama_hacks_record.json` (still $776,000, still
+  `source: ""`).
 - The August–September flows are explicitly unattributed. See above.
 
 ## Files

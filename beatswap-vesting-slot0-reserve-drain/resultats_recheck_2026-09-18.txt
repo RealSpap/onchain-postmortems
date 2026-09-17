@@ -1,0 +1,193 @@
+ROTATING FIGURE-FRESHNESS RE-CHECK: 2026-09-18
+Entry: beatswap-vesting-slot0-reserve-drain
+Original reconstruction: 2026-09-14, snapshot block 121829657.
+
+This entry came up in the pipeline's rotating re-check. Nothing was suspected
+wrong with it. One live claim had in fact gone stale, and is corrected in the
+README's new section "Both contracts were paused on 2026-09-15, and it
+changes less than it looks". Nothing in the original reconstruction of the
+exploit itself changed.
+
+
+--------------------------------------------------------------------------
+0. SOURCES RE-CHECKED FIRST
+--------------------------------------------------------------------------
+DefiLlama, curl https://api.llama.fi/hacks, name == "BeatXswap", 2026-09-18:
+
+{"date": 1788912000, "name": "BeatXswap", "classification": "Oracle
+ Manipulation", "technique": "Spot Price Manipulation", "amount": 77512,
+ "chain": ["BSC"], "bridgeHack": false, "targetType": "DeFi Protocol",
+ "source": "", "returnedFunds": null, "defillamaId": null,
+ "language": "Solidity"}
+
+Unchanged from preuves/07_defillama_record.json. Amount still 77512, source
+still empty.
+
+Targeted search for a BeatSwap post-mortem or refund announcement re-run
+2026-09-18: still none found. Press coverage remains the SlowMist relay.
+One note: some relays describe the venue as "Uniswap V3". The pool
+0xA5Db84d7BCcb799fb31bd3c417D04d5bC29Da96D is PancakeSwap V3, a Uniswap V3
+fork on BNB Chain, as this entry already states. No change needed.
+
+
+--------------------------------------------------------------------------
+1. THE STALE CLAIM: BOTH CONTRACTS ARE NOW PAUSED
+--------------------------------------------------------------------------
+eth_call paused() (0x5c975abb), latest block, bsc-dataseed.binance.org,
+BSC block 122491393:
+
+  V1 0x1e647FAADb05f2124BFCcFC003EDc06D1A90bf5D  paused() = true
+  V2 0x9a7A92240FBAc4030b65A6E61239928d6Bcc716F  paused() = true
+
+The entry recorded both as unpaused at block 121829657. Confirmed on the
+archive endpoint bsc-mainnet.public.blastapi.io that paused() was still
+false at that block, so the entry was correct when written.
+
+Transition located by bisecting paused() over blocks 121829657..122491393
+on bsc-mainnet.public.blastapi.io:
+
+  V1: last unpaused 121977388, first paused 121977389
+      block 121977389 timestamp = 2026-09-15 05:56:14 UTC
+  V2: last unpaused 121977571, first paused 121977572
+      block 121977572 timestamp = 2026-09-15 05:57:36 UTC
+
+82 seconds apart, six days after the exploit, one day after this entry's
+snapshot.
+
+
+--------------------------------------------------------------------------
+2. WHO PAUSED THEM
+--------------------------------------------------------------------------
+No transaction in either block is addressed to a vesting contract, which is
+why a scan filtering on tx.to == contract finds nothing. Both contracts'
+owner() is a contract:
+
+  owner() of V1 = 0x62382d13b909b611c17b54eb19f8e5bc3d9c1e24  (has code)
+  owner() of V2 = 0x62382d13b909b611c17b54eb19f8e5bc3d9c1e24  (has code)
+
+Filtering each block on tx.to == that owner gives exactly one transaction
+each:
+
+  block 121977389
+    tx       0xfc666dc9bc18cf73b2740c4406b8aae86ce9e004370de80e2e6058555f9a7e25
+    from     0xa7f7ef6946427932547d44cf1132c54269cd379a
+    to       0x62382d13b909b611c17b54eb19f8e5bc3d9c1e24
+    selector 0x6a761202   (execTransaction, Gnosis Safe)
+    status   0x1
+    logs     owner contract event, then from V1:
+             Paused(0x62382d13b909b611c17b54eb19f8e5bc3d9c1e24)
+             topic0 0x62e78cea01bee320cd4e420270b5ea74000d11b0c9f74754ebdbfc544b05a258
+
+  block 121977572
+    tx       0x0b59b691f3a2863d6df19730983fc96b80970f3afc051affebc9948be9d595e0
+    from     0xa7f7ef6946427932547d44cf1132c54269cd379a
+    to       0x62382d13b909b611c17b54eb19f8e5bc3d9c1e24
+    selector 0x6a761202
+    status   0x1
+    logs     owner contract event, then from V2:
+             Paused(0x62382d13b909b611c17b54eb19f8e5bc3d9c1e24)
+
+setPause(bool) is onlyOwner in both verified sources
+(02_LiquidityVestingConvert_0x1e64_verified.sol line 159, and the V2
+equivalent), so this is the project's own multisig acting, not a third party.
+
+
+--------------------------------------------------------------------------
+3. WHAT THE PAUSE COVERS
+--------------------------------------------------------------------------
+grep for whenNotPaused in both verified sources:
+
+  02_LiquidityVestingConvert_0x1e64_verified.sol
+    171: function deposit(uint256 usdtAmount) external nonReentrant whenNotPaused
+    225: function withdraw(uint256 vestingId) external nonReentrant
+    276: function claimBatch(uint256[] calldata vestingIds) external nonReentrant
+
+  02b_LiquidityVestingConvertOnce_0x9a7a_verified.sol
+    176: function deposit(uint256 usdtAmount) external nonReentrant whenNotPaused
+    233: function withdraw() external nonReentrant
+    285: function claim() external nonReentrant
+
+whenNotPaused is on deposit() only. The exploit path is closed. Claims,
+batch claims and withdrawals are not gated by the pause.
+
+
+--------------------------------------------------------------------------
+4. CLAIM SIMULATIONS RE-RUN AFTER THE PAUSE
+--------------------------------------------------------------------------
+eth_call from each depositor address, latest block, bsc-dataseed.
+V1: claimBatch([id]) selector 0x62abebce. V2: claim() selector 0x4e71d92d.
+Revert selectors resolved by keccak of each custom error in the verified
+sources.
+
+  0xe694b68f = InsufficientVestingBalance()
+  0xf16eeebd = InsufficientRewardBalance()
+  0x6507689f = AlreadyWithdrawn()
+  0xd93c0665 = EnforcedPause()        <- returned by NO call below
+
+V1 (5 records):
+  id=23  0x12584Af4D2beF399E166858cd6a7504d609E4A35   390,196.78 BTX  InsufficientVestingBalance
+  id=24  0xaD4De0001b2436AECeD23Dd265815e06E241769c   328,183.80 BTX  InsufficientVestingBalance
+  id=25  0x4829C9754B63a6BA032EB18856A659077f93D01e   305,087.50 BTX  InsufficientVestingBalance
+  id=22  0xCB2cE16A004199aFF9e351E2Bb347b28461e08Bb   291,742.39 BTX  InsufficientVestingBalance
+  id=0   0xc5A974C004F1c381Ca0246d1A34f6cedDD84884A        50.30 BTX  InsufficientVestingBalance
+
+V2 (18 records):
+  id=73  0xa90d6faf5b17A83935a0d61F580929157Af97B2e   115,422.08 BTX  InsufficientRewardBalance
+  id=80  0x6F990dcaB60b606e1910228e2c301C6206eaB27E   112,667.04 BTX  InsufficientRewardBalance
+  id=81  0xB8c3876cc206175bFe7cc70f7941AC854514C4EE   112,305.98 BTX  InsufficientRewardBalance
+  id=82  0x3792CbD57c62c823420F7a777b47A16809858132   110,004.52 BTX  InsufficientRewardBalance
+  id=76  0xfd98f79c9E29f96520a1a332147cC5fA291567A1   105,170.05 BTX  AlreadyWithdrawn
+  id=78  0x40cb0C05Fe179E9357711B3Af6123026A0f8B7a8   100,483.94 BTX  InsufficientRewardBalance
+  id=83  0x80b44f26a5e2926bc74a5B8D67dD9acE2687c56F    94,968.21 BTX  InsufficientRewardBalance
+  id=77  0x5ced5000E42C3E003459416411c7BAF92efd225a    93,360.54 BTX  AlreadyWithdrawn
+  id=84  0x0413FaD57EA273b160B8E5bb64bBc63812b92E02    92,107.83 BTX  InsufficientRewardBalance
+  id=79  0xbCA1663BA07772b1Ab0B54952af5B6BA848fAb42    89,107.31 BTX  AlreadyWithdrawn
+  id=88  0xD3973402E1Fb69885281C944c118DD56F35e63B0    82,982.51 BTX  InsufficientRewardBalance
+  id=86  0xEFB4d08bAC45Fc46c7244F7f62b8FA4850e69B46    81,507.08 BTX  InsufficientRewardBalance
+  id=85  0x9c388BBBDD55156a3fA6DfFB94DBa0Be3F0BECDA    71,832.73 BTX  InsufficientRewardBalance
+  id=74  0x0a4e64C88FB9b5b21Ad64d284648531AAb7014Ee    55,855.20 BTX  AlreadyWithdrawn
+  id=75  0xDAD57ff75666AeBa21Dae6fcD664bCdA866dD9E1    55,807.78 BTX  AlreadyWithdrawn
+  id=87  0x687d1316fC79884fDA2e41C0109B4D8c079AD1b6    52,574.39 BTX  InsufficientRewardBalance
+  id=0   0xc5A974C004F1c381Ca0246d1A34f6cedDD84884A        10.06 BTX  InsufficientRewardBalance
+  id=1   0x17703fa0C85da6ec3AB6559d8a82D885008FC1dA        10.06 BTX  InsufficientRewardBalance
+
+The two headline simulations in the entry still revert with exactly the
+errors it states. No call returned EnforcedPause(), confirming the pause is
+not what is blocking them.
+
+Five V2 records now return AlreadyWithdrawn(). V2's withdraw() pays pending
+vesting only inside `if (pending > 0)`, then decreases liquidity, collects,
+burns the NFT and sets info.withdrawn = true. So those five recovered their
+LP position and were paid no BTX.
+
+  as of 2026-09-14 : 23 records, 22 addresses, 2,880,330.46 BTX
+  withdrawn since  :  5 records,  5 addresses,   399,300.88 BTX  (all V2)
+  still open       : 18 records, 17 addresses, 2,481,029.58 BTX
+  399,300.88 + 2,481,029.58 = 2,880,330.46, reconciles exactly.
+
+
+--------------------------------------------------------------------------
+5. RESERVES AND CASH-OUT, RE-READ
+--------------------------------------------------------------------------
+BTX.balanceOf, latest block:
+  V1 0.012405213610261196 BTX   unchanged from 2026-09-14
+  V2 0.139706768237304241 BTX   was 0.018160, up 0.121547 BTX
+
+The V2 increase is far below any open entitlement (the smallest open V2
+record is 10.06 BTX) and does not change any claim simulation above. Its
+origin was not traced.
+
+Ethereum, gateway.tenderly.co/public/mainnet:
+  DAI.balanceOf(0x67b2f08683a735cfe6f6e57fa86909b62218c2a1)
+    = 63,678.085614 DAI
+  eth_getTransactionCount = 4
+
+Unchanged. Still untouched since 2026-09-10.
+
+
+--------------------------------------------------------------------------
+6. EFFECT ON THE QUEUED X THREAD
+--------------------------------------------------------------------------
+This entry's drafted thread said "Five days on, neither contract is paused".
+That is now false. The thread was rewritten on 2026-09-18 against the facts
+above before being posted. See the pipeline's x_queue.json notes.

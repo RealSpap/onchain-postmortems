@@ -1,0 +1,113 @@
+ROTATING SOURCE-FRESHNESS REVIEW: 2026-09-18
+Entry: barnbridge-dormant-dao-controller-swap
+Reviewed because this entry came up in the pipeline's rotating figure-freshness
+step, not because anything was suspected wrong with it.
+
+Two questions were asked: (1) does a more authoritative source exist now than
+existed on 2026-09-11, and (2) has DefiLlama's own record moved.
+
+
+--------------------------------------------------------------------------
+1. DEFILLAMA: RE-FETCHED, UNCHANGED
+--------------------------------------------------------------------------
+curl https://api.llama.fi/hacks, filtered to name == "BarnBridge", 2026-09-18:
+
+{"date": 1783987200, "name": "BarnBridge", "classification": "Governance",
+ "technique": "Malicious Proposal", "amount": 776000, "chain": ["Ethereum"],
+ "bridgeHack": false, "targetType": "DeFi Protocol", "source": "",
+ "returnedFunds": null, "defillamaId": "131", "language": "Solidity"}
+
+Byte-identical to preuves/12_defillama_hacks_record.json. Amount still
+776000, source still empty, date still 1783987200 (2026-07-14 00:00:00 UTC).
+Registry rows H1 and the "Correction to DefiLlama" line both still hold.
+
+
+--------------------------------------------------------------------------
+2. OFFICIAL BARNBRIDGE POST-MORTEM: STILL NONE
+--------------------------------------------------------------------------
+Targeted search re-run 2026-09-18 ("BarnBridge SMART Yield governance
+takeover post-mortem official statement 2026"). No statement from BarnBridge
+itself surfaced. The README's caveat on this point stands.
+
+
+--------------------------------------------------------------------------
+3. A BETTER PRESS SOURCE DOES NOW EXIST: BLOCKAID
+--------------------------------------------------------------------------
+On 2026-09-11 the only Blockaid material this project had was their pre-drain
+community alert on X (preuves/14_press_and_defillama_verbatim.txt, SOURCE 4),
+which warned about approval risk and explicitly said "There is no confirmed
+drain at this time".
+
+Blockaid has since published a full write-up:
+  "Governance Takeovers: How $22M Was Drained and How to Stop Them"
+  https://blockaid.io/blog/governance-takeovers-how-22m-was-drained-and-how-to-stop-them
+  Retrieved 2026-09-18 via WebFetch.
+
+What it states about BarnBridge, verbatim where quoted:
+  Loss:            "$777,000" (described as approximately $776,600 across two
+                   sweeps)
+  Sweep times:     02:39 and 02:47 UTC, July 15 2026
+  Affected:        "roughly 50 wallets"
+  Governance cost: "The attacker locked about 32,000 BOND, roughly $600, and
+                   pushed through a proposal that looked like a routine proxy
+                   upgrade."
+  Transaction hashes given (BOTH):
+    0xd191fead1b9a2244f2837560f35d4fc865404914d229bfcb0172d1a7a9895afb
+    0x7d722637a58a7117dbca0182ec26d74e2be0c1052ac319f0150bc056e528d238
+
+This is the first source found by this project to publish the second hash.
+It does not change any figure this project derived; it changes how the press
+correction must be worded. "The published figure is one transaction out of
+seventeen" was accurate against BlockSec and DefiLlama and remains accurate
+about them, but it is no longer accurate about the best-published account.
+The README now says "at most two transactions out of seventeen" and names
+which source publishes which.
+
+Blockaid's own $22M total covers Token of Power ($1.59M, June 9), BonkDAO
+($20M, July 6), BarnBridge (~$777,000, July 15) and four further incidents
+including Panther and Unicly. Only the BarnBridge line is in scope here and
+only it was read.
+
+
+--------------------------------------------------------------------------
+4. THE SECOND TRANSACTION, RE-DERIVED INDEPENDENTLY ON 2026-09-18
+--------------------------------------------------------------------------
+Rather than cite Blockaid for the second hash, it was re-fetched from chain.
+This transaction was already in this project's own evidence at
+preuves/05_outflow_tx_classification.txt (row 2 of the extraction table) and
+in the README's extraction table; only the press-correction sentence was
+behind.
+
+eth_getTransactionByHash / eth_getTransactionReceipt, endpoint
+gateway.tenderly.co/public/mainnet, 2026-09-18:
+
+  tx        0x7d722637a58a7117dbca0182ec26d74e2be0c1052ac319f0150bc056e528d238
+  block     25535160
+  blockHash 0xb11344f2be59f1719d87ff9f364fde5f32928fdf9430579a92b3573a1d9bc102
+  status    0x1 (success)
+  from      0xf908610e9174c7cd6e9dfd371e238be4511297a1  (attacker EOA)
+  to        0x66c6f3b4b4b458e6d764759ecf122484ebef7580  (attacker Controller A)
+  selector  0xe321fa05                                  (same as every other
+                                                          non-probe extraction)
+  gasUsed   1040193
+
+  USDC Transfer logs: 44, from 44 distinct source addresses.
+  43 of them are victim wallets paying into the bb_cUSDC provider
+  0xdaa037f99d168b552c0c61b7fb64cf7819d78310; the 44th is a 0.000000 USDC log
+  from 0x39aa39c021dfbae8fac545936693ac917d5e7563 (Compound cUSDC), the
+  provider's own accounting leg, not a victim.
+  Final leg out: 1,632.168524 USDC
+    0xdaa037f99d168b552c0c61b7fb64cf7819d78310
+    -> 0xf908610e9174c7cd6e9dfd371e238be4511297a1
+
+  Matches the README's extraction-table row for block 25,535,160 exactly
+  (1,632.168524 USDC to 0xf908610e…), and matches
+  preuves/05_outflow_tx_classification.txt line for line.
+
+Arithmetic on the two published sweeps:
+  774,943.379409 + 1,632.168524 = 776,575.547933 USDC
+  776,575.547933 / 1,931,365.22 = 40.21%
+Blockaid's "approximately $776,600" is this sum rounded. The README's "40% of
+the total" was already right and is now stated as 40.2%.
+
+No figure in this entry changed as a result of this review.
