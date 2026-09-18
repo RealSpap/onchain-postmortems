@@ -1,0 +1,92 @@
+== 1. DefiLlama record
+  {"date": 1789516800, "name": "Flamincome", "classification": "Oracle Manipulation", "technique": "Spot Price Manipulation", "amount": 595000, "chain": ["Ethereum"], "bridgeHack": false, "targetType": "DeFi Protocol", "source": "", "returnedFunds": null, "defillamaId": "243", "language": "Solidity"}
+
+== 2. The exploit transaction
+  block 25990443, 2026-09-16 13:49:59 UTC, from 0x83381e7f7232775735169d72d237b858ffc36871, status 0x1
+  contract creation: to=None, created 0x1c7eacef3630e764519e6ea2e8caa2bdb7d8b486, 132 logs
+  attack contract (constructor-created) 0x875da4bd7b4a52a806a533b1cf6d6ff92365d2e6
+  flash loan from Morpho: 18,093,111.000000 USDT, repaid 18,093,111.000000 USDT
+  deposit into VaultYUSDT: 17,935,898.484800 USDT -> 120,721.525790 YUSDT minted; 120,721.525790 YUSDT burned later in the same tx
+  USDT leaving the Strategy in this tx:
+    log  10 -> 0x4b827d771456abd5afc1d05837f915577729a751  0.042000
+    log  11 -> 0x749e50bb28e8098e05478c337f5dd2506e39dbb1  13.958000
+    log 125 -> 0x4b827d771456abd5afc1d05837f915577729a751  92,658.360150
+    log 126 -> 0x875da4bd7b4a52a806a533b1cf6d6ff92365d2e6  18,439,013.669987
+  USDT entering the Strategy in this tx:
+    log  16 <- 0x0461eeff7c856020e574c0c364fe968ca06bcc0f  17,935,898.485800
+    log 121 <- 0x3ed3b47dd13ec9a98b44e6204a523e766b225811  544,259.649474
+  Strategy USDT out minus USDT in (Aave redemption excluded): 595,787.544337 USDT
+  of which paid to governance 0x4b827d771456abd5afc1d05837f915577729a751 as withdraw fee: 92,658.402150 USDT
+  profit forwarded to the EOA: 345,902.669987 USDT
+  other USDT the attack contract sent out:
+    log   2 -> 0xff4eb4541ccb20587c78c8639dd89cbe2588a4d0  13.883321
+    log  18 -> 0xbebc44782c7db0a1a60cb6fe97d0b483032ff1c7  39,934.640179
+    log  47 -> 0x06da0fd433c1a5d7a4faa01111c044910a184553  138.038700
+    log  55 -> 0xbebc44782c7db0a1a60cb6fe97d0b483032ff1c7  8.592000
+    log  84 -> 0x000000000004444c5dc75cb358380d2e3de08a90  11.619000
+    log  90 -> 0x3c8caee4e09296800f8d29a68fa3837e2dae4940  117,119.700000
+  total 157,226.473200 USDT; USDT that came back from the XUSDT probe: 13.958000
+  of which spent acquiring the usdp3CRV (everything except the first, probe, swap): 157,212.589879 USDT
+  Convex reward pool Staked(user=0xb8d6471ca573c92c7096ab8600347f6a9fe268a5, 691,647.799229 usdp3CRV)
+
+== 3. Reconciliation
+  attacker: withdraw 18,439,013.669987 + probe return 13.958000 - deposit 17,935,898.484800 - other spend 157,226.473200 = 345,902.669987
+  Strategy: USDT out minus USDT in = 595,787.544337; USDT+aUSDT balance drop across the block = 595,787.542728
+  split: attacker profit 345,902.669987 + governance fees 92,658.402150 + attacker's other spend 157,226.473200 = 595,787.545337
+
+== 4. State either side of the block, and now
+  block 25990442: YUSDT supply 21,517.468169, VaultYUSDT.balance() 3,196,903.965610 (price 148.572497 USDT/share)
+      XUSDT supply 308,534.360817; Strategy holds USDT 51,527.894863, aUSDT 3,453,910.431564, Convex-staked usdp3CRV 0.000000
+      implied deposited() 3,453,910.431564; minus aUSDT 0.000000; usdp3CRV virtual price 1.0148703752
+  block 25990443: YUSDT supply 21,517.468169, VaultYUSDT.balance() 3,303,094.956907 (price 153.507603 USDT/share)
+      XUSDT supply 308,520.360817; Strategy holds USDT 0.000000, aUSDT 2,909,650.783699, Convex-staked usdp3CRV 691,647.799229
+      implied deposited() 3,611,615.317724; minus aUSDT 701,964.534025; usdp3CRV virtual price 1.0149161680
+  block 26003447: YUSDT supply 13.216033, VaultYUSDT.balance() 1,301.371710 (price 98.469163 USDT/share)
+      XUSDT supply 308,520.360817; Strategy holds USDT 0.000000, aUSDT 309,821.732527, Convex-staked usdp3CRV 0.000000
+      implied deposited() 309,821.732527; minus aUSDT 0.000000; usdp3CRV virtual price 1.0150709402
+  after the block, the Convex position is booked at 701,964.534025 USDT; LP x virtual_price = 701,964.534025
+  price per share 148.572497 -> 153.507603
+  real stablecoin held by the Strategy 3,505,438.326427 -> 2,909,650.783699
+
+== 5. After the exploit: who withdrew, and what the LP turned into
+  block 25993939 (11.7 h after the exploit) 0x1533ae36ed8cefcea13dea730a73d2c24f5780d4c719f4714f4c095b75d67383: 0x3d920c35a92f9a224d2918568647c8f9789bee2a burns 9,335.494611 YUSDT; Strategy pays 7,165.363106 to 0x4b827d771456abd5afc1d05837f915577729a751, 1,425,907.258125 to 0x3d920c35a92f9a224d2918568647c8f9789bee2a
+      sent by 0x3d920c35a92f9a224d2918568647c8f9789bee2a
+      gross 1,433,072.621231 USDT = 153.507948 per share, vs 148.572497 per share before the exploit; at the pre-exploit price these shares were worth 1,386,997.741018 gross, difference +46,074.880213
+  block 25995865 (18.1 h after the exploit) 0x557b27c57cac5e005c956e0b5925f09abc9600a2409f7073bc191c7852bf82bf: 0x4b827d771456abd5afc1d05837f915577729a751 burns 12,168.757525 YUSDT; Strategy pays 1,196,764.744059 to 0x4b827d771456abd5afc1d05837f915577729a751, 0.000000 to 0x4b827d771456abd5afc1d05837f915577729a751
+      sent by 0x6c3192ff89b6e20430e3f2069c1133bc64cef46a (the strategist)
+      gross 1,196,764.744059 USDT = 98.347324 per share, vs 148.572497 per share before the exploit; at the pre-exploit price these shares were worth 1,807,942.685574 gross, difference -611,177.941515
+  pre-exploit holdings: governance 12,168.757525 YUSDT of 21,517.468169
+  Convex Withdrawn(user=Strategy): 16 txs, blocks 25995051-25995113, 691,647.799229 usdp3CRV, senders {'0x6c3192ff89b6e20430e3f2069c1133bc64cef46a': 16}
+  USDP Strategy -> 0x6c3192ff89b6e20430e3f2069c1133bc64cef46a: 721,614.516498 (block 25995246)
+  strategist sold 321,614.516484 USDP in 15 txs for 88,387.542045 USDT (average 0.2748 USDT per USDP)
+  of those 15 txs, 3 were sent by the strategist itself and 12 by other addresses; every one credits it USDT
+  strategist still holds 400,000.000014 USDP at block 26003447
+  strategist -> Strategy 30,000.000000 USDT (block 25995314)
+  now: aUSDT held 309,821.732527 vs XUSDT supply 308,520.360817; YUSDT supply 13.216033
+
+== 6. Funding and cash-out
+  block 25990287 13:18:35 UTC: withdrawal event from 0x12d66f87a04a9e220743712ce6d9bb1b5616b8fc naming recipient 0x83381e7f7232775735169d72d237b858ffc36871
+  gap to the exploit: 31.4 minutes
+  Blockscout label of 0x12d66f87a04a9e220743712ce6d9bb1b5616b8fc: TornadoCash_Eth_01
+  LI.FI swap (block 25990456): 345,902.669987 USDT in
+  forward (block 25990460): 144.149159 ETH to 0x7b698cc3697d530afac1b5085b14106a9b3dc306
+  0x7b698cc3697d530afac1b5085b14106a9b3dc306 now: nonce 38, balance 0.00001148 ETH
+
+== Checks (17/17 pass)
+  [PASS] DefiLlama carries Flamincome at 595000 USD
+  [PASS] exploit tx is a successful contract creation sent by the attacker EOA
+  [PASS] Morpho flash loan repaid in full in the same tx
+  [PASS] every YUSDT share minted to the attacker is burned in the same tx
+  [PASS] attacker EOA receives 345,902.669987 USDT
+  [PASS] the attacker's usdp3CRV was staked on Convex for the Strategy, not for itself
+  [PASS] the attacker's USDT ledger nets to exactly the profit sent to the EOA
+  [PASS] the Strategy's transfer-level outflow matches its balance drop to within 0.01 USDT (aUSDT interest)
+  [PASS] profit + governance fees + other spend equals the Strategy's outflow to within 0.01 USDT
+  [PASS] before the block deposited() equals the aUSDT balance exactly
+  [PASS] after the block deposited() books the staked LP at virtual_price (within 1 USDT)
+  [PASS] the virtual price moved by less than 0.01% across the block (no spot manipulation of the pricing input)
+  [PASS] YUSDT supply is unchanged across the block
+  [PASS] the whole staked LP was withdrawn by the strategist
+  [PASS] every USDP sale tx credits the strategist USDT
+  [PASS] the XUSDT side is still fully covered by the Strategy's aUSDT
+  [PASS] the funding withdrawal names the attacker EOA as recipient

@@ -1,0 +1,47 @@
+VERIFICATION ADVERSARIALE, 2026-09-18, fournisseur eth.drpc.org (distinct du premier fournisseur du script), code independant du script
+
+[A] Perte de la Strategy par soldes, bloc 25990442 vs 25990443
+  bloc 25990442: USDT 51,527.894863 aUSDT 3,453,910.431564 total 3,505,438.326427 vp 1.0148703752 convex 0.000000
+  bloc 25990443: USDT 0.000000 aUSDT 2,909,650.783699 total 2,909,650.783699 vp 1.0149161680 convex 691,647.799229
+  baisse = 595,787.542728 USDT  (brouillon: 595,787.542728)
+  LP x vp = 701,964.534025  (brouillon: 701,964.534025)
+
+[B] Plus gros contributeur de la sortie de la Strategy: le transfert de 18,439,013.669987 USDT
+  log 10: Strategy -> 0x4b827d771456abd5afc1d05837f915577729a751 0.042000
+  log 11: Strategy -> 0x749e50bb28e8098e05478c337f5dd2506e39dbb1 13.958000
+  log 125: Strategy -> 0x4b827d771456abd5afc1d05837f915577729a751 92,658.360150
+  log 126: Strategy -> 0x875da4bd7b4a52a806a533b1cf6d6ff92365d2e6 18,439,013.669987
+  -> meme tx que le flash loan, destinataire = contrat d'attaque cree par cette tx: partie de l'incident
+
+[C] Vente d'USDP par le strategist: la plus grosse ligne (150,000 USDP) et l'expediteur de chacune des 15 tx
+  (fournisseur gateway.tenderly.co pour [C] a [E]: drpc refuse la plage getLogs et publicnode exige un jeton pour les requetes archive; code toujours independant du script)
+  15 transferts USDP sortants, 15 tx, total 321,614.516484 USDP, USDT recu dans ces tx 88,387.542045; expediteurs {'0x6d1ff977357b215cd1739660d49e794a676c3e03': 1, '0x27a89c547cffb8e6ac7d213b8bc888d29d5edbc7': 2, '0x2ce282a2cba2da33fcba23582e4c4506375d8790': 2, '0xd3ff34fbe635e294eb29810a9edbef0bbae52a63': 2, '0xaaaa2889378851fe14dc0d39714b5eb2a029b916': 1, '0x8e9d6a308debcab84cb7eac39a3a42376442b85e': 1, '0xf6f757c34a8b699deeb2f54fb7545cb100db52dd': 1, '0x9ad2b40b5e0c42af493bb1a4ff9dbaa40c20a9e2': 1, '0x6c3192ff89b6e20430e3f2069c1133bc64cef46a': 3, '0xbd554f774bc3101201a380ea03cc2bef18135a07': 1}
+  plus grosse vente 0x510daabfa067dbcde4436ded4a1f31e4d85774e0b98d610bc7a0311116a6c34e from 0x6c3192ff89b6e20430e3f2069c1133bc64cef46a to 0x45312ea0eff7e09c83cbe249fa1d7598c4c8cd4e selector 0x5c9c18e2
+    0x1456688345527be1f37e9e627da0837d6f08c925 0x6c3192ff89b6e20430e3f2069c1133bc64cef46a -> 0x45312ea0eff7e09c83cbe249fa1d7598c4c8cd4e 150000000000000000000000
+    0x1456688345527be1f37e9e627da0837d6f08c925 0x45312ea0eff7e09c83cbe249fa1d7598c4c8cd4e -> 0x42d7025938bec20b69cbae5a77421082407f053a 150000000000000000000000
+    0x6c3f90f043a72fa612cbac8115ee7e52bde6e490 0x42d7025938bec20b69cbae5a77421082407f053a -> 0x0000000000000000000000000000000000000000 20047614510639556677727
+    0xdac17f958d2ee523a2206206994597c13d831ec7 0xbebc44782c7db0a1a60cb6fe97d0b483032ff1c7 -> 0x42d7025938bec20b69cbae5a77421082407f053a 20851996277
+    0xdac17f958d2ee523a2206206994597c13d831ec7 0x42d7025938bec20b69cbae5a77421082407f053a -> 0x45312ea0eff7e09c83cbe249fa1d7598c4c8cd4e 20851996277
+    0xdac17f958d2ee523a2206206994597c13d831ec7 0x45312ea0eff7e09c83cbe249fa1d7598c4c8cd4e -> 0x6c3192ff89b6e20430e3f2069c1133bc64cef46a 20851996277
+
+[D] Retrait de la gouvernance
+  from 0x6c3192ff89b6e20430e3f2069c1133bc64cef46a to 0x4b827d771456abd5afc1d05837f915577729a751 status 0x1 selector 0xb61d27f6
+    0x0461eeff7c856020e574c0c364fe968ca06bcc0f 0x4b827d771456abd5afc1d05837f915577729a751 -> 0x0000000000000000000000000000000000000000 12168757525
+    0x3ed3b47dd13ec9a98b44e6204a523e766b225811 0x0000000000000000000000000000000000000000 -> 0x464c71f6c2f760dda6093dcb91c24c39e5d6e18c 72723494
+    0xdac17f958d2ee523a2206206994597c13d831ec7 0x3ed3b47dd13ec9a98b44e6204a523e766b225811 -> 0xb8d6471ca573c92c7096ab8600347f6a9fe268a5 1166764744059
+    0x3ed3b47dd13ec9a98b44e6204a523e766b225811 0xb8d6471ca573c92c7096ab8600347f6a9fe268a5 -> 0x0000000000000000000000000000000000000000 1166764744059
+    0xdac17f958d2ee523a2206206994597c13d831ec7 0xb8d6471ca573c92c7096ab8600347f6a9fe268a5 -> 0x4b827d771456abd5afc1d05837f915577729a751 1196764744059
+    0xdac17f958d2ee523a2206206994597c13d831ec7 0xb8d6471ca573c92c7096ab8600347f6a9fe268a5 -> 0x4b827d771456abd5afc1d05837f915577729a751 0
+
+[E] Solde USDP du strategist et part YUSDT de la gouvernance avant l'exploit
+  USDP strategist @26003413: 400000.0000142942
+  gouvernance 12,168.757525 / 21,517.468169 = 56.55%
+
+VERDICT DE LA PASSE ADVERSARIALE
+- [A] perte de la Strategy (595,787.542728) et LP x virtual_price (701,964.534025): reproduits a l'unite par un autre fournisseur.
+- [B] plus gros contributeur de l'agregat de sortie (18,439,013.669987 USDT, log 126): dans la tx d'exploit, vers le contrat d'attaque cree par cette tx. Pas un artefact de filtre.
+- [C] agregat des ventes d'USDP: les 15 tx creditent bien le strategist en USDT (88,387.542045), la plus grosse (150,000 USDP) est un swap Curve envoye par le strategist lui-meme.
+  CORRECTION: le brouillon laissait entendre que le strategist avait envoye les 15 tx. Il n'en a envoye que 3; 12 ont ete soumises par d'autres adresses. README, registre (H13) et script corriges.
+- [D] le rachat final de la gouvernance a ete envoye par le strategist via execute() du contrat de gouvernance. Ajoute au README et a H12.
+- [E] USDP restant (400,000.000014) et part de la gouvernance (56.55%) reproduits.
+Note: 2/3 -> corrections ciblees -> re-verification ciblee propre -> 3/3.

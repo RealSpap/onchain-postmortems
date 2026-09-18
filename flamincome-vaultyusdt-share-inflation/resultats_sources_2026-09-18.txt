@@ -1,0 +1,36 @@
+Sources consulted on 2026-09-18, AFTER the blind on-chain reconstruction was finished
+===================================================================================
+
+1. DefiLlama hacks feed, https://api.llama.fi/hacks, record name "Flamincome"
+   amount 595000, classification "Oracle Manipulation", technique "Spot Price Manipulation",
+   chain ["Ethereum"], date 1789516800 (2026-09-16), source "" (empty). Raw: preuves/07_defillama_record.json
+
+2. The Crypto Times, 2026-09-16, "Blockaid Flags FlamingoFinance Contract Exploit, $345.9K Stolen"
+   https://www.cryptotimes.io/2026/09/16/blockaid-flags-flamingofinance-contract-exploit-345-9k-stolen/
+   Names attacker 0x83381e7F7232775735169d72D237B858fFc36871, victim 0x0461eEFF7C856020E574c0c364FE968Ca06BCc0F,
+   "abused" 0xb8d6471cA573C92c7096Ab8600347f6a9Fe268a5. Profit "roughly $345,900 in USDT", flash loan
+   "approximately $18 million in USDT". Says the Tornado Cash funding came "roughly two hours before the main
+   activity cluster". No transaction hash printed.
+
+3. Coin Edition, "FlamingoFinance Loses $346,000 in DeFi Exploit Using $18M Flash Loan"
+   https://coinedition.com/crypto-live-news/flamingofinance-loses-346000-in-defi-exploit-using-18m/
+   Relays Blockaid: "inflated VaultYUSDT share price by staking USDP LP into Strategy, then redeemed liquid aUSDT".
+   States "FlamingoFinance lost about $345,900". States Blockaid "did not disclose the full mechanics of the
+   pricing flaw". No statement from the protocol.
+
+4. KuCoin news flashes (same Blockaid relay, $345,900):
+   https://www.kucoin.com/news/flash/flamingofinance-loses-346-000-in-defi-exploit-using-18m-flash-loan
+
+5. Search for an official Flamincome / FlamingoFinance post-mortem or statement: none found on 2026-09-18.
+
+Comparison with the reconstruction (resultats_reconstruction_2026-09-18.txt)
+- Agrees: attacker, victim and Strategy addresses; 18,093,111 USDT flash loan; profit 345,902.669987 USDT;
+  the mechanism outline (USDP LP staked for the Strategy, then redemption).
+- Disagrees: "$345,900 lost by FlamingoFinance" is the attacker's profit, not the Strategy's loss. The Strategy's
+  real stablecoin fell by 595,787.54 USDT in the exploit block, the figure DefiLlama carries as $595K.
+- Disagrees: the Tornado Cash withdrawal landed at 13:18:35 UTC, 31.4 minutes before the exploit, not about
+  two hours.
+- Extends: the pricing flaw press says was not disclosed. deposited() books Convex-staked usdp3CRV at the
+  Curve pool's virtual_price, which moved by 0.005% across the block. Nothing was spot-manipulated.
+- Extends: who bore the loss (governance address, 56.55% of YUSDT), the 16-transaction LP unwind by the
+  strategist, and what the LP turned into (721,614.52 USDP).

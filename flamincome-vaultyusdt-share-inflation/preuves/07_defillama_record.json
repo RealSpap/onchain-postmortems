@@ -1,0 +1,18 @@
+[
+ {
+  "date": 1789516800,
+  "name": "Flamincome",
+  "classification": "Oracle Manipulation",
+  "technique": "Spot Price Manipulation",
+  "amount": 595000,
+  "chain": [
+   "Ethereum"
+  ],
+  "bridgeHack": false,
+  "targetType": "DeFi Protocol",
+  "source": "",
+  "returnedFunds": null,
+  "defillamaId": "243",
+  "language": "Solidity"
+ }
+]

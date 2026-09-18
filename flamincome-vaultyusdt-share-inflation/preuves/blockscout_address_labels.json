@@ -1,0 +1,154 @@
+{
+ "0x0461eeff7c856020e574c0c364fe968ca06bcc0f": {
+  "name": "YIELD FLAMINCOME Tether USD",
+  "is_contract": true,
+  "verified": true,
+  "impl": [],
+  "creation_tx": "0x1920d280df8840606ab07ab6cf562b5d9ef384fd113e2ea65423c12aa50d5698",
+  "token": "YIELD FLAMINCOME Tether USD"
+ },
+ "0xb8d6471ca573c92c7096ab8600347f6a9fe268a5": {
+  "name": "Strategy",
+  "is_contract": true,
+  "verified": true,
+  "impl": [],
+  "creation_tx": "0x3a0497c0f0e6c66d43d7339b022dc70a5a55a19c2703e955140e5e57133c9201",
+  "token": null
+ },
+ "0x749e50bb28e8098e05478c337f5dd2506e39dbb1": {
+  "name": "StrategyBaselineAmmoniaBufferUSDT",
+  "is_contract": true,
+  "verified": true,
+  "impl": [],
+  "creation_tx": "0xce5161c8f9d99f2483ac19e36d6e92711ad704681307b059318aab2a4414c8ca",
+  "token": null
+ },
+ "0x2205d2f559ef91580090011aa4e0ef68ec33da44": {
+  "name": "NormalizerMethaneUSDT",
+  "is_contract": true,
+  "verified": true,
+  "impl": [],
+  "creation_tx": "0x60ed8f46c6d27e6b13058a8bac770ddbc458cb196ae189b3b44d87b3b71c76b4",
+  "token": "normalized Tether USD"
+ },
+ "0xa93727e8661d4f82cfd50f7d8fd3f38ec8493b84": {
+  "name": "VaultXUSDT",
+  "is_contract": true,
+  "verified": true,
+  "impl": [],
+  "creation_tx": "0x764c5ea3d7c8db296d66554c4e34d31e58ae2b47ebe8e5059bc14ee23e3dd2d9",
+  "token": "CROSS FLAMINCOME Tether USD"
+ },
+ "0x4b827d771456abd5afc1d05837f915577729a751": {
+  "name": "AppProxyUpgradeable",
+  "is_contract": true,
+  "verified": true,
+  "impl": [
+   "0x3A93C17FC82CC33420d1809dDA9Fb715cc89dd37"
+  ],
+  "creation_tx": "0x5e358b5e3694713cfef5d17a6487f85e24b0e5b29cbcf48481f011df659a2db4",
+  "token": null
+ },
+ "0x989aeb4d175e16225e39e87d0d97a3360524ad80": {
+  "name": "CurveVoterProxy",
+  "is_contract": true,
+  "verified": true,
+  "impl": [],
+  "creation_tx": "0xf85935709f5cc7fedacdec61035f9686a9b2266bba86482fbfa55ed668430968",
+  "token": null
+ },
+ "0x055be5ddb7a925bfef3417fc157f53ca77ca7222": {
+  "name": "Vyper_contract",
+  "is_contract": true,
+  "verified": true,
+  "impl": [],
+  "creation_tx": "0xd0ab15a9724176bdca39e77563f5e319038706121be2e2774d291c54a7259658",
+  "token": "Curve.fi usdp3CRV Gauge Deposit"
+ },
+ "0x0a758a25997167762e187f960dd0539a4ae3e9a6": {
+  "name": "StakingRewards",
+  "is_contract": true,
+  "verified": true,
+  "impl": [],
+  "creation_tx": "0x6dd9c7b811ce18741738cb39ac6afce9028eb3d1dce5ead18a632cc3d9ad497e",
+  "token": null
+ },
+ "0x24dffd1949f888f91a0c8341fc98a3f280a782a8": {
+  "name": "ConvexRewardPool",
+  "is_contract": true,
+  "verified": true,
+  "impl": [],
+  "creation_tx": "0x0133b61bbe4a3bb7abd2dfb751d359b18d5cab3746c81e6ea233006f3c18a5ef",
+  "token": null
+ },
+ "0x9ba60ba98413a60db4c651d4afe5c937bbd8044b": {
+  "name": "TransparentUpgradeableProxy",
+  "is_contract": true,
+  "verified": true,
+  "impl": [
+   "0x5f6F0F7D35f98C928EdB935D5af8beA74e563104"
+  ],
+  "creation_tx": "0x0f14333a5c5857541d3c916df6a5b6deb0aa32270897658d487017677081d988",
+  "token": "Yearn Lazy Ape Index"
+ },
+ "0x42d7025938bec20b69cbae5a77421082407f053a": {
+  "name": "Vyper_contract",
+  "is_contract": true,
+  "verified": true,
+  "impl": [],
+  "creation_tx": "0xf174b1f2ecda71c404259d5858a024400b1a0fa071a8022b192e517fce0c1085",
+  "token": null
+ },
+ "0x3c8caee4e09296800f8d29a68fa3837e2dae4940": {
+  "name": null,
+  "is_contract": true,
+  "verified": false,
+  "impl": [],
+  "creation_tx": "0x0ef477cf637919fc4892be75d77eaa7766002adf24b10d89b1f44c12486d5077",
+  "token": null
+ },
+ "0xc4daf3b5e2a9e93861c3fbdd25f1e943b8d87417": {
+  "name": "Curve USDP Pool yVault",
+  "is_contract": true,
+  "verified": true,
+  "impl": [
+   "0xA696a63cc78DfFa1a63E9E50587C197387FF6C7E"
+  ],
+  "creation_tx": "0x3aa6323d3ae24b065857b08f979e856225152c6127b68d6dfacdc19750e77a4a",
+  "token": "Curve USDP Pool yVault"
+ },
+ "0x5fa5b62c8af877cb37031e0a3b2f34a78e3c56a6": {
+  "name": "Curve LUSD Pool yVault",
+  "is_contract": true,
+  "verified": true,
+  "impl": [
+   "0xA696a63cc78DfFa1a63E9E50587C197387FF6C7E"
+  ],
+  "creation_tx": "0xb88174947bbf55625c40330de9ea8ed254bc7a69ba5b5074c6555d7dcd403414",
+  "token": "Curve LUSD Pool yVault"
+ },
+ "0x875da4bd7b4a52a806a533b1cf6d6ff92365d2e6": {
+  "name": null,
+  "is_contract": true,
+  "verified": false,
+  "impl": [],
+  "creation_tx": "0x5ff8150482f5473bff16b4a142a98a7f72b159df5e9dd38afd90470551640d37",
+  "token": null
+ },
+ "0xff4eb4541ccb20587c78c8639dd89cbe2588a4d0": {
+  "name": "Uniswap V2",
+  "is_contract": true,
+  "verified": true,
+  "impl": [],
+  "creation_tx": "0x20c11ee6286e5406e65745fdc52694cc3ce72d5dce0f1c6b03ffcb539681216c",
+  "token": "Uniswap V2"
+ },
+ "0xc7b764ed433d51a2851d47db29dc484b0eccf5dd": {
+  "name": "BPool",
+  "is_contract": true,
+  "verified": true,
+  "impl": [],
+  "creation_tx": "0x0a6b7eefe87caf1980d06f9c041db21cec9fb8a311307f189f974de6f9a4986b",
+  "token": null
+ }
+}

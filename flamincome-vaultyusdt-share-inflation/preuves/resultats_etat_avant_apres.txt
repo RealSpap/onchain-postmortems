@@ -1,0 +1,27 @@
+== bloc 25990442
+ YUSDT.totalSupply         21517.468169
+ YUSDT.balance() (=balanceOfY) 3196903.96561  priceE18 USDT/share 148.57249656424483
+ XUSDT.totalSupply         308534.360817
+ USDT.balanceOf(strategy)  51527.894863
+ aUSDT.balanceOf(strategy) 3453910.431564
+ ConvexRewardPool(pid28).balanceOf(strategy) usdp3CRV 0.0
+ => deposited() implicite = balance()+Xsupply-USDT = 3453910.431564  ; moins aUSDT = 0.0
+ usdp pool get_virtual_price 1.014870375193518
+== bloc 25990443
+ YUSDT.totalSupply         21517.468169
+ YUSDT.balance() (=balanceOfY) 3303094.956907  priceE18 USDT/share 153.50760279807156
+ XUSDT.totalSupply         308520.360817
+ USDT.balanceOf(strategy)  0.0
+ aUSDT.balanceOf(strategy) 2909650.783699
+ ConvexRewardPool(pid28).balanceOf(strategy) usdp3CRV 691647.7992294792
+ => deposited() implicite = balance()+Xsupply-USDT = 3611615.317724  ; moins aUSDT = 701964.534025
+ usdp pool get_virtual_price 1.0149161680371397
+== bloc latest
+ YUSDT.totalSupply         13.216033
+ YUSDT.balance() (=balanceOfY) 1300.981715  priceE18 USDT/share 98.43965394154206
+ XUSDT.totalSupply         308520.360817
+ USDT.balanceOf(strategy)  0.0
+ aUSDT.balanceOf(strategy) 309821.342532
+ ConvexRewardPool(pid28).balanceOf(strategy) usdp3CRV 0.0
+ => deposited() implicite = balance()+Xsupply-USDT = 309821.342532  ; moins aUSDT = 0.0
+ usdp pool get_virtual_price 1.0150709401817648
