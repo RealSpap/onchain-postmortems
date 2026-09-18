@@ -16,6 +16,27 @@ Independent on-chain reconstruction of the exploit against Flamincome's legacy V
 | Still true at block 26003447 (2026-09-18) | The attacker's forwarding address has sent 38 transactions and holds 0.00001148 ETH. Flamincome's strategist still holds 400,000.000014 of the 721,614.52 USDP. The vault's other side, VaultXUSDT, is still covered: 309,821.73 aUSDT against 308,520.36 XUSDT |
 | What's still open | The Strategy's implementation (`0xff20de3f…2afb`) is unverified, so the `virtual_price` reading is inferred from a unit-exact numeric match, not read from source. Who controls `0x3d920c35…ee2a`, and where the 144.15 ETH went after its first hop |
 
+```mermaid
+flowchart TD
+    TC["TornadoCash_Eth_01 0x12D6...B8Fc"] -->|"0.0979 ETH, 31.4 min before"| EOA["Attacker EOA 0x8338...6871"]
+    EOA -->|"contract creation"| C1["0x1C7E...b486"]
+    C1 -->|"deploys and runs"| ATK["Attack contract 0x875d...d2E6"]
+    MOR["Morpho"] -->|"flash loan 18,093,111 USDT"| ATK
+    ATK -->|"deposit 17,935,898.4848 USDT, 120,721.52579 YUSDT minted"| VY["VaultYUSDT 0x0461...Cc0F"]
+    ATK -->|"157,212.59 USDT through Curve, Yearn, Balancer-style pool"| LP["691,647.799229 usdp3CRV"]
+    LP -->|"deposited and staked on the Strategy's behalf"| CVX["Convex reward pool"]
+    CVX -.->|"booked at 701,964.534025 USDT, LP x virtual_price"| STR
+    AAVE["Aave aUSDT"] -->|"544,259.649474 USDT redeemed"| STR["Strategy 0xb8d6...68a5"]
+    STR -->|"18,439,013.669987 USDT on withdrawal"| ATK
+    STR -->|"92,658.36015 USDT withdraw fee"| GOV["Governance 0x4b82...a751"]
+    ATK -->|"repays 18,093,111 USDT"| MOR
+    ATK -->|"345,902.669987 USDT"| EOA
+    EOA -->|"swap on LI.FI, then 144.149159 ETH"| FWD["0x7B69...Dc306, 38 txs sent, not traced further"]
+    CVX -->|"withdrawn by the strategist in 16 txs, about 15.4 h later"| USDP["721,614.516498 USDP to strategist 0x6c31...f46a"]
+```
+
+*Fig. 1: fund flow in block 25990443 plus the two later legs, addresses truncated for display. The dotted line is how the Strategy valued the position, not a transfer.*
+
 ## The method
 
 ```bash
