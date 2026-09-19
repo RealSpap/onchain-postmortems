@@ -1,0 +1,31 @@
+ROTATING FIGURE-FRESHNESS RE-CHECK: 2026-09-19
+Entry: coldcard-rng-seed-theft
+
+1. DefiLlama, curl https://api.llama.fi/hacks, name == "COLDCARD", 2026-09-19:
+   {"date": 1785456000, "name": "COLDCARD", "classification": "Key Compromise",
+    "technique": "Weak Key Generation", "amount": 116000000, "chain": ["Bitcoin"],
+    "targetType": "Wallet", "source": "", "returnedFunds": null}
+   Unchanged from the 2026-09-10 record in resultats_sources_2026-09-10.txt.
+
+   Fix applied: the README At a glance row labelled "Weak Key Generation" as
+   DefiLlama's classification. In DefiLlama's record that string is the
+   technique field; the classification field is "Key Compromise" (already
+   stated correctly in registre_hypotheses.csv row H1). Row now gives both
+   fields. No figure changed.
+
+2. "Still untouched" claim re-read live, 2026-09-19, two explorers agreeing:
+   bc1qq85v2c926eg6pgxhwp6q7lf6cnsz80qs3fcu9r
+     blockstream.info and mempool.space: received 562.02148293 BTC,
+     spent 0.00000000, 66 UTXOs, nothing spending it in the mempool.
+   bc1qnk4zh9qcnap2mycp56qjrgza3cc8ylrh8fecp0 (address A)
+     both explorers: received 594.47728031 BTC, spent 562.02666941 BTC,
+     165 UTXOs (32.45061090 BTC), nothing spending it in the mempool.
+   Identical to the entry's 2026-09-10 figures. Still untouched.
+
+3. Source search re-run 2026-09-19 (Coldcard / Coinkite post-mortem, final
+   total). No new official Coinkite figure found. Other analytics firms now
+   publish their own totals across waves (for example Galaxy Research,
+   as relayed by press: 1,596 BTC across 3 verified waves, about 2,055 BTC
+   with a suspected 4th wave). None is more authoritative than the TRM Labs
+   figure this entry already cites as preliminary, and none concerns wave 1,
+   the only wave this entry reconstructs. No figure change made.

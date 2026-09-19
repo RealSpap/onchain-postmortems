@@ -19,7 +19,7 @@ entire haul is confirmed still sitting completely untouched.
 |---|---|
 | Incident | A firmware build/link bug (`MICROPY_HW_ENABLE_RNG` set to 0, guarded by `#ifndef` instead of a value check) let MicroPython's software PRNG silently replace the hardware TRNG in seed generation from March 2021 onward, collapsing entropy to roughly 40-72 bits depending on model |
 | Window (this entry) | 2026-07-30 01:36:08-01:51:26 UTC, 4 consecutive Bitcoin blocks (960188-960191); this is wave 1 of a reported 4-wave incident spanning into early August |
-| DefiLlama / named-security-team figure | DefiLlama: "COLDCARD", $116,000,000, classification "Weak Key Generation". TRM Labs (named security team): "roughly 1,816 BTC (~$116 million) drained from more than 5,200 addresses" across 4 waves, explicitly stated as preliminary |
+| DefiLlama / named-security-team figure | DefiLlama: "COLDCARD", $116,000,000, classification "Key Compromise", technique "Weak Key Generation". TRM Labs (named security team): "roughly 1,816 BTC (~$116 million) drained from more than 5,200 addresses" across 4 waves, explicitly stated as preliminary |
 | Verified independently (wave 1 only) | 594.47728031 BTC swept from 505 distinct victim addresses (1,331 UTXOs, 506 transactions) into one consolidation address inside a 15-minute, 4-block window; $37,996,965.32 at CoinGecko's theft-day price |
 | A primary-source root cause independently confirmed | Coinkite's own GitHub commit `ca724637` ("fixes rng", 2026-07-31) fixes exactly the bug Coinkite's own blog describes; the current live file still shows the original bad line, `mpconfigboard.h:77` |
 
