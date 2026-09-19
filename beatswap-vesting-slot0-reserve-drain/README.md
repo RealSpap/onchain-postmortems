@@ -1,6 +1,6 @@
 # BeatSwap (BTX) Vesting Contracts Exploit Postmortem
 
-Independent on-chain reconstruction of the exploit against BeatSwap's two BTX vesting contracts on BNB Chain (2026-09-09). SlowMist's alert, relayed by PANews and Gate News, reported about 2.985 million BTX ($77,512) lost to a flash-loan price manipulation, with USDT deposited "in two separate transactions" and BTX "withdrawn from the LP positions". DefiLlama carries the same $77,512. The chain shows that figure is the gross proceeds of one sale leg, that both deposits sat in a single transaction, and that the LP positions were never withdrawn. It also shows three things no source found mentions: the contracts were left unpaused for six days, the 22 addresses still owed BTX on 23 open vesting records can no longer claim it, and the attacker's own contract is now registered as a beneficiary of 6.75 million BTX of vesting. Every figure below was re-derived live from public RPCs and the victims' verified source. No post-mortem by BeatSwap was found. BeatSwap's multisig paused both contracts on 2026-09-15, after this reconstruction was written; that pause covers `deposit()` only and leaves the stranded claims and the attacker's own claim exactly as they were, which is set out in "Both contracts were paused on 2026-09-15, and it changes less than it looks" below.
+Independent on-chain reconstruction of the exploit against BeatSwap's two BTX vesting contracts on BNB Chain (2026-09-09). SlowMist's alert, relayed by PANews and Gate News, reported about 2.985 million BTX ($77,512) lost to a flash-loan price manipulation, with USDT deposited "in two separate transactions" and BTX "withdrawn from the LP positions". DefiLlama carries the same $77,512. The chain shows that figure is the gross proceeds of one sale leg, that both deposits sat in a single transaction, and that the LP positions were never withdrawn. It also shows three things no source found mentions: the contracts were left unpaused for six days, the 22 addresses still owed BTX on 23 open vesting records can no longer claim it, and the attacker's own contract is now registered as a beneficiary of 6.75 million BTX of vesting. Every figure below was re-derived live from public RPCs and the victims' verified source. No post-mortem by BeatSwap was found. BeatSwap's multisig paused both contracts on 2026-09-15, after this reconstruction was written; that pause covers `deposit()` only. From 2026-09-16 an unattributed address has been topping up V2 with the exact BTX each V2 depositor is owed as their lock ends, and those depositors are being paid in full, while V1's five open records remain unpaid and the attacker's own claim is unchanged; both are set out in "Both contracts were paused on 2026-09-15, and it changes less than it looks" and "Correction and update, 2026-09-19" below.
 
 ## At a glance
 
@@ -108,10 +108,10 @@ Three consequences, each re-derived on 2026-09-18 rather than reasoned about:
   (`0xd93c0665`), which no call returned.
 - **Five V2 depositors got out in between.** Of the 23 records open on
   2026-09-14, five (all in V2, 399,300.88 BTX of vesting between them) now
-  revert with `AlreadyWithdrawn()` (`0x6507689f`). `withdraw()` pays pending
-  vesting only `if (pending > 0)`, so these completed with their LP position
-  returned and no BTX paid. That leaves **18 records held by 17 addresses,
-  2,481,029.58 BTX of vesting, still owed and still unclaimable**.
+  revert with `AlreadyWithdrawn()` (`0x6507689f`). *Corrected 2026-09-19:*
+  this section originally said these five were paid no BTX. That was wrong.
+  They were paid in full, out of BTX that was sent into V2 for them after the
+  pause; see "Correction and update, 2026-09-19" below.
 - **The attacker's own claim is untouched by the pause.** Records #26 and #89
   are not withdrawn and are not pause-gated either. A refund to either reserve
   would still be claimable by the executor on the same terms as the real
@@ -124,6 +124,49 @@ any open entitlement and not traced further here. On Ethereum the attacker's
 63,678.085614 DAI is still at nonce 4, untouched.
 
 Full command output in `resultats_recheck_2026-09-18.txt`.
+
+### Correction and update, 2026-09-19
+
+Re-checked at BNB Chain block 122827487 (2026-09-19 16:14 UTC). The
+2026-09-18 section above read the five withdrawn V2 records as paid no BTX.
+Reading the records themselves and the BTX `Transfer` logs shows the
+opposite.
+
+- **V2 depositors are being paid in full as their locks end.** Eleven V2
+  records are now withdrawn (ids 73 to 83, including the five above), and on
+  every one `claimedVestingAmount` equals `totalVestingAmount`, 1,222,425.77
+  BTX of vesting between them. The payments are visible directly: for
+  example 115,422.08 BTX from V2 to `0xa90d6faf…97b2e` (record 73, the V2
+  depositor whose simulated claim was cited above) in tx
+  `0x370fbd47fb1a02100e8808334c7822d4f181c839595bb466835c47c401a0ea4b`,
+  and 93,360.54 BTX to `0x5ced5000…d225a` (record 77) in tx
+  `0x2aced54c80758e453bacf3e382f25cc38f2496261d47cbebd33758adac65d6cd`.
+- **The BTX comes from one address, after the pause.** Since 2026-09-14,
+  every BTX transfer above 1 BTX into V2 is from
+  `0x22910037793143b4f788696d5fe015d271aba735`: 12 transfers, 1,048,428 BTX
+  in total, the first at block 122187934 (2026-09-16 08:15 UTC, tx
+  `0x6b3e14686ac0363d471bb9e8268b4db28583cdaf4cbcb4fb70c683c31c389650`), the
+  latest at block 122721089 (2026-09-19 02:56 UTC). Each checked pair matches: 55,856 BTX in, then
+  55,855.20 BTX out to record 74's holder (tx
+  `0x1b9cd23eb6847ac47b32e91f2a8523c8e694b8f03c250bf49de1aa1e8d6d6bdc`);
+  93,361 BTX in (tx
+  `0xe5755daf7e566ed95df04c06ab93e0597b3de595758bf45cd8c0bdf464f266a1`),
+  then 93,360.54 out to record 77's. V2's balance is back to 0.084 BTX at
+  the time of this check. Who controls that address is not established here;
+  it is not the owner Safe.
+- **V1 has not been refilled.** No BTX transfer above 1 BTX has reached V1
+  since 2026-09-14; it still holds 0.012405 BTX, and its five open records
+  are still unpaid.
+- **Seven V2 records are still open**: five with locks ending between
+  2026-09-22 and 2026-10-03, and two 10 BTX records whose locks ended in
+  June. 412,329.26 BTX of their vesting is unclaimed. Whether they are paid depends on the same top-ups
+  continuing.
+- **The attacker's record is untouched.** Record #89 (the executor
+  `0x371700b9…a922d`) still shows 0 claimed, not withdrawn, LP NFT 7392249
+  still attached. Both contracts are still paused. The attacker's
+  63,678.085614 DAI is at nonce 4, unchanged.
+
+Full command output in `resultats_recheck_2026-09-19.txt`.
 
 ### Where the money is
 
