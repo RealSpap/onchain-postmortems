@@ -1,0 +1,85 @@
+Rotating figure-freshness re-check, 2026-09-20
+==============================================
+
+Scope: the "3 distinct USDC.e source addresses" phrasing in README.md, which
+attached a whole-transaction sender count to the leg that reaches the
+cash-out wallet. Every figure below was re-derived live from Optimism on
+2026-09-20, at chain head block 157,128,510.
+
+Method: eth_getTransactionReceipt on each claim transaction, filtering the
+USDC.e (0x7F5c764cBc14f9669B88837ca1490cCa17c31607) Transfer topic
+0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef, then
+eth_call balanceOf at block 156,580,506 and at latest. Endpoints used:
+optimism.gateway.tenderly.co, mainnet.optimism.io, optimism-rpc.publicnode.com.
+
+
+1. TRANSACTION 0xf7a270480f9d457bddc2c8cb4f16669ef01f185cf6bda338351a71e704c79b4b
+   status 0x1, block 156,580,507
+   from 0x003FE7359A4E03C85Ac2f521eC699ED84C7c5ccB
+   to   0xeF9886f4C8823Dc9457267A7b76A55Db2C2f5F8d
+   13 USDC.e Transfer logs in the transaction.
+   Distinct USDC.e senders anywhere in the transaction: 3
+     0x255483434aBA5a75dc60c1391bB162bcd9De2882   sent  1,525.000000
+     0x426713C9E9522bd840b8506bc14a3Fe761a5fbd8   sent  9,409.663229
+     0xeF9886f4C8823Dc9457267A7b76A55Db2C2f5F8d   sent 10,984.663268
+   Transfers landing on the cash-out address
+   0xeb2d41bcb3c3Be8Be5D74942Fa2deB601448E240: exactly 1
+     0xeF9886f4C8823Dc9457267A7b76A55Db2C2f5F8d -> cash-out  10,984.663268
+   The two Cozy-side senders sum to 10,934.663229, which is 50.000039 less
+   than the helper forwards.
+
+2. TRANSACTION 0x8761164b8947a0690b57896a8e7370dd69fe8e9137ce61e0b21ff08581a2ce60
+   status 0x1, block 156,580,507
+   from 0x003FE7359A4E03C85Ac2f521eC699ED84C7c5ccB
+   to   0x9E47C805587362eF36F2cAB9d1E4E7D546f953d4
+   33 USDC.e Transfer logs in the transaction.
+   Distinct USDC.e senders anywhere in the transaction: 3
+     0x255483434aBA5a75dc60c1391bB162bcd9De2882   sent   2,050.000000
+     0x17705474203F7ff7ba8a940c433AB43D1F58E249   sent 160,776.340904
+     0x9E47C805587362eF36F2cAB9d1E4E7D546f953d4   sent 163,326.343700
+   Transfers landing on the cash-out address: exactly 1
+     0x9E47C805587362eF36F2cAB9d1E4E7D546f953d4 -> cash-out 163,326.343700
+   The two Cozy-side senders sum to 162,826.340904, which is 500.002796 less
+   than the helper forwards.
+
+3. WHERE THE TWO DIFFERENCES COME FROM
+   balanceOf(USDC.e) at block 156,580,506, the block before the claims:
+     0xeF9886f4C8823Dc9457267A7b76A55Db2C2f5F8d :      50.000039
+     0x9E47C805587362eF36F2cAB9d1E4E7D546f953d4 :     500.002796
+   Both match their transaction's shortfall to the exact wei, so each helper
+   simply already held that residual before the claim. Neither figure comes
+   from an unaccounted third source.
+   balanceOf(USDC.e) at chain head 157,128,510:
+     0xeF9886f4C8823Dc9457267A7b76A55Db2C2f5F8d :       0.000000
+     0x9E47C805587362eF36F2cAB9d1E4E7D546f953d4 :       0.000000
+
+4. HEADLINE FIGURES, UNCHANGED
+   Total reaching the cash-out address across both claims: 174,311.006968
+   USDC.e, identical to what this entry published on 2026-09-08.
+   eth_getCode on 0xeb2d41bcb3c3Be8Be5D74942Fa2deB601448E240: 0 bytes, still
+   a plain EOA. Its USDC.e balance today is 0.000000.
+   DefiLlama api.llama.fi/hacks record for "Cozy V2", re-fetched 2026-09-20:
+   amount 163326, classification "Protocol Logic", technique "Unknown",
+   source field still empty. Unchanged since 2026-09-08.
+
+5. SEARCH FOR A BETTER SOURCE THAN EXISTED WHEN THIS WAS WRITTEN
+   The README's Caveats note that Cozy stated a fuller account would be
+   posted by 2026-09-10 18:00 UTC, after this entry was published. A press
+   and official-statement search on 2026-09-20 found no such fuller account.
+   Coverage still reports the same two figures this entry already compares
+   against: roughly $170,000 attributed to Cozy itself, and $163,326 for the
+   single tracked transaction. Nothing found supersedes the 170,186 USDC.e
+   figure, so it is left as published. Coverage consulted: CoinDesk,
+   BeInCrypto, Crypto Briefing, Cryptonomist, Phemex, COINOTAG.
+   One press detail independently consistent with this entry's core finding:
+   coverage describes the tracked exploit transaction as moving "about
+   163,326 USDC.e ... through 63 token transfers", that is, the second claim
+   transaction alone, which is exactly why the tracked figure omits the
+   first claim.
+
+CONCLUSION
+   No headline figure changed. One wording fix applied to README.md: the
+   "3 distinct USDC.e source addresses" count belongs to the whole
+   transaction, not to the leg reaching the cash-out wallet, which is a
+   single transfer in each case. The corrected passage now names the helper
+   contracts, the Cozy-side senders, and the two pre-held residuals.
