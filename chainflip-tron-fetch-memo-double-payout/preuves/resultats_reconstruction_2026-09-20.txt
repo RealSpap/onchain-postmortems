@@ -1,0 +1,119 @@
+Chainflip Tron USDT vault, 2026-09-12: live reconstruction
+run at 2026-09-20 18:40:16 UTC
+
+vault     TEcDijvKSXcfWT7S6rd44H5vNgufm7Y4XC 0x32e07e5dfcb75c2977adddc593eb8d6b6e71f96e
+attacker  TWSe9ZFc26fQo5vgramdwMCUWi2oKwo2BZ 0xe092bce6dc52c38fbf7441edc8ea5b89b48a8a5a
+USDT      TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t 0xa614f803b6fd780986a42c78ec9c7f77e6ded13c
+
+==============================================================================
+1. The two endpoints agree on the vault's USDT balance today
+==============================================================================
+publicnode balanceOf(vault) = 352,462.314709
+trongrid   balanceOf(vault) = 352,462.314709
+agreed.
+
+==============================================================================
+2. The attacker's own USDT legs, from raw Transfer logs
+==============================================================================
+scanning blocks 86167178 to 86170178 for Transfer logs touching the attacker
+
+block      dir                USDT  counterparty
+86167376   in        13,260.798955  0x243202498ab0f22bbe866d1f7a6b74f359d96107
+86168471   out       13,000.000000  0x15307d2accf7f1b3fc6aa7491e9e6b8593131aa2
+86168654   in        12,991.856400  0x32e07e5dfcb75c2977adddc593eb8d6b6e71f96e
+86168713   out       13,000.000000  0xa940397202a706e0e25552bc4ff5fdb4bf8249f1
+86168838   in        12,995.684310  0x32e07e5dfcb75c2977adddc593eb8d6b6e71f96e
+86168908   in        12,991.849955  0x32e07e5dfcb75c2977adddc593eb8d6b6e71f96e
+86168942   out       26,240.189620  0x7263c2d5006258b4335698eb0fa5014e1b035557
+86169038   in        26,235.867402  0x32e07e5dfcb75c2977adddc593eb8d6b6e71f96e
+86169108   in        26,232.033802  0x32e07e5dfcb75c2977adddc593eb8d6b6e71f96e
+86169145   out       52,467.901204  0x92c6d58ae47c457331c6e068fbf5f0ccd45cbea3
+86169272   in        52,463.579094  0x32e07e5dfcb75c2977adddc593eb8d6b6e71f96e
+86169341   in        52,460.262359  0x32e07e5dfcb75c2977adddc593eb8d6b6e71f96e
+86169379   out      104,923.841453  0xde16f4435a093303e85ff93123126fa5f272fe40
+86169482   in       104,919.512812  0x32e07e5dfcb75c2977adddc593eb8d6b6e71f96e
+86169551   in       104,916.137527  0x32e07e5dfcb75c2977adddc593eb8d6b6e71f96e
+86169585   out      209,835.650339  0x19daccba009a62a04eacf373a3e255b1d1e4c9be
+86169709   in       209,831.328128  0x32e07e5dfcb75c2977adddc593eb8d6b6e71f96e
+86169779   in       209,827.494582  0x32e07e5dfcb75c2977adddc593eb8d6b6e71f96e
+86169815   out      375,563.327997  0x6572d449681cba938b4b086f78c461a3655070b4
+86169946   in       375,555.172173  0x32e07e5dfcb75c2977adddc593eb8d6b6e71f96e
+86169987   out      330,000.000000  0xbb215fb95320dde10b544a1505bc30acd1e7653c
+86170111   in       329,996.194640  0x32e07e5dfcb75c2977adddc593eb8d6b6e71f96e
+86170178   in       329,992.361150  0x32e07e5dfcb75c2977adddc593eb8d6b6e71f96e
+
+starting capital, one transfer from TDGbEeTP6QQ1iCJ6twP5FNCDrbHTBme44f: 13,260.798955
+deposits into Chainflip deposit channels: 8, total 1,125,030.910613
+payouts received from the vault:          14, total 1,861,409.334334
+net extracted (payouts minus deposits):   736,378.423721
+
+==============================================================================
+3. Memo on the deposit fetch, versus number of payouts
+==============================================================================
+Each round is one deposit swept from its channel into the vault by a
+'fetch' transaction. The claim under test: the rounds that paid twice
+are exactly the rounds whose fetch the attacker broadcast himself with
+a memo attached.
+
+time UTC   payouts   memo    broadcaster (owner_address)                  memo bytes
+01:47:36   1         no      4120161dd5a8486ede75382cf379d041a26513ca47   0
+01:59:39   2         yes     41e092bce6dc52c38fbf7441edc8ea5b89b48a8a5a (attacker) 121
+02:11:03   2         yes     41e092bce6dc52c38fbf7441edc8ea5b89b48a8a5a (attacker) 121
+02:21:15   2         yes     41e092bce6dc52c38fbf7441edc8ea5b89b48a8a5a (attacker) 121
+02:32:51   2         yes     41e092bce6dc52c38fbf7441edc8ea5b89b48a8a5a (attacker) 121
+02:43:15   2         yes     41e092bce6dc52c38fbf7441edc8ea5b89b48a8a5a (attacker) 121
+02:54:45   1         no      4166c1ef322e20bfcbaa994d8e34621b20c4161681   0
+03:03:21   2         yes     41e092bce6dc52c38fbf7441edc8ea5b89b48a8a5a (attacker) 121
+
+memo present on exactly the doubled rounds, and only from the attacker: True
+distinct memos across the six doubled rounds: 1
+  memo hex: 1206e092bce6dc52c38fbf7441edc8ea5b89b48a8a5a0081010164000000e092bce6dc52c38fbf7441edc8ea5b89b48a8a5a0000000000000000000000000000000000000000000000000000000000000000000000000101010101010101010101010101010101010101010101010101010101010101000000
+  length 121 bytes; attacker address appears at byte offsets [2, 30]
+
+==============================================================================
+4. The vault's balance walked back to the end of the attack
+==============================================================================
+There is no archive state on Tron's public JSON-RPC, so the balance at
+the end of the attack is derived from today's balance and every USDT
+transfer since, read from raw logs.
+blocks 86170179 to 86419117: 225 transfers out (2,733,025.781562), 347 in (3,021,644.047051)
+vault USDT immediately after the final payout: 63,844.049220
+
+blocks 86168471 to 86170178 (the attack itself): 16 out (1,869,638.228915), 12 in (1,144,983.910613)
+vault USDT immediately before the attacker's first deposit: 788,498.367522
+drop across the attack: 724,654.318302
+
+reconciliation, so the drop is not read as the amount stolen:
+  unrelated deposits fetched during the window: 19,953.000000
+  unrelated payouts made during the window:     8,228.894581
+  788,498.367522 + 19,953.000000 - 8,228.894581 - 736,378.423721 = 63,844.049220
+
+==============================================================================
+5. Headline arithmetic
+==============================================================================
+attacker's starting capital:             13,260.798955
+attacker's peak balance:                 749,639.222676
+net taken from the vault:                736,378.423721
+published by Chainflip, press, DefiLlama: 736,442.17
+difference:                              63.746279
+multiple on starting capital:            56.53x
+
+vault USDT before the attack:              788,498.367522
+vault USDT left when the attacker stopped: 63,844.049220
+vault USDT today:                          352,462.314709
+
+==============================================================================
+6. Checks
+==============================================================================
+two providers agree on the vault balance                PASS
+eight deposits                                          PASS
+fourteen payouts                                        PASS
+net is 736,378.423721 USDT                              PASS
+starting capital is 13,260.798955 USDT                  PASS
+memo correlates one-to-one with the doubled rounds      PASS
+one single memo, reused verbatim six times              PASS
+vault left with 63,844.049220 USDT                      PASS
+vault held 788,498.367522 USDT before the attack        PASS
+the reconciliation closes exactly                       PASS
+
+10/10 checks passed

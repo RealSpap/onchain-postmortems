@@ -1,0 +1,78 @@
+Sources collected 2026-09-20 for chainflip-tron-fetch-memo-double-payout
+==============================================================================
+
+1. DefiLlama hacks feed, https://api.llama.fi/hacks, fetched 2026-09-20
+------------------------------------------------------------------------------
+   records in feed: 1273
+   MATCH: {
+      "date": 1789171200,
+      "name": "Chainflip AMM",
+      "classification": "Bridge & Cross-Chain",
+      "technique": "Bridge Logic Flaw",
+      "amount": 736442.17,
+      "chain": [
+            "Tron"
+      ],
+      "bridgeHack": true,
+      "targetType": "DeFi Protocol",
+      "source": "",
+      "returnedFunds": null,
+      "defillamaId": "3853",
+      "parentProtocolId": "parent#chainflip",
+      "language": "Rust"
+}
+
+   September 2026 records in the feed, for context:
+     2026-09-04  Notional V2              1727782.00     Ethereum
+     2026-09-05  Secured Finance Lending  104000.00      Ethereum
+     2026-09-05  Dream Health Chain       71800.00       BSC
+     2026-09-05  Reddio RedSonic          22800.00       Ethereum
+     2026-09-06  Liquid Network           320000000.00   Liquid
+     2026-09-07  Cozy V2                  163326.00      Optimism
+     2026-09-08  WealthManagementV2       26414.00       BSC
+     2026-09-09  Nomic                    3150000.00     Nomic
+     2026-09-09  Zentra Finance           140030.00      Citrea
+     2026-09-09  BeatXswap                77512.00       BSC
+     2026-09-10  Dominion                 None           Solana
+     2026-09-10  Symbiosis                336000.00      BSC,Ethereum
+     2026-09-11  ether.fi Liquid          43260.00       Ethereum
+     2026-09-12  Chainflip AMM            736442.17      Tron
+     2026-09-16  Flamincome               595000.00      Ethereum
+     2026-09-16  Startale                 2876.00        Ethereum
+     2026-09-17  Nostra Money Market      3500000.00     Starknet
+
+2. Chainflip's own post-mortem
+------------------------------------------------------------------------------
+   https://chainflip.io/blog/tron-usdt-exploit-what-happened-and-what-happens-next
+   Read 2026-09-20, AFTER this entry's reconstruction was complete.
+   Figures it publishes:
+     - '736,442.17 USDT were taken in six unauthorised payouts'
+     - the attacker 'ran this eight times over about ninety minutes'
+     - 'One user swap of 115,654.41 USDT remained in the vault unable to be paid out'
+     - root cause: a Tron memo read as a separate, failed swap, so the same
+       deposit 'ended up being paid out twice'
+     - no addresses and no transaction hashes are published
+
+3. The fix, in Chainflip's own repository
+------------------------------------------------------------------------------
+   PR #6893  fix: strict tron vault witnessing
+     state=closed merged=True merged_at=2026-09-16T13:07:09Z merge_commit=7ffb508738a8b7f6965eed09a48b77997ea5876e
+     changed_files=3 additions=270 deletions=41
+   PR #6894  fix: strict tron vault witnessing
+     state=closed merged=True merged_at=2026-09-17T09:25:40Z merge_commit=ee5b372a76238df444332cf56375a1e02ee70ab2
+     changed_files=3 additions=270 deletions=41
+     file: Cargo.lock (+16/-16)
+     file: bouncer/tests/evm_deposits.ts (+5/-2)
+     file: engine/src/witness/tron/vault_swaps_witnessing.rs (+249/-23)
+
+4. Press coverage read on 2026-09-20 (figures each outlet published)
+------------------------------------------------------------------------------
+   CryptoSlate, 'Chainflip to reset TRON USDT provider balances to zero
+     following $736,000 exploit': 736,442.17 USDT, window 01:44 to 03:10 UTC
+     on Sept 12, 'six liquidity-provider withdrawals to be paid twice'.
+   The Crypto Times, 'Chainflip Halts Network After $736K Tron USDT Exploit;
+     Users to Be Made Whole', 2026-09-13.
+   crypto.news, 'Chainflip loses 736,442 USDT in TRON exploit'.
+   KuCoin news flash and Coin-Turk carry the same 736,442 figure.
+   Every outlet found repeats Chainflip's own 736,442.17 and none publishes
+   an address, a transaction hash, or the attacker's own capital.

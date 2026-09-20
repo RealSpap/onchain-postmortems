@@ -1,0 +1,70 @@
+Round by round ledger and vault activity, read from TronGrid on 2026-09-20
+==============================================================================
+
+A. Every USDT transfer touching the vault, 01:40 to 03:20 UTC on 2026-09-12
+------------------------------------------------------------------------------
+time UTC   dir                USDT  counterparty
+01:40:30   out        3,473.556256  THT4wt4upLiejoVN6XovzTQqtY5oFjS9Qj
+01:44:24   out        6,969.524675  TLKt9zRHFrV7Ay5NfsJ4yk7j1pMtwJ35c2
+01:47:36   in        13,000.000000  TBuFHA6cxBKRuE7QcdkzqYyWhtSM6gXnCZ
+01:53:36   out       12,991.856400  TWSe9ZFc26fQo5vgramdwMCUWi2oKwo2BZ <= attacker
+01:59:39   in        13,000.000000  TRQ88sGrerfrPgHiQQgWqBUSjsqb11gdxm
+02:02:48   out       12,995.684310  TWSe9ZFc26fQo5vgramdwMCUWi2oKwo2BZ <= attacker
+02:06:18   out       12,991.849955  TWSe9ZFc26fQo5vgramdwMCUWi2oKwo2BZ <= attacker
+02:09:30   in           250.000000  TRdk5ngGBd1M2gzyas7JLMt1hhvpHXmoeL
+02:11:03   in        26,240.189620  TLQ3YSviESxx3nim9dhcvFrs6Gyn8zKfu2
+02:12:48   out       26,235.867402  TWSe9ZFc26fQo5vgramdwMCUWi2oKwo2BZ <= attacker
+02:16:18   out       26,232.033802  TWSe9ZFc26fQo5vgramdwMCUWi2oKwo2BZ <= attacker
+02:21:15   in        52,467.901204  TPMHrJf1qiXVAnWZpa3FeDaFYg7uSmrySv
+02:23:18   out        6,223.524822  TLzKUnUhHBM6NfMF1VNu21wStqi5Y2Jg25
+02:24:30   out       52,463.579094  TWSe9ZFc26fQo5vgramdwMCUWi2oKwo2BZ <= attacker
+02:27:57   out       52,460.262359  TWSe9ZFc26fQo5vgramdwMCUWi2oKwo2BZ <= attacker
+02:32:51   in       104,923.841453  TWDWWXZv74W33PYXPiZqkjYcKdwj3aKPSU
+02:35:00   out      104,919.512812  TWSe9ZFc26fQo5vgramdwMCUWi2oKwo2BZ <= attacker
+02:35:30   in        19,180.000000  TCmodsyhTzbaWJHuCKp5QBMptKHkKjuKP7
+02:38:27   out      104,916.137527  TWSe9ZFc26fQo5vgramdwMCUWi2oKwo2BZ <= attacker
+02:43:15   in       209,835.650339  TCKv1KpizuUfrQFr8pzwPtQRtrQBaBEVF3
+02:45:09   in            23.000000  TLswSC3pYw8hDKJigtTtfi4yw2QfMNjoSG
+02:46:21   out      209,831.328128  TWSe9ZFc26fQo5vgramdwMCUWi2oKwo2BZ <= attacker
+02:49:51   out      209,827.494582  TWSe9ZFc26fQo5vgramdwMCUWi2oKwo2BZ <= attacker
+02:53:42   out        2,005.369759  TWTCgos5jQp2eWyLoPdiGhZxgU4g1Fmpvp
+02:54:45   in       375,563.327997  TKDcouiTiqwV7uEkuvwm3Y1PdBBW8AUQVB
+02:58:12   out      375,555.172173  TWSe9ZFc26fQo5vgramdwMCUWi2oKwo2BZ <= attacker
+03:03:21   in       330,000.000000  TT2fLntae72J9Kkw24je7VLSecFwFT4U3P
+03:03:21   in           500.000000  TFUQaMPVhz5fvgsdzGz9FsfdjUmAevZnJU
+03:06:27   out      329,996.194640  TWSe9ZFc26fQo5vgramdwMCUWi2oKwo2BZ <= attacker
+03:09:48   out      329,992.361150  TWSe9ZFc26fQo5vgramdwMCUWi2oKwo2BZ <= attacker
+
+B. Per round: deposit in, payouts out, and the excess over the deposit
+------------------------------------------------------------------------------
+01:47:36   deposit      13,000.000000  payouts 1  total      12,991.856400  excess          -9.856400
+01:59:39   deposit      13,000.000000  payouts 2  total      25,987.534265  excess      12,987.534265
+02:11:03   deposit      26,240.189620  payouts 2  total      52,467.901204  excess      26,227.711584
+02:21:15   deposit      52,467.901204  payouts 2  total     104,923.841453  excess      52,455.940249
+02:32:51   deposit     104,923.841453  payouts 2  total     209,835.650339  excess     104,911.808886
+02:43:15   deposit     209,835.650339  payouts 2  total     419,658.822710  excess     209,823.172371
+02:54:45   deposit     375,563.327997  payouts 1  total     375,555.172173  excess          -9.844176
+03:03:21   deposit     330,000.000000  payouts 2  total     659,988.555790  excess     329,988.555790
+TOTAL      deposit   1,125,030.910613  payouts 14  total   1,861,409.334334  excess     736,378.423721
+
+C. What Chainflip's published 736,442.17 actually is
+------------------------------------------------------------------------------
+  sum of the FIRST payout of each of the six doubled rounds : 736,442.166386
+  sum of the SECOND payout of each of the six doubled rounds: 736,420.139375
+  net extracted across all eight rounds                     : 736,378.423721
+  published by Chainflip, press and DefiLlama               : 736,442.17
+  => the published figure is the sum of the first legs, to the cent.
+
+D. Vault activity after the attack: when Tron actually stopped
+------------------------------------------------------------------------------
+  transfers between 03:10 on 09-12 and 18:00 on 09-20: 568
+    quiet: 2026-09-12 11:46:15 -> 2026-09-14 15:53:00  (52.11 h)
+    quiet: 2026-09-14 15:53:00 -> 2026-09-15 14:32:12  (22.65 h)
+    quiet: 2026-09-15 14:32:12 -> 2026-09-15 15:39:57  (1.13 h)
+    quiet: 2026-09-16 04:46:51 -> 2026-09-16 06:27:12  (1.67 h)
+    quiet: 2026-09-16 06:29:12 -> 2026-09-17 03:14:33  (20.76 h)
+    quiet: 2026-09-17 03:58:48 -> 2026-09-17 11:39:21  (7.68 h)
+    quiet: 2026-09-17 12:00:42 -> 2026-09-18 11:04:24  (23.06 h)
+    quiet: 2026-09-18 11:04:24 -> 2026-09-18 15:28:36  (4.40 h)
+    quiet: 2026-09-19 00:00:57 -> 2026-09-19 01:10:15  (1.16 h)
+  last transfer seen: 2026-09-20 17:40:06
