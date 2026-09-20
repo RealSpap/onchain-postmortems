@@ -1,0 +1,79 @@
+SOURCES COLLECTED 2026-09-20 for the 2026-09-15 Safe module drain
+==========================================================================
+
+1. DefiLlama hacks API (https://api.llama.fi/hacks), fetched 2026-09-20
+--------------------------------------------------------------------------
+   records whose name mentions rsETH or Kelp: 1
+    {"date": 1776470400, "name": "Kelp", "classification": "Bridge & Cross-Chain", "technique": "Cross-Chain Message Spoofing", "amount": 293000000, "chain": ["Ethereum", "Arbitrum"], "bridgeHack": true, "targetType": "DeFi Protocol", "source": "", "returnedFunds": null, "defillamaId": "3946", "parentProtocolId": "parent#kelp-dao", "language": "Solidity"}
+
+   every DefiLlama hack record dated within 16 days of 2026-09-20: 17
+    ('2026-09-04', 'Notional V2', 1727782, ['Ethereum'], 'Arithmetic Error')
+    ('2026-09-05', 'Dream Health Chain', 71800, ['BSC'], 'Reward Logic Flaw')
+    ('2026-09-05', 'Reddio RedSonic', 22800, ['Ethereum'], 'Incorrect Share Accounting')
+    ('2026-09-05', 'Secured Finance Lending', 104000, ['Ethereum'], 'Spot Price Manipulation')
+    ('2026-09-06', 'Liquid Network', 320000000, ['Liquid'], 'Unbacked Cross-Chain Mint')
+    ('2026-09-07', 'Cozy V2', 163326, ['Optimism'], 'Unknown')
+    ('2026-09-08', 'WealthManagementV2', 26414, ['BSC'], 'Private Key Compromised')
+    ('2026-09-09', 'BeatXswap', 77512, ['BSC'], 'Spot Price Manipulation')
+    ('2026-09-09', 'Nomic', 3150000, ['Nomic'], 'Unbacked Cross-Chain Mint')
+    ('2026-09-09', 'Zentra Finance', 140030, ['Citrea'], 'Rounding Error')
+    ('2026-09-10', 'Dominion', None, ['Solana'], 'Private Key Compromised')
+    ('2026-09-10', 'Symbiosis', 336000, ['BSC', 'Ethereum'], 'Unbacked Cross-Chain Mint')
+    ('2026-09-11', 'ether.fi Liquid', 43260, ['Ethereum'], 'Arbitrary External Call')
+    ('2026-09-12', 'Chainflip AMM', 736442.17, ['Tron'], 'Bridge Logic Flaw')
+    ('2026-09-16', 'Flamincome', 595000, ['Ethereum'], 'Spot Price Manipulation')
+    ('2026-09-16', 'Startale', 2876, ['Ethereum'], 'Improper Access Control')
+    ('2026-09-17', 'Nostra Money Market', 3500000, ['Starknet'], 'Spot Price Manipulation')
+
+   FINDING: DefiLlama's hacks feed carries NO record for the
+   2026-09-15 Safe module drain. There is no entry dated
+   2026-09-15 anywhere in the feed.
+   The nearest same-chain records are Flamincome and Startale,
+   both dated 2026-09-16 and both unrelated (different protocols,
+   different mechanisms, amounts of $595,000 and $2,876).
+
+   NOT TO BE CONFUSED WITH: the feed does carry one record whose
+   name matches "Kelp", printed above, dated 2026-04-18
+   (unix 1776470400), $293,000,000, "Cross-Chain Message Spoofing",
+   Ethereum + Arbitrum, defillamaId 3946, parent "parent#kelp-dao".
+   That is the earlier Kelp DAO cross-chain incident, a different
+   event from the one this entry documents, and it is already
+   covered separately in this repository under the slug
+   kelpdao-rseth-layerzero-rpc-spoofing. It is not a record of the
+   2026-09-15 Safe module drain.
+
+2. Press coverage found by web search on 2026-09-20
+--------------------------------------------------------------------------
+   Cointelegraph, 'MEV Bot Front-Runs $7.7M Ethereum Wallet Exploit'
+      https://cointelegraph.com/news/mev-bot-intercepts-77m-in-rseth-from-ethereum-wallet-exploit
+      $7.7M; MEV searcher tagged 'Yoink' executed first in the same block; 18.93 ETH (~$46,000) paid to a block builder; Kelp placed the receiving address under a 24-hour pause.
+
+   The Crypto Times, '$7.8M rsETH Drained From Ethereum Safe Wallet'
+      https://www.cryptotimes.io/2026/09/15/7-8m-rseth-drained-from-ethereum-safe-wallet-mev-bot-yoink-front-runs-the-exploit/
+      'approximately 2,900 rsETH, valued at around $7.8 million'; Blockaid $7.73M; PeckShieldAlert $7.81M; victim Safe 0x40E93a52...9f7AbA8; Yoink bot 0x80BF7Db6...1DBBD4e4; paused receiving address 0xC70f00CD...A8b80ea0; states no funds returned.
+
+   Coinpedia, 'Ethereum Wallet Loses $7.8 Million in rsETH Exploit'
+      https://coinpedia.org/news/ethereum-wallet-loses-7-8-million-in-rseth-exploit/
+      $7.8M headline; custom LP module routed through an attacker-created Uniswap v4 hooked pool; aEthrsETH unwrapped into rsETH; 'public keeper multicall' named as the entry point.
+
+   Coinmonks / Medium, 'ETH wallet exploit backfires as MEV bot captures $7.7M'
+      https://medium.com/coinmonks/eth-wallet-exploit-backfires-as-mev-bot-captures-7-7m-kelp-freezes-address-34642f3f21da
+      $7.7M; Kelp freezes the receiving address; Kelp states its own contracts, minting and withdrawals are unaffected.
+
+   FINDING: every outlet found publishes 2,900 rsETH / $7.7M-$7.8M as
+   the size of the incident, describes it as a single front-run
+   transaction, and reports the funds as NOT returned. None of them
+   mentions the 66 rsETH taken by other searchers after the first
+   transaction, the Aave liquidation the drain triggered, or the
+   2,882.367408826 rsETH the bot sent back on 2026-09-16.
+
+3. Contract source verification status, checked 2026-09-20
+--------------------------------------------------------------------------
+   0xdcdc4ef8c992e75bb0f300536cd93e601c8882ab module A (beacon proxy): sourcify HTTP 404 (not verified)
+   0xea18b13d11f705a68f0954f637949e1eaa7ac4ca module B: sourcify HTTP 404 (not verified)
+   0xc62d6fdc4e77c4d006784bc4805703b37ffcc4b7 module A implementation: sourcify HTTP 404 (not verified)
+
+   FINDING: neither module nor the implementation behind module A's
+   beacon proxy has publicly verified source. The exact in-module
+   authorisation bug is therefore reported here from on-chain
+   behaviour only, not from reading the module's source.

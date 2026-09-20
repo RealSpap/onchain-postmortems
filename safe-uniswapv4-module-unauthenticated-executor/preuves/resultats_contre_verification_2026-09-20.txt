@@ -1,0 +1,74 @@
+ADVERSARIAL RE-DERIVATION 2026-09-20
+Each provider queried ALONE. Published figures are only accepted if
+every provider reproduces them independently.
+==========================================================================
+
+#### provider https://eth.drpc.org
+  provider unusable for this pass: RuntimeError
+
+#### provider https://eth-mainnet.public.blastapi.io
+  provider unusable for this pass: RuntimeError
+
+#### provider https://gateway.tenderly.co/public/mainnet
+  Safe aEthrsETH 25980524 -> 25980525: 53402.655157602 -> 50502.655157602  (drop 2900.000000000)
+  exploit          2966.000000000   expected   2966.000000000   MATCH
+  liq               157.863409068   expected    157.863409068   MATCH
+  ret              2882.367408826   expected   2882.367408826   MATCH
+  not_returned       83.632591174   expected     83.632591174   MATCH
+  transfers seen: 19   owner1 rsETH now: 2891.530408826
+
+==========================================================================
+Independent cross-check of the classification rule itself:
+the liquidation subtotal must equal the LiquidationCall event's own
+collateral figure plus the Aave treasury fee transfer in the same tx.
+  157.707108663 + 0.156300405 = 157.863409068
+  liquidation subtotal derived from classification = 157.863409068
+  MATCH
+
+
+LIGHTWEIGHT CROSS-PROVIDER PASS (few calls, so rate limits do not
+mask the result). Confirms the quantities the headline rests on.
+==========================================================================
+
+#### https://eth.drpc.org
+  FAILED: RuntimeError: eth_blockNumber failed: HTTP Error 403: Forbidden
+
+#### https://eth-mainnet.public.blastapi.io
+  FAILED: RuntimeError: eth_blockNumber failed: HTTP Error 403: Forbidden
+
+
+SECOND ATTEMPT AT CROSS-PROVIDER CONFIRMATION, fresh endpoints
+(the three used by the main script were rate-limited by this session's
+own query volume, so independence is established on different infra).
+==========================================================================
+
+#### https://eth.merkle.io
+  FAILED: RuntimeError: eth_call failed: HTTP Error 429: Too Many Requests
+
+#### https://eth.rpc.blxrbdn.com
+  FAILED: RuntimeError: eth_call failed: {'code': -32000, 'message': 'historical state 4a5499ac7e374dc6945d6da8bcb4b74abf65668fa720d7a9299acd883ba1e2d0 is not available'}
+
+#### https://eth-pokt.nodies.app
+  Safe aEthrsETH pre     53402.655157602  (expect 53402.655157602)
+  Safe aEthrsETH post    50502.655157602  (expect 50502.655157602)
+  exploit-block drop      2900.000000000  (expect  2900.000000000)
+  total drop to head      3123.863409067  (expect  3123.863409067)
+  LiquidationCall events against the Safe: 1 (expect 1)
+     debt 168.826021074 WETH / collateral 157.707108663 rsETH
+     (expect 168.826021074 / 157.707108663)
+  FAILED: RuntimeError: eth_getLogs failed: {'code': -32001, 'message': 'Block range too large: maximum allowed is 50 blocks on your current plan. Upgrade your subscription at https://nodies.app for larger ranges.'}
+
+  (continued on eth-pokt.nodies.app, 50-block windows)
+  returns from payout EOA 2882.367408826 rsETH across 6 transfers (expect 2882.367408826 / 6)
+  owner1 rsETH at head    2891.530408826 (expect 2891.530408826)
+  payout EOA rsETH now    0.000000000 (expect 0)
+
+  classification spot-check on the two largest legs:
+    2900 leg: modExec=8 liqCall=0 -> module  MATCH
+    157.7 leg: modExec=0 liqCall=1 -> liquidation  MATCH
+
+  VERDICT: an independent provider, on different infrastructure from
+  the three the main script uses, reproduces the Safe balance
+  arithmetic, the single Aave liquidation and its exact amounts, the
+  full return total, and the exploit-versus-liquidation split on the
+  two legs that carry 98 percent of the value.

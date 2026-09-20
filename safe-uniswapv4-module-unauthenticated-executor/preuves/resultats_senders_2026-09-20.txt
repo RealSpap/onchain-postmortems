@@ -1,0 +1,10 @@
+PER-SENDER BREAKDOWN of the module exploit, derived 2026-09-20
+======================================================================
+  0xfde0d1575ed8e06fbf36256bcdfa1f359281455a  2900.000000000 rsETH  across 1 transfer(s)
+  0x41a1d3ec1aa6c2d35a3c20a378b7b1d10137f27b  50.000000000 rsETH  across 1 transfer(s)
+  0x2f7e143e27f2fa26ef3b8ac72698f1d321422f67   9.500000000 rsETH  across 2 transfer(s)
+  0x0000000000382d3e66faf4f7c563b76b2da40f98   2.500000000 rsETH  across 5 transfer(s)
+  0xb8daff19d8dfd4e50ae11cd38ce94528656a99d8   2.500000000 rsETH  across 5 transfer(s)
+  0x0000000000300a8c18629d5c4fc25a498f22b6bd   1.500000000 rsETH  across 3 transfer(s)
+  TOTAL                                       2966.000000000 rsETH  across 17 transfers
+  distinct senders: 6

@@ -1,0 +1,181 @@
+reconstruct_exploit.py  run at head block 26018996
+exploit block 25980525  (2026-09-15 04:38:47 UTC)
+
+==============================================================================
+1. The Safe's Aave rsETH position, before and after
+==============================================================================
+  aEthrsETH at 25980524 (pre-exploit) :    53402.655157602
+  aEthrsETH at 25980525 (post)            :    50502.655157602
+  taken inside the exploit block                 :     2900.000000000
+  aEthrsETH at head 26018996                       :    50278.791748535
+  net drop vs pre-exploit                        :     3123.863409067
+  variable WETH debt pre-exploit                 :    51761.142317253 WETH
+  (this Safe is a leveraged rsETH/WETH looper, which is why the
+   collateral loss put it straight into liquidation range)
+
+==============================================================================
+2. Every aEthrsETH transfer out of the Safe, classified
+==============================================================================
+  A transfer is attributed to the module exploit when its own
+  transaction emitted ExecutionFromModuleSuccess on the Safe, and
+  to an Aave liquidation when it emitted LiquidationCall against
+  the Safe. The two are different events and are NOT summed into
+  one 'stolen' figure.
+
+  blk 25980525    2900.000000000 -> 0x00000000..  module exploit    modExec=8 liq=0  tx.from 0xfde0d157..
+  blk 25980755      50.000000000 -> 0x00000000..  module exploit    modExec=8 liq=0  tx.from 0x41a1d3ec..
+  blk 25980849       9.000000000 -> 0x00000000..  module exploit    modExec=8 liq=0  tx.from 0x2f7e143e..
+  blk 25980878       0.500000000 -> 0x00000000..  module exploit    modExec=8 liq=0  tx.from 0x2f7e143e..
+  blk 25980901       0.156300405 -> 0x464c71f6..  aave liquidation  modExec=0 liq=1  tx.from 0xfde0d157..
+  blk 25980901     157.707108663 -> 0x00000000..  aave liquidation  modExec=0 liq=1  tx.from 0xfde0d157..
+  blk 25980903       0.500000000 -> 0x00000000..  module exploit    modExec=8 liq=0  tx.from 0xb8daff19..
+  blk 25980904       0.500000000 -> 0x00000000..  module exploit    modExec=8 liq=0  tx.from 0x00000000..
+  blk 25980904       0.500000000 -> 0x00000000..  module exploit    modExec=8 liq=0  tx.from 0xb8daff19..
+  blk 25980905       0.500000000 -> 0x00000000..  module exploit    modExec=8 liq=0  tx.from 0x00000000..
+  blk 25980906       0.500000000 -> 0x00000000..  module exploit    modExec=8 liq=0  tx.from 0xb8daff19..
+  blk 25980906       0.500000000 -> 0x00000000..  module exploit    modExec=8 liq=0  tx.from 0x00000000..
+  blk 25980906       0.500000000 -> 0x00000000..  module exploit    modExec=8 liq=0  tx.from 0x00000000..
+  blk 25980907       0.500000000 -> 0x00000000..  module exploit    modExec=8 liq=0  tx.from 0xb8daff19..
+  blk 25980907       0.500000000 -> 0x00000000..  module exploit    modExec=8 liq=0  tx.from 0x00000000..
+  blk 25980907       0.500000000 -> 0x00000000..  module exploit    modExec=8 liq=0  tx.from 0x00000000..
+  blk 25980908       0.500000000 -> 0x00000000..  module exploit    modExec=8 liq=0  tx.from 0x00000000..
+  blk 25980908       0.500000000 -> 0x00000000..  module exploit    modExec=8 liq=0  tx.from 0x00000000..
+  blk 25980908       0.500000000 -> 0x00000000..  module exploit    modExec=8 liq=0  tx.from 0xb8daff19..
+
+  transfers                    : 19
+  module exploit subtotal      :   2966.000000000 rsETH
+  aave liquidation subtotal    :    157.863409068 rsETH
+  grand total out of the Safe  :   3123.863409068 rsETH
+  distinct senders driving the module exploit: 6
+     0x0000000000300a8c18629d5c4fc25a498f22b6bd
+     0x0000000000382d3e66faf4f7c563b76b2da40f98
+     0x2f7e143e27f2fa26ef3b8ac72698f1d321422f67
+     0x41a1d3ec1aa6c2d35a3c20a378b7b1d10137f27b
+     0xb8daff19d8dfd4e50ae11cd38ce94528656a99d8
+     0xfde0d1575ed8e06fbf36256bcdfa1f359281455a
+  first module drain block 25980525 (2026-09-15 04:38:47 UTC)
+  last  module drain block 25980908 (2026-09-15 05:55:23 UTC)
+
+==============================================================================
+3. Inside the winning transaction: whose exploit was it?
+==============================================================================
+  tx      0x0e7680b06cb8a6f86c149d9ba90d98e3d334e7b072dde03909d43fcfd98a8705
+  from    0xfde0d1575ed8e06fbf36256bcdfa1f359281455a   (bot EOA)
+  to      0x80bf7db69556d9521c03461978b8fc731dbbd4e4   (bot contract)
+  block   25980525  index 0  status 0x1
+
+  token flow (rsETH / aEthrsETH transfers only):
+    aEthrsETH  0x0000000000000000000000000000000000000000 -> 0x40e93a52f6af9fcd3b476aedadd7feabd9f7aba8       0.000000010
+    aEthrsETH  0x40e93a52f6af9fcd3b476aedadd7feabd9f7aba8 -> 0x000000000004444c5dc75cb358380d2e3de08a90    2900.000000000
+    aEthrsETH  0x000000000004444c5dc75cb358380d2e3de08a90 -> 0x10605ee48ff962952c966277a5d2dac0a0705cb1    2900.000000000
+    aEthrsETH  0x10605ee48ff962952c966277a5d2dac0a0705cb1 -> 0x0000000000000000000000000000000000000000    2900.000000000
+    rsETH      0x2d62109243b87c4ba3ee7ba1d91b0dd0a074d7b1 -> 0x10605ee48ff962952c966277a5d2dac0a0705cb1    2900.000000000
+    rsETH      0x10605ee48ff962952c966277a5d2dac0a0705cb1 -> 0x80bf7db69556d9521c03461978b8fc731dbbd4e4    2900.000000000
+    rsETH      0x80bf7db69556d9521c03461978b8fc731dbbd4e4 -> 0x000000000004444c5dc75cb358380d2e3de08a90      17.632591174
+    rsETH      0x80bf7db69556d9521c03461978b8fc731dbbd4e4 -> 0xc70f00cd7e461686b04b0e912e309beca8b80ea0    2882.367408826
+
+  Note the attacker's own helper contract appearing inside a
+  transaction sent by the bot: the bot replayed the attacker's
+  calldata and redirected the output to its own payout address.
+
+  ExecutionFromModuleSuccess events: 8
+    0xdcdc4ef8c992e75bb0f300536cd93e601c8882ab  x7
+    0xea18b13d11f705a68f0954f637949e1eaa7ac4ca  x1
+
+==============================================================================
+4. How the Safe's own tokens were moved: the Permit2 pattern
+==============================================================================
+  spender 0x000000000022d473030f116ddee9f6b43ac78ba3 (Permit2): 34 Approval events, 17 non-zero, max 2900.000000000
+
+  Each drain approves Permit2 for the exact amount, pulls it, then
+  resets the allowance to zero in the same transaction.
+
+  live allowances from the Safe at head:
+    0x000000000022d473030f116ddee9f6b43ac78ba3 : 0.000000000 aEthrsETH
+    0x000000000004444c5dc75cb358380d2e3de08a90 : 0.000000000 aEthrsETH
+    0x80bf7db69556d9521c03461978b8fc731dbbd4e4 : 0.000000000 aEthrsETH
+
+==============================================================================
+5. The Aave liquidation the exploit triggered
+==============================================================================
+  block 25980901  tx 0xe77f7513547d917e86e2ac8457b00e9f4336fee3908b9a674095603d467cde66
+    collateral asset 0xa1290d69c65a6fe4df752f95823fae25cb99e5a7 (rsETH)
+    debt asset       0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2 (WETH)
+    liquidated user  0x40e93a52f6af9fcd3b476aedadd7feabd9f7aba8 (the Safe)
+    debt covered        168.826021074 WETH
+    collateral taken    157.707108663 rsETH
+    liquidator       0x80bf7db69556d9521c03461978b8fc731dbbd4e4
+  LiquidationCall events against this Safe since the exploit: 1
+  The liquidator is the same contract that won the exploit race.
+
+==============================================================================
+6. The return: what came back, and when
+==============================================================================
+  blk 25989429 2026-09-16 10:26:23 UTC  -> 0x8c2aeccef3b3634d039c96993577f80d3278fee8       1.000000000  <-- Safe owner
+  blk 25989444 2026-09-16 10:29:23 UTC  -> 0x8c2aa78affec1a7ab1b94fb458212629c67f5ee8       0.000000000
+  blk 25989461 2026-09-16 10:32:47 UTC  -> 0x8c2a451b1f9666b20df5873a21eade3878b1fee8       0.000000000
+  blk 25989490 2026-09-16 10:38:35 UTC  -> 0x8c2aeccef3b3634d039c96993577f80d3278fee8    2881.367408826  <-- Safe owner
+  blk 25989532 2026-09-16 10:47:11 UTC  -> 0x8c2aa78affec1a7ab1b94fb458212629c67f5ee8       0.000000000
+  blk 25989551 2026-09-16 10:50:59 UTC  -> 0x8c2a451b1f9666b20df5873a21eade3878b1fee8       0.000000000
+
+  total returned by the bot payout address: 2882.367408826 rsETH
+  bot payout rsETH balance now            : 0.000000000
+  Safe owner rsETH balance now            : 2891.530408826
+
+==============================================================================
+7. Access control: nobody involved was authorised
+==============================================================================
+  Safe owners at the exploit block (3), threshold 1:
+    0x8c2aeccef3b3634d039c96993577f80d3278fee8
+    0x5f411b4485741e5a437fcc1ef103fbeb461158ca
+    0xe32e3bd2ec560513cab4757564ca50d13caf9f7f
+    is bot EOA          a Safe owner? False
+    is bot contract     a Safe owner? False
+    is bot payout       a Safe owner? False
+    is attacker EOA     a Safe owner? False
+    is attacker helper  a Safe owner? False
+
+==============================================================================
+8. The modules: dormant before, all disabled after
+==============================================================================
+  ExecutionFromModuleSuccess on this Safe in the 60000 blocks
+  before the exploit (blocks 25920525..25980524): 0
+
+  module enable/disable events in that window and after: 12
+    blk 25939284 2026-09-09 10:41:35 UTC  Enabled  0x3821844dfd03d53e210be2b0cb520edc9ec593d3
+    blk 25980931 2026-09-15 06:00:11 UTC  Disabled 0xea18b13d11f705a68f0954f637949e1eaa7ac4ca
+    blk 25980931 2026-09-15 06:00:11 UTC  Disabled 0xdcdc4ef8c992e75bb0f300536cd93e601c8882ab
+    blk 25981331 2026-09-15 07:20:23 UTC  Disabled 0x3821844dfd03d53e210be2b0cb520edc9ec593d3
+    blk 25981331 2026-09-15 07:20:23 UTC  Disabled 0xc9fa95346c4a74777893b778d0f593072ec77e96
+    blk 25981331 2026-09-15 07:20:23 UTC  Disabled 0xd691102216fd20581cfb93376d78495863442b22
+    blk 25981331 2026-09-15 07:20:23 UTC  Disabled 0x400f9fd48b925cb3155d2e44381df2e7338c636b
+    blk 25981331 2026-09-15 07:20:23 UTC  Disabled 0xb9533e1932d301f4df9e17a50d084e54fd9e6620
+    blk 25981331 2026-09-15 07:20:23 UTC  Disabled 0x5a98764284113713cdefe7518728c1888f47555a
+    blk 25981331 2026-09-15 07:20:23 UTC  Disabled 0x22e4de84b636015872190536649917ddf106f4f2
+    blk 25981331 2026-09-15 07:20:23 UTC  Disabled 0xc778735646d47734307f738ef24d30e511f5371b
+    blk 25981331 2026-09-15 07:20:23 UTC  Disabled 0xdecb8da080c2a195e59d590aea3417109e131719
+    isModuleEnabled(0xdcdc4ef8c992e75bb0f300536cd93e601c8882ab) pre-exploit=1 head=0
+    isModuleEnabled(0xea18b13d11f705a68f0954f637949e1eaa7ac4ca) pre-exploit=1 head=0
+
+==============================================================================
+9. Headline arithmetic
+==============================================================================
+  Aave oracle rsETH price at the exploit block : $2,699.45
+  Aave oracle rsETH price at head              : $2,782.55
+
+  drained by the module exploit    2966.000000000 rsETH   $     8,006,577
+  seized by the Aave liquidation    157.863409068 rsETH   $       426,145
+  total out of the Safe            3123.863409068 rsETH   $     8,432,722
+  returned by the bot 2026-09-16   2882.367408826 rsETH   $     7,780,815
+  EXPLOIT LOSS NOT RETURNED          83.632591174 rsETH   $       225,762
+
+  the figure published everywhere  2900.000000000 rsETH   $     7,828,413
+  understates the module drain by    66.000000000 rsETH
+
+==============================================================================
+10. Did the original attacker profit?
+==============================================================================
+  attacker EOA     rsETH 0.000000000   aEthrsETH 0.000000000   ETH 0.000471663
+  attacker helper  rsETH 0.000000000   aEthrsETH 0.000000000   ETH 0.000000000
+
+Done.
