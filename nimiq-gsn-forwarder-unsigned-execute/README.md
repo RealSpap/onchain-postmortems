@@ -22,6 +22,8 @@ The price of being trusted enough to make that call was one POL, staked through 
 | Reached the attacker on Ethereum | 50,447.825983 USDC, after 15.304996 of swap slippage and one abandoned leg |
 | DefiLlama | $50,400, source field empty, no incident link |
 | Attacker | `0x2258491525c21f334c5a2dc22ce55e55023fc45d`, an EIP-7702 delegated EOA, first transaction 20 minutes before the drain |
+| Attack contract | `0x8ed97c79a95b311e28b91eed6077af1576533fcd`, deployed through CREATE2 after being named as the payout recipient |
+| Cash-out address | `0x4b0e8b2c38b0044405e24db481d00be7d5419e04`, on Polygon and then on Ethereum |
 | Cost of entry | 1 POL staked in the OpenGSN StakeManager, 1000 second unstake delay, never withdrawn |
 | Signature supplied | 65 zero bytes, three times |
 | Events left behind | Three `Redeem` events with no matching `Open`, because the forged opens emit nothing |
