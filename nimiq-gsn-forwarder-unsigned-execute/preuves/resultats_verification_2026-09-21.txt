@@ -1,0 +1,68 @@
+Nimiq gas-abstraction drain, 2026-09-16: live reconstruction
+Polygon head block 94191108, Ethereum head block 26025722
+
+1. What left the liquidity wallet, and what was left behind
+-----------------------------------------------------------
+  [OK  ] wallet balance before == amount taken (0x3c499c54)  ->  before 26130.64171, after 0, now 0
+  [OK  ] wallet balance before == amount taken (0xc2132d05)  ->  before 24332.489269, after 0, now 0
+  [OK  ] wallet balance before == amount taken (0x2791bca1)  ->  before 0.661117, after 0, now 0
+  [OK  ] the three legs sum to the gross take  ->  50463.792096 units of stablecoin
+  [OK  ] gross take is not DefiLlama's rounded 50400  ->  DefiLlama publishes 50400, the chain says 50463.792096
+
+2. The forged requests: an unsigned open, relayed by the attacker
+-----------------------------------------------------------------
+  [OK  ] the opens tx is the attacker calling his own delegated EOA  ->  from == to == 0x2258491525c21f334c5a2dc22ce55e55023fc45d, nonce 7
+  [OK  ] that EOA carries an EIP-7702 delegation  ->  delegate 0x0404853a9d3fdd57073f06be08a72401e85ee251
+  [OK  ] three execute() calls reached the HTLC handlers  ->  3 calls with selector 0xe024dc7f
+  [OK  ] every forged request carries a 65-byte all-zero signature  ->  no signature was forged, the field was left empty
+  [OK  ] every forged request claims to come from the liquidity wallet  ->  0x24cb173ae221aea93369f34bdcf0ddb35b436773
+  [OK  ] each open names the attack contract as recipient and refund address
+  [OK  ] each open's hashlock is sha256(0x..01)  ->  0xec4916dd28fc4c10d78e287ca5d9cc51ee1ae73cbfde08c6b37324cbfaac8bc5
+  [OK  ] the amounts opened are exactly the three drained balances
+  [OK  ] the attack contract did not exist yet when it was named  ->  CREATE2 address, deployed 70 blocks later
+
+3. Nothing in the contract's own event log records the opens
+------------------------------------------------------------
+  [OK  ] no Open event exists for any of the three ids  ->  searched 1.3M blocks either side, found 0
+  [OK  ] the forged-open transaction emits no HTLC event at all  ->  the Open event lives in postRelayedCall, which ran on the attacker's own paymaster
+
+4. The redeem: secret = 1, paid out in full
+-------------------------------------------
+  [OK  ] three Redeem events, each with secret 0x..01
+  [OK  ] the redeemed ids are the three forged ids
+  [OK  ] the three token transfers match the three opened amounts  ->  0.661117 0x2791bca1, 26130.64171 0x3c499c54, 24332.489269 0xc2132d05
+  [OK  ] native handler paid out 26130.64171 of 26146.433531 held
+  [OK  ] bridged handler paid out 24332.489269 of 24362.397334 held
+  [OK  ] bridged handler paid out 0.661117 of 18.777821 held
+
+5. What it cost to be trusted: one POL, still staked
+----------------------------------------------------
+  [OK  ] the relay stake is 1 POL  ->  1 POL, unstake delay 1000 seconds
+  [OK  ] the stake was never withdrawn  ->  withdrawBlock still 0
+
+6. Four failed attempts, none of them an authorisation failure
+--------------------------------------------------------------
+     invalid externalGasLimit | invalid externalGasLimit | low gas | execution reverted
+  [OK  ] no failure came from a signature, nonce or permission check  ->  every revert is gas accounting
+
+7. The exit: one swap, one bridge, one hop
+------------------------------------------
+  [OK  ] the cash-out address held the drained USDC right after the redeem  ->  26130.64171
+  [OK  ] real USDC reached the same address on Ethereum  ->  50447.825983 USDC
+  [OK  ] gross minus swap slippage minus the abandoned leg equals it  ->  50463.792096 - 15.304996 - 0.661117 = 50447.825983
+  [OK  ] it left again in one transfer, in full  ->  to 0x37305b1cd40574e4c5ce33f8e8306be057fd7341
+  [OK  ] the destination is custodial-scale, so nothing past it is traceable  ->  3963230544.638977 USDC sitting there now
+
+8. The explorer trail is poisoned, the money is not
+---------------------------------------------------
+  [OK  ] dozens of fake tokens replay the exact stolen amount  ->  57 fake transfers of 50447.825983 across 45 contracts, none of them USDC
+  [OK  ] the real USDC balance of that address is zero
+  [OK  ] no fake contract is the canonical USDC  ->  46 distinct token contracts touched that address
+
+9. Five days on: no on-chain remediation
+----------------------------------------
+  [OK  ] neither HTLC handler has emitted anything since the drain  ->  0 events between the drain and head
+  [OK  ] the drained wallet's approvals were never revoked  ->  3 of them are still effectively unlimited
+  [OK  ] the drained wallet is empty, so nothing is at risk there now
+
+36 checks passed, 0 failed.

@@ -1,0 +1,154 @@
+Sources, primary artefacts and press comparison
+Nimiq gas-abstraction drain, Polygon, 2026-09-16
+Collected 2026-09-21, Polygon head block 94191108, Ethereum head block 26025722
+
+1. CONTRACT ADDRESSES: WHERE THEY COME FROM
+-------------------------------------------
+Not taken from press. Taken from Nimiq's own public wallet configuration,
+nimiq/wallet, src/config/config.mainnet.ts, branch master, fetched
+2026-09-21 from raw.githubusercontent.com:
+
+  polygon.usdc.htlcContract         0x0cFD862bE942846Cebad797d7c1BC6e47714959b
+  polygon.usdc.transferContract     0x3157d422cd1be13AC4a7cb00957ed717e648DFf2
+  polygon.usdc_bridged.htlcContract 0xF615bD7EA00C4Cc7F39Faad0895dB5f40891359f
+  polygon.usdt_bridged.htlcContract 0xF615bD7EA00C4Cc7F39Faad0895dB5f40891359f
+  polygon.usdc_bridged.transferContract 0x98E69a6927747339d5E543586FC0262112eBe4BD
+  polygon.openGsnRelayHubContract   0x6C28AfC105e65782D9Ea6F2cA68df84C9e7d750d
+
+The same file carries two flags that are themselves evidence of the
+response: polygon.isGasAbstractionUnderMaintenance is true, and
+fastspot.enabledSwapAssets no longer lists any stablecoin.
+
+2. CONTRACT SOURCE
+------------------
+Both handlers are verified. Source read from two independent mirrors that
+agree byte for byte on the relevant functions:
+
+  sourcify.dev/server/v2/contract/137/0xF615bD7EA00C4Cc7F39Faad0895dB5f40891359f
+  polygon.blockscout.com/api/v2/smart-contracts/0xF615bD7EA00C4Cc7F39Faad0895dB5f40891359f
+
+  Contract name      ERC20MetaHTLCHandler
+  Compiler           0.8.17+commit.8df45f5f
+  versionRecipient   2.2.6+opengsn.recipient.erc20meta.htlc.handler
+  versionPaymaster   2.2.6+opengsn.paymaster.erc20meta.htlc.handler
+
+  0x3157d422cd1be13AC4a7cb00957ed717e648DFf2 is a different contract,
+  ERC20PermitHandler, same OpenGSN base, same execute() shape.
+
+The two lines that matter, ERC20MetaHTLCHandler.sol lines 221 to 229
+(289 lines total in the verified source):
+
+  function execute(ForwardRequest calldata request, bytes32 domainSeparator,
+                   bytes32 requestTypeHash, bytes calldata suffixData,
+                   bytes calldata signature)
+      public override payable onlyRelayHub returns (bool, bytes memory) {
+      (request, domainSeparator, requestTypeHash, suffixData, signature);
+      ...
+      openPrivate(request.from, openRequestData);
+
+The first statement of the body is a no-op that exists only to silence the
+unused-parameter warning. The signature is never read. Authentication for
+this call path lives in preRelayedCall, which is the paymaster half of the
+same contract, and which a relay call is free to point somewhere else.
+
+ERC20PermitHandler.sol lines 122 to 134 carry the identical pattern, ending
+in transferPrivate(request.from, requestData).
+
+3. THE TRANSACTIONS
+-------------------
+  2026-09-16 23:08:04 UTC  block 93929996  nonce 0   attacker deploys helper
+  2026-09-16 23:08:31 UTC                  nonce 2   REVERT invalid externalGasLimit
+  2026-09-16 23:09:03 UTC                  nonce 3   REVERT invalid externalGasLimit
+  2026-09-16 23:22:18 UTC                  nonce 4   redeploys helper
+  2026-09-16 23:22:54 UTC                  nonce 6   REVERT low gas
+  2026-09-16 23:26:49 UTC  block 93930784  nonce 7   THREE FORGED OPENS
+       0xb067efae73637f3564f58af7f6027afc497e81e47624b0048636085c678858c0
+  2026-09-16 23:27:27 UTC                  nonce 8   REVERT creation code storage out of gas
+  2026-09-16 23:28:34 UTC  block 93930854  nonce 9   THREE REDEEMS
+       0xb2ca76dfbfe571742b4b66465b777ab1e06988a8632be1631bef9654cc64d169
+  2026-09-16 23:30:13 UTC                  nonce 10  funds the cash-out EOA
+  2026-09-16 23:34:37 UTC  KyberSwap MetaAggregationRouterV2, USDT0 to USDC
+  2026-09-16 23:35:57 UTC  LI.FI Permit2Proxy, bridge "eco", integrator
+                           jumper.exchange, destination chain id 1
+       0xc76ed1f76e08878d67d89b20fddeb056fd932399f934ff693b95b2f195926326
+  2026-09-16 23:36:11 UTC  Ethereum block 25993364, 50447.825983 USDC in
+       0x483f483b70fb1e980f7940f3565577a081e4ac3eab20404c6eeb82ac2bc9e518
+  2026-09-16 23:37:35 UTC  Ethereum block 25993371, 50447.825983 USDC out
+       0x3dceca78faac4d5c4e9bdfce9c3a9063b766077292b78942a95b4a04d8783bc4
+
+Nonces 1 and 5 are consumed by EIP-7702 authorisation tuples rather than by
+ordinary transactions, which is why they do not appear in the list. The
+delegation is still live: eth_getCode on the attacker EOA returns
+0xef01000404853a9d3fdd57073f06be08a72401e85ee251.
+
+4. REMEDIATION TIMELINE, FROM NIMIQ'S OWN REPOSITORY
+----------------------------------------------------
+api.github.com/repos/nimiq/wallet/commits, path src/config/config.mainnet.ts,
+fetched 2026-09-21. All times UTC.
+
+  2026-09-17 18:25:48  22520ca984  config: show a maintenance message for
+                                   swaps in the Wallet
+  2026-09-17 21:11:11  0b0122ab2f  router.ts,Sidebar: show swap maintenance
+                                   via new WarningModal instead of tooltip
+  2026-09-17 22:31:35  32b484909f  config,router: put gas abstraction for
+                                   sending stablecoins under maintenance
+  2026-09-19 09:18:45  47fe85945a  config: re-enable NIM-BTC swaps
+
+First mitigation commit lands 18 hours 57 minutes after the drain. The
+gas-abstraction switch lands 23 hours 3 minutes after it. Both are wallet
+configuration. Neither touches the chain: the handlers have no pause
+function, nothing was upgraded, and no approval was revoked.
+
+5. DEFILLAMA
+------------
+api.llama.fi/hacks, fetched 2026-09-21. Record:
+
+  {"date": 1789516800, "name": "Nimiq", "classification": "Input Validation",
+   "technique": "Signature Verification Flaw", "amount": 50400,
+   "chain": ["Polygon"], "bridgeHack": false, "targetType": "DeFi Protocol",
+   "source": "", "returnedFunds": null, "defillamaId": null,
+   "language": "Solidity"}
+
+The source field is empty. The amount is 50400. The chain says 50463.792096.
+
+6. PRESS
+--------
+coinfomania.com/nimiq-reports-50463-loss-due-to-exploit, read 2026-09-21
+after this reconstruction was finished, not before. It gives 50463 as the
+loss, credits a SlowMist alert, and describes the flaw as "the
+ERC20PermitHTLCHandler's execute function, which failed to validate crucial
+parameters". No address, no transaction hash, no chain named in the body.
+ERC20PermitHTLCHandler is not a contract that exists at either drained
+address: the drained ones are ERC20MetaHTLCHandler, and ERC20PermitHandler
+is the separate transfer contract.
+
+okx.com orbit insight 87713771195840, relaying Defimon Alerts, read the
+same way. It is the most accurate public account: it names the paymaster
+and forwarder doubling up, the missing signature check in execute, the
+attacker's own relay, the forged opens from the liquidity wallet, the
+preimage hash lock, and the three tokens. It gives no address, no hash, no
+amount breakdown, and treats the whole thing as one event rather than two
+transactions 105 seconds apart.
+
+Nothing found in any source reports: that the signature field was 65 zero
+bytes rather than a forgery, that the amounts are the wallet's exact
+balances to the last unit, that the entry price was a 1 POL relay stake
+that is still sitting in the StakeManager, that the operation ran on an
+EIP-7702 delegated EOA, that four attempts failed on gas first, that the
+forged opens leave no event in the contract's own log, or where the money
+went.
+
+7. WHAT IS DELIBERATELY NOT CLAIMED
+-----------------------------------
+- Dollar figures assume one dollar per stablecoin unit. No oracle price is
+  applied anywhere in this entry.
+- 0x37305b1cd40574e4c5ce33f8e8306be057fd7341 held 3963230544.638977 USDC at
+  the head block above. It carries no public label. Nothing downstream of
+  it is attributed to anyone, and no exchange is named.
+- 100 JPYC reached the cash-out address on 2026-09-17 from an address that
+  appears nowhere else in this incident. It is treated as dust and is not
+  attributed.
+- The 45 token contracts replaying 50447.825983 are treated as address
+  poisoning, not as fund movement. Their deployers are not identified.
+- No wallet other than the drained one is examined for exposure, and none
+  is named.

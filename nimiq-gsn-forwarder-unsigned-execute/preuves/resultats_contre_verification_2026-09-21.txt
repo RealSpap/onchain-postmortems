@@ -1,0 +1,37 @@
+ADVERSARIAL PASS, largest contributing line item: 26130.641710 USDC
+Provider order deliberately reversed vs reconstruct_exploit.py
+
+A. Every USDC movement of the drained wallet in the 24h around the drain
+   USDC transfers touching that wallet on 2026-09-16 UTC: 2
+   block 93913647  from 0x0cfd862be942846cebad797d7c1bc6e47714959b -> 0x24cb173ae221aea93369f34bdcf0ddb35b436773  14.05938
+   block 93930784  from 0x24cb173ae221aea93369f34bdcf0ddb35b436773 -> 0x0cfd862be942846cebad797d7c1bc6e47714959b  26130.64171
+   => the 26130.641710 is not one of several outflows netted together.
+      It is the only USDC that left that wallet all day.
+
+B. Who actually executed that transfer (not who appears in the log)
+   caller 0x0cfd862be942846cebad797d7c1bc6e47714959b  transferFrom(0x24cb173ae221aea93369f34bdcf0ddb35b436773, 0x0cfd862be942846cebad797d7c1bc6e47714959b, 26130.64171)
+   => pulled by the handler itself under its pre-existing allowance,
+      inside the relayed call. Not a wallet-initiated transfer.
+
+C. Balance delta re-read on a different provider, one block either side
+   block 93930783  wallet USDC = 26130.64171
+   block 93930784  wallet USDC = 0
+   block 93930853  handler USDC = 26146.433531
+   block 93930854  handler USDC = 15.791821
+
+D. Press figure reconciliation
+   gross units          : 50463.792096
+   floor, as press prints: 50463
+   DefiLlama            : 50400
+   => Nimiq's reported 50463 is the floor of the on-chain sum.
+      DefiLlama is 63.792096 low and carries no source.
+
+E. Does anything else drain in the same window that I am NOT counting?
+   handler events in blocks 93930700-93931000: 3
+   block 93930854  0x0cfd862be9  0xfe5d8239fb4c
+   block 93930854  0xf615bd7ea0  0xfe5d8239fb4c
+   block 93930854  0xf615bd7ea0  0xfe5d8239fb4c
+   => only the three Redeem events. The forged opens emit nothing,
+      which is the finding, not a gap in this sweep.
+
+[exited with code 0]
