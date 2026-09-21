@@ -1,0 +1,87 @@
+Rotating figure-freshness re-check, 2026-09-21
+==============================================
+
+Entry: dreamhealthchain-award-two-wei-reclaim
+Previous review: 2026-09-17 (block 122476848)
+This review: BNB Chain block 123170916
+
+1. SEARCH FOR A BETTER SOURCE THAN EXISTED WHEN THIS WAS WRITTEN
+---------------------------------------------------------------
+Searched for a Dream Health Chain official statement or post-mortem
+(protocol name plus "post-mortem" / "official statement" / the incident
+date). Nothing found. The only public technical account is still the
+DeFiHackLabs PoC (PR #1231). The entry's statement "No post-mortem by
+Dream Health Chain was found" still holds.
+
+Re-fetched the DefiLlama record from https://api.llama.fi/hacks:
+
+  name           : Dream Health Chain
+  date           : 1788566400 (2026-09-05)
+  amount         : 71800
+  classification : Protocol Logic
+  technique      : Reward Logic Flaw
+  chain          : ["BSC"]
+  source         : ""            <- still empty
+  defillamaId    : null
+  returnedFunds  : null
+
+Unchanged in every field since the entry was written. No new authoritative
+source exists, so nothing in the substance of the entry needed revising.
+
+2. LIVE STATE RE-DERIVED (https://bsc-dataseed.binance.org, block 123170916)
+---------------------------------------------------------------------------
+EIP-1967 implementation slot of the award contract
+0xe2A047aADbac51b0116Af1cE91eBDAe4B4202094:
+
+  slot 0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc
+  reads 0x5abb3fe2a02e5d4320862944cd3a0b8f6af28ce1
+
+  Unchanged. The vulnerable implementation has still never been replaced,
+  sixteen days after the exploit.
+
+Award contract DHC balance (token 0x743F15f4d2481774d970f286f0EbAD9C3Daed6E9):
+
+  1.082368461773454472 DHC
+
+  Unchanged. Never refilled.
+
+Attacker EOA 0xD3A8D0A9F55cf679fff6F277E49AfC95B49D2B07:
+
+  USDT raw  : 71851016708262373165555
+  USDT exact: 71851.016708262373165555
+  nonce     : 4
+
+  Unchanged to the wei, and still at nonce 4.
+
+  Note for future reviewers: a first pass of this re-check printed
+  71851.016708262381143868 and looked like a drift of about 8e-15 USDT.
+  That was a float64 artifact of dividing the raw integer by 1e18 in
+  Python, not a change on chain. Re-done with Decimal on the raw integer it
+  matches the published figure character for character. Compare raw
+  integers, not floats, on an 18-decimal token.
+
+3. INTERNAL-TENSION CHECK
+-------------------------
+Re-read the entry for the "both figures correct but reads as
+contradictory" class of issue. The $71,800 cash-out versus the
+568,370.746789 DHC loss is the obvious candidate, and the entry already
+states the relationship between them explicitly in the At a glance table
+and again in the pool-depth paragraph: the DHC never could have been sold
+for its pre-attack notional because the pool was not deep enough. No
+clarifying phrase needed.
+
+4. WHAT CHANGED IN THE ENTRY
+----------------------------
+Three time-relative claims were re-anchored to dates so they cannot go
+stale silently again. No figure was altered and no new claim was added:
+
+  - "Twelve days later the vulnerable implementation has never been
+    replaced" became "As of 2026-09-21, sixteen days on, ...". The original
+    was written on 2026-09-17 and had quietly become wrong as a day count.
+  - The At a glance "Still true at block 122476848 (2026-09-17)" row now
+    cites block 123170916 (2026-09-21) and carries the attacker's USDT
+    balance at full precision.
+  - "It is still at nonce 4 today" became "It was still at nonce 4 on
+    2026-09-21".
+
+Verdict: figures confirmed fresh, wording re-anchored.
