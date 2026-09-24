@@ -1,0 +1,175 @@
+SOURCES ET IDENTITE DES CONTRATS
+lecture du 2026-09-24T17:19:09.837129Z
+
+--- 1. la fiche DefiLlama, brute ---
+  source : https://api.llama.fi/hacks
+    amount             16380
+    bridgeHack         False
+    chain              ['Base']
+    classification     'Access Control'
+    date               1789948800
+    defillamaId        None
+    language           'Solidity'
+    name               'The Internet Token'
+    returnedFunds      None
+    source             ''
+    targetType         'Token'
+    technique          'Arbitrary External Call'
+    date lisible      : 2026-09-21T00:00:00Z
+  le champ source est vide : DefiLlama ne renvoie vers aucun lien d'incident.
+
+--- 2. identite des contrats, par les sources verifiees de Blockscout Base ---
+    (endpoint : https://base.blockscout.com/api/v2/smart-contracts/<adresse>)
+  0x968d6a288d7b024d5012c0b25d67a889e4e3ec19  RewardToken                  verifie=True  le jeton INT lui-meme
+  0x837dbabc4f5fa78baf177597edbda09645822032  LiquidityUnifier             verifie=True  le contrat exploite
+  0x6b82fdfc0344bd76d5cb58bc24d0ffe947975516  Convertor                    verifie=True  le contrat qui rend l'exploitation payante
+  0xd5d1a16084a116f8a6c2c706c110dbad2e99be83  RoleStore                    verifie=True  le registre de roles
+  0x1d34e08120dbd1ea9bdbcd90c2dc919b50ddff4c  OptimismMintableERC20        verifie=True  l'ancien jeton INT ponte
+  0x71c51c4ae1d76f262339593f01b9085d44fb2d98  TradeFeeCallback             verifie=True  un callback de transfert, PAS le contrat exploite
+  0xfd5bbca6942ac19c6ce7a65b11f3521237172079  AllowListCallback            verifie=True  un autre callback de transfert
+
+--- 3. les selecteurs du chemin d'attaque, recalcules par keccak local ---
+  0xd28e8f03  swapV3(address,address)
+  0xfa461e33  uniswapV3SwapCallback(int256,int256,bytes)
+  0x40c10f19  mint(address,uint256)
+  0x9dc29fac  burn(address,uint256)
+  0x67c6e39c  convert(address,uint256)
+  0x0dfe1681  token0()
+  0xd21220a7  token1()
+  0x128acb08  swap(address,bool,int256,uint160,bytes)
+  0x18160ddd  totalSupply()
+  0x70a08231  balanceOf(address)
+  ces selecteurs sont ceux que l'on retrouve dans la trace callTracer de la
+  transaction 0xed62bb27..., ce qui identifie le chemin sans dependre d'un nom.
+
+--- 4. couverture de presse lue APRES la reconstruction ---
+  Recherche web sur 'Internet Token Base exploit September 2026'. Les resumes
+  agreges renvoyes decrivent : un LiquidityUnifier qui fait confiance a une
+  adresse de pool fournie par l'appelant, un faux callback de pool qui minte
+  environ 925 millions d'INT, 5,847 WETH soit environ 16 033,55 $ sortis du
+  pool officiel INT/WETH, environ 764 millions d'INT gardes, un role de mint
+  non revoque a temps, des copieurs qui portent la supply a environ
+  156 milliards, et une proposition de gouvernance de l'attaquant visant la
+  tresorerie. Perte totale annoncee : environ 265 000 $.
+  Ce qui se verifie sur la chaine : le nom LiquidityUnifier, le pool fourni
+  par l'appelant, le montant du mint, le WETH sorti, l'INT garde, et le pic
+  de supply a 156 milliards (156 277 572 881 INT exactement).
+  Ce qui ne se verifie pas : la perte de 265 000 $ (le pool ne contenait que
+  5,847033390701967596 WETH en tout), et la proposition de gouvernance, que
+  cette entree n'affirme pas puisqu'elle ne l'a pas reconstruite.
+  Ce que la presse ne dit pas du tout : le mint seul ne rapporte rien, il est
+  annule par validateSupply et par _clearPool dans la meme transaction. Sans
+  le Convertor il n'y a pas d'exploitation. Une transaction le prouve :
+  0x0af9d052... a minte environ 2**224 wei et son delta de supply est nul.
+
+--- 5. extraits verbatim de la source verifiee de LiquidityUnifier ---
+    0x837dbabc4f5fa78baf177597edbda09645822032, recopie tel quel depuis
+    https://base.blockscout.com/api/v2/smart-contracts/0x837dbabc4f5fa78baf177597edbda09645822032
+        modifier validateSupply() {
+            uint256 supply = IERC20(rewardToken).totalSupply();
+    
+            _;
+    
+            if (IERC20(rewardToken).totalSupply() > supply) {
+                revert("supply cannot increase");
+            }
+        }
+        function swapV2(address token, address pool) external nonReentrant validateSupply {
+            _validatePool(pool);
+            _validatePoolV2Tokens(token, pool);
+    
+        function swapV3(address token, address pool) external nonReentrant validateSupply {
+            _validatePool(pool);
+            _validatePoolV3Tokens(token, pool);
+    
+            // zeroForOne: true if swapping token0 for token1
+            // and token0 is rewardToken
+            bool zeroForOne = IUniswapV3Pool(pool).token0() == rewardToken;
+        function uniswapV3SwapCallback(
+            int256 amount0Delta,
+            int256 amount1Delta,
+            bytes calldata /* data */
+        ) external {
+            address _currentPoolV3 = currentPoolV3;
+    
+            if (msg.sender != _currentPoolV3) {
+                revert("msg.sender != currentPoolV3");
+            }
+    
+            int256 amount = amount0Delta > 0 ? amount0Delta : amount1Delta;
+            RewardToken(rewardToken).mint(_currentPoolV3, amount.toUint256());
+        }
+    
+        function _validatePool(address pool) internal view {
+            if (pool == address(0)) {
+                revert("invalid pool");
+            }
+            if (pool.code.length == 0) {
+                revert("invalid pool");
+            }
+    
+            if (_excludedPools.contains(pool)) {
+                revert("excluded pool");
+            }
+        }
+    
+        function _validatePoolV2Tokens(address token, address pool) internal view {
+            address token0 = IUniswapV2Pair(pool).token0();
+            address token1 = IUniswapV2Pair(pool).token1();
+            if (!(token0 == rewardToken && token1 == token || token0 == token && token1 == rewardToken)) {
+                revert("invalid pool");
+            }
+        }
+    
+        function _validatePoolV3Tokens(address token, address pool) internal view {
+            address token0 = IUniswapV3Pool(pool).token0();
+            address token1 = IUniswapV3Pool(pool).token1();
+            if (!(token0 == rewardToken && token1 == token || token0 == token && token1 == rewardToken)) {
+                revert("invalid pool");
+            }
+        }
+    (fin de l'extrait)
+    A retenir : swapV3 est external et ne porte aucun onlyRole. _validatePool
+    ne verifie que trois choses, dont aucune n'etablit qu'il s'agit d'un vrai
+    pool Uniswap V3 : adresse non nulle, code non vide, absence de la liste
+    d'exclusion. _validatePoolV3Tokens interroge le pool LUI-MEME. Le callback
+    ne verifie que msg.sender == currentPoolV3, que le faux pool satisfait par
+    construction, puis minte le delta que ce meme pool annonce. Aucun appel a
+    une factory Uniswap n'apparait dans le fichier.
+
+--- 6. la source verifiee de Convertor, en entier, 38 lignes ---
+    0x6b82fdfc0344bd76d5cb58bc24d0ffe947975516
+    contract Convertor is ReentrancyGuard {
+        using SafeERC20 for IERC20;
+    
+        IERC20 public immutable transferrableToken;
+        RewardToken public immutable mintableToken;
+    
+        constructor(
+            IERC20 _transferrableToken,
+            RewardToken _mintableToken
+        ) {
+            transferrableToken = _transferrableToken;
+            mintableToken = _mintableToken;
+        }
+    
+        function convert(address from, uint256 amount) external nonReentrant {
+            if (from == address(transferrableToken)) {
+                transferrableToken.safeTransferFrom(msg.sender, address(this), amount);
+                mintableToken.mint(msg.sender, amount);
+                return;
+            }
+    
+            if (from == address(mintableToken)) {
+                mintableToken.burn(msg.sender, amount);
+                transferrableToken.safeTransfer(msg.sender, amount);
+                return;
+            }
+    
+            revert("invalid from token");
+        }
+    }
+    (fin de l'extrait)
+    A retenir : convert est external et ne porte aucun modificateur de role.
+    Le contrat detient lui-meme TOKEN_MINTER et TOKEN_BURNER sur l'INT, donc
+    n'importe quel appelant peut faire l'aller-retour dans les deux sens.
