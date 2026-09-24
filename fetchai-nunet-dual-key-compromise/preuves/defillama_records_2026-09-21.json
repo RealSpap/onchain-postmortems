@@ -1,0 +1,38 @@
+{
+  "fetched_from": "https://api.llama.fi/hacks",
+  "fetched_on": "2026-09-21",
+  "records": [
+    {
+      "date": 1789776000,
+      "name": "Fetch.ai",
+      "classification": "Key Compromise",
+      "technique": "Private Key Compromised",
+      "amount": 1530000,
+      "chain": [
+        "Ethereum"
+      ],
+      "bridgeHack": true,
+      "targetType": "DeFi Protocol",
+      "source": "",
+      "returnedFunds": null,
+      "defillamaId": null,
+      "language": "Solidity"
+    },
+    {
+      "date": 1789776000,
+      "name": "NuNet",
+      "classification": "Key Compromise",
+      "technique": "Private Key Compromised",
+      "amount": 462730,
+      "chain": [
+        "Ethereum"
+      ],
+      "bridgeHack": false,
+      "targetType": "Token",
+      "source": "",
+      "returnedFunds": null,
+      "defillamaId": null,
+      "language": "Solidity"
+    }
+  ]
+}

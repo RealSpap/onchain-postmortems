@@ -1,0 +1,8 @@
+inner hash          : 0x9f575d46e2d798845c3ef9c520e9d0ed4045d6989f45ebb12a8c0e88b45250a2
+personal_sign digest: 0xe7f44f44a26bddd6e7e00efedb239ad827c1c37bffb7070535dd0955f2d926d7
+recovered signer    : 0x69e5446b07b23de0A76730062c3252152216c85C
+stored authorizer   : 0x69e5446b07b23de0a76730062c3252152216c85c
+
+MATCH: True
+
+Conclusion: the signature is VALID and was produced by the contract's own conversion authorizer key.

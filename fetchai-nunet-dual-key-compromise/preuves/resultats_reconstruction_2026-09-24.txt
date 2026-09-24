@@ -1,0 +1,138 @@
+==============================================================================
+Fetch.ai / NuNet dual key compromise, 2026-09-19: live re-derivation
+head block: 26048177
+==============================================================================
+
+--- LEG 1: Fetch.ai TokenConversionManagerV3 ---
+PASS 1. conversionIn sender is the attacker EOA
+        expected: 0x1572f2af7696b39c85e3221cde8efb640f86c362
+        on-chain: 0x1572f2af7696b39c85e3221cde8efb640f86c362
+PASS 2. conversionIn target is the converter
+        expected: 0xab424a430cc09864fa1277a38193111705adf3a3
+        on-chain: 0xab424a430cc09864fa1277a38193111705adf3a3
+PASS 3. selector is conversionIn(address,uint256,bytes32,uint8,bytes32,bytes32)
+        expected: 0x6a02fcc4
+        on-chain: 0x6a02fcc4
+PASS 4. the tx succeeded
+        expected: 0x1
+        on-chain: 0x1
+PASS 5. exploit block timestamp
+        expected: 2026-09-19 20:21:47 UTC
+        on-chain: 2026-09-19 20:21:47 UTC
+PASS 6. conversionIn recipient is the cash-out wallet
+        expected: 0x2dcc1085fdcf418b421e45e86e4e54637cc21dfe
+        on-chain: 0x2dcc1085fdcf418b421e45e86e4e54637cc21dfe
+PASS 7. FET amount in the calldata
+        expected: 8721530401625910000000000
+        on-chain: 8721530401625910000000000
+PASS 8. converter FET balance the block before
+        expected: 8721530401625910000000000
+        on-chain: 8721530401625910000000000
+PASS 9. converter FET balance after the call
+        expected: 0
+        on-chain: 0
+PASS 10. the call moved 100 percent of the converter balance
+        expected: 8721530401625910000000000
+        on-chain: 8721530401625910000000000
+PASS 11. conversion authorizer before the exploit
+        expected: 0x69e5446b07b23de0a76730062c3252152216c85c
+        on-chain: 0x69e5446b07b23de0a76730062c3252152216c85c
+PASS 12. conversion authorizer is STILL the same address today
+        expected: 0x69e5446b07b23de0a76730062c3252152216c85c
+        on-chain: 0x69e5446b07b23de0a76730062c3252152216c85c
+
+--- LEG 2: NuNet NTX mint ---
+PASS 13. mint sender is the NuNet minter key
+        expected: 0x863f13e5b505f1eb17803b94ec9d3daf80092165
+        on-chain: 0x863f13e5b505f1eb17803b94ec9d3daf80092165
+PASS 14. mint target is the NTX token
+        expected: 0xf0d33beda4d734c72684b5f9abbebf715d0a7935
+        on-chain: 0xf0d33beda4d734c72684b5f9abbebf715d0a7935
+PASS 15. selector is mint(address,uint256)
+        expected: 0x40c10f19
+        on-chain: 0x40c10f19
+PASS 16. mint recipient is the SAME cash-out wallet as leg 1
+        expected: 0x2dcc1085fdcf418b421e45e86e4e54637cc21dfe
+        on-chain: 0x2dcc1085fdcf418b421e45e86e4e54637cc21dfe
+PASS 17. NTX minted
+        expected: 408532878133452
+        on-chain: 408532878133452
+PASS 18. mint block timestamp
+        expected: 2026-09-19 20:50:11 UTC
+        on-chain: 2026-09-19 20:50:11 UTC
+PASS 19. gap between the two legs, seconds
+        expected: 1704
+        on-chain: 1704
+PASS 20. NTX total supply before the mint
+        expected: 591467121866548
+        on-chain: 591467121866548
+PASS 21. NTX total supply after the mint
+        expected: 1000000000000000
+        on-chain: 1000000000000000
+PASS 22. the mint landed supply on exactly 1,000,000,000 NTX
+        expected: 1000000000000000
+        on-chain: 1000000000000000
+
+--- REMEDIATION ---
+PASS 23. NTX was not paused before the mint
+        expected: 0
+        on-chain: 0
+PASS 24. NTX is paused now
+        expected: 1
+        on-chain: 1
+PASS 25. pause block timestamp
+        expected: 2026-09-20 08:51:11 UTC
+        on-chain: 2026-09-20 08:51:11 UTC
+PASS 26. hours between the mint and the pause
+        expected: 12.02
+        on-chain: 12.02
+PASS 27. DEFAULT_ADMIN_ROLE was revoked from the compromised key
+        expected: False
+        on-chain: False
+PASS 28. the compromised key STILL held MINTER_ROLE at block 26025495
+        expected: True
+        on-chain: True
+PASS 29. MINTER_ROLE is revoked from it at block 26025859
+        expected: False
+        on-chain: False
+PASS 30. PAUSER_ROLE is revoked from it at block 26025861
+        expected: False
+        on-chain: False
+PASS 31. the compromised key holds neither role at head
+        expected: False
+        on-chain: False
+PASS 32. the same mint call succeeded before the pause
+        expected: True
+        on-chain: True
+
+--- CASH-OUT (single-transaction figures only) ---
+PASS 33. gross ETH received for the 8.72M FET, in one block
+        expected: 522.776440004
+        on-chain: 522.776440004
+PASS 34. cash-out wallet already held ETH before the incident
+        expected: 20.060285990
+        on-chain: 20.060285990
+PASS 35. cash-out wallet already held NTX before the mint
+        expected: 29021535.984019
+        on-chain: 29021535.984019
+
+--- LEG 2 PROCEEDS vs THE PAUSE (single reads, no aggregation) ---
+PASS 36. cash-out wallet NTX balance at the pause block
+        expected: 0
+        on-chain: 0
+PASS 37. cash-out wallet NTX balance at head
+        expected: 0
+        on-chain: 0
+PASS 38. the wallet's last NTX went to the MetaMask Swap Router
+        expected: ('0x2dcc1085fdcf418b421e45e86e4e54637cc21dfe', '0x881d40237659c251811cec9c364ef91dc08d300c')
+        on-chain: ('0x2dcc1085fdcf418b421e45e86e4e54637cc21dfe', '0x881d40237659c251811cec9c364ef91dc08d300c')
+PASS 39. NTX leaving the wallet in that one transaction
+        expected: 130004414.117471
+        on-chain: 130004414.117471
+PASS 40. seconds between that last NTX leaving and the pause
+        expected: 23664
+        on-chain: 23664
+
+==============================================================================
+40/40 checks passed
+==============================================================================

@@ -1,0 +1,38 @@
+======================================================================
+ROLE STATE ON THE COMPROMISED KEY 0x863f13e5b505f1eb17803b94ec9d3daf80092165
+======================================================================
+  MINTER_ROLE  at draft head 26025495 : True
+  MINTER_ROLE  at latest            : False
+  PAUSER_ROLE  at draft head 26025495 : True
+  PAUSER_ROLE  at latest            : False
+
+RoleRevoked events naming that key: 3
+  block 26017604  2026-09-20 08:43:47 UTC  DEFAULT_ADMIN_ROLE sender 0x78a60de4fbf1f1c2daf8c94b5e40f877032cef00
+    tx 0xd2b5e77ce6f8c73c2b5e9e56879b3f669a2c49f8016f287e62d218a449268971
+  block 26025859  2026-09-21 12:22:59 UTC  MINTER_ROLE        sender 0x78a60de4fbf1f1c2daf8c94b5e40f877032cef00
+    tx 0x78de71fc2c30f95a2c3b098a657d27fe8d39625f927490c56aa0b7eed8888439
+  block 26025861  2026-09-21 12:23:23 UTC  PAUSER_ROLE        sender 0x78a60de4fbf1f1c2daf8c94b5e40f877032cef00
+    tx 0x294c43e0394ecee51ed97618bb68e4391c7d21570da42e8d2d7c88b7f9214501
+
+  revocation sender matches the new admin 0x78a60de4fbf1f1c2daf8c94b5e40f877032cef00 : True
+
+hours from the mint to the MINTER_ROLE revocation : 39.55
+
+what the compromised key can do now:
+    unpause()        reverts: execution reverted: ERC20PresetMinterPauser: must have pauser role to unpause', 
+    mint(cashout,1)  reverts: execution reverted: ERC20PresetMinterPauser: must have minter role to mint', 'da
+
+======================================================================
+WHERE THE MINTED NTX WAS WHEN THE TOKEN WAS PAUSED
+======================================================================
+  cash-out wallet NTX balance at latest : 0.000000
+  cash-out wallet NTX balance at the pause block 26017641 : 0.000000
+
+  last NTX to leave the wallet, tx 0x7831ac650481e446c065a241e40def85131cc1145ac7979c61392e18560d08fb
+    from 0x2dcc1085fdcf418b421e45e86e4e54637cc21dfe
+    to   0x881d40237659c251811cec9c364ef91dc08d300c  (MetaMask Swap Router: True)
+    status 0x1, block 26015677, 2026-09-20 02:16:47 UTC
+    NTX out of the wallet in this tx : 130004414.117471
+
+  pause at 2026-09-20 08:51:11 UTC
+  the wallet's last NTX left 23664 seconds (6h34m24s) BEFORE the pause
