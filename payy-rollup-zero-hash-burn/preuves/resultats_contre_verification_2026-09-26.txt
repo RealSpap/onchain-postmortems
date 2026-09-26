@@ -1,0 +1,161 @@
+Payy Network rollup bridge drain, Ethereum, 2026-09-24
+reconstruction executee le 2026-09-26T18:24:07Z
+endpoints : https://ethereum-rpc.publicnode.com, https://gateway.tenderly.co/public/mainnet
+
+==========================================================================
+SECTION 0. keccak-256 maison contre des reponses connues
+==========================================================================
+  [OK  ] keccak of the empty string
+  [OK  ] transfer(address,uint256) selector
+  [OK  ] ERC-20 Transfer topic
+
+==========================================================================
+SECTION 1. la transaction du drain principal
+==========================================================================
+  tx 0xf43abdac5422087f645d77923eb1c825178bff3eb86d17d40fa18d89701e1814
+  from 0x5343b904bf837befb2f5a256b0cd5fbf30503d38  to 0x367c1eaf14aa06b78ce76bd0243297de79d85270  bloc 26044909  2026-09-24T04:21:23Z
+  [OK  ] sent by the prover address
+  [OK  ] sent to the Payy RollupV1 proxy
+  [OK  ] the call is verifyRollup, selector computed locally
+  [OK  ] it succeeded
+  [OK  ] block
+  [OK  ] timestamp
+  implementation EIP-1967 au bloc 26044909 : 0x7d8837b547f4fea0053571cb149e845fc58e9b2d
+  [OK  ] the proxy pointed at the verified RollupV1 implementation
+
+==========================================================================
+SECTION 2. les messages prouves : burns a hash nul
+==========================================================================
+  precedent hauteur 33183168  vk 0x0701c58cb73e870b  1003 entrees publiques  1 signature(s)  10 messages  0 burn(s) a hash nul
+  drain 1   hauteur 33198253  vk 0x0701c58cb73e870b  1003 entrees publiques  1 signature(s)  18 messages  1 burn(s) a hash nul
+      burn a hash nul : 1,828,589.378132 USDC -> 0xaa4985dbdabfaca344237d40f7e06c4a0bb57e70
+  drain 2   hauteur 33216759  vk 0x0701c58cb73e870b  1003 entrees publiques  1 signature(s)  32 messages  2 burn(s) a hash nul
+      burn a hash nul : 1.000000 USDC -> 0xaa4985dbdabfaca344237d40f7e06c4a0bb57e70
+      burn a hash nul : 90,202.820016 USDC -> 0xaa4985dbdabfaca344237d40f7e06c4a0bb57e70
+  [OK  ] same verification key in all three rollups
+  [OK  ] each carries 1003 public inputs
+  [OK  ] each carries exactly one validator signature
+  [OK  ] drain 1 continues from the previous root
+  [OK  ] drain 2 continues from drain 1's root
+  [OK  ] drain 1 height
+  [OK  ] drain 2 height
+  [OK  ] the previous ordinary rollup has no zero-hash burn
+  [OK  ] drain 1: one zero-hash burn, 1,828,589.378132 USDC to the attacker
+  [OK  ] drain 2: two zero-hash burns, 1 and 90,202.820016 USDC to the attacker
+  [OK  ] every other burn in both batches has a non-zero hash
+  burns ordinaires dans les deux lots : 31
+
+==========================================================================
+SECTION 3. les sorties d'USDC du lot 1 et le chiffre de presse
+==========================================================================
+  12 transferts USDC sortis du pont, total 1,832,149.468132
+  vers l'attaquant 1,828,589.378132, vers les autres 3,560.090000
+  [OK  ] total USDC leaving the bridge in drain 1 (the press figure)
+  [OK  ] of which to the attacker (the DefiLlama figure)
+  [OK  ] the rest, ordinary withdrawals in the same batch
+  [OK  ] Burned topic computed locally matches the receipt
+  [OK  ] exactly one Burned event with a zero hash in drain 1
+  [OK  ] and its recipient is the attacker
+
+==========================================================================
+SECTION 4. soldes du pont et total pris
+==========================================================================
+  pont avant le drain 1 (bloc 26044908) 1,927,099.804991 USDC
+  pont apres le drain 1 (bloc 26044909) 94,950.336859 USDC
+  pont avant le drain 2 (bloc 26046438) 96,773.872712 USDC
+  pont apres le drain 2 (bloc 26046439) 700.752696 USDC
+  pont ancrage (bloc 26063354)        710.752696 USDC
+  total pris par l'attaquant dans les deux lots : 1,918,792.198148 USDC
+  [OK  ] bridge balance before drain 1
+  [OK  ] bridge balance after drain 1, not zero
+  [OK  ] drain 2 paid the attacker 90,202.820016 USDC
+  [OK  ] attacker total across both batches
+  [OK  ] drain 2 also repaid the substitutor 1 USDC
+  [OK  ] drain 2 timestamp
+  [OK  ] bridge balance at the anchor block
+  part du solde initial prise : 99.5689 %
+  [OK  ] share of the pre-attack balance taken, in millionths
+  blockHeight du pont a l'ancrage : 33216759
+  [OK  ] no rollup has been accepted since drain 2
+
+==========================================================================
+SECTION 5. historique : tous les burns a hash nul depuis le bloc 18000000
+==========================================================================
+  bloc 26044909  0xf43abdac5422087f645d77923eb1c825178bff3eb86d17d40fa18d89701e1814  -> 0xaa4985dbdabfaca344237d40f7e06c4a0bb57e70
+  bloc 26044911  0xb82f517eceb472f3b31dc7048ad730f867a251e4e9718ccdbf3593ee8bde596a  -> 0xaa4985dbdabfaca344237d40f7e06c4a0bb57e70
+  bloc 26046439  0xda88fb9273c703a4d2647c744362f58b6db4e104d7a203a75d4b67e3d54858c8  -> 0x7c7e3fd85854be2d95516eda97a808424e717978
+  bloc 26046439  0xda88fb9273c703a4d2647c744362f58b6db4e104d7a203a75d4b67e3d54858c8  -> 0xaa4985dbdabfaca344237d40f7e06c4a0bb57e70
+  [OK  ] exactly four zero-hash Burned events in the bridge's history
+  [OK  ] all four sit in the attack window
+  [OK  ] three pay the attacker, one repays the substitutor
+
+==========================================================================
+SECTION 6. qui signe, qui prouve, qui verifie
+==========================================================================
+  jeux de validateurs : 1, validateurs du jeu courant : ['0x41582701cb3117680687df80bd5a2ca971bda964']
+  [OK  ] one validator set
+  [OK  ] with a single validator, so one signature is a two-thirds majority
+  zkVerifiers(VK) : verifier 0x14dacd534ddc676601b27f41eb541a7951524a2f messages_length 1000 enabled 1
+  [OK  ] the verification key maps to the verifier contract
+  [OK  ] and is enabled
+  VerifierAdded : 2 evenement(s), dernier au bloc 25101717 (2026-05-15T16:22:47Z)
+  [OK  ] verifier last changed at block 25101717, long before the attack
+  [OK  ] the same prover sent 0x26991c69
+  [OK  ] the same prover sent 0xda88fb92
+
+==========================================================================
+SECTION 7. le paiement anticipe d'1 USDC sur un burn a hash nul
+==========================================================================
+  tx 0xb82f517eceb472f3b31dc7048ad730f867a251e4e9718ccdbf3593ee8bde596a  from 0x7c7e3fd85854be2d95516eda97a808424e717978  bloc 26044911  2026-09-24T04:21:47Z
+  [OK  ] sent by the substitutor
+  [OK  ] it succeeded, so the onlyBurnSubstitutor gate accepted the sender
+  [OK  ] the call is substituteBurn, selector computed locally
+  [OK  ] burn address argument is the attacker
+  [OK  ] hash argument is zero
+  [OK  ] amount argument is 1 USDC
+  [OK  ] 24 seconds after drain 1
+
+==========================================================================
+SECTION 8. les deux depots d'essai de l'attaquant
+==========================================================================
+  0xd0ca87eda8  2026-09-22T13:31:11Z  [('0xaa4985dbdabfaca344237d40f7e06c4a0bb57e70', '0x367c1eaf14aa06b78ce76bd0243297de79d85270', '5.000000')]
+  [OK  ] deposit from the attacker
+  [OK  ] through mint(bytes32,bytes32,bytes32)
+  [OK  ] of 5 USDC into the bridge
+  [OK  ] timestamp
+  0xb43eccd37f  2026-09-23T08:25:35Z  [('0xaa4985dbdabfaca344237d40f7e06c4a0bb57e70', '0x367c1eaf14aa06b78ce76bd0243297de79d85270', '5.000000')]
+  [OK  ] deposit from the attacker
+  [OK  ] through mint(bytes32,bytes32,bytes32)
+  [OK  ] of 5 USDC into the bridge
+  [OK  ] timestamp
+
+==========================================================================
+SECTION 9. premiers sauts de la sortie
+==========================================================================
+  solde de l'attaquant avant le drain : 4.517285 USDC
+  bloc 26044917  0xb2fd99c115ad98162149fa1e0e8243050d3009719910e00bff16808a12ca10e7  -> 0xb483b1742aad0a60a9fc91bb36c5a42dbe3f3d38  1,828,594.895417 USDC
+  [OK  ] one non-zero USDC transfer out of the attacker in the next 100 blocks
+  [OK  ] to the first hop
+  [OK  ] it closes exactly: prior balance + drain 1 + the 1 USDC substitution
+  [OK  ] ninety-six seconds after drain 1
+  code de 0xb483b1742aad0a60a9fc91bb36c5a42dbe3f3d38 : 0xef010063c0c19a282a1b52b07dd5a65b58948a07dae32b
+  [OK  ] the first hop is an EIP-7702 delegated account
+  [OK  ] delegating to
+  saut 1 bloc 26044937 -> 0xe3478b0bb1a5084567c319096437924948be1964  2.063730 USDC
+  saut 1 bloc 26044939 -> 0x225a38bc71102999dd13478bfabd7c4d53f2dc17  457,148.723854 USDC
+  saut 1 bloc 26044940 -> 0x225a38bc71102999dd13478bfabd7c4d53f2dc17  457,148.207921 USDC
+  saut 1 bloc 26044942 -> 0x225a38bc71102999dd13478bfabd7c4d53f2dc17  228,573.974978 USDC
+  saut 1 bloc 26044944 -> 0x225a38bc71102999dd13478bfabd7c4d53f2dc17  342,860.962517 USDC
+  saut 1 bloc 26044946 -> 0x225a38bc71102999dd13478bfabd7c4d53f2dc17  171,430.481258 USDC
+  saut 1 bloc 26044949 -> 0x225a38bc71102999dd13478bfabd7c4d53f2dc17  171,430.481259 USDC
+  [OK  ] six transfers from the first hop to one contract
+  [OK  ] totalling 1,828,592.831787 USDC
+  [OK  ] the six transfers end six minutes 24 seconds after the hop was funded
+  [OK  ] plus 2.063730 USDC to a separate address
+  [OK  ] the receiving contract has code
+  attaquant a l'ancrage : 90,202.821244 USDC
+  [OK  ] the 90,202.82 USDC of drain 2 still sit on the attacker at the anchor
+
+==========================================================================
+RESULTAT : 73 controles reussis, 0 echecs
+==========================================================================

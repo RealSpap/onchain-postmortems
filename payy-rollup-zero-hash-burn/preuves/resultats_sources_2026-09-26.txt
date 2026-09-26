@@ -1,0 +1,166 @@
+SOURCES, relevees le 2026-09-26
+
+== 1. DefiLlama, https://api.llama.fi/hacks, enregistrement Payy Network ==
+{
+ "date": 1790208000,
+ "name": "Payy Network",
+ "classification": "Bridge & Cross-Chain",
+ "technique": "Bridge Logic Flaw",
+ "amount": 1828589.378132,
+ "chain": [
+  "Ethereum"
+ ],
+ "bridgeHack": true,
+ "targetType": "DeFi Protocol",
+ "source": "",
+ "returnedFunds": null,
+ "defillamaId": null,
+ "language": "Solidity"
+}
+
+== 2. Source verifiee, Sourcify, https://sourcify.dev/server/v2/contract/1/0x7d8837b547f4fea0053571cb149e845fc58e9b2d ==
+match exact_match runtimeMatch exact_match contrat contracts/rollup3/RollupV1.sol:RollupV1 compilateur 0.8.20+commit.a1b79de6
+-- contracts/rollup3/RollupV1.sol, lignes 314-372 (verifyRollup) --
+ 314      function verifyRollup(
+ 315          uint256 height,
+ 316          bytes32 verificationKeyHash,
+ 317          bytes calldata aggrProof,
+ 318          // oldRoot, newRoot, commitHash, <messages_length>, 16x kzg
+ 319          bytes32[] calldata publicInputs,
+ 320          bytes32 otherHashFromBlockHash,
+ 321          Signature[] calldata signatures
+ 322      ) public onlyProver {
+ 323          require(
+ 324              zkVerifiers[verificationKeyHash].enabled,
+ 325              "RollupV1: ZK verifier not allowed"
+ 326          );
+ 327  
+ 328          require(
+ 329              publicInputs.length ==
+ 330                  zkVerifiers[verificationKeyHash].messages_length + 3,
+ 331              "RollupV1: Invalid publicInputs length"
+ 332          );
+ 333  
+ 334          bytes32 oldRoot = publicInputs[0];
+ 335          bytes32 newRoot = publicInputs[1];
+ 336          bytes32 commitHash = publicInputs[2];
+ 337  
+ 338          verifyRootHash(oldRoot);
+ 339  
+ 340          verifyCommitHash(commitHash);
+ 341  
+ 342          verifyValidatorSignatures(
+ 343              newRoot,
+ 344              height,
+ 345              otherHashFromBlockHash,
+ 346              signatures
+ 347          );
+ 348  
+ 349          verifyAllMessages(
+ 350              // Skip the first 3 public inputs as these are never messages
+ 351              3,
+ 352              publicInputs,
+ 353              zkVerifiers[verificationKeyHash].messages_length
+ 354          );
+ 355  
+ 356          require(
+ 357              zkVerifiers[verificationKeyHash].verifier.verify(
+ 358                  aggrProof,
+ 359                  publicInputs
+ 360              ),
+ 361              "RollupV1: ZK proof verification failed"
+ 362          );
+ 363  
+ 364          rootHash = newRoot;
+ 365          require(
+ 366              height > blockHeight,
+ 367              "RollupV1: New block height must be greater than current"
+ 368          );
+ 369          blockHeight = height;
+ 370  
+ 371          emit RollupVerified(height, newRoot);
+ 372      }
+-- contracts/rollup3/RollupV1.sol, lignes 442-470 (verifyBurn) --
+ 442      function verifyBurn(
+ 443          uint i,
+ 444          bytes32[] calldata messages
+ 445      ) internal returns (uint) {
+ 446          bytes32 note_kind = messages[i + 1];
+ 447          uint256 value = uint256(messages[i + 2]);
+ 448          bytes32 hash = messages[i + 3];
+ 449          address burn_addr = bytes32ToAddress(messages[i + 4]);
+ 450  
+ 451          address token = tokens[note_kind];
+ 452  
+ 453          bytes32 substituteBurnKey = getSubstituteBurnKey(
+ 454              hash,
+ 455              burn_addr,
+ 456              note_kind,
+ 457              value
+ 458          );
+ 459          address substitutor = substitutedBurns[substituteBurnKey];
+ 460          if (substitutor != address(0)) {
+ 461              bool success = executeBurn(token, substitutor, hash, value, false);
+ 462              if (success) {
+ 463                  delete substitutedBurns[substituteBurnKey];
+ 464              }
+ 465          } else {
+ 466              executeBurn(token, burn_addr, hash, value, false);
+ 467          }
+ 468  
+ 469          return i + 5;
+ 470      }
+-- contracts/rollup3/RollupV1.sol, lignes 725-765 (verifyValidatorSignatures) --
+ 725      function verifyValidatorSignatures(
+ 726          bytes32 newRoot,
+ 727          uint256 height,
+ 728          bytes32 otherHashFromBlockHash,
+ 729          Signature[] calldata signatures
+ 730      ) internal {
+ 731          updateValidatorSetIndex(height);
+ 732          ValidatorSet storage validatorSet = getValidators();
+ 733  
+ 734          require(signatures.length > 0, "RollupV1: No signatures");
+ 735  
+ 736          uint minValidators = (validatorSet.validatorsArray.length * 2) / 3 + 1;
+ 737          require(
+ 738              signatures.length >= minValidators,
+ 739              "RollupV1: Not enough signatures from validators to verify block"
+ 740          );
+ 741  
+ 742          bytes32 sigHash = getSignatureMessageHash(
+ 743              newRoot,
+ 744              height,
+ 745              otherHashFromBlockHash
+ 746          );
+ 747  
+ 748          address previous = address(0);
+ 749          for (uint i = 0; i < signatures.length; i++) {
+ 750              Signature calldata signature = signatures[i];
+ 751              address signer = ECDSA.recover(
+ 752                  sigHash,
+ 753                  uint8(signature.v),
+ 754                  signature.r,
+ 755                  signature.s
+ 756              );
+ 757              require(
+ 758                  validatorSet.validators[signer] == true,
+ 759                  "RollupV1: Signer is not a validator"
+ 760              );
+ 761  
+ 762              require(signer > previous, "RollupV1: Signers are not sorted");
+ 763              previous = signer;
+ 764          }
+ 765      }
+
+== 3. Presse, lue APRES la reconstruction (resume, pas de citation longue) ==
+Unchained, 2026-09-25, https://unchainedcrypto.com/payy-rules-out-a-compromised-key-in-1-92-million-drain-of-users-deposits/
+  total annonce 1,92 M USDC ; premier lot 1 828 589 USDC a 04:21 UTC ; second lot 90 202 USDC a 09:30 UTC ;
+  environ 700 USDC restants ; premier lot converti en environ 683 ETH via UniswapX (non re-derive ici) ;
+  Payy exclut une cle compromise, l'ingenierie sociale et une faille de son infrastructure hors chaine ;
+  ne mentionne ni le hash nul des burns, ni le jeu de validateurs a un seul membre, ni le paiement anticipe d'1 USDC.
+CryptoSlate, 2026-09-25, https://cryptoslate.com/payy-bridge-exploit-freezes-crypto-cards-and-no-balances-remain-safe/
+  1 832 149,4681 USDC sortis en une transaction au bloc 26044909 ; contrat 'vide de tout son solde' ;
+  aucune cause technique ; aucun second lot.
+Cybersecuritynews / GBHackers, 2026-09 : 'drain du solde complet', environ 1,83 M$.
+Recherche web du 2026-09-26 : 'Payy Network bridge exploit September 2026', 10 resultats, aucun post-mortem technique de Payy trouve.
