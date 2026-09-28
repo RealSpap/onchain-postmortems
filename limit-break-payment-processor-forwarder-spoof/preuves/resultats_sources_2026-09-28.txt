@@ -1,0 +1,151 @@
+SOURCES, relevees le 2026-09-28
+
+== 1. DefiLlama, https://api.llama.fi/hacks, enregistrement Limit Break ==
+{
+ "date": 1790208000,
+ "name": "Limit Break Payment Processor",
+ "classification": "Access Control",
+ "technique": "Token Approval Abuse",
+ "amount": null,
+ "chain": [
+  "Ethereum",
+  "ApeChain"
+ ],
+ "bridgeHack": false,
+ "targetType": "NFTfi",
+ "source": "",
+ "returnedFunds": null,
+ "defillamaId": null,
+ "language": "Solidity"
+}
+
+(Sources Sourcify v2, exact_match : PaymentProcessor 0x9a1d00bed7cd04bcda516d721a596eb22aac6834, ModuleTrades 0x9a1d0059f5534e7a6c6c4dae390ebd3a731bd7dc, TrustedForwarder 0xff000047abea9064c699c0727148776e4e17771c, TrustedForwarderFactory 0xff0000b6c4352714cce809000d0cd30a0e0c8dce)
+
+== 2. PaymentProcessor.sol, modifier delegateCall ==
+  137      modifier delegateCall(address module, bytes4 selector, bytes calldata data) {
+  138          assembly {
+  139              // This protocol is designed to work both via direct calls and calls from a trusted forwarder that
+  140              // preserves the original msg.sender by appending an extra 20 bytes to the calldata.  
+  141              // The following code supports both cases.  The magic number of 68 is:
+  142              // 4 bytes for the selector
+  143              // 32 bytes calldata offset to the data parameter
+  144              // 32 bytes for the length of the data parameter
+  145              let lengthWithAppendedCalldata := sub(calldatasize(), 68)
+  146  
+  147              let ptr := mload(0x40)
+  148              mstore(ptr, selector)
+  149              calldatacopy(add(ptr,0x04), data.offset, lengthWithAppendedCalldata)
+  150              mstore(0x40, add(ptr,add(0x04, lengthWithAppendedCalldata)))
+  151  
+  152              let result := delegatecall(gas(), module, ptr, add(lengthWithAppendedCalldata, 4), 0, 0)
+  153              if iszero(result) {
+  154                  // Call has failed, retrieve the error message and revert
+  155                  let size := returndatasize()
+  156                  returndatacopy(0, 0, size)
+  157                  revert(0, size)
+  158              }
+  159          }        
+  160          _;
+
+== 3. ModuleTrades.sol, buyListing : calcul du taker ==
+   87      function buyListing(
+   88          bytes32 domainSeparator, 
+   89          Order memory saleDetails, 
+   90          SignatureECDSA memory sellerSignature,
+   91          Cosignature memory cosignature,
+   92          FeeOnTop memory feeOnTop
+   93      ) public payable {
+   94          uint256 appendedDataLength;
+   95          unchecked {
+   96              appendedDataLength = msg.data.length - BASE_MSG_LENGTH_BUY_LISTING;
+   97          }
+   98  
+   99          TradeContext memory context = TradeContext({
+  100              domainSeparator: domainSeparator,
+  101              channel: msg.sender,
+  102              taker: appendedDataLength == 20 ? _msgSender() : msg.sender,
+  103              disablePartialFill: true
+  104          });
+
+== 4. lib/TrustedForwarder/src/TrustedForwarderERC2771Context.sol (compile dans ModuleTrades), _msgSender ==
+   32      function _msgSender() internal view virtual override returns (address sender) {
+   33          if (_factory.isTrustedForwarder(msg.sender)) {
+   34              if (msg.data.length >= 20) {
+   35                  // The assembly code is more direct than the Solidity version using `abi.decode`.
+   36                  /// @solidity memory-safe-assembly
+   37                  assembly {
+   38                      sender := shr(96, calldataload(sub(calldatasize(), 20)))
+   39                  }
+   40              } else {
+   41                  return super._msgSender();
+   42              }
+   43          } else {
+   44              return super._msgSender();
+   45          }
+   46      }
+
+== 5. TrustedForwarder.sol, forwardCall sans signature ==
+   66      function forwardCall(address target, bytes calldata message)
+   67          external
+   68          payable
+   69          returns (bytes memory returnData)
+   70      {
+   71          address signerCache = signer;
+   72          if (signerCache != address(0)) {
+   73              revert TrustedForwarder__CannotUseWithoutSignature();
+   74          }
+   75  
+   76          bytes memory encodedData = _encodeERC2771Context(message, _msgSender());
+   77          assembly {
+
+== 6. TrustedForwarder.sol, _encodeERC2771Context ==
+  194      function _encodeERC2771Context(bytes calldata _data, address _msgSender) internal pure returns (bytes memory encodedData) {
+  195          assembly  {
+  196              // Calculate total length: data.length + 20 bytes for the address
+  197              let totalLength := add(_data.length, 20)
+  198  
+  199              // Allocate memory for the combined data
+  200              encodedData := mload(0x40)
+  201              mstore(0x40, add(encodedData, add(totalLength, 0x20)))
+  202  
+  203              // Set the length of the `encodedData`
+  204              mstore(encodedData, totalLength)
+  205  
+  206              // Copy the `bytes calldata` data
+  207              calldatacopy(add(encodedData, 0x20), _data.offset, _data.length)
+  208  
+  209              // Append the `address`. Addresses are 20 bytes, stored in the last 20 bytes of a 32-byte word
+  210              mstore(add(add(encodedData, 0x20), _data.length), shl(96, _msgSender))
+  211          }
+  212      }
+
+== 7. TrustedForwarderFactory.sol, cloneTrustedForwarder (aucun controle d'appelant) ==
+   48      function cloneTrustedForwarder(address admin, address appSigner, bytes32 salt) external returns (address trustedForwarder) {
+   49          trustedForwarder = Clones.cloneDeterministic(trustedForwarderImplementation, keccak256(abi.encode(msg.sender, salt)));
+   50  
+   51          (bool success, ) = trustedForwarder.call(abi.encodeWithSelector(INIT_SELECTOR, admin, appSigner));
+   52          if (!success) {
+   53              revert TrustedForwarderFactory__TrustedForwarderInitFailed(admin, appSigner);
+   54          }
+   55          forwarders[trustedForwarder] = true;
+   56  
+   57          emit TrustedForwarderCreated(msg.sender, trustedForwarder);
+   58      }
+
+== 8. Chainlink ETH/USD 0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419, latestRoundData() au bloc 26053260 ==
+cast call 0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419 'latestRoundData()(uint80,int256,uint256,uint256,uint80)' --block 26053260
+answer 268517247359 (8 decimales) = 2685.17247359 USD, updatedAt 1790324483
+541.375935595563059375 WETH x 2685.17247359 = 1453687.76 USD ; + 8426.531308 USDC = 1462114.29 USD
+
+== 9. Presse (lue le 2026-09-28, pour comparaison apres la reconstruction) ==
+- The Block, 2026-09-25 : 23 155 NFT sauves (> 5,7 M$), 660 WETH "at risk", source 0xQuit (Yuga Labs).
+  https://www.theblock.co/news/web3/2026-09-25-magic-eden-legacy-approvals-leave-5-7-million-in-nfts-exposed-to-exploit-before-rescue-416874
+- CryptoTicker : 530,7 a 537,5 WETH de 911 a 949 portefeuilles, 8 380 USDC de 62 portefeuilles, ~549 000 WILD de 11,
+  7 680 WAPE sur ApeChain ; portefeuille de sauvetage 0x71cF3f5724bD2B72Ef6464992aCd26216De7fe33 a partir de 05:46 UTC le 25/09 ;
+  WETH a partir de 08:25 UTC. https://cryptoticker.io/en/magic-eden-limit-break-exploit-weth-nfts-revoke-approvals/
+- Gizmotimes : meme portefeuille de sauvetage 0x71cF...fe33 ; "at least $2.8 million" sur cinq chaines ; ne decrit aucun
+  mecanisme technique au-dela des approbations. https://www.gizmotimes.com/blockchain/nft/0xquit-rescues-nfts-limit-break-exploit/51465
+- Phemex : "approximately $1.7 million in NFTs stolen across three transactions", citant Blockaid.
+  https://phemex.com/news/article/limit-break-exploit-on-ethereum-drains-17m-in-nfts-via-payment-processor-v2-flaw-97828
+- Aucun postmortem technique de Limit Break trouve au 2026-09-28.
+

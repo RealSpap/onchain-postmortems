@@ -1,0 +1,48 @@
+== 1. BuyListingERC721 events on Payment Processor V2, blocks 26040000 to 26078000
+events: 1152
+
+== 2. NFT contract of each fill: code before the attack?
+distinct NFT contracts: 121, with no code at block 26047000: 119
+fills on contracts deployed after the attack began: 1150
+  excluded (pre-existing contract): 0x26fcce71249e65027ee41aecb9fcdc8a9a36167673ce83b3790073461192285a block 26053412 0.161729174344526787 WETH
+  excluded (pre-existing contract): 0x79a4df3d63ab9af2ad61fd8b2dd3f36cfef3d3c1559f6bb271257616afb53eda block 26054533 0.000495000000000000 WETH
+
+== 3. Did any victim send the transaction that charged it?
+drain transactions: 232, distinct senders: 32
+fills where buyer == tx.from: 0 of 1150
+rescue wallet among senders: False
+
+== 4. Totals by payment coin (buyer = topic1 pays, seller = topic2 receives)
+  541.375935595563059375 WETH from 978 wallets in 1072 fills
+  8426.531308 USDC from 63 wallets in 65 fills
+  548722.897850195194444065 WILD from 11 wallets in 11 fills
+  12.934036415936827524 APE from 2 wallets in 2 fills
+first drain: 26053260 2026-09-25 08:26:11 UTC  last drain in window: 26077995 2026-09-28 19:18:23 UTC
+
+== 5. WETH by UTC day
+  2026-09-25: 532.651363735049749148 WETH in 981 fills
+  2026-09-26: 4.289110204423406696 WETH in 41 fills
+  2026-09-27: 3.431244694029738080 WETH in 33 fills
+  2026-09-28: 1.004216962060165451 WETH in 17 fills
+
+== 6. Largest single transaction, checked against raw WETH Transfer logs
+0xdd3ab342cfcf979ed67988321e5541589426a80c43d52bc4514ca969c1e7a96b: 25 fills, event sum 281.656429171682959990 WETH, WETH Transfer logs into seller 0x860bb7ce155d0a14574ce10033bec2c981739c8d: 281.656429171682959990 WETH
+  top WETH recipients in that tx: [('860bb7ce155d0a14574ce10033bec2c981739c8d', '281.656429171682959990 WETH'), ('23245f620d1e910ad76e6b6de4f8284a53c9ad2d', '281.656429171682959990 WETH')]
+
+== 7. How the taker is spoofed: calldata of the call into Payment Processor
+first drain tx of each sender, calls into PP as (caller, selector, bytes-offset word):
+   ('0xb48d6af77c5e3b99876ea71b38e9c814ba5b1c8e', '0xc32dacae', 0) 499
+   ('0xc22a5c8d7db9da131a199d34aac22e02b58c7fd8', '0x86817d7d', 32) 1
+calldata into PP: 984 bytes; offset word = 0; PP copies calldatasize-68 = 916 bytes from byte 36
+last 20 bytes of calldata into PP (appended by forwarder): 0x860bb7ce155d0a14574ce10033bec2c981739c8d
+last 20 bytes of calldata into the module (read as taker):  0xede4e6d73a5277910a6d5459d255e4d2095a2373
+first fill's buyer in the event:                            0xede4e6d73a5277910a6d5459d255e4d2095a2373
+
+== 8. The forwarder
+isTrustedForwarder: True
+signer() (zero = open mode): 0x0000000000000000000000000000000000000000000000000000000000000000
+created at block 26052371 2026-09-25 05:27:11 UTC
+created by tx 0xfe776ec0ca4be969f4b50d6f137f4dd9fb2d47606526a2d7f1a4089d197525ba sent from 0x71cf3f5724bd2b72ef6464992acd26216de7fe33 | rescue wallet: True
+
+== 9. The first theft (NFTs, 2026-09-24) uses the same primitive
+0x9050e28ed880a960ddaa248373c104e41fa847cde7a3774d003a71c2f74193d3 calls into PP: 70 Counter({('0xb233e3602bb06aa2c2db0982bbaf33c2b15184c9', '0x08fdd68e', 0): 70})
