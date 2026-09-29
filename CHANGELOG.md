@@ -4,6 +4,42 @@ One entry per addition or correction to this repo. Each incident added
 with `add_new_entry.py` gets tagged as a matching GitHub release, see
 "Get notified of new postmortems" in `README.md`.
 
+**Gap disclosed, not filled:** entries below stop at 2026-09-11 (23
+incidents); the repo has since grown to 51 without new changelog entries.
+Not backfilled here since the original reasoning behind each addition
+isn't reconstructible after the fact without guessing -- Spap's call
+whether to keep this file going (retroactively, from here on) or retire it
+in favor of the GitHub Releases feed already linked in the README, which
+never stopped tracking each addition.
+
+## 2026-09-29 -- consistency fixes, not a new incident
+
+- Fixed the opening "headline number" sentence, stuck at "42 incidents /
+  $783.9M" since before this file's own tracking gap started while the
+  Index below it grew to 51 incidents / $798.5M -- `check_readme_consistency.py`
+  never checked that sentence, so it drifted silently. Extended the script
+  with two new checks (headline vs. year totals, Corrections-table row
+  count stated consistently in 4 places) so this class of drift fails the
+  check from now on instead of needing to be spotted by eye.
+- Added 3 missing rows to "Corrections to press and DefiLlama" (Nimiq,
+  Fetch.ai and NuNet, The Internet Token): each already had a real press/
+  DefiLlama gap documented in its own Index footnote, but was never added
+  as its own row in the summary table. 31 -> 34 rows (26 corrections, 5
+  reconciliations, 3 discoveries).
+- Fixed the GitHub repo's own "About" description (still said "42... 51
+  independent on-chain forensic reconstructions... $783.9M+", same stale
+  figures as the headline bug) and two absolute `github.com/RealSpap/...`
+  links inside the Index table that should have been relative links like
+  every other row (Limit Break, Nimiq) -- both bugs pre-date the account
+  migration below, not caused by it.
+- Repo moved from `github.com/RealSpap` to `github.com/RealSpap` (GitHub's
+  appeal; this is a full-history mirror copy done by Spap himself, not a
+  native transfer). Updated the README's own cross-links to
+  `multisig-overlap-showcase` and the release-feed Atom URL to match; left
+  the "Structure" section's historical mapping to the 8 pre-consolidation
+  `RealSpap/...` repos untouched, since that's an accurate record of where
+  things WERE, not a live link.
+
 ## 2026-09-11 (23)
 
 - Added a 37th incident: Weft Finance (Weft V2) HUG collateral

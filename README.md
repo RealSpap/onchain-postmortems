@@ -1,6 +1,6 @@
 # On-Chain Postmortems
 
-**The headline number: $783.9M in DeFi and on-chain losses, independently recomputed from raw chain data across 42 reconstructed incidents.**
+**The headline number: $798.5M in DeFi and on-chain losses, independently recomputed from raw chain data across 51 reconstructed incidents.**
 
 Independent forensic reconstructions, done entirely on-chain, of DeFi
 security incidents and on-chain incidents more broadly. Each entry starts
@@ -12,7 +12,7 @@ wrong, this repo says so and shows the on-chain proof.
 
 One example: DefiLlama tracked WealthManagementV2 as a $26,414 "private
 key compromise"; the real on-chain drain was $422,251.40, about 16x
-higher, one of 31 cases in the [Corrections to press and
+higher, one of 34 cases in the [Corrections to press and
 DefiLlama](#corrections-to-press-and-defillama) table below.
 
 By the same author: [@RealSpap on X](https://x.com/RealSpap), [Dune
@@ -37,7 +37,7 @@ files, nothing summarized or lost in the merge.
 |---|---|
 | Incidents covered | 51, independently reconstructed on-chain, see the index for detail |
 | Cumulative loss, recomputed | About $798.5M across the 51 incidents ($798,501,217 exactly, sum of the figures in the index below). At least one entry is a known floor, so the real total is higher. |
-| Corrections made | 31 entries below correct, reconcile, or newly surface a press or DefiLlama figure, label, date, or classification (24 corrections, 4 reconciliations, 3 discoveries not previously priced by DefiLlama at all). See Corrections to press and DefiLlama below. |
+| Corrections made | 34 entries below correct, reconcile, or newly surface a press or DefiLlama figure, label, date, or classification (26 corrections, 5 reconciliations, 3 discoveries not previously priced by DefiLlama at all). See Corrections to press and DefiLlama below. |
 | Method | Each subfolder keeps its original Python reconstruction script, its `registre_hypotheses.csv` falsification registry, and its script's raw output in `resultats_*.txt`, so every figure below can be checked against the file that produced it |
 | License | MIT across all 42 entries, single author (s_pap, 2026) |
 
@@ -94,7 +94,7 @@ exact figure decoded from source data.
 | Fetch.ai and NuNet Dual Key Compromise | 2026-09-19 | ≈ 1,992,730 [^fetchai-nunet-dual-key-compromise] | Ethereum | Key-Compromise | Two separately compromised keys, one bridge conversion authorizer and one MINTER_ROLE holder, paying out to one address | [fetchai-nunet-dual-key-compromise/](fetchai-nunet-dual-key-compromise/) |
 | Payy Network | 2026-09-24 | ≈ 1,918,792 [^payy-rollup-zero-hash-burn] | Ethereum | Bridge | A rollup bridge that pays any burn listed in a proven, validator-signed batch, with no check of its own on the burn hash: two batches from the normal prover, signed by the single validator, listed zero-hash burns paying the attacker | [payy-rollup-zero-hash-burn/](payy-rollup-zero-hash-burn/) |
 | Notional Finance (V1 Escrow) | 2026-09-03 / 09-04 | 1,727,782 [^notional] | Ethereum | Rounding/Math-Bug | uint128 overflow/downcast in the legacy V1 Escrow contract's collateral valuation | [notional-v1-escrow/](notional-v1-escrow/) |
-| Limit Break Payment Processor V2 forwarder spoof | 2026-09-25 | ≈ 1,462,114 [^limit-break-payment-processor-forwarder-spoof] | Ethereum | Access-Control | Trusted-forwarder calldata offset makes Payment Processor read an attacker-chosen wallet as the buyer, so a victim's standing token approval pays for the attacker's zero-value NFT listing | [https://github.com/RealSpap/onchain-postmortems/tree/main/limit-break-payment-processor-forwarder-spoof](https://github.com/RealSpap/onchain-postmortems/tree/main/limit-break-payment-processor-forwarder-spoof) |
+| Limit Break Payment Processor V2 forwarder spoof | 2026-09-25 | ≈ 1,462,114 [^limit-break-payment-processor-forwarder-spoof] | Ethereum | Access-Control | Trusted-forwarder calldata offset makes Payment Processor read an attacker-chosen wallet as the buyer, so a victim's standing token approval pays for the attacker's zero-value NFT listing | [limit-break-payment-processor-forwarder-spoof/](limit-break-payment-processor-forwarder-spoof/) |
 | Chainflip (Tron USDT vault) | 2026-09-12 | ≈ 736,378 [^chainflip-tron-fetch-memo-double-payout] | Tron | Bridge | A permissionless deposit fetch, re-broadcast by the depositor with a forged vault-swap memo, made the protocol refund a deposit it had already credited | [https://chainflip.io/blog/tron-usdt-exploit-what-happened-and-what-happens-next](https://chainflip.io/blog/tron-usdt-exploit-what-happened-and-what-happens-next) |
 | XRP Healthcare (XRPH Wallet) | 2026-09-03 / 09-04 | ≥ 445,198 [^xrph-wallet-key-compromise] | XRP Ledger + Ethereum | Key-Compromise | Mass wallet-side private-key compromise (not an XRPL protocol bug) swept thousands of externally-owned wallets to one collector, laundered via NEAR Intents into Ethereum and settled as DAI | [xrph-wallet-key-compromise/](xrph-wallet-key-compromise/) |
 | WealthManagementV2 | 2026-09-08 | ≥ 422,251 [^wealthmanagementv2-selfowned-proxy-drain] | BSC | Access-Control | Attacker-deployed, attacker-owned EIP-1967 proxy repeatedly called a withdraw() sweep function to drain a shared claim/interest pool contract to a collector wallet | [wealthmanagementv2-selfowned-proxy-drain/](wealthmanagementv2-selfowned-proxy-drain/) |
@@ -104,7 +104,7 @@ exact figure decoded from source data.
 | Zentra Finance | 2026-09-09 | ≈ 140,030 [^zentra-finance-atoken-burn-clamp] | Citrea | Rounding/Math-Bug | Aave v3 fork aToken _burnScaled capped the burn to the caller's balance, so repayWithATokens with zero aTokens cleared 140,000 ctUSD of debt while burning nothing; cap added by a 2026-06-25 upgrade | [zentra-finance-atoken-burn-clamp/](zentra-finance-atoken-burn-clamp/) |
 | Dream Health Chain | 2026-09-05 | ≈ 71,851 [^dreamhealthchain-award-two-wei-reclaim] | BSC | Rounding/Math-Bug | Award contract paid a fixed 10 percent of a position's declared amount on every claim, with no claimed-flag and no elapsed-time check, so re-entering the position for 2 wei re-armed the same payout; run 333 times across 5 positions in one block | [dreamhealthchain-award-two-wei-reclaim/](dreamhealthchain-award-two-wei-reclaim/) |
 | BeatSwap (BTX Vesting Contracts) | 2026-09-09 | ≈ 63,705 [^beatswap-vesting-slot0-reserve-drain] | BSC | Oracle | Two permissionless vesting deposit() functions sized the BTX leg of a V3 LP mint from a single PancakeSwap slot0 read; a flash-loan dump made both put their whole BTX reserve into positions the attacker bought back in the same transaction, leaving 22 depositors' vesting claims unpayable | [beatswap-vesting-slot0-reserve-drain/](beatswap-vesting-slot0-reserve-drain/) |
-| Nimiq | 2026-09-16 | ≈ 50,463 [^nimiq-gsn-forwarder-unsigned-execute] | Polygon | Access-Control | OpenGSN forwarder whose execute discards the signature, reachable by any registered relay, used to open HTLCs on behalf of a wallet that never signed | [https://github.com/RealSpap/onchain-postmortems/tree/main/nimiq-gsn-forwarder-unsigned-execute](https://github.com/RealSpap/onchain-postmortems/tree/main/nimiq-gsn-forwarder-unsigned-execute) |
+| Nimiq | 2026-09-16 | ≈ 50,463 [^nimiq-gsn-forwarder-unsigned-execute] | Polygon | Access-Control | OpenGSN forwarder whose execute discards the signature, reachable by any registered relay, used to open HTLCs on behalf of a wallet that never signed | [nimiq-gsn-forwarder-unsigned-execute/](nimiq-gsn-forwarder-unsigned-execute/) |
 | Secured Finance (JPYC Lending Market) | 2026-09-05/09-06 | ≈ 45,445 [^securedfinance-jpyc-tokenvault-selflend] | Ethereum | Access-Control | Flash-loan-funded self-matched lend/borrow position on the JPYC market let TokenVault's collateral accounting treat the just-deposited amount as withdrawable, before the flash loan was repaid | [securedfinance-jpyc-tokenvault-selflend/](securedfinance-jpyc-tokenvault-selflend/) |
 | ether.fi Liquid (AtomicQueue) | 2026-09-11 | ≈ 38,004 [^etherfi-atomicqueue-eip7702-solver-drain] | Ethereum | Access-Control | Legacy Veda AtomicQueue.solve() never checks solver==msg.sender; attacker named victims as solver to spend their stale approvals. Reachable only for code-bearing accounts (9 of 11 were EIP-7702), fully reimbursed on-chain | [etherfi-atomicqueue-eip7702-solver-drain/](etherfi-atomicqueue-eip7702-solver-drain/) |
 | Reddio (RedSonic Vault) | 2026-09-05 | ≈ 22,748 [^redsonic-vault-share-registration] | Ethereum | Access-Control | Permissionless registerErc20() let an unprivileged caller register a second share class over the same pooled collateral, letting a flash-loan-funded deposit be redeemed for more than it was worth | [redsonic-vault-share-registration/](redsonic-vault-share-registration/) |
@@ -242,10 +242,11 @@ Full history: [`digests/`](digests/)
 
 Every figure in the Index above is recomputed from each subfolder's own
 source files, then checked against whatever press or DefiLlama already
-published. The 31 rows below are the cases where that check turned up a
+published. The 34 rows below are the cases where that check turned up a
 real gap: a wrong number, a wrong label, a wrong date, a wrong
-classification, or (for Aquifer, Maya Protocol, Virtue Protocol, and
-Float Protocol) a reconciled gap neither side is really "wrong" about, or
+classification, or (for Aquifer, Maya Protocol, Virtue Protocol, Float
+Protocol, and Fetch.ai/NuNet) a reconciled gap neither side is really
+"wrong" about, or
 (for XRP Healthcare and the Safe LP Module, not tracked at all, and
 Full Sail, tracked with no dollar figure) an incident DefiLlama does not
 price. Full detail,
@@ -285,6 +286,9 @@ in the linked subfolder; this table gives the headline gap only.
 | ether.fi Liquid (AtomicQueue) | Press: ~$38K/15.45 ETH headline, not why those 11 wallets; DefiLlama: $43,260 (~14% high), returnedFunds null. Found: 9 of 11 wallets are EIP-7702; a 300-liquidETH EOA approver was left untouched; all 11 reimbursed within ~9h | [etherfi-atomicqueue-eip7702-solver-drain/](etherfi-atomicqueue-eip7702-solver-drain/) |
 | Zentra Finance (ctUSD reserve) | Press: ~$143,000, attack vector undisclosed; DefiLlama labels it "Rounding Error". Found: 140,029.999998 stablecoin units left two reserves, matching DefiLlama's $140,030 exactly; a burn-cap bug, not a rounding error | [zentra-finance-atoken-burn-clamp/](zentra-finance-atoken-burn-clamp/) |
 | BeatSwap (BTX vesting contracts) | Press (SlowMist via PANews): ~2.985M BTX / ~$77,500 lost, deposits "in two separate transactions", BTX "withdrew from the LP positions", Uniswap V3; DefiLlama: $77,512. Found: $77,512 is one sale leg; victims lost 3,072,493 BTX, attacker kept 63,704.84 USDT; one transaction; LP NFTs never withdrawn; PancakeSwap V3; contracts still unpaused, 23 open vesting records now unpayable | [beatswap-vesting-slot0-reserve-drain/](beatswap-vesting-slot0-reserve-drain/) |
+| Nimiq | DefiLlama tracks $50,400 (empty source field), 63.79 low; press relayed Nimiq's own $50,463 as the floor. Found: exact on-chain sum 50,463.792096, derived three independent ways to the unit | [nimiq-gsn-forwarder-unsigned-execute/](nimiq-gsn-forwarder-unsigned-execute/) |
+| Fetch.ai and NuNet | DefiLlama holds two separate records, 1,530,000 for Fetch.ai and 462,730 for NuNet, both dated 2026-09-19. Found: two distinct compromised keys (a bridge conversion authorizer and a MINTER_ROLE holder) paying out to one address, one linked incident (reconciliation, not error) | [fetchai-nunet-dual-key-compromise/](fetchai-nunet-dual-key-compromise/) |
+| The Internet Token | Press: ~$265,000. DefiLlama: $16,380 (empty source), carried over unpriced. Found: the drained pool never held $265,000; independently re-derived quantity is 5.866812895215939248 WETH, ~99.999% of the pool, across two transactions | [internet-token-liquidityunifier-fake-pool-mint/](internet-token-liquidityunifier-fake-pool-mint/) |
 
 ## Falsifiable hypotheses, not just claims
 

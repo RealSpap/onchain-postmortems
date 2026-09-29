@@ -30,6 +30,17 @@ structure and checks:
   6. Every footnote marker referenced anywhere in the Index has a matching
      footnote definition, and every footnote definition is referenced by
      at least one row (no orphans in either direction).
+  7. ADDED 2026-09-29: the opening bold "headline number" sentence (incident
+     count + rounded $ total) matches the same year-level totals check 3
+     already trusts. This line drifted silently for days (stuck at "42
+     incidents / $783.9M" while the Index grew to 51 / $798.5M) because
+     nothing here ever looked at it before.
+  8. ADDED 2026-09-29: the Corrections-to-press-and-DefiLlama row count is
+     stated in three separate places (the intro prose, "At a glance", and
+     the Corrections section's own lead sentence) plus the table itself --
+     all four drifted apart once already (3 incidents had a real press/
+     DefiLlama correction documented only in their Index footnote, never
+     added as their own Corrections row).
 
 No LLM call, no network access, no API key. Exit code 0 means everything
 that was checked is internally consistent; non-zero means it found a
@@ -409,6 +420,90 @@ def check_footnotes(full_text: str) -> None:
         fail("Footnote mismatch: " + "; and ".join(parts) + ".")
 
 
+HEADLINE_RE = re.compile(
+    r"\*\*The headline number: \$([\d.]+)M in DeFi and on-chain losses, "
+    r"independently recomputed from raw chain data across (\d+) reconstructed "
+    r"incidents\.\*\*"
+)
+
+
+def check_headline(full_text: str, years: dict) -> None:
+    """The opening bold sentence restates the incident count and total loss in a
+    rounded, human-readable form -- it is the first thing anyone reads, but
+    nothing else in this script ever looks at it, so it drifted silently once
+    already (stuck at "42 incidents / $783.9M" while the Index below it grew
+    to 51 / $798.5M). Checked against the same year-level totals every other
+    check here already trusts, not re-derived independently."""
+    m = HEADLINE_RE.search(full_text)
+    if not m:
+        fail(
+            "Could not find the opening '**The headline number: $X.YM ... across "
+            "N reconstructed incidents.**' sentence at the top of README.md. It "
+            "may have been reworded without updating this check."
+        )
+    headline_millions, headline_count = m.group(1), int(m.group(2))
+    year_count_sum = sum(y["stated_count"] for y in years.values())
+    if headline_count != year_count_sum:
+        fail(
+            f"Headline incident count mismatch: the opening sentence says "
+            f"{headline_count}, but summing every year's stated count gives "
+            f"{year_count_sum}."
+        )
+    year_sum = sum(y["stated_total"] for y in years.values())
+    expected_millions = f"{year_sum / 1_000_000:.1f}"
+    if headline_millions != expected_millions:
+        fail(
+            f"Headline loss figure mismatch: the opening sentence says "
+            f"${headline_millions}M, but the year totals sum to ${year_sum:,} "
+            f"(${expected_millions}M rounded to the same precision)."
+        )
+
+
+CORRECTIONS_INLINE_RE = re.compile(r"one of (\d+) cases in the \[Corrections")
+CORRECTIONS_GLANCE_RE = re.compile(r"^(\d+) entries below correct, reconcile")
+CORRECTIONS_SECTION_ROWS_RE = re.compile(r"The (\d+) rows below are the cases")
+
+
+def check_corrections_count(full_text: str) -> None:
+    """Three places state how many rows the Corrections table has (the intro
+    prose, the 'At a glance' block, and the Corrections section's own lead
+    sentence) -- and the table itself is a fourth. All four drifted apart
+    once already (three incidents' own corrections existed only as index
+    footnotes, never added as their own row here). None of this script's
+    other checks ever counted this table, so it stayed silently wrong."""
+    inline_m = CORRECTIONS_INLINE_RE.search(full_text)
+    if not inline_m:
+        fail("Could not find the 'one of N cases in the [Corrections ...' sentence near the top of README.md.")
+    glance_section = extract_section(full_text, "At a glance")
+    glance_m = None
+    for line in glance_section.splitlines():
+        row = parse_table_row(line)
+        if row and len(row) >= 2:
+            glance_m = CORRECTIONS_GLANCE_RE.search(row[1])
+            if glance_m:
+                break
+    if not glance_m:
+        fail("Could not find the 'N entries below correct, reconcile ...' row in the 'At a glance' block.")
+    corrections_section = extract_section(full_text, "Corrections to press and DefiLlama")
+    section_m = None
+    for line in corrections_section.splitlines():
+        section_m = CORRECTIONS_SECTION_ROWS_RE.search(line.strip())
+        if section_m:
+            break
+    if not section_m:
+        fail("Could not find 'The N rows below are the cases ...' in the Corrections section's lead paragraph.")
+
+    table_rows = [
+        line for line in corrections_section.splitlines()
+        if line.strip().startswith("|") and "Incident" not in line and not re.match(r"^\|[\s:-]+\|", line.strip())
+    ]
+    stated = {"intro": int(inline_m.group(1)), "at a glance": int(glance_m.group(1)),
+              "corrections section": int(section_m.group(1)), "actual table rows": len(table_rows)}
+    if len(set(stated.values())) != 1:
+        fail("Corrections row-count mismatch across the README: " +
+             ", ".join(f"{k} says {v}" for k, v in stated.items()) + ".")
+
+
 def main() -> int:
     try:
         full_text = read_readme()
@@ -420,6 +515,8 @@ def main() -> int:
         check_current_month(years, current_month_keys)
         check_table_rows_match_subfolders(all_rows)
         check_footnotes(full_text)
+        check_headline(full_text, years)
+        check_corrections_count(full_text)
     except ConsistencyError as exc:
         print(f"README self-consistency check FAILED: {exc}", file=sys.stderr)
         return 1
