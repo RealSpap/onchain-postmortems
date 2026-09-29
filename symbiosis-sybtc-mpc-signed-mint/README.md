@@ -193,4 +193,4 @@ difference is scope, not substance.
 
 ## License
 
-MIT, s_pap, 2026.
+MIT, Spap, 2026.

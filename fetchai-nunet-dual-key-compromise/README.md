@@ -222,4 +222,4 @@ verified losses.
 
 ## License
 
-MIT, s_pap, 2026.
+MIT, Spap, 2026.

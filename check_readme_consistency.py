@@ -1,11 +1,18 @@
 #!/usr/bin/env python3
 """
-Deterministic self-consistency check for README.md.
+Deterministic self-consistency check across README.md, INDEX.md and
+CORRECTIONS.md.
 
 This is NOT a re-verification against raw blockchain data. It never touches
 a chain, a protocol contract, or any external API. It only checks that the
-numbers and cross-references README.md makes about ITSELF actually agree
-with each other.
+numbers and cross-references these three files make about EACH OTHER
+actually agree.
+
+ADDED 2026-09-29: the Index and Corrections tables used to live inside
+README.md (459 lines, half of it these two tables); they now live in their
+own files, INDEX.md and CORRECTIONS.md, with README.md kept to a short
+pitch + "At a glance" + links out. This script's checks moved with them,
+cross-file where a number in one file has to match a number in another.
 
 The Index is grouped by year (### <YYYY>), then by month
 (#### <Month name> <YYYY>, optionally suffixed " (current month)"), each
@@ -54,6 +61,10 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent
 README_PATH = REPO_ROOT / "README.md"
+# ADDED 2026-09-29: the Index and Corrections table moved out of README.md into their
+# own files (compaction pass -- README.md was 459 lines, half of it these two tables).
+INDEX_PATH = REPO_ROOT / "INDEX.md"
+CORRECTIONS_PATH = REPO_ROOT / "CORRECTIONS.md"
 
 # Directories that are never incident subfolders even though they live at
 # repo root, e.g. VCS/CI metadata.
@@ -83,10 +94,10 @@ def fail(message: str) -> None:
     raise ConsistencyError(message)
 
 
-def read_readme() -> str:
-    if not README_PATH.is_file():
-        fail(f"README.md not found at expected path: {README_PATH}")
-    return README_PATH.read_text(encoding="utf-8")
+def read_file(path: Path) -> str:
+    if not path.is_file():
+        fail(f"{path.name} not found at expected path: {path}")
+    return path.read_text(encoding="utf-8")
 
 
 def extract_section(text: str, heading: str) -> str:
@@ -396,11 +407,12 @@ def check_table_rows_match_subfolders(all_rows: list) -> None:
         )
 
 
-def check_footnotes(full_text: str) -> None:
-    index_section = extract_section(full_text, "Index")
-
-    referenced = set(re.findall(r"\[\^([A-Za-z0-9_-]+)\](?!:)", index_section))
-    defined = set(re.findall(r"^\[\^([A-Za-z0-9_-]+)\]:", index_section, re.MULTILINE))
+def check_footnotes(index_text: str) -> None:
+    """ADDED 2026-09-29: takes INDEX.md's own text directly now (it IS the Index
+    section, in its own file) instead of extracting a '## Index' heading out of
+    README.md."""
+    referenced = set(re.findall(r"\[\^([A-Za-z0-9_-]+)\](?!:)", index_text))
+    defined = set(re.findall(r"^\[\^([A-Za-z0-9_-]+)\]:", index_text, re.MULTILINE))
 
     orphaned_references = sorted(referenced - defined)  # used in table, never defined
     unused_definitions = sorted(defined - referenced)   # defined, never used in table
@@ -459,22 +471,24 @@ def check_headline(full_text: str, years: dict) -> None:
         )
 
 
-CORRECTIONS_INLINE_RE = re.compile(r"one of (\d+) cases in the \[Corrections")
-CORRECTIONS_GLANCE_RE = re.compile(r"^(\d+) entries below correct, reconcile")
+CORRECTIONS_INLINE_RE = re.compile(r"one of (\d+) cases in \[Corrections")
+CORRECTIONS_GLANCE_RE = re.compile(r"^(\d+) entries correct, reconcile")
 CORRECTIONS_SECTION_ROWS_RE = re.compile(r"The (\d+) rows below are the cases")
 
 
-def check_corrections_count(full_text: str) -> None:
-    """Three places state how many rows the Corrections table has (the intro
-    prose, the 'At a glance' block, and the Corrections section's own lead
-    sentence) -- and the table itself is a fourth. All four drifted apart
-    once already (three incidents' own corrections existed only as index
-    footnotes, never added as their own row here). None of this script's
-    other checks ever counted this table, so it stayed silently wrong."""
-    inline_m = CORRECTIONS_INLINE_RE.search(full_text)
+def check_corrections_count(readme_text: str, corrections_text: str) -> None:
+    """Three places state how many rows the Corrections table has (README's intro
+    prose, README's 'At a glance' block, and CORRECTIONS.md's own lead sentence)
+    -- and the table itself, also in CORRECTIONS.md, is a fourth. All four
+    drifted apart once already (three incidents' own corrections existed only
+    as Index footnotes, never added as their own row here). None of this
+    script's other checks ever counted this table, so it stayed silently wrong.
+    ADDED 2026-09-29: split across two files (readme_text, corrections_text)
+    now that the table itself moved out of README.md."""
+    inline_m = CORRECTIONS_INLINE_RE.search(readme_text)
     if not inline_m:
-        fail("Could not find the 'one of N cases in the [Corrections ...' sentence near the top of README.md.")
-    glance_section = extract_section(full_text, "At a glance")
+        fail("Could not find the 'one of N cases in [Corrections ...' sentence near the top of README.md.")
+    glance_section = extract_section(readme_text, "At a glance")
     glance_m = None
     for line in glance_section.splitlines():
         row = parse_table_row(line)
@@ -483,49 +497,49 @@ def check_corrections_count(full_text: str) -> None:
             if glance_m:
                 break
     if not glance_m:
-        fail("Could not find the 'N entries below correct, reconcile ...' row in the 'At a glance' block.")
-    corrections_section = extract_section(full_text, "Corrections to press and DefiLlama")
+        fail("Could not find the 'N entries correct, reconcile ...' row in README.md's 'At a glance' block.")
     section_m = None
-    for line in corrections_section.splitlines():
+    for line in corrections_text.splitlines():
         section_m = CORRECTIONS_SECTION_ROWS_RE.search(line.strip())
         if section_m:
             break
     if not section_m:
-        fail("Could not find 'The N rows below are the cases ...' in the Corrections section's lead paragraph.")
+        fail("Could not find 'The N rows below are the cases ...' in CORRECTIONS.md's lead paragraph.")
 
     table_rows = [
-        line for line in corrections_section.splitlines()
+        line for line in corrections_text.splitlines()
         if line.strip().startswith("|") and "Incident" not in line and not re.match(r"^\|[\s:-]+\|", line.strip())
     ]
-    stated = {"intro": int(inline_m.group(1)), "at a glance": int(glance_m.group(1)),
-              "corrections section": int(section_m.group(1)), "actual table rows": len(table_rows)}
+    stated = {"readme intro": int(inline_m.group(1)), "readme at a glance": int(glance_m.group(1)),
+              "corrections.md lead sentence": int(section_m.group(1)), "actual table rows": len(table_rows)}
     if len(set(stated.values())) != 1:
-        fail("Corrections row-count mismatch across the README: " +
+        fail("Corrections row-count mismatch across the repo: " +
              ", ".join(f"{k} says {v}" for k, v in stated.items()) + ".")
 
 
 def main() -> int:
     try:
-        full_text = read_readme()
-        index_section = extract_section(full_text, "Index")
-        years, current_month_keys = parse_index(index_section)
+        readme_text = read_file(README_PATH)
+        index_text = read_file(INDEX_PATH)
+        corrections_text = read_file(CORRECTIONS_PATH)
+        years, current_month_keys = parse_index(index_text)
         all_rows = check_month_subtotals(years)
         check_year_totals(years)
-        check_overall_total(full_text, years)
+        check_overall_total(readme_text, years)
         check_current_month(years, current_month_keys)
         check_table_rows_match_subfolders(all_rows)
-        check_footnotes(full_text)
-        check_headline(full_text, years)
-        check_corrections_count(full_text)
+        check_footnotes(index_text)
+        check_headline(readme_text, years)
+        check_corrections_count(readme_text, corrections_text)
     except ConsistencyError as exc:
         print(f"README self-consistency check FAILED: {exc}", file=sys.stderr)
         return 1
 
     total_months = sum(len(y["months"]) for y in years.values())
     print(
-        f"README self-consistency check passed ({len(all_rows)} incidents across "
-        f"{len(years)} year(s) and {total_months} month(s); month/year/overall totals, "
-        f"current-month label, subfolder count, and footnotes all consistent)."
+        f"README/INDEX/CORRECTIONS self-consistency check passed ({len(all_rows)} incidents "
+        f"across {len(years)} year(s) and {total_months} month(s); month/year/overall totals, "
+        f"current-month label, subfolder count, footnotes, headline and corrections-count all consistent)."
     )
     return 0
 

@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-Scaffold a new incident subfolder in onchain-postmortems and update the
-root README's Index (year -> month grouped) and "at a glance" block to
-match.
+Scaffold a new incident subfolder in onchain-postmortems and update
+INDEX.md's Index (year -> month grouped) and README.md's "at a glance"
+block plus its opening headline sentence to match.
 
 Inspired by SunWeb3Sec/DeFiHackLabs's add_new_entry.py, adapted for this
 repo's actual layout: one subfolder per incident, each holding a Python
@@ -13,12 +13,20 @@ Foundry-POC-per-year layout.
 The Index groups incidents by year, then by month (the incident's primary,
 i.e. earliest, date if --date is a range), each month holding its own
 table sorted by loss, descending. Every number this script writes, a
-month's subtotal, a year's total, the overall cumulative total and
-incident count in "at a glance", and the table of contents' year/month
-list, is recomputed from the Index itself every time this script runs,
-never from a stored counter, so nothing can drift out of sync with the
-table data. The script also keeps the "(current month)" label on whichever
-month is chronologically latest after the new incident is inserted.
+month's subtotal, a year's total, and the overall cumulative total and
+incident count (in README.md's "at a glance" block AND its opening
+headline sentence), is recomputed from the Index itself every time this
+script runs, never from a stored counter, so nothing can drift out of sync
+with the table data. The script also keeps the "(current month)" label on
+whichever month is chronologically latest after the new incident is
+inserted.
+
+ADDED 2026-09-29: the Index moved out of README.md into INDEX.md (a
+compaction pass, README.md was 459 lines, half of it this table) -- this
+script now reads/writes INDEX.md for everything Index-shaped, and
+README.md only for "at a glance" + the headline sentence, in two separate
+file writes. It never touches CORRECTIONS.md or the "Corrections made"
+line, both stay a human judgment call.
 
 Usage:
     python3 add_new_entry.py \\
@@ -44,6 +52,12 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent
 README_PATH = REPO_ROOT / "README.md"
+# ADDED 2026-09-29: the Index (year/month tables + footnotes) moved out of
+# README.md into its own file, part of a compaction pass (README.md was 459
+# lines, half of it this table). This script now writes INDEX.md for
+# everything Index-shaped, and only touches README.md for the "At a glance"
+# block, which stays there.
+INDEX_PATH = REPO_ROOT / "INDEX.md"
 
 MONTH_NAMES = ["January", "February", "March", "April", "May", "June",
                "July", "August", "September", "October", "November", "December"]
@@ -105,6 +119,12 @@ def read_readme() -> str:
     return README_PATH.read_text(encoding="utf-8")
 
 
+def read_index() -> str:
+    if not INDEX_PATH.exists():
+        sys.exit(f"INDEX.md not found at {INDEX_PATH}, this script must run from the repo root.")
+    return INDEX_PATH.read_text(encoding="utf-8")
+
+
 def parse_primary_date(date_str: str):
     """--date accepts 'YYYY-MM-DD' or a range like 'YYYY-MM-DD/MM-DD' or
     'YYYY-MM-DD / MM-DD'; the primary (earliest) date is what's used for
@@ -132,21 +152,20 @@ class MonthBlock:
 
 
 def find_index_bounds(lines):
-    """Returns (index_heading_idx, index_end_idx) spanning the '## Index'
-    section (exclusive of the next '## ' heading or EOF)."""
+    """Returns (index_start_idx, index_end_idx) spanning the whole Index
+    body in INDEX.md: from its first '### <year>' heading (skipping the
+    file's own title + backlink preamble) to EOF -- INDEX.md's entire
+    content IS the Index now, there's no wrapping '## Index' heading or a
+    trailing '## ' section to stop at (both moved to README.md, unrelated
+    file, 2026-09-29)."""
     start = None
     for i, line in enumerate(lines):
-        if line.strip() == "## Index":
+        if YEAR_HEADING_RE.match(line):
             start = i
             break
     if start is None:
-        sys.exit("Could not find a '## Index' heading in README.md.")
-    end = len(lines)
-    for i in range(start + 1, len(lines)):
-        if lines[i].startswith("## "):
-            end = i
-            break
-    return start, end
+        sys.exit("Could not find a '### <year>' heading in INDEX.md.")
+    return start, len(lines)
 
 
 def parse_index_structure(lines, index_start, index_end):
@@ -345,7 +364,7 @@ def main():
             text += f"\n<!-- external source: {args.readme_url} -->\n"
             readme_path.write_text(text, encoding="utf-8")
 
-    content = read_readme()
+    content = read_index()
     lines = content.splitlines()
     index_start, index_end = find_index_bounds(lines)
     months, years = parse_index_structure(lines, index_start, index_end)
@@ -465,7 +484,11 @@ def main():
         is_current = block.key == latest_key
         lines[block.heading_line_idx] = f"#### {month_heading_text}" + (" (current month)" if is_current else "")
 
-    # Recompute overall totals in "At a glance" from the years' stated totals.
+    # Recompute overall totals from the years' stated totals -- these now feed
+    # README.md's "At a glance" block AND its opening headline sentence
+    # (ADDED 2026-09-29: both moved/added when the Index moved out to its own
+    # file; neither is INDEX.md's own content, so update README.md separately
+    # below instead of writing these into `lines`, which is INDEX.md's).
     index_start, index_end = find_index_bounds(lines)
     months, years = parse_index_structure(lines, index_start, index_end)
     overall_total = sum(month_sum_and_floor(lines, b)[0] for b in months)
@@ -477,36 +500,6 @@ def main():
         " At least one entry is a known floor, so the real total is higher."
         if overall_has_floor else ""
     )
-    new_incidents_line = f"| Incidents covered | {overall_count}, independently reconstructed on-chain, see the index for detail |"
-    new_loss_line = (
-        f"| Cumulative loss, recomputed | About ${total_m:.1f}M across the {overall_count} "
-        f"incidents (${total_str} exactly, sum of the figures in the index below)."
-        f"{floor_note} |"
-    )
-    for idx, line in enumerate(lines):
-        if line.startswith("| Incidents covered |"):
-            lines[idx] = new_incidents_line
-        elif line.startswith("| Cumulative loss, recomputed |"):
-            lines[idx] = new_loss_line
-
-    # Regenerate the table of contents' year/month list between its markers.
-    toc_start = toc_end = None
-    for idx, line in enumerate(lines):
-        if line.strip() == "<!-- TOC:YEARS:START -->":
-            toc_start = idx
-        elif line.strip() == "<!-- TOC:YEARS:END -->":
-            toc_end = idx
-            break
-    if toc_start is not None and toc_end is not None:
-        toc_lines = []
-        for year in sorted(years.keys(), reverse=True):
-            toc_lines.append(f"  - [{year}](#{year})")
-            year_months = sorted([b for b in months if b.year == year], key=lambda b: b.month_num, reverse=True)
-            for b in year_months:
-                heading_line = lines[b.heading_line_idx]
-                heading_text = heading_line[len("#### "):]
-                toc_lines.append(f"    - [{heading_text}](#{slugify_heading(heading_text)})")
-        lines = lines[:toc_start + 1] + toc_lines + lines[toc_end:]
 
     # Add a placeholder footnote for the new entry if one doesn't already exist.
     joined = "\n".join(lines)
@@ -525,13 +518,38 @@ def main():
             footnote_text += f" External source: {args.readme_url}."
         lines = lines[:j] + [footnote_text] + lines[j:]
 
-    README_PATH.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    INDEX_PATH.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+    # README.md: "At a glance" table (Incidents covered / Cumulative loss rows)
+    # and the opening headline sentence, both recomputed from the same
+    # overall_total/overall_count just derived from INDEX.md -- kept as two
+    # separate writes to two separate files, never both baked into one.
+    readme_lines = read_readme().splitlines()
+    new_incidents_line = f"| Incidents covered | {overall_count}, independently reconstructed on-chain, see [the full index](INDEX.md) for detail |"
+    new_loss_line = (
+        f"| Cumulative loss, recomputed | About ${total_m:.1f}M across the {overall_count} "
+        f"incidents (${total_str} exactly, sum of the figures in the index)."
+        f"{floor_note} |"
+    )
+    new_headline = (
+        f"**The headline number: ${total_m:.1f}M in DeFi and on-chain losses, "
+        f"independently recomputed from raw chain data across {overall_count} "
+        f"reconstructed incidents.**"
+    )
+    for idx, line in enumerate(readme_lines):
+        if line.startswith("| Incidents covered |"):
+            readme_lines[idx] = new_incidents_line
+        elif line.startswith("| Cumulative loss, recomputed |"):
+            readme_lines[idx] = new_loss_line
+        elif line.startswith("**The headline number:"):
+            readme_lines[idx] = new_headline
+    README_PATH.write_text("\n".join(readme_lines) + "\n", encoding="utf-8")
 
     index_start, index_end = find_index_bounds(lines)
     months, years = parse_index_structure(lines, index_start, index_end)
     final_count = sum(len(rows_in_block(lines, b)) for b in months)
     final_total = sum(month_sum_and_floor(lines, b)[0] for b in months)
-    print(f"README.md updated: {final_count} incidents, cumulative loss ${final_total:,.0f}.")
+    print(f"INDEX.md and README.md updated: {final_count} incidents, cumulative loss ${final_total:,.0f}.")
     print(f"Fill in the TODO in {args.slug}/README.md, {args.slug}/reconstruct_exploit.py, and the [^{args.slug}] footnote before publishing.")
 
 
