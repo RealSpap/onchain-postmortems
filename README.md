@@ -103,9 +103,11 @@ onchain-postmortems/
 ```
 
 Each of the 8 subfolders above used to be, before being folded into this
-repo, its own public GitHub repo under the `RealSpap` account. Those 8 repos
-aren't deleted, kept archived and private now that their canonical content
-lives here.
+repo, its own public GitHub repo under the `RealSpap` account. That account is
+no longer publicly reachable (migrated to `RealSpap` in September 2026); none
+of these 8 old repo names resolve anywhere anymore, and no attempt is made to
+recreate them under the new account -- their canonical content already lives
+here, in full.
 
 | Old repo | Subfolder here |
 |---|---|
