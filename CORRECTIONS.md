@@ -3,17 +3,15 @@
 Back to [README](README.md#at-a-glance).
 
 Every figure in [the Index](INDEX.md) is recomputed from each subfolder's own
-source files, then checked against whatever press or DefiLlama already
-published. The 34 rows below are the cases where that check turned up a
-real gap: a wrong number, a wrong label, a wrong date, a wrong
-classification, or (for Aquifer, Maya Protocol, Virtue Protocol, Float
-Protocol, and Fetch.ai/NuNet) a reconciled gap neither side is really
-"wrong" about, or
-(for XRP Healthcare and the Safe LP Module, not tracked at all, and
-Full Sail, tracked with no dollar figure) an incident DefiLlama does not
-price. Full detail,
-including the exact transactions and event logs behind each figure, lives
-in the linked subfolder; this table gives the headline gap only.
+source files, then checked against press and DefiLlama. The 34 rows below
+are where that check found a real gap: a wrong number, label, date, or
+classification; a reconciled gap neither side is really "wrong" about
+(Aquifer, Maya Protocol, Virtue Protocol, Float Protocol, Fetch.ai/NuNet);
+or an incident DefiLlama doesn't price at all (XRP Healthcare and the Safe
+LP Module — not tracked; Full Sail — tracked with no dollar figure). Full
+detail, including the exact transactions and event logs behind each
+figure, lives in the linked subfolder; this table gives the headline gap
+only.
 
 | Incident | Gap (old -> found) | Link |
 |---|---|---|

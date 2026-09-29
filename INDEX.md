@@ -2,18 +2,14 @@
 
 Back to [README](README.md#at-a-glance).
 
-Grouped by year, then by month, most recent first. Within each month,
-sorted by recomputed loss, descending. Every year gets its own subtotal
-(sum of its months), every month gets its own subtotal (sum of its rows),
-and both roll up into the cumulative total stated in [README.md's "At a
-glance"](README.md#at-a-glance).
-The current month, the month the most recent incident falls in, is marked
-below so recent activity is easy to tell apart from historical entries.
+Grouped by year, then month, most recent first; within each month, sorted
+by recomputed loss, descending. Year and month subtotals roll up into the
+cumulative total in [README.md's "At a
+glance"](README.md#at-a-glance). The current month is marked below.
 
-The "Type/Mechanism" column reflects what the on-chain reconstruction
-actually found, not the incident's press label. The "Category" column is
-this project's own classification, for scanning convenience, not a label
-sourced from DefiLlama or press.
+"Type/Mechanism" reflects what the on-chain reconstruction found, not the
+press label. "Category" is this project's own classification, for
+scanning convenience, not sourced from DefiLlama or press.
 
 Loss ($) legend: **≥** confirmed floor, the real loss may be higher.
 **≈** independently recomputed, not exact to the cent. No symbol,

@@ -1,35 +1,31 @@
 # On-Chain Postmortems
 
-**The headline number: $798.5M in DeFi and on-chain losses, independently recomputed from raw chain data across 51 reconstructed incidents.**
+**$798.5M in DeFi and on-chain losses, independently recomputed from raw chain data across 51 incidents.**
 
-Independent forensic reconstructions, done entirely on-chain, of DeFi
-security incidents and on-chain incidents more broadly. Each entry starts
-from a primary source of the protocol involved (its own GitHub deployment
-registries, never a press article) and reconstructs the exploit from raw
-chain data: `eth_getLogs`, decoded transaction receipts, live `eth_call`
-reads. When press coverage or DefiLlama gets a number, a scope, or a label
-wrong, this repo says so and shows the on-chain proof.
+Forensic reconstructions done entirely on-chain. Each entry starts from a
+primary source (the protocol's own deployment registries, never a press
+article) and rebuilds the exploit from raw chain data: `eth_getLogs`,
+decoded transaction receipts, live `eth_call` reads. When press or
+DefiLlama gets a number, scope, or label wrong, this repo shows the
+on-chain proof.
 
-One example: DefiLlama tracked WealthManagementV2 as a $26,414 "private
-key compromise"; the real on-chain drain was $422,251.40, about 16x
-higher, one of 34 cases in [Corrections to press and
-DefiLlama](CORRECTIONS.md).
+Example: DefiLlama logged WealthManagementV2 as a $26,414 "private key
+compromise"; the real drain was $422,251.40, 16x higher — one of 34 cases
+in [Corrections to press and DefiLlama](CORRECTIONS.md).
 
-By the same author: [@RealSpap on X](https://x.com/RealSpap), [Dune
-profile](https://dune.com/s_pap), and
-[multisig-overlap-showcase](https://github.com/RealSpap/multisig-overlap-showcase),
-on-chain research into who actually controls DeFi admin keys.
+Same author: [@RealSpap on X](https://x.com/RealSpap), [Dune
+profile](https://dune.com/s_pap),
+[multisig-overlap-showcase](https://github.com/RealSpap/multisig-overlap-showcase)
+(who actually controls DeFi admin keys).
 
-Get notified of new postmortems: click Watch, then Custom, then Releases
-only, on this repo's GitHub page. Every new incident gets tagged as a
-release. Prefer RSS? This repo's release feed is a plain Atom URL, no
-account needed: https://github.com/RealSpap/onchain-postmortems/releases.atom
+New postmortems land as GitHub releases — Watch → Custom → Releases, or
+the plain [Atom feed](https://github.com/RealSpap/onchain-postmortems/releases.atom),
+no account needed.
 
-This repo brings together 8 postmortems that used to live in 8 separate
-GitHub repos, merged so incident count doesn't turn into repo count; see
-the mapping in [Structure](#structure) below. Each incident still keeps
-its own subfolder with its script, hypothesis registry, and raw proof
-files, nothing summarized or lost in the merge.
+8 incidents here used to be 8 separate repos, merged so incident count
+doesn't become repo count (mapping in [Structure](#structure) below);
+each still keeps its own script, hypothesis registry, and raw proof
+files.
 
 ## At a glance
 
@@ -62,7 +58,10 @@ total: **[INDEX.md](INDEX.md)**. Corrections against press and DefiLlama,
 
 ## Monthly digests
 
-A recurring monthly roundup, one file per month, published once that month closes: headline loss total, breakdown by root-cause technique, the three biggest incidents, and a full linked table. Same independent, on-chain-first discipline as every individual entry, just aggregated.
+One file per month, published once the month closes: headline loss
+total, breakdown by root-cause technique, the three biggest incidents,
+and a full linked table. Same discipline as every individual entry, just
+aggregated.
 
 - [August 2026](digests/2026-08.md): first edition, 19 incidents, at least $46.7M
 
@@ -70,12 +69,10 @@ Full history: [`digests/`](digests/)
 
 ## Falsifiable hypotheses, not just claims
 
-Every subfolder keeps a `registre_hypotheses.csv`: every claim behind
-that entry's writeup, broken into individually falsifiable hypotheses,
-each with an exact locator (a file and line number in that entry's own
-`resultats_*.txt`), a concrete falsification test, and a confidence
-level. Nothing in a README above is asserted without a row here backing
-it.
+Every subfolder keeps a `registre_hypotheses.csv`: each claim broken into
+a falsifiable hypothesis, with an exact locator (file + line in that
+entry's `resultats_*.txt`), a falsification test, and a confidence level.
+Nothing above is asserted without a row backing it.
 
 One real row, from `drift-protocol-durable-nonce-admin-hijack/registre_hypotheses.csv`:
 
@@ -83,9 +80,9 @@ One real row, from `drift-protocol-durable-nonce-admin-hijack/registre_hypothese
 |---|---|---|---|---|
 | H8 | The fake collateral mint (`G84LEhbNMR1yYbHgHbnNYNSK8mpTKcazh5jcW5yMPQKo`), derived purely from another hypothesis's own transaction inner instructions, not press-supplied, has `decimals=9`, live supply ~750,000,000 (within 0.0000004% of press's "750 million" claim), `mintAuthority=null`, and its own live Metaplex metadata decodes to name "CarbonVote Token", symbol "CVT" | `resultats_reconstruction_2026-09-11.txt:68-77` | Re-run `reconstruct_exploit.py` steps 5-6 against a different Solana RPC; a different supply, decimals, or metadata name/symbol would invalidate this | High |
 
-Anyone can re-run that exact test against a different RPC endpoint
-themselves; the hypothesis is only trusted here because it hasn't broken
-yet, not because it was written by this project.
+Anyone can re-run that test against a different RPC themselves; it's
+trusted only because it hasn't broken yet, not because this project
+wrote it.
 
 ## Structure
 
@@ -135,44 +132,39 @@ python3 add_new_entry.py \
   --readme-url "https://example.com/postmortem"
 ```
 
-This scaffolds a stub README, `registre_hypotheses.csv`, and
-`reconstruct_exploit.py`; inserts the new row into `INDEX.md` in the right
-year/month section; and recomputes every subtotal, the cumulative total,
-this README's "At a glance" block, and the "(current month)" label
-straight from the Index data, never from a hardcoded number. Run
-`add_new_entry.py --help` for the full flag reference, including
-`--loss-known-partial` and the controlled `--category` tags; it never
-touches `CORRECTIONS.md` or the "Corrections made" line, which stay human
-judgment calls.
+Scaffolds a stub README, `registre_hypotheses.csv`, and
+`reconstruct_exploit.py`; inserts the row into `INDEX.md` in the right
+year/month section; recomputes every subtotal, the cumulative total, and
+this README's "At a glance" block straight from the Index data, never a
+hardcoded number. `add_new_entry.py --help` for the full flag reference,
+including `--loss-known-partial` and the controlled `--category` tags. It
+never touches `CORRECTIONS.md` — that stays a human judgment call.
 
 ## Scope
 
-This program covers DeFi incidents today, but the name is deliberately
-`onchain-postmortems`, not `defi-postmortems`: a future entry doesn't need
-to be a lending or AMM protocol. A bridge hack, an L1/L2 infrastructure
-incident, or a compromised validator set all belong here just as much, as
-long as they get the same treatment: an independent on-chain reconstruction
-from a primary source, not a summary of press coverage.
+Covers DeFi incidents today, but the name is deliberately
+`onchain-postmortems`, not `defi-postmortems`: a bridge hack, an L1/L2
+infrastructure incident, or a compromised validator set belongs here just
+as much, same treatment — an independent on-chain reconstruction from a
+primary source, not a summary of press coverage.
 
 ## Suggest an incident
 
-Know of an on-chain incident that fits this program's scope, an
-independent, primary-source reconstruction, not a summary of press? Open
-a GitHub issue with the protocol name, date, and chain, or reach out on X
-([@RealSpap](https://x.com/RealSpap)). Every entry is still built and
-verified by one person, so not every suggestion becomes a subfolder, but
-tips with a tx hash or block number attached get looked at first.
+Open a GitHub issue with the protocol name, date, and chain, or reach out
+on X ([@RealSpap](https://x.com/RealSpap)). Built and verified by one
+person, so not every suggestion becomes a subfolder, but tips with a tx
+hash or block number attached get looked at first.
 
 ## Limits
 
-- This is independent research, not a security audit, and isn't
-  affiliated with any protocol, auditor, or outlet cited in a subfolder.
+- Independent research, not a security audit; not affiliated with any
+  protocol, auditor, or outlet cited in a subfolder.
 - Every dollar figure in [the Index](INDEX.md) is recomputed from each
-  subfolder's source files (its README, its script's raw output in
+  subfolder's own source files (its README, its script's raw output in
   `resultats_*.txt`, or its `registre_hypotheses.csv`), never carried over
-  from an old summary without checking it against those files. When a
-  subfolder's source data doesn't support a full dollar total, the table
-  says so in a footnote instead of inventing one.
+  from an old summary unchecked. When a subfolder's source data doesn't
+  support a full dollar total, the table footnotes it instead of
+  inventing one.
 - 12 entries report a dollar figure that is a known floor, not a complete
   total. Read the linked subfolder for the full accounting in native
   units.
@@ -193,20 +185,20 @@ tips with a tx hash or block number attached get looked at first.
 | Verus-Ethereum Bridge | 2nd exploit (2026-07-23, $7,530,000 per DefiLlama) not priced | [verus-ethereum-bridge-forged-proof/](verus-ethereum-bridge-forged-proof/) |
 
 - Tectonic, Moonwell, and Liquid Network report the confirmed
-  unrecoverable or still-uncovered figure, not the higher gross amount;
+  unrecoverable or still-uncovered figure, not the higher gross amount —
   see each entry's own footnote for both readings.
 - `tectonic-cronos/` is the only subfolder without a `resultats_*.txt` or
-  a `registre_hypotheses.csv`: its script is a tool for reading the
-  chain's current state (`tectonic_risk_snapshot.py`), not a replay of the
-  incident, and its loss figures ($120M+ borrowed, $8.3M unrecoverable)
-  rest on its README and the Dune dashboard it links, not on a locally
-  reproducible output file in this repo. Flagged here rather than hidden.
+  a `registre_hypotheses.csv`: its script reads the chain's current state
+  (`tectonic_risk_snapshot.py`), not a replay of the incident, and its
+  loss figures ($120M+ borrowed, $8.3M unrecoverable) rest on its README
+  and the Dune dashboard it links, not a locally reproducible output file
+  in this repo. Flagged here rather than hidden.
 - The "Category" column in the Index is this project's own classification
   of an already-described mechanism, for scanning convenience, not a
   label sourced from DefiLlama, press, or the protocol itself. Several
   incidents plausibly fit more than one tag; each row carries the single
-  tag judged most useful for finding it, the full "Type/Mechanism" column
-  next to it carries the actual nuance.
+  tag judged most useful for finding it, the "Type/Mechanism" column next
+  to it carries the actual nuance.
 
 ## Disclaimer
 
@@ -216,24 +208,27 @@ live contract reads) as of the date noted per entry, not a security
 audit, and not affiliated with, commissioned by, or endorsed by any
 protocol, auditor, or outlet named in a subfolder.
 
-- **No claim beyond the data.** Statements about who sent, received, or
-  drained funds are based solely on on-chain records and publicly
-  disclosed information cited inline, so no claim of wrongdoing beyond
-  what that cited on-chain data shows is made or implied against any
-  named address or entity.
+- **No claim beyond the data.** Who sent, received, or drained funds is
+  based solely on on-chain records and publicly disclosed information
+  cited inline — no claim of wrongdoing beyond what that data shows is
+  made or implied against any named address or entity.
 - **Not advice.** Nothing in this repo is legal, financial, or investment
   advice.
-- **A snapshot, not a live feed.** Each entry reflects a point in time:
-  on-chain balances, labels, and follow-up transactions can and do change
-  after publication, and entries are not updated automatically to reflect
-  such changes.
-- **Corrections welcome.** Any individual or entity named in an entry who
-  believes a fact about them is inaccurate is invited to contact the
-  author with supporting evidence for a prompt, transparent correction.
+- **A snapshot, not a live feed.** Balances, labels, and follow-up
+  transactions can and do change after publication; entries are not
+  updated automatically to reflect such changes.
+- **Corrections welcome.** Any individual or entity named who believes a
+  fact about them is inaccurate is invited to contact the author with
+  supporting evidence for a prompt, transparent correction.
 
 Readers should independently verify all cited addresses, transactions,
 and figures before relying on them.
 
 ## License
 
-MIT. See `LICENSE`. Deliberately open, including every reconstruction script: unlike a reusable cross-protocol screening tool, each script here is wired to one already-public historical incident, so publishing it costs nothing competitively and buys real reproducibility, anyone can rerun the same query against the same public chain data and get the same number, which is what makes the corrections to press and DefiLlama in this repo checkable rather than just asserted.
+MIT. See `LICENSE`. Deliberately open, including every reconstruction
+script: each is wired to one already-public historical incident, so
+publishing it costs nothing competitively and buys real reproducibility —
+anyone can rerun the same query against the same public chain data and
+get the same number, which is what makes the corrections to press and
+DefiLlama in this repo checkable rather than just asserted.
