@@ -1,6 +1,6 @@
 # On-Chain Postmortems
 
-**$798.5M in DeFi and on-chain losses, independently recomputed from raw chain data across 51 incidents.**
+**$924.9M in DeFi and on-chain losses, independently recomputed from raw chain data across 52 incidents.**
 
 Forensic reconstructions done entirely on-chain. Each entry starts from a
 primary source (the protocol's own deployment registries, never a press
@@ -31,28 +31,28 @@ files.
 
 | | |
 |---|---|
-| Incidents covered | 51, independently reconstructed on-chain, see [the full index](INDEX.md) for detail |
-| Cumulative loss, recomputed | About $798.5M across the 51 incidents ($798,501,217 exactly, sum of the figures in the index). At least one entry is a known floor, so the real total is higher. |
+| Incidents covered | 52, independently reconstructed on-chain, see [the full index](INDEX.md) for detail |
+| Cumulative loss, recomputed | About $924.9M across the 52 incidents ($924,918,283 exactly, sum of the figures in the index). At least one entry is a known floor, so the real total is higher. |
 | Corrections made | 34 entries correct, reconcile, or newly surface a press or DefiLlama figure, label, date, or classification (26 corrections, 5 reconciliations, 3 discoveries not previously priced by DefiLlama at all). See [Corrections to press and DefiLlama](CORRECTIONS.md). |
 | Method | Each subfolder keeps its original Python reconstruction script, its `registre_hypotheses.csv` falsification registry, and its script's raw output in `resultats_*.txt`, so every figure below can be checked against the file that produced it |
-| License | MIT across all 51 entries, single author (Spap, 2026) |
+| License | MIT across all 52 entries, single author (Spap, 2026) |
 
 ## The 5 biggest losses
 
-Full history is 51 incidents across 6 months; these are the largest, by
+Full history is 52 incidents across 6 months; these are the largest, by
 recomputed loss. Full table, sortable by month: [INDEX.md](INDEX.md).
 
 | Protocol | Loss ($) | Chain | Mechanism | Link |
 |---|---|---|---|---|
 | Drift Protocol | ≈ 295,706,375 | Solana | Pre-signed durable-nonce Squads multisig approvals hijacked the program's admin key | [drift-protocol-durable-nonce-admin-hijack/](drift-protocol-durable-nonce-admin-hijack/) |
 | Kelp DAO (rsETH / LayerZero DVN) | ≈ 273,377,225 | Ethereum | Compromised LayerZero RPC nodes plus a DDoS-forced DVN failover passed a forged message through a 1-of-1 verifier | [kelpdao-rseth-layerzero-rpc-spoofing/](kelpdao-rseth-layerzero-rpc-spoofing/) |
+| Bitget hot wallet drain (Ethereum leg) | ≥ 126,417,066 | Ethereum | Spoofed withdrawal requests signed by Bitget's own hot wallets; the Ethereum leg of a $387.5M four-chain theft | [bitget-hot-wallet-spoofed-withdrawals/](bitget-hot-wallet-spoofed-withdrawals/) |
 | Liquid Network | ≥ 46,568,719 | Bitcoin + Liquid | Range-proof cache-key collision let a peg-out register as fully backed | [liquid-rangeproof-cache/](liquid-rangeproof-cache/) |
 | COLDCARD (Weak Seed RNG) | ≥ 37,996,965 | Bitcoin | Build-flag bug silently swapped the hardware RNG for a weak software PRNG for 5+ years | [coldcard-rng-seed-theft/](coldcard-rng-seed-theft/) |
-| AFX Bridge | ≈ 24,150,000 | Arbitrum + Ethereum | 5-of-7 threshold bridge-validator signing keys compromised via social engineering | [afx-bridge-validator-key-compromise/](afx-bridge-validator-key-compromise/) |
 
 ## Full index
 
-Grouped by year and month, sorted by loss within each month, 51 rows in
+Grouped by year and month, sorted by loss within each month, 52 rows in
 total: **[INDEX.md](INDEX.md)**. Corrections against press and DefiLlama,
 34 rows: **[CORRECTIONS.md](CORRECTIONS.md)**.
 
@@ -89,7 +89,7 @@ wrote it.
 ```
 onchain-postmortems/
   README.md                          this file (pitch + at-a-glance)
-  INDEX.md                           full year/month incident index, 51 rows
+  INDEX.md                           full year/month incident index, 52 rows
   CORRECTIONS.md                     full press/DefiLlama corrections table, 34 rows
   add_new_entry.py                   scaffolds a new subfolder and updates INDEX.md
   digests/                            one monthly roundup file per month (2026-08.md, ...)

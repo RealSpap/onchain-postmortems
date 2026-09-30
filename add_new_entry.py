@@ -532,16 +532,16 @@ def main():
         f"{floor_note} |"
     )
     new_headline = (
-        f"**The headline number: ${total_m:.1f}M in DeFi and on-chain losses, "
+        f"**${total_m:.1f}M in DeFi and on-chain losses, "
         f"independently recomputed from raw chain data across {overall_count} "
-        f"reconstructed incidents.**"
+        f"incidents.**"
     )
     for idx, line in enumerate(readme_lines):
         if line.startswith("| Incidents covered |"):
             readme_lines[idx] = new_incidents_line
         elif line.startswith("| Cumulative loss, recomputed |"):
             readme_lines[idx] = new_loss_line
-        elif line.startswith("**The headline number:"):
+        elif line.startswith("**$") and "in DeFi and on-chain losses" in line:
             readme_lines[idx] = new_headline
     README_PATH.write_text("\n".join(readme_lines) + "\n", encoding="utf-8")
 

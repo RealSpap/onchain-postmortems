@@ -433,8 +433,8 @@ def check_footnotes(index_text: str) -> None:
 
 
 HEADLINE_RE = re.compile(
-    r"\*\*The headline number: \$([\d.]+)M in DeFi and on-chain losses, "
-    r"independently recomputed from raw chain data across (\d+) reconstructed "
+    r"\*\*\$([\d.]+)M in DeFi and on-chain losses, "
+    r"independently recomputed from raw chain data across (\d+) "
     r"incidents\.\*\*"
 )
 
@@ -449,8 +449,8 @@ def check_headline(full_text: str, years: dict) -> None:
     m = HEADLINE_RE.search(full_text)
     if not m:
         fail(
-            "Could not find the opening '**The headline number: $X.YM ... across "
-            "N reconstructed incidents.**' sentence at the top of README.md. It "
+            "Could not find the opening '**$X.YM in DeFi and on-chain losses, ... across "
+            "N incidents.**' sentence at the top of README.md. It "
             "may have been reworded without updating this check."
         )
     headline_millions, headline_count = m.group(1), int(m.group(2))
@@ -471,9 +471,9 @@ def check_headline(full_text: str, years: dict) -> None:
         )
 
 
-CORRECTIONS_INLINE_RE = re.compile(r"one of (\d+) cases in \[Corrections")
+CORRECTIONS_INLINE_RE = re.compile(r"one of (\d+) cases\s+in \[Corrections")
 CORRECTIONS_GLANCE_RE = re.compile(r"^(\d+) entries correct, reconcile")
-CORRECTIONS_SECTION_ROWS_RE = re.compile(r"The (\d+) rows below are the cases")
+CORRECTIONS_SECTION_ROWS_RE = re.compile(r"The (\d+) rows below\s+are (?:the cases|where)")
 
 
 def check_corrections_count(readme_text: str, corrections_text: str) -> None:
@@ -498,11 +498,7 @@ def check_corrections_count(readme_text: str, corrections_text: str) -> None:
                 break
     if not glance_m:
         fail("Could not find the 'N entries correct, reconcile ...' row in README.md's 'At a glance' block.")
-    section_m = None
-    for line in corrections_text.splitlines():
-        section_m = CORRECTIONS_SECTION_ROWS_RE.search(line.strip())
-        if section_m:
-            break
+    section_m = CORRECTIONS_SECTION_ROWS_RE.search(corrections_text)
     if not section_m:
         fail("Could not find 'The N rows below are the cases ...' in CORRECTIONS.md's lead paragraph.")
 
