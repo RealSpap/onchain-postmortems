@@ -1,46 +1,46 @@
-CONTRE-VERIFICATION sur un second fournisseur independant : https://base.drpc.org
-(les lectures d'origine de ce dossier ont ete faites sur https://gateway.tenderly.co/public/base)
-date de lecture : 2026-09-24T17:16:28.548837Z
-cle de role TOKEN_MINTER = keccak256(abi.encode('TOKEN_MINTER')) = 0xb77a48db4266813e82e1cdfbc47bca32aab994909c42cb5090bb0dd63e40bc1f
-elle correspond bien a une cle enumeree par getRoles() sur le RoleStore : 0xb77a48db42...
+CROSS-CHECK on a second, independent provider: https://base.drpc.org
+(this folder's original reads were made on https://gateway.tenderly.co/public/base)
+read on: 2026-09-24T17:16:28.548837Z
+TOKEN_MINTER role key = keccak256(abi.encode('TOKEN_MINTER')) = 0xb77a48db4266813e82e1cdfbc47bca32aab994909c42cb5090bb0dd63e40bc1f
+it matches a key enumerated by getRoles() on the RoleStore: 0xb77a48db42...
 
---- 1. supply INT aux blocs charnieres (totalSupply(), 18 decimales) ---
-  bloc 51593877  juste avant la 1re exploitation       808409913595513467171581989 wei =       808409913.595513 INT
-  bloc 51593878  bloc de la 1re exploitation          1733821591974536552916619196 wei =      1733821591.974536 INT
-  bloc 51596204  pic de supply                      156277572881271391872337832604 wei =    156277572881.271393 INT
-  bloc 51604090  dernier bloc avec TOKEN_MINTER     156277572881271391872337832604 wei =    156277572881.271393 INT
-  bloc 51604091  bloc de revocation                 156277572881271391872337832604 wei =    156277572881.271393 INT
-  bloc 51604379  9 m 36 s apres la revocation         8211704340627698153131879644 wei =      8211704340.627699 INT
-  bloc 51739799  lecture du jour                       847720490974547513374037371 wei =       847720490.974548 INT
+--- 1. INT supply at the key blocks (totalSupply(), 18 decimals) ---
+  block 51593877  just before the 1st exploit           808409913595513467171581989 wei =       808409913.595513 INT
+  block 51593878  block of the 1st exploit             1733821591974536552916619196 wei =      1733821591.974536 INT
+  block 51596204  supply peak                        156277572881271391872337832604 wei =    156277572881.271393 INT
+  block 51604090  last block with TOKEN_MINTER       156277572881271391872337832604 wei =    156277572881.271393 INT
+  block 51604091  revocation block                   156277572881271391872337832604 wei =    156277572881.271393 INT
+  block 51604379  9 m 36 s after revocation           8211704340627698153131879644 wei =      8211704340.627699 INT
+  block 51739799  today's read                          847720490974547513374037371 wei =       847720490.974548 INT
 
---- 2. WETH dans le pool exploite 0xdec6eadbd8ed3f655cba4bb4eeff6fb43b16969d ---
-  bloc 51579726  2026-09-20, avant tout                    5847023331264742436 wei = 5.847023331264742829 WETH
-  bloc 51593877  juste avant la 1re exploitation           5847033390701967596 wei = 5.847033390701967370 WETH
-  bloc 51593878  apres la 1re exploitation                      45371376279279 wei = 0.000045371376279279 WETH
-  bloc 51622927  2026-09-22 00:00:01Z                         6084683299908997 wei = 0.006084683299908997 WETH
-  bloc 51739799  lecture du jour                           2950934642730012734 wei = 2.950934642730012492 WETH
+--- 2. WETH in the exploited pool 0xdec6eadbd8ed3f655cba4bb4eeff6fb43b16969d ---
+  block 51579726  2026-09-20, beforehand                    5847023331264742436 wei = 5.847023331264742829 WETH
+  block 51593877  just before the 1st exploit               5847033390701967596 wei = 5.847033390701967370 WETH
+  block 51593878  after the 1st exploit                          45371376279279 wei = 0.000045371376279279 WETH
+  block 51622927  2026-09-22 00:00:01Z                         6084683299908997 wei = 0.006084683299908997 WETH
+  block 51739799  today's read                              2950934642730012734 wei = 2.950934642730012492 WETH
 
---- 2bis. le second pool INT/WETH 0xe2dda0911e227e73d9fd94745b851c8bc6504610 n'est pas touche ---
-  bloc 51579726         1033946412150225845 wei = 1.033946412150225758 WETH
-  bloc 51622927         1033946412150225845 wei = 1.033946412150225758 WETH
-  bloc 51739799         1033946412150225845 wei = 1.033946412150225758 WETH
+--- 2b. the second INT/WETH pool 0xe2dda0911e227e73d9fd94745b851c8bc6504610 is untouched ---
+  block 51579726         1033946412150225845 wei = 1.033946412150225758 WETH
+  block 51622927         1033946412150225845 wei = 1.033946412150225758 WETH
+  block 51739799         1033946412150225845 wei = 1.033946412150225758 WETH
 
---- 3. role TOKEN_MINTER : hasRole(address,bytes32) sur le RoleStore ---
-  bloc 51593877  hasRole(LiquidityUnifier, TOKEN_MINTER) = True
-  bloc 51604090  hasRole(LiquidityUnifier, TOKEN_MINTER) = True
-  bloc 51604091  hasRole(LiquidityUnifier, TOKEN_MINTER) = False
-  bloc 51739799  hasRole(LiquidityUnifier, TOKEN_MINTER) = False
-  getRoleMembers(TOKEN_MINTER, 0, 50) aujourd'hui : 0 membre(s)
+--- 3. TOKEN_MINTER role: hasRole(address,bytes32) on the RoleStore ---
+  block 51593877  hasRole(LiquidityUnifier, TOKEN_MINTER) = True
+  block 51604090  hasRole(LiquidityUnifier, TOKEN_MINTER) = True
+  block 51604091  hasRole(LiquidityUnifier, TOKEN_MINTER) = False
+  block 51739799  hasRole(LiquidityUnifier, TOKEN_MINTER) = False
+  getRoleMembers(TOKEN_MINTER, 0, 50) today: 0 member(s)
 
---- 4. le mint geant ne survit pas a sa propre transaction ---
-  bloc 51594631 totalSupply = 4510056627111605810151730817 wei
-  bloc 51594632 totalSupply = 4510056627111605810151730817 wei
-  les deux lectures sont identiques : 0x0af9d052... a minte puis brule le meme montant,
-  delta de supply exactement nul.
+--- 4. the giant mint does not survive its own transaction ---
+  block 51594631 totalSupply = 4510056627111605810151730817 wei
+  block 51594632 totalSupply = 4510056627111605810151730817 wei
+  the two reads are identical: 0x0af9d052... minted then burned the same amount,
+  supply delta exactly zero.
 
---- 5. configuration vivante du LiquidityUnifier ---
+--- 5. live configuration of the LiquidityUnifier ---
   swapAmount()  = 1000000000000000000000000000 wei = 1000000000.0 INT
-  excludedPools = 1 entree(s)
+  excludedPools = 1 entry(ies)
       0xdec6eadbd8ed3f655cba4bb4eeff6fb43b16969d
 
-FIN DE LA CONTRE-VERIFICATION. Aucune valeur ne differe des lectures d'origine.
+END OF CROSS-CHECK. No value differs from the original reads.

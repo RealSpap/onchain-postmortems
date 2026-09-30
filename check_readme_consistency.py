@@ -1,68 +1,47 @@
 #!/usr/bin/env python3
 """
-Deterministic self-consistency check across README.md, INDEX.md and
-CORRECTIONS.md.
+Deterministic self-consistency check across README.md, INDEX.md,
+CORRECTIONS.md and the incident subfolders.
 
 This is NOT a re-verification against raw blockchain data. It never touches
-a chain, a protocol contract, or any external API. It only checks that the
-numbers and cross-references these three files make about EACH OTHER
-actually agree.
-
-ADDED 2026-09-29: the Index and Corrections tables used to live inside
-README.md (459 lines, half of it these two tables); they now live in their
-own files, INDEX.md and CORRECTIONS.md, with README.md kept to a short
-pitch + "At a glance" + links out. This script's checks moved with them,
-cross-file where a number in one file has to match a number in another.
+a chain or any external API. It only checks that the numbers and
+cross-references these files make about EACH OTHER agree.
 
 The Index is grouped by year (### <YYYY>), then by month
 (#### <Month name> <YYYY>, optionally suffixed " (current month)"), each
-month holding one markdown table of incident rows. This script walks that
-structure and checks:
+month holding one markdown table of incident rows. Checks:
 
-  1. Every month's stated subtotal equals the sum of its own rows' Loss ($)
-     figures, and the stated per-month incident count matches the row count.
-  2. Every year's stated total equals the sum of its months' STATED
-     subtotals (not recomputed independently, so this specifically checks
-     the month -> year rollup), and the stated per-year incident count
-     matches the sum of its months' counts.
-  3. The overall cumulative total and incident count stated in "At a
-     glance" equal the sum of the years' STATED totals and counts (the
-     year -> overall rollup).
-  4. Exactly one month is marked "(current month)", and it is the
-     chronologically latest month that actually has a section.
-  5. The number of incident rows across the whole Index matches the number
-     of incident subfolders that actually exist in the repo (a subfolder
-     counts only if it has its own README.md; root-level files don't
-     count).
-  6. Every footnote marker referenced anywhere in the Index has a matching
-     footnote definition, and every footnote definition is referenced by
-     at least one row (no orphans in either direction).
-  7. ADDED 2026-09-29: the opening bold "headline number" sentence (incident
-     count + rounded $ total) matches the same year-level totals check 3
-     already trusts. This line drifted silently for days (stuck at "42
-     incidents / $783.9M" while the Index grew to 51 / $798.5M) because
-     nothing here ever looked at it before.
-  8. ADDED 2026-09-29: the Corrections-to-press-and-DefiLlama row count is
-     stated in three separate places (the intro prose, "At a glance", and
-     the Corrections section's own lead sentence) plus the table itself --
-     all four drifted apart once already (3 incidents had a real press/
-     DefiLlama correction documented only in their Index footnote, never
-     added as their own Corrections row).
+  1. Every month's stated subtotal equals the sum of its rows' Loss ($)
+     figures, and the stated incident count matches the row count.
+  2. Every year's stated total and count equal the sum of its months'.
+  3. The cumulative total, the recomputed share (rows not marked †) and the
+     incident count in README's "At a glance" equal the Index's.
+  4. Exactly one month is marked "(current month)", the latest one.
+  5. The number of Index rows equals the number of incident subfolders
+     (a subfolder counts only if it has its own README.md), and every row's
+     Link cell points to an existing subfolder.
+  6. Every footnote marker has a definition and vice versa.
+  7. The opening bold headline (total, count, recomputed share) matches the
+     Index.
+  8. The Corrections row count agrees across README and CORRECTIONS.md and
+     with the table itself, and the per-type breakdown sums to it.
+  9. The number of known floors (≥) stated in README equals the Index's ≥
+     cells and the rows of README's floor table.
+ 10. Every subfolder's registre_hypotheses.csv has the standard header and
+     exactly 5 ';'-separated fields per row.
 
-No LLM call, no network access, no API key. Exit code 0 means everything
-that was checked is internally consistent; non-zero means it found a
-disagreement, and stderr says exactly which check failed and what the two
-disagreeing values were.
+Exit code 0 means everything checked is internally consistent; non-zero
+means a disagreement, and stderr says which check failed and the two
+disagreeing values.
 """
 
+import csv
 import re
 import sys
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent
 README_PATH = REPO_ROOT / "README.md"
-# ADDED 2026-09-29: the Index and Corrections table moved out of README.md into their
-# own files (compaction pass -- README.md was 459 lines, half of it these two tables).
 INDEX_PATH = REPO_ROOT / "INDEX.md"
 CORRECTIONS_PATH = REPO_ROOT / "CORRECTIONS.md"
 
@@ -115,16 +94,14 @@ def extract_section(text: str, heading: str) -> str:
 
 def parse_loss_cell(cell: str) -> float:
     """
-    Parse a Loss ($) table cell like '≈ 9,131,000 [^moonwell]' or
-    '≥ 234,000 [^balancer]' or a plain '174,311 [^cozy]' into a number.
-    Handles the approx (≈) and at-least (≥) prefix symbols, and strips
-    thousands-separator commas.
+    Parse a Loss ($) table cell like '≈ 9,131,000 [^moonwell]',
+    '≥ † 234,000 [^balancer]' or a plain '174,311 [^cozy]' into a number.
+    Handles the approx (≈), at-least (≥) and sourced (†) prefix symbols, and
+    strips thousands-separator commas.
     """
     original = cell
     text = re.sub(r"\[\^[^\]]+\]", "", cell)  # drop footnote marker(s)
-    text = text.strip()
-    text = text.lstrip("≈≥~").strip()          # drop approx/at-least symbols
-    text = re.sub(r"^(about|approximately|at least)\s+", "", text, flags=re.IGNORECASE)
+    text = re.sub(r"^[≈≥†\s]+", "", text.strip())  # drop prefix symbols
     text = text.lstrip("$").strip()
     text = text.replace(",", "")
     m = re.match(r"^(\d+(?:\.\d+)?)", text)
@@ -308,7 +285,16 @@ def check_year_totals(years: dict) -> None:
             )
 
 
-def check_overall_total(full_text: str, years: dict) -> None:
+def loss_prefix(cell: str) -> str:
+    return re.match(r"^[≈≥†\s]*", cell.strip()).group(0)
+
+
+def recomputed_total(all_rows: list) -> int:
+    """Sum of the rows NOT marked † (sourced, not recomputed)."""
+    return int(round(sum(parse_loss_cell(r[2]) for r in all_rows if "†" not in loss_prefix(r[2]))))
+
+
+def check_overall_total(full_text: str, years: dict, all_rows: list) -> None:
     glance_section = extract_section(full_text, "At a glance")
     glance_rows = []
     for line in glance_section.splitlines():
@@ -331,7 +317,7 @@ def check_overall_total(full_text: str, years: dict) -> None:
     if incidents_value is None:
         fail("Could not find the 'Incidents covered' row in the 'At a glance' block.")
     if loss_value_text is None:
-        fail("Could not find the 'Cumulative loss, recomputed' row in the "
+        fail("Could not find the 'Cumulative loss' row in the "
              "'At a glance' block.")
 
     m = re.match(r"^(\d+)", incidents_value.strip())
@@ -351,7 +337,7 @@ def check_overall_total(full_text: str, years: dict) -> None:
     if not m:
         fail(
             "Could not find an exact dollar figure of the form "
-            "'$<number> exactly' in the 'Cumulative loss, recomputed' cell: "
+            "'$<number> exactly' in the 'Cumulative loss' cell: "
             f"{loss_value_text!r}"
         )
     stated_overall_sum = int(m.group(1).replace(",", ""))
@@ -361,6 +347,15 @@ def check_overall_total(full_text: str, years: dict) -> None:
             "Cumulative loss mismatch: 'At a glance' states the exact figure "
             f"${stated_overall_sum:,}, but summing every year's stated total gives "
             f"${year_sum:,}."
+        )
+    m = re.search(r"\$([\d,]+) of it independently recomputed", loss_value_text)
+    if not m:
+        fail("Could not find '$<number> of it independently recomputed' in the 'Cumulative loss' cell.")
+    stated_recomputed = int(m.group(1).replace(",", ""))
+    if stated_recomputed != recomputed_total(all_rows):
+        fail(
+            f"Recomputed-share mismatch: 'At a glance' states ${stated_recomputed:,}, but the Index "
+            f"rows not marked † sum to ${recomputed_total(all_rows):,}."
         )
 
 
@@ -405,12 +400,14 @@ def check_table_rows_match_subfolders(all_rows: list) -> None:
             f"subfolder(s) with their own README.md exist in the repo: "
             f"{sorted(subfolders)}."
         )
+    for row in all_rows:
+        m = re.match(r"^\[([^\]]+)\]\(([^)]+)\)$", row[-1])
+        target = m.group(2).rstrip("/") if m else None
+        if not m or target not in subfolders:
+            fail(f"Index row {row[0]!r} links to {row[-1]!r}, not to one of the incident subfolders.")
 
 
 def check_footnotes(index_text: str) -> None:
-    """ADDED 2026-09-29: takes INDEX.md's own text directly now (it IS the Index
-    section, in its own file) instead of extracting a '## Index' heading out of
-    README.md."""
     referenced = set(re.findall(r"\[\^([A-Za-z0-9_-]+)\](?!:)", index_text))
     defined = set(re.findall(r"^\[\^([A-Za-z0-9_-]+)\]:", index_text, re.MULTILINE))
 
@@ -432,26 +429,22 @@ def check_footnotes(index_text: str) -> None:
         fail("Footnote mismatch: " + "; and ".join(parts) + ".")
 
 
+# Deliberately loose on wording: only the three numbers are pinned, so a prose
+# edit of the headline does not break CI (it did on 2026-09-29).
 HEADLINE_RE = re.compile(
-    r"\*\*\$([\d.]+)M in DeFi and on-chain losses, "
-    r"independently recomputed from raw chain data across (\d+) "
-    r"incidents\.\*\*"
+    r"^\*\*\$([\d.]+)M\b.*?\bacross (\d+) incidents\b.*?\$([\d.]+)M of it independently recomputed",
+    re.MULTILINE,
 )
 
 
-def check_headline(full_text: str, years: dict) -> None:
-    """The opening bold sentence restates the incident count and total loss in a
-    rounded, human-readable form -- it is the first thing anyone reads, but
-    nothing else in this script ever looks at it, so it drifted silently once
-    already (stuck at "42 incidents / $783.9M" while the Index below it grew
-    to 51 / $798.5M). Checked against the same year-level totals every other
-    check here already trusts, not re-derived independently."""
+def check_headline(full_text: str, years: dict, all_rows: list) -> None:
+    """The opening bold sentence restates the total, the incident count and the
+    recomputed share in rounded form; checked against the Index."""
     m = HEADLINE_RE.search(full_text)
     if not m:
         fail(
-            "Could not find the opening '**$X.YM in DeFi and on-chain losses, ... across "
-            "N incidents.**' sentence at the top of README.md. It "
-            "may have been reworded without updating this check."
+            "Could not find the opening bold headline with '$X.YM ... across N incidents "
+            "... $Z.WM of it independently recomputed' at the top of README.md."
         )
     headline_millions, headline_count = m.group(1), int(m.group(2))
     year_count_sum = sum(y["stated_count"] for y in years.values())
@@ -469,22 +462,25 @@ def check_headline(full_text: str, years: dict) -> None:
             f"${headline_millions}M, but the year totals sum to ${year_sum:,} "
             f"(${expected_millions}M rounded to the same precision)."
         )
+    expected_recomputed = f"{recomputed_total(all_rows) / 1_000_000:.1f}"
+    if m.group(3) != expected_recomputed:
+        fail(
+            f"Headline recomputed-share mismatch: the opening sentence says ${m.group(3)}M, "
+            f"but the Index rows not marked † sum to ${expected_recomputed}M."
+        )
 
 
 CORRECTIONS_INLINE_RE = re.compile(r"one of (\d+) cases\s+in \[Corrections")
-CORRECTIONS_GLANCE_RE = re.compile(r"^(\d+) entries correct, reconcile")
+CORRECTIONS_GLANCE_RE = re.compile(
+    r"^(\d+) entries correct, reconcile.*?\((\d+) corrections, (\d+) reconciliations, (\d+) discoveries"
+)
 CORRECTIONS_SECTION_ROWS_RE = re.compile(r"The (\d+) rows below\s+are (?:the cases|where)")
 
 
 def check_corrections_count(readme_text: str, corrections_text: str) -> None:
-    """Three places state how many rows the Corrections table has (README's intro
-    prose, README's 'At a glance' block, and CORRECTIONS.md's own lead sentence)
-    -- and the table itself, also in CORRECTIONS.md, is a fourth. All four
-    drifted apart once already (three incidents' own corrections existed only
-    as Index footnotes, never added as their own row here). None of this
-    script's other checks ever counted this table, so it stayed silently wrong.
-    ADDED 2026-09-29: split across two files (readme_text, corrections_text)
-    now that the table itself moved out of README.md."""
+    """README's intro, README's 'At a glance' row and CORRECTIONS.md's lead
+    sentence each state the Corrections row count; the table is a fourth
+    source. The per-type breakdown in 'At a glance' must sum to it."""
     inline_m = CORRECTIONS_INLINE_RE.search(readme_text)
     if not inline_m:
         fail("Could not find the 'one of N cases in [Corrections ...' sentence near the top of README.md.")
@@ -511,6 +507,49 @@ def check_corrections_count(readme_text: str, corrections_text: str) -> None:
     if len(set(stated.values())) != 1:
         fail("Corrections row-count mismatch across the repo: " +
              ", ".join(f"{k} says {v}" for k, v in stated.items()) + ".")
+    by_type = sum(int(glance_m.group(i)) for i in (2, 3, 4))
+    if by_type != stated["actual table rows"]:
+        fail(f"Corrections breakdown in 'At a glance' sums to {by_type}, "
+             f"but the table has {stated['actual table rows']} rows.")
+
+
+FLOOR_COUNT_RE = re.compile(r"^- (\d+) entries report a dollar figure that is a known floor", re.MULTILINE)
+
+
+def check_floors(readme_text: str, all_rows: list) -> None:
+    index_floors = sum(1 for r in all_rows if "≥" in loss_prefix(r[2]))
+    m = FLOOR_COUNT_RE.search(readme_text)
+    if not m:
+        fail("Could not find '- N entries report a dollar figure that is a known floor' in README.md.")
+    lines = readme_text.splitlines()
+    try:
+        start = next(i for i, l in enumerate(lines) if l.startswith("| Protocol | Why it's a floor |"))
+    except StopIteration:
+        fail("Could not find README.md's floor table ('| Protocol | Why it's a floor |').")
+    table_rows = 0
+    for l in lines[start + 2:]:
+        if not l.startswith("|"):
+            break
+        table_rows += 1
+    if not int(m.group(1)) == index_floors == table_rows:
+        fail(f"Floor count mismatch: README says {m.group(1)}, the Index has {index_floors} '≥' "
+             f"cells, README's floor table has {table_rows} rows.")
+
+
+REGISTRY_HEADER = ["key", "hypothesis", "locator", "falsification_test", "evidence_confidence"]
+
+
+def check_registries() -> None:
+    for path in sorted(REPO_ROOT.glob("*/registre_hypotheses.csv")):
+        with path.open(encoding="utf-8", newline="") as fh:
+            rows = list(csv.reader(fh, delimiter=";"))
+        if not rows or rows[0] != REGISTRY_HEADER:
+            fail(f"{path.parent.name}/registre_hypotheses.csv: header is {rows[0] if rows else None!r}, "
+                 f"expected {';'.join(REGISTRY_HEADER)!r}.")
+        for n, row in enumerate(rows[1:], start=2):
+            if any(c.strip() for c in row) and len(row) != 5:
+                fail(f"{path.parent.name}/registre_hypotheses.csv line {n}: {len(row)} fields, expected 5 "
+                     f"(a ';' or quote inside a field is probably unquoted).")
 
 
 def main() -> int:
@@ -521,12 +560,14 @@ def main() -> int:
         years, current_month_keys = parse_index(index_text)
         all_rows = check_month_subtotals(years)
         check_year_totals(years)
-        check_overall_total(readme_text, years)
+        check_overall_total(readme_text, years, all_rows)
         check_current_month(years, current_month_keys)
         check_table_rows_match_subfolders(all_rows)
         check_footnotes(index_text)
-        check_headline(readme_text, years)
+        check_headline(readme_text, years, all_rows)
         check_corrections_count(readme_text, corrections_text)
+        check_floors(readme_text, all_rows)
+        check_registries()
     except ConsistencyError as exc:
         print(f"README self-consistency check FAILED: {exc}", file=sys.stderr)
         return 1
@@ -535,7 +576,7 @@ def main() -> int:
     print(
         f"README/INDEX/CORRECTIONS self-consistency check passed ({len(all_rows)} incidents "
         f"across {len(years)} year(s) and {total_months} month(s); month/year/overall totals, "
-        f"current-month label, subfolder count, footnotes, headline and corrections-count all consistent)."
+        f"current-month label, subfolders and links, footnotes, headline, corrections, floors and registries all consistent)."
     )
     return 0
 

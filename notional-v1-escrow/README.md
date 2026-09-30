@@ -11,7 +11,7 @@ Independent on-chain reconstruction of the integer-overflow exploit against Noti
 | Press figure | ~$1.73M (69,257 DAI + 1,658,524 USDC), swapped to ETH and reportedly routed through Tornado Cash |
 | Verified independently | Exact same amounts to 4 decimal places, exact same block numbers, exact attacker and exploit-contract addresses, none published anywhere else found |
 | A real naming discrepancy | DefiLlama's own hacks feed labels this incident "Notional V2"; every press source, and Notional's own GitHub organization structure, identifies the exploited contracts as V1 |
-| What's still open | The reported Tornado Cash routing was not independently confirmed; the destination address found is an unlabeled 23-byte minimal-proxy contract, not a recognizable Tornado Cash pool |
+| What's still open | The reported Tornado Cash routing was not independently confirmed; the destination address found is an EIP-7702 delegated EOA (23-byte delegation designator), not a recognizable Tornado Cash pool |
 
 ## The method
 
@@ -89,7 +89,7 @@ DefiLlama's `api.llama.fi/hacks` record for this incident reads, in full:
 }
 ```
 
-`"source"` is empty here, the same as every other record checked elsewhere in this research program: DefiLlama's own hacks feed never links a primary source directly for this incident. Every press source found (SlowMist, CryptoRank, BeInCrypto, Blockfence, shattered.io, Cryptotimes) identifies the exploited contracts as V1; Blockfence's headline explicitly calls it "Notional Finance V1". This project's own on-chain trace settles it independently: the exploited `Escrow` address is committed in `notional-finance/contracts`, the repository Notional itself names V1, distinct from its separate `contracts-v2` and `contracts-v3` repositories. The most widely syndicated tracker for on-chain hacks has the version number wrong for this one.
+`"source"` is empty here, like the other DefiLlama records checked for this repository. Every press source found (SlowMist, CryptoRank, BeInCrypto, Blockfence, shattered.io, Cryptotimes) identifies the exploited contracts as V1; Blockfence's headline explicitly calls it "Notional Finance V1". This project's own on-chain trace settles it independently: the exploited `Escrow` address is committed in `notional-finance/contracts`, the repository Notional itself names V1, distinct from its separate `contracts-v2` and `contracts-v3` repositories. The most widely syndicated tracker for on-chain hacks has the version number wrong for this one.
 
 ### The attacker's entire on-chain history: five transactions, ever
 
@@ -107,13 +107,13 @@ Transactions 3 and 4 are the attacker moving its own, already-received DAI and U
 
 ### What this project could not confirm: the Tornado Cash laundering claim
 
-The press reports the stolen funds were swapped into ~689 ETH and routed through Tornado Cash. The attacker wallet's fifth and final transaction sends only 1.105701960350961564 ETH, to `0x8aaf01B6F9AcC973274B8718BE4D1C1be10E3be6`, a contract of exactly 23 bytes of bytecode (small enough to be a minimal proxy) with no name or metadata in Blockscout's index. That destination does not resolve to a named or recognizable Tornado Cash pool by any means this project checked, and the ~1.11 ETH transfer found does not by itself account for the full ~689 ETH the press claims was laundered. This project reports the press's Tornado Cash claim as unconfirmed rather than independently verified, and did not trace the funds' full path from the attacker's DAI/USDC balances through to their final destination.
+The press reports the stolen funds were swapped into ~689 ETH and routed through Tornado Cash. The attacker wallet's fifth and final transaction sends only 1.105701960350961564 ETH, to `0x8aaf01B6F9AcC973274B8718BE4D1C1be10E3be6`, an address whose code is exactly 23 bytes, `0xef0100` followed by `0x63c0c19a282a1B52b07dD5a65b58948A07DAE32B`: an EIP-7702 delegation designator, meaning an externally-owned account that delegated its execution to that contract (the same delegate the Moonwell MAMO exploiter used in this repo), not a minimal proxy. It carries no name or metadata in Blockscout's index. That destination does not resolve to a named or recognizable Tornado Cash pool by any means this project checked, and the ~1.11 ETH transfer found does not by itself account for the full ~689 ETH the press claims was laundered. This project reports the press's Tornado Cash claim as unconfirmed rather than independently verified, and did not trace the funds' full path from the attacker's DAI/USDC balances through to their final destination.
 
 ## Caveats
 
 - This is independent research, not an audit, and not affiliated with Notional Finance, SlowMist, or any outlet cited above.
 - The exact Solidity mechanics of the `uint128` downcast are reported here as the press (specifically SlowMist and shattered.io) describe them; this project verified the transaction-level effect (the exact amounts moved, the exact addresses, the exact timing) but did not independently re-derive the vulnerable line of code from Notional V1's source.
-- SlowMist's own write-up, the most technically detailed press source found, returned an HTTP 403 to this project's fetch tools; it is summarized here only via search-result excerpts, not fetched and read directly.
+- SlowMist's own write-up, the most technically detailed press source found, returned an HTTP 403 to automated requests; it is summarized here only via search-result excerpts, not fetched and read directly.
 - The full path of the stolen DAI and USDC after they reached the attacker's wallet, including the claimed swap to ~689 ETH and any Tornado Cash deposit, was not independently traced; transactions 3 and 4 in the attacker's own history (its own USDC and DAI transfer calls) were not decoded for exact recipients or amounts.
 - The V1-vs-V2 mislabeling is established here from the exploited contract's own address and Notional's own repository structure (the address is committed in the repo Notional itself calls V1), not from any deeper audit of DefiLlama's internal ID scheme.
 - This project's own hypothesis register rates six of its eight logged hypotheses "High" evidence confidence; the claim that only 5 transactions exist for the attacker wallet is rated "Medium" (a sixth, undiscovered transaction would invalidate it), and the claim that the final 23-byte destination is not Tornado Cash is rated "Low" (this project could not check a third-party address-labeling service).
@@ -121,14 +121,14 @@ The press reports the stolen funds were swapped into ~689 ETH and routed through
 
 ## Files
 
-- `README.md` - this document.
-- `reconstruct_exploit.py` - the committed Python script (uses `web3.py` and `eth_abi`) that independently re-derives both block timestamps, locates the attacker's deployment and extraction transactions, and decodes the exact DAI/USDC amounts straight from Ethereum mainnet via a public RPC.
-- `registre_hypotheses.csv` - the hypothesis register: eight claims (H1-H8), each with its own locator inside the `resultats_*.txt` files below, a falsification test, and an evidence-confidence rating.
-- `resultats_attaquant_2026-09-09.txt` - the attacker wallet's full 5-transaction history, retrieved from Blockscout's public API on 2026-09-09.
-- `resultats_reconstruction_2026-09-09.txt` - raw console output of `reconstruct_exploit.py`, run on 2026-09-09.
-- `resultats_sources_2026-09-09.txt` - the DefiLlama hacks-feed record, the press sources found, and Notional's own `mainnet.json` deployment addresses, all queried on 2026-09-09.
-- `LICENSE` - MIT license text.
-- `.gitignore` - ignores the local Python virtual environment and bytecode cache.
+- `README.md`, this document.
+- `reconstruct_exploit.py`, the committed Python script (uses `web3.py` and `eth_abi`) that independently re-derives both block timestamps, locates the attacker's deployment and extraction transactions, and decodes the exact DAI/USDC amounts straight from Ethereum mainnet via a public RPC.
+- `registre_hypotheses.csv`, the hypothesis register: eight claims (H1-H8), each with its own locator inside the `resultats_*.txt` files below, a falsification test, and an evidence-confidence rating.
+- `resultats_attaquant_2026-09-09.txt`, the attacker wallet's full 5-transaction history, retrieved from Blockscout's public API on 2026-09-09.
+- `resultats_reconstruction_2026-09-09.txt`, raw console output of `reconstruct_exploit.py`, run on 2026-09-09.
+- `resultats_sources_2026-09-09.txt`, the DefiLlama hacks-feed record, the press sources found, and Notional's own `mainnet.json` deployment addresses, all queried on 2026-09-09.
+- `LICENSE`, MIT license text.
+- `.gitignore`, ignores the local Python virtual environment and bytecode cache.
 
 ## License
 

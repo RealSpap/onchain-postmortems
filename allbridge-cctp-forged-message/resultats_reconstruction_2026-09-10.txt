@@ -27,7 +27,7 @@ Total drop in Router balance (real loss to Allbridge depositors): 190,155.976393
   of which kept by the attacker: 189,751.554381 USDC
   of which paid to Aave as flash loan fee: 404.422012 USDC
 
-=== Step 4: the Polygon setup transaction, a day before SlowMist's stated date ===
+=== Step 4: the Polygon setup transaction (July 25 UTC, July 26 in UTC+8) ===
 tx 0x2a88d79756b4547b33fea7b3c1420793680e2b8952bef4c65e99879e16b22140
 block 90871052, 2026-07-25 20:32:55 UTC
 from: 0x2419432344b0b892e592b2601b98eae702ba360e  to (MessageTransmitterV2): 0x81d40f21f12a8f0e3252bccb954d722d4c464b64

@@ -104,9 +104,8 @@ math (MR !835's root-cause step 5). The withdraw that followed, in the
 same transaction, paid out **48,869,502.5269541928 CACAO**, independently
 re-derived here to full precision from the raw transaction, not from
 Midgard's rounded display. MAYAChain's own RCA in MR !835 states this step
-"withdrew 48.87 million CACAO"; this reconstruction's own number matches
-it to 8 of its 9 significant digits, itself already a level of precision
-the primary source's rounded prose figure doesn't carry.
+"withdrew 48.87 million CACAO"; this reconstruction's own number is
+consistent with that rounded figure.
 
 ### The cash-out: ten swaps, four minutes, straight to Bitcoin
 

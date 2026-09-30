@@ -136,7 +136,9 @@ attacker's real, successful, final move of the entire drained amount.
 Checked live today (2026-09-10, a week after the 2026-09-03 14:00 UTC
 whitehat deadline): the designated recovery addresses hold 0.980001878
 SOL and 0.001550501933366716 ETH, respectively, neither remotely close to
-80% of 1000.8 ETH. The whitehat deal was not honored.
+80% of 1000.8 ETH. No return to the designated recovery addresses was found
+as of 2026-09-10; since the destination of the 2026-09-01 transfer is
+unidentified, a return by some other route is not excluded.
 
 ### The dollar figure, and a same-day price gap that explains the press number
 
@@ -146,7 +148,7 @@ independently verified. At CoinGecko's 2026-09-01 price ($2,466.57), the
 same ETH amount is $2,468,528, within 0.05% of DefiLlama's own tracked
 $2,469,729 for this incident. The two prices bracket DefiLlama's figure
 because the attacker did not move the stolen ETH out as one lump until a
-day after the actual drain; whichever exact hour DefiLlama's own pipeline
+day after the actual drain; whichever exact hour DefiLlama
 priced this at, it lands inside that one-day gap, not on the theft
 timestamp itself. This entry uses the theft-day price because that is
 when the loss actually happened, not when the attacker later chose to

@@ -1,4 +1,4 @@
-== ether.fi Liquid AtomicQueue exploit — live reconstruction ==
+== ether.fi Liquid AtomicQueue exploit: live reconstruction ==
 
 exploit tx 0x7cbe0b4349513fed6d03ba8bf9ed708e10e07a501d10b5f344a25ae10595599b
   block 25952624 @ 1789111211 status=1 to=None (None=creation)

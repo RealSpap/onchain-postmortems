@@ -24,9 +24,9 @@ JSON in resultats_reconstruction_2026-09-10.txt Step 6):
   name: "Gravity Bridge", date: 1780099200 (2026-05-30 00:00:00 UTC),
   amount: $5,400,000, classification: "Key Compromise",
   technique: "Validator Key Compromised", chain: ["Ethereum"],
-  bridgeHack: true, source: "" (empty, as in every other record checked
-  in this research program - DefiLlama's hacks feed never links a primary
-  source directly).
+  bridgeHack: true, source: "" (empty: DefiLlama's hacks feed does not
+  link a primary source for this
+  record).
 
 Gravity Bridge's own GitHub organization (primary source for contract
 identity, used as the sole starting anchor in reconstruct_exploit.py
@@ -70,7 +70,7 @@ rather than silently dropped or silently trusted):
     RPC tx_search), 2026-09-10. Both nodes are live and synced (confirmed
     via /cosmos/base/tendermint/v1beta1/blocks/latest, current block
     23,605,733 at query time), so this is read as the nodes not retaining
-    tx index back to the 2026-06-25/07-17 window the article describes,
+    tx index back to the undated pre-exploit setup the article describes,
     not as evidence the transaction doesn't exist.
   - The validator address rekt.news names for the attacker's "julia666"
     self-delegation (gravityvaloper1rdwckpx2p3mwu4k8xdz8vmd4x3mqx4v9ars8k)

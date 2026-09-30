@@ -96,16 +96,16 @@ The wallet (`0xD3A8D0A9F55cf679fff6F277E49AfC95B49D2B07`) was empty and unused u
 - Whether the 5% of each declared amount that is never pulled at all is the token's transfer tax or the award contract's own arithmetic is not determined here.
 - How many other addresses hold open award positions was not established: enumerating them would mean scanning logs back to the proxy's 2022 deployment, past the providers' 50,000-block `getLogs` limit. What the balance shows is that no claim from anyone can now be paid.
 - The funding path's shape (unshield, WBNB withdrawal, internal transfer to a nonce-0 wallet) is read from the transaction's own receipt and call trace. The two addresses involved are given as addresses; their commonly used protocol label was not confirmed against a primary deployment record.
-- Balances, nonce and the implementation slot are snapshots at block 122476848 (2026-09-17), read from three providers.
+- Balances, nonce and the implementation slot are snapshots at block 122476848 (2026-09-17), read from three providers, and were re-checked unchanged at block 123170916 (2026-09-21, `preuves/resultats_sources_2026-09-21.txt`).
 - No statement by Dream Health Chain was found, and DefiLlama's record for this incident carries an empty source field.
 
 ## Files
 
-- `reconstruct_exploit.py`: live reconstruction; re-derives every figure above and ends with fifteen self-checks.
-- `registre_hypotheses.csv`: 11 falsifiable hypotheses, each with a precise locator and a falsification test.
+- `reconstruct_exploit.py`: live reconstruction; re-derives every figure of the 2026-09-17 reconstruction and ends with fifteen self-checks.
+- `registre_hypotheses.csv`: 12 falsifiable hypotheses, each with a precise locator and a falsification test.
 - `resultats_reconstruction_2026-09-17.txt`: raw output of the reconstruction run (identical to `preuves/09_reconstruction_output.txt`).
 - `preuves/`: the four receipts, the three call traces, the attacker contract's and the victim's bytecode, the funding transaction's receipt, the DefiLlama record, the DeFiHackLabs PR as its API returns it, the openchain.xyz selector lookups, state reads from three providers, a claim-by-claim ledger built from logs alone, and the adversarial verification pass.
 
 ## License
 
-Released under the MIT License. See `LICENSE`.
+Released under the MIT License (see `LICENSE` at the repository root).

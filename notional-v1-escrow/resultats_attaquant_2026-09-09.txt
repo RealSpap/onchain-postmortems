@@ -3,11 +3,11 @@ Full transaction history of the attacker EOA
 public API (eth.blockscout.com/api/v2/addresses/.../transactions?filter=from,
 no API key), 2026-09-09. 5 transactions total, chronological order:
 
-2026-09-03T23:58:47Z  -> [contract creation]                                bloc 25900220  value 0
-2026-09-04T00:01:35Z  -> 0xEc434A2f9B7b93AAD1beD77d6Bc512A75aE90d78          bloc 25900234  value 0.07 ETH   selector 0xe5fca7b6
-2026-09-04T00:03:35Z  -> USDC token (transfer)                              bloc 25900244  value 0
-2026-09-04T00:04:11Z  -> DAI token (transfer)                               bloc 25900247  value 0
-2026-09-04T00:04:35Z  -> 0x8aaf01B6F9AcC973274B8718BE4D1C1be10E3be6         bloc 25900249  value 1.105701960350961564 ETH
+2026-09-03T23:58:47Z  -> [contract creation]                                block 25900220  value 0
+2026-09-04T00:01:35Z  -> 0xEc434A2f9B7b93AAD1beD77d6Bc512A75aE90d78          block 25900234  value 0.07 ETH   selector 0xe5fca7b6
+2026-09-04T00:03:35Z  -> USDC token (transfer)                              block 25900244  value 0
+2026-09-04T00:04:11Z  -> DAI token (transfer)                               block 25900247  value 0
+2026-09-04T00:04:35Z  -> 0x8aaf01B6F9AcC973274B8718BE4D1C1be10E3be6         block 25900249  value 1.105701960350961564 ETH
 
 This wallet's transaction count (nonce) was 0 going into block 25900220:
 the contract-creation transaction there is this wallet's first-ever
@@ -16,7 +16,7 @@ transaction on Ethereum.
 Transaction 1 (block 25900220, contract creation): the deployed contract's
 constructor itself calls Notional V1's ERC1155Trade contract
 (0xBbA899578bd3fA3DAa863A340f5600797993eF08), the address committed in
-Notional's own mainnet.json - the two mintfCashPair() calls the press
+Notional's own mainnet.json; the two mintfCashPair() calls the press
 describes happen inside this single constructor call, not as separate
 top-level transactions. The exploit contract this deploys:
 0xEc434A2f9B7b93AAD1beD77d6Bc512A75aE90d78 (6,425 bytes of bytecode).
@@ -30,18 +30,22 @@ and 1,658,524.8641 USDC from Notional's Escrow contract, through one
 intermediate address per token, directly into this attacker wallet.
 
 Transactions 3-4 (blocks 25900244, 25900247): plain `transfer` calls on
-the USDC and DAI contracts themselves - the attacker moving its own,
+the USDC and DAI contracts themselves, the attacker moving its own,
 already-received balances, most likely consolidating or routing them
 onward (e.g., to a DEX for the swap to ETH the press describes). This
 project did not decode the exact recipients or amounts of these two calls.
 
 Transaction 5 (block 25900249, ~5 minutes after the first): sends
-1.105701960350961564 ETH to 0x8aaf01B6F9AcC973274B8718BE4D1C1be10E3be6, a
-contract with exactly 23 bytes of bytecode (small enough to be a minimal
-proxy) and no name or metadata in Blockscout's index. This is the last
+1.105701960350961564 ETH to 0x8aaf01B6F9AcC973274B8718BE4D1C1be10E3be6, an
+address whose code is exactly 23 bytes,
+0xef010063c0c19a282a1b52b07dd5a65b58948a07dae32b: an EIP-7702 delegation
+designator (an externally-owned account delegating to
+0x63c0c19a282a1B52b07dD5a65b58948A07DAE32B), not a minimal proxy, with no
+name or metadata in Blockscout's index (code re-read with eth_getCode on
+2026-09-30). This is the last
 transaction found from this wallet. It was not identified as a
 recognizable Tornado Cash pool or router by any means this project
 checked, and 1.11 ETH does not by itself account for anything close to
-the ~689 ETH the press reports was ultimately laundered - the full path
+the ~689 ETH the press reports was ultimately laundered; the full path
 from ~$1.73M in stablecoins to that reported ETH total and its final
 destination was not traced further in this project. See README caveats.

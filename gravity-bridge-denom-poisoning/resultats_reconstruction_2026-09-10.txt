@@ -73,7 +73,7 @@ DefiLlama classification/technique: "Key Compromise" / "Validator Key Compromise
 -> contradicted by Steps 2-4 above: every validator signature on the outgoing batches was genuine,
    the registry itself was poisoned via a permissionless function call, no key was compromised
 
-=== Step 7: USD total, CoinGecko's own theft-day snapshot ===
+=== Step 7: USD total, CoinGecko's own daily snapshot dated 2026-05-29 (00:00 UTC, the day before the drain) ===
   4,349,701.311883 USDC @ CoinGecko 2026-05-29 $1.0001 = $4,350,000.83
   434,072.402068 USDT @ CoinGecko 2026-05-29 $0.9988 = $433,538.65
   274.345940 WETH @ CoinGecko 2026-05-29 $2,008.1145 = $550,918.05

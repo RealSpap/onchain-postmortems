@@ -1,9 +1,9 @@
-TRACE callTracer DE LA PREMIERE TRANSACTION
+callTracer TRACE OF THE FIRST TRANSACTION
 transaction : 0xed62bb27bd1058d3d7cc93d55421d6d0001ced8cb4529b02773f5126a4edb08b
-fournisseur : https://base.drpc.org  lecture du 2026-09-24T17:22:44.940349Z
-Les selecteurs de la colonne de droite sont recalcules localement par keccak256,
-pas lus dans une base de signatures : le chemin est identifie sans faire confiance
-a un nom de contrat.
+provider: https://base.drpc.org  read on 2026-09-24T17:22:44.940349Z
+The selectors in the right-hand column are recomputed locally with keccak256,
+not read from a signature database: the path is identified without trusting
+a contract name.
 
 CREATE     0x4acac3ecb4912147cbbf9dc927368a046e35b5b6 deployer (attacker) 0x60806040
   CREATE     0x94d9b828a9fa0d7d788127c827c8c0a268a35f69 FAKE POOL (attacker) 0x60c06040
@@ -92,14 +92,14 @@ CREATE     0x4acac3ecb4912147cbbf9dc927368a046e35b5b6 deployer (attacker) 0x6080
     STATICCALL 0x1d34e08120dbd1ea9bdbcd90c2dc919b50ddff4c legacyBridgedINT balanceOf(address)
     CALL       0x1d34e08120dbd1ea9bdbcd90c2dc919b50ddff4c legacyBridgedINT transfer(address,uint256)
 
---- le coeur du chemin, en clair ---
-  1. le deployeur appelle swapV3(WETH, FAKE POOL) sur LiquidityUnifier
-  2. LiquidityUnifier demande token0() et token1() AU FAUX POOL lui-meme
-  3. LiquidityUnifier appelle swap() sur le faux pool
-  4. le faux pool rappelle uniswapV3SwapCallback sur LiquidityUnifier
-  5. LiquidityUnifier appelle mint(address,uint256) sur RewardToken
-  6. toujours dans le callback, le faux pool appelle convert() sur Convertor,
-     qui brule l'INT et lui donne le jeton ponte : la supply revient a son point
-     de depart AVANT que validateSupply et _clearPool ne s'executent
-  7. apres le retour de swapV3, un second convert() reminte le meme montant
-  8. le faux pool vend une partie de l'INT au VRAI pool et remonte le WETH a l'EOA
+--- the core of the path, in plain words ---
+  1. the deployer calls swapV3(WETH, FAKE POOL) on LiquidityUnifier
+  2. LiquidityUnifier asks THE FAKE POOL itself for token0() and token1()
+  3. LiquidityUnifier calls swap() on the fake pool
+  4. the fake pool calls back uniswapV3SwapCallback on LiquidityUnifier
+  5. LiquidityUnifier calls mint(address,uint256) on RewardToken
+  6. still inside the callback, the fake pool calls convert() on Convertor,
+     which burns the INT and gives it the bridged token: the supply returns to its
+     starting point BEFORE validateSupply and _clearPool run
+  7. after swapV3 returns, a second convert() re-mints the same amount
+  8. the fake pool sells part of the INT to the REAL pool and passes the WETH up to the EOA

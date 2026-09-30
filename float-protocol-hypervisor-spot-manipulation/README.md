@@ -10,11 +10,11 @@ value, then ran four deposit/withdraw cycles across the two vaults while
 the price stayed distorted, each pair depositing a small, genuine stake
 and withdrawing the identical share count moments later for a
 disproportionate mix of the underlying tokens. Reversing the swaps and
-unwrapping the residual WETH back to ETH nets the attacker exactly
-10.706591043820923 ETH, confirmed two independent ways in this
+unwrapping the residual WETH back to ETH nets the attacker
+10.706591043821 ETH, confirmed two independent ways in this
 reconstruction (the WETH contract's own `Withdrawal` event, and the
-attacker's EOA balance delta across the block), both agreeing to the
-wei. Two Gamma/Hypervisor vaults, deployed in November 2021 and untouched
+attacker's EOA balance delta across the block), which agree to 12
+decimals in the committed run. Two Gamma/Hypervisor vaults, deployed in November 2021 and untouched
 for years, were still live, still holding real FLOAT/WETH liquidity, and
 still carried no defense against this when this transaction landed.
 
@@ -25,7 +25,7 @@ still carried no defense against this when this transaction landed.
 | Incident | A flash-loan-funded Uniswap V3 `slot0` manipulation distorted the shared FLOAT/WETH pool's spot price; four deposit/withdraw cycles against Float Protocol's two `vFLOAT-ETH3` Hypervisor vaults, straddling that distorted price, redeemed more value than was deposited |
 | Window | 2026-08-31T09:35:11Z, one transaction, one block (25,874,402) |
 | Press/DefiLlama figure | SlowMist's own Twitter alert (as republished by crypto.news, cryptotimes.io, and others) states "10.71 ETH" lost; DefiLlama's hacks feed tracks the same incident (defillamaId 497, the same id as Float Protocol's unrelated January 2022 exploit) at a flat $28,000 |
-| Verified independently | The exploit transaction's own `Withdrawal(address,uint256)` event on the WETH contract, and the attacker EOA's own balance delta across the exploit block (two archive RPC endpoints agree), both independently confirm **10.706591043820923 ETH** realized profit, matching the "10.71 ETH" figure to the reported precision |
+| Verified independently | The exploit transaction's own `Withdrawal(address,uint256)` event on the WETH contract, and the attacker EOA's own balance delta across the exploit block (two archive RPC endpoints agree), both independently confirm **10.706591043821 ETH** realized profit, matching the "10.71 ETH" figure to the reported precision |
 | USD conversion | At CoinGecko's own 2026-08-31 daily historical price ($2,416.24), that is **$25,869.71**, about 7.6% below DefiLlama's $28,000; an intraday-interpolated price ($2,446.10, from CoinGecko's hourly range around the exact block timestamp) gives $26,189.43, about 6.5% below. Neither this entry nor DefiLlama's $28,000 can be shown as flatly wrong from public data alone (see Caveats) |
 
 ## The method
@@ -85,8 +85,8 @@ assumed correct:
    residual WETH into raw ETH, the last event in the transaction), and
    the attacker EOA's own `eth_getBalance` delta across the block (on two
    separate archive-capable RPC providers, which agree with each other to
-   the wei). Both land on the identical figure once the transaction's own
-   gas cost is added back in.
+   the wei). Both land on the same figure, to 12 decimals, once the
+   transaction's own gas cost is added back in.
 
 ## What it found
 
@@ -103,7 +103,7 @@ and WETH). Both loans are fully accounted for by the end of the
 transaction: the WETH is repaid in full (log 106, exactly 1,000.0 WETH
 back to the same lending pool), and the FLOAT flash-swap is repaid with a
 **0.3009%** premium (120,361.083250 FLOAT back, log 95, against 120,000.0
-FLOAT borrowed, log 2) -- matching Uniswap V2's own 0.30% flash-swap fee
+FLOAT borrowed, log 2), matching Uniswap V2's own 0.30% flash-swap fee
 almost exactly, independent confirmation that this really is a V2-style
 flash swap rather than an ordinary trade.
 
@@ -126,7 +126,7 @@ were transferred to the main attack contract for withdrawal:
 | 4 | VAULT2 | 394,911.862 FLOAT + 0 WETH | 11,687.203 | 394,297.020 FLOAT + 2.841 WETH |
 
 Every deposit/withdraw pair burns exactly the shares it minted (verified
-by the script, `shares matched: True` for all 4 cycles) -- the gain comes
+by the script, `shares matched: True` for all 4 cycles); the gain comes
 entirely from the underlying token split the vault computes at deposit
 time versus at withdraw time, while the pool's spot price is held away
 from fair value in between by further swaps (logs 20-24, 42-48, 53, 55,
@@ -142,22 +142,25 @@ After the last withdrawal, the attack contract swapped its remaining
 1,000 WETH flash loan and the 120,361 FLOAT flash-swap in full, and
 unwrapped what was left. The WETH contract's own `Withdrawal(address,
 uint256)` event (log 107, the very last log in the transaction) records
-the attack contract unwrapping **10.706591043820923304 ETH** -- read
+the attack contract unwrapping **10.706591043821 ETH**, read
 directly off that event, not inferred.
 
 This is independently cross-checked against the attacker EOA's own
 balance: `eth_getBalance` at block 25,874,401 (immediately before) shows
-1.523042733552253614 ETH; at block 25,874,402 (immediately after,
-i.e. this transaction's own block) shows 12.226732689558621914 ETH. The
-delta (10.703689956006368078 ETH) plus the transaction's own gas cost
-(0.002901087814555094 ETH) equals **10.706591043820923304 ETH** --
-matching the WETH `Withdrawal` event to the wei. A second archive-capable
+1.523042733552 ETH; at block 25,874,402 (immediately after,
+i.e. this transaction's own block) shows 12.226732689559 ETH. The
+delta (10.703689956006 ETH) plus the transaction's own gas cost
+(0.002901087814555094 ETH, exact) equals **10.706591043821 ETH**,
+matching the WETH `Withdrawal` event. The committed run computed these
+in floating point, so figures are given to 12 decimals and the match is
+shown to that precision, not to the wei; the script now compares the
+integer wei values exactly. A second archive-capable
 RPC provider (`eth-mainnet.public.blastapi.io`, cross-checked against
 `eth.drpc.org`) returns the identical two balances.
 
 ### USD conversion, and the gap against DefiLlama
 
-10.706591043820923 ETH at CoinGecko's own 2026-08-31 daily historical
+10.706591043821 ETH at CoinGecko's own 2026-08-31 daily historical
 price ($2,416.2418165172735) is **$25,869.71**. A tighter,
 intraday-interpolated price (using CoinGecko's hourly range data around
 the exact block timestamp, 09:35:11 UTC, interpolating between the
@@ -203,7 +206,7 @@ left to drain.
   `msg.sender` from the withdrawing contract) is read directly off the
   event log's indexed `sender` arguments, not assumed.
 - The $25,869.71 / $26,189.43 figures are two different, defensible
-  independent re-derivations of the same confirmed 10.706591043820923 ETH
+  independent re-derivations of the same confirmed 10.706591043821 ETH
   using different CoinGecko price granularities; neither should be read
   as more "official" than the other, and neither matches DefiLlama's
   $28,000 exactly (see "USD conversion" above).

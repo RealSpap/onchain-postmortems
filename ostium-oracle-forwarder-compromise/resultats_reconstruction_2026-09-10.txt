@@ -36,7 +36,7 @@ distinct transactions paying the exploiter address (0x321df194646029e7a6193ea055
   0xfaf6d3d4d7f1a75bfc11fb4d36d0525791546267fda1cdd371703ce03ae8ba8c  block 484138330  2026-07-15 14:23:52 UTC  1,078,439.5804 USDC
 
 TOTAL, Vault -> exploiter, every transaction in the scanned window: 23,753,539.4772 USDC
-Vault outflow to 39+ OTHER recipients in the same window (routine LP/trader activity, unrelated to the exploiter address): 130.05 USDC across 9 distinct addresses
+Vault outflow to other recipients in the same window (routine LP/trader activity, unrelated to the exploiter address): 130.05 USDC across 9 distinct addresses
 First exploiter-directed payout: 2026-07-15 14:18:23 UTC
 Last exploiter-directed payout:  2026-07-15 14:23:52 UTC
 Span: 329 seconds

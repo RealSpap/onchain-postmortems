@@ -29,7 +29,7 @@ The contract never looks at that field. `verifyBurn` pays out whatever value and
 | Recipient | `0xaa4985dbdabfaca344237d40f7e06c4a0bb57e70`, which made two 5 USDC deposits into the bridge on September 22 and 23 |
 | Fast-withdrawal payment | `0xb82f517eceb472f3b31dc7048ad730f867a251e4e9718ccdbf3593ee8bde596a`: Payy's substitutor `0x7c7e3fd85854be2d95516eda97a808424e717978` paid the attacker 1 USDC against a zero-hash burn, 24 seconds after the first batch |
 | First cash-out hop | 1,828,594.895417 USDC to `0xb483b1742aad0a60a9fc91bb36c5a42dbe3f3d38`, an EIP-7702 delegated account, at block 26044917 |
-| Status | No batch has been accepted since the second one: the bridge's `blockHeight` is still 33216759. The 90,202.820016 USDC from the second batch had not left the recipient address at block 26063354 |
+| Status | As of block 26063354 (2026-09-26), no batch had been accepted since the second one: the bridge's `blockHeight` was still 33216759. The 90,202.820016 USDC from the second batch had not left the recipient address at block 26063354 |
 
 ## Fund flow
 
@@ -90,7 +90,7 @@ The transactions were found and decoded before any coverage was read. Press, and
 
 **Where the first batch went.** Ninety-six seconds after it, the recipient sent 1,828,594.895417 USDC in one transfer to `0xb483b1...3d38`, which closes exactly against its prior 4.517285 plus the first batch plus the 1 USDC substitution. `0xb483b1...3d38` is an EIP-7702 delegated account, its code is `0xef0100` followed by the delegate `0x63c0c19a282a1b52b07dd5a65b58948a07dae32b`. Over the next six and a half minutes it sent 1,828,592.831787 USDC in six transfers to the contract `0x225a...dc17` and 2.06373 USDC to `0xe3478b...1964`. Unchained reports that the first batch was converted to about 683 ETH through UniswapX. This entry did not follow the funds past that contract and does not re-derive the ETH figure. Both addresses also show zero-value and fake-token transfers involving lookalike addresses right after, consistent with the address-poisoning spam that follows any large movement, and not treated here as part of the attack. One lookalike, `0xe347a7...1964`, shares the display truncation `0xe347...1964`, which is why this entry spells that address longer.
 
-**The second batch has not moved.** At block 26063354 the recipient still held 90,202.821244 USDC, and the bridge's `blockHeight` was still 33216759, the height of the second batch. No batch has been accepted since.
+**The second batch has not moved.** At block 26063354 the recipient still held 90,202.821244 USDC, and the bridge's `blockHeight` was still 33216759, the height of the second batch. No batch had been accepted since, as of that block.
 
 ## What this does not establish
 
@@ -110,4 +110,4 @@ Payy had published no technical post-mortem that this reconstruction could find 
 
 ## License
 
-MIT, same as the rest of this repository. The evidence files in `preuves/` are raw tool output and are reproduced as generated.
+MIT, same as the rest of this repository. The evidence files in `preuves/` are raw script output (with the script's own labels translated into English) and are otherwise reproduced as generated.

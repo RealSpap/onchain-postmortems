@@ -9,7 +9,7 @@ WHAT WAS RE-DERIVED AND CONFIRMED
   -1,832,090.195547. Latest balance minus in-transaction net equals the reconstruction's pre-block balances exactly
   (1,240,403.093401 and 1,832,090.213707), so no BTX moved in or out after the block.
 - Attacker profit: EOA net +63,704,837,356,523,361,110,351 raw units (18 decimals) = 63,704.837356523361110351 USDT.
-- Aggregate check on the largest contributor (per the 2026-09-14 rule on summed figures): the largest USDT inflow to
+- Aggregate check on the largest contributor to a summed figure: the largest USDT inflow to
   the executor is 77,512.640594 from 0x238a3588...e6c4, inside the exploit transaction itself, paired in the same
   transaction with 6,000,000 + 2,984,557.865885 BTX sent by the executor to that same address. It is the BTX sale
   leg of this incident, not an unrelated transfer caught by a broad filter.
@@ -24,7 +24,7 @@ WHAT WAS RE-DERIVED AND CONFIRMED
 - PANews wording ("two separate transactions", "withdrew BTX from the LP positions", "Uniswap V3 pool", "September 11")
   confirmed verbatim in the article body (preuves/08c), not only in a search-engine summary.
 
-ISSUES FOUND AND FIXED (fix-and-reverify attempt 1 of 2)
+ISSUES FOUND AND FIXED
 1. The draft said "23 depositors". The 23 open records belong to 22 distinct addresses (one address holds a record in
    each contract). README, press-claims file and H8 reworded; reconstruct_exploit.py now prints the distinct-holder
    count (22) and checks for overlap with owner/treasury/attacker/executor (none). Re-run: confirmed.
@@ -32,7 +32,7 @@ ISSUES FOUND AND FIXED (fix-and-reverify attempt 1 of 2)
    artifact. Exact values are ...523361110351. Script now formats exactly; H6 and H11 corrected. Re-run: confirmed.
 3. The pre-exploit pool price (0.03498181) could not be re-read from a second archive provider (drpc 429/500,
    dataseed eth_getLogs disabled, blastapi eth_getLogs 429). Not reproducible independently in this pass, so the
-   39% drop is now flagged as single-provider in the README caveats and H10 was lowered to Moyenne.
+   39% drop is now flagged as single-provider in the README caveats and H10 was lowered to Medium.
 
 NOT RE-DERIVED IN THIS PASS
 - Source of the attacker's first 0.09975 BNB (internal transfer), already listed as open.

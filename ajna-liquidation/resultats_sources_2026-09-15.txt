@@ -1,4 +1,4 @@
-ajna-liquidation, figure-freshness review of 2026-09-15 (pipeline step 6)
+ajna-liquidation, source re-check of 2026-09-15
 RPC: gateway.tenderly.co/public/mainnet, queried 2026-09-15
 
 eth_getTransactionByHash 0x8a8793963c0ef443b9a396665c3c185ded132d5f99daf7c99e87125597016e64

@@ -1,5 +1,5 @@
-~/Library/Python/3.9/lib/python/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
-  warnings.warn(
+Raw stdout of reconstruct_exploit.py (a urllib3/LibreSSL environment warning is omitted).
+
 === Step 1: enumerate every pool from the documented factory ===
 224 pools found from 0x6146DD43C5622bB6D12A5240ab9CF4de14eDC625 (the address on Ajna's own docs page)
 

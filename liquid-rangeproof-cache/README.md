@@ -20,7 +20,7 @@ address) and Elements' own GitHub repository.
 | Window | 2026-09-06 14:28:56 to 16:48:45 UTC (3 outflow transactions, Bitcoin mainnet); partial return 2026-09-07 16:09:25 UTC |
 | Press/DefiLlama figure | DefiLlama and press both cite about $320,000,000 gross, "~4,000 BTC" |
 | Verified independently | 4,007.82220180 BTC net left the federation's own reserve address across 3 transactions on 2026-09-06, each spent with 11 valid signatures against the federation's real multisig script. 3,400.00000000 BTC came back on 2026-09-07. 598.50041569 BTC remains at the same source address, live, as of this reconstruction |
-| A primary-source citation caught | Liquid Network's own incident report states the exploit happened at "15:53:10 UTC" in block 4,050,336; that block's own chain-recorded timestamp, read live, is 13:53:10 UTC, two hours earlier |
+| Timestamp note | Liquid Network's own incident report, as indexed by search engines (the post itself could not be fetched directly), gives "15:53:10 UTC" for block 4,050,336; that block's own chain-recorded timestamp, read live, is 13:53:10 UTC, two hours earlier |
 
 Fig. 1: fund flow, addresses and tx hashes truncated for display.
 
@@ -106,7 +106,7 @@ reconstruction did not trace further.
 
 At 18:30:10 UTC the same day, a 0.00001 BTC transaction carrying an
 `OP_RETURN` payload was sent to the federation address
-(`c103de95…2b3e69a19`, block 965818) - a contact attempt, consistent with
+(`c103de95…2b3e69a19`, block 965818), a contact attempt, consistent with
 press reporting that whoever held the funds identified themselves as
 white-hat researchers and opened a channel with the federation on-chain.
 
@@ -116,11 +116,16 @@ At 16:09:25 UTC the next day, transaction
 from a single source address, `bc1ql4mfu6aundtkksxklfajs2h3t9nzcd6gyqjlte`,
 with **598.49955894 BTC** returned to that same source address as change.
 Querying that source address again live, three days later on 2026-09-10,
-its balance is **598.50041569 BTC** - essentially unchanged, only
+its balance is **598.50041569 BTC**, essentially unchanged, only
 dust-level probe transactions since. That is the figure this entry reports
 as the still-unrecovered loss: a floor, not a ceiling, since the two other,
 smaller destination addresses from the original drain (6.64740016 BTC
-combined) are not accounted for in it.
+combined) are not accounted for in it. At CoinGecko's live rate when the
+script ran (2026-09-10 11:09:20 UTC, $77,809/BTC), that floor is worth
+about **$46,568,719**. Because it is a balance still held, it is priced at
+the rate of the day it was read, not at the theft-day rate; at the
+2026-09-06 rate used for the gross figure ($79,821.70/BTC) it would be
+about $47,773,000.
 
 ### A primary source's own citation checked against the chain it describes
 
@@ -130,13 +135,13 @@ Liquid Network's own incident report (posted by its own X account,
 block 4,050,336), a vulnerability in the open-source Elements software
 related to how Liquid nodes cache range proof verifications..." Querying
 Liquid block 4,050,336 directly gives a chain-recorded timestamp of
-2026-09-06 **13:53:10 UTC** - two hours earlier than what the incident
-report itself states for the very block it cites. This does not change any
-BTC amount in this entry (all of those come from Bitcoin mainnet, not from
-this timestamp), but it is a real, checkable discrepancy in the primary
-source's own account of its own incident, independently found the same way
-this repo's Cosmos EVM and Allbridge entries each caught a different
-primary source's own citation error.
+2026-09-06 **13:53:10 UTC**, two hours earlier than the time the report
+gives for the very block it cites. The report text was only seen through
+search-engine indexing (the post itself returned HTTP 402 to automated
+requests), and a two-hour gap is also what a CEST/UTC conversion slip
+would produce, so this is reported as an apparent discrepancy, not as a
+confirmed error. It does not change any BTC amount in this entry (all of
+those come from Bitcoin mainnet, not from this timestamp).
 
 ### What could not be independently confirmed
 
@@ -157,7 +162,7 @@ and rests on that press and security-team coverage alone.
   affiliated with Blockstream, the Liquid Federation, SideSwap, or any
   outlet cited above.
 - Liquid Network's own incident report was not directly fetchable (HTTP 402
-  from the tool available in this session). Its quoted text above rests on
+  to automated requests). Its quoted text above rests on
   two independently-worded search queries both returning the identical
   indexed page-title text for that report's URL, not on a direct fetch of
   the page itself. See `resultats_sources_2026-09-10.txt` for the full

@@ -4,7 +4,7 @@ Checked 2026-09-14. Chain values: preuves/09_reconstruction_output.txt (live run
 SOURCES READ
 - PANews English, "Security Firm: BeatXswap Suffers Price Manipulation Attack, Losing Approximately $77,500"
   https://panews.io/articles/01a08f74-edd7-73aa-8bac-4c7486f16091
-  (WebFetch returned HTTP 403; re-fetched with a browser user-agent on 2026-09-14 and the quoted wording confirmed verbatim
+  (a first fetch returned HTTP 403; re-fetched with a browser user-agent on 2026-09-14 and the quoted wording confirmed verbatim
   in the article body, dated "PANews, September 11", attributed to SlowMist monitoring; excerpt in preuves/08c)
 - Gate News (pt-br), "BeatXswap perde US$ 77.512 em ataque de emprestimo relampago causado por falha no contrato", published 12/09/2026 06:24:04, source link coinfomania.com, credits @SlowMist_Team
   https://www.gate.com/pt-br/news/detail/BTX/beatxswap-loses-77512-in-flash-loan-exploit-via-contract-flaw-24212820

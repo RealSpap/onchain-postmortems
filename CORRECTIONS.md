@@ -2,16 +2,18 @@
 
 Back to [README](README.md#at-a-glance).
 
-Every figure in [the Index](INDEX.md) is recomputed from each subfolder's own
-source files, then checked against press and DefiLlama. The 34 rows below
-are where that check found a real gap: a wrong number, label, date, or
-classification; a reconciled gap neither side is really "wrong" about
-(Aquifer, Maya Protocol, Virtue Protocol, Float Protocol, Fetch.ai/NuNet);
-or an incident DefiLlama doesn't price at all (XRP Healthcare and the Safe
-LP Module — not tracked; Full Sail — tracked with no dollar figure). Full
-detail, including the exact transactions and event logs behind each
-figure, lives in the linked subfolder; this table gives the headline gap
-only.
+Every figure in [the Index](INDEX.md) comes from each subfolder's own
+source files and is checked against press and DefiLlama. The 34 rows below
+are where that check found a real gap: 23 corrections, where the chain
+shows a wrong number, scope, label, date, or classification; 8
+reconciliations, where the published figure measures something different
+and neither side is shown to be wrong (Aquifer, Maya Protocol, Virtue
+Protocol, Float Protocol, Fetch.ai/NuNet, Allbridge, Liquid Network, MORE
+Markets); and 3 discoveries, incidents DefiLlama doesn't price at all (XRP
+Healthcare and the Safe LP Module, not tracked; Full Sail, tracked with no
+dollar figure). Full detail, including the exact transactions and event
+logs behind each figure, lives in the linked subfolder; this table gives
+the headline gap only.
 
 | Incident | Gap (old -> found) | Link |
 |---|---|---|
@@ -23,29 +25,29 @@ only.
 | Balancer V1 (legacy pools) | DefiLlama/press: 1 pool. Found: same wallet drained 4 pools that night; the other 3 quantified only in kind, no price feed | [balancer-v1-rounding/](balancer-v1-rounding/) |
 | Notional Finance (V1 Escrow) | DefiLlama's feed labels the contract "V2". Found: actually V1; the dollar amount itself matches DefiLlama exactly | [notional-v1-escrow/](notional-v1-escrow/) |
 | Cozy V2 | Cozy: $170,186. DefiLlama: $163,326 (one of two claim txns). Found: verified on-chain total $174,311.01, two independent ways | [cozy-v2-optimism/](cozy-v2-optimism/) |
-| Cosmos EVM (MANTRA / TAC / KiiChain) | Cosmos Labs' own post-mortem cites block 9355102 for the KiiChain anchor tx. Found: real block is 9355107, on two RPC endpoints | [cosmos-evm-vesting-underflow/](cosmos-evm-vesting-underflow/) |
-| Allbridge (CCTP Forged Message) | SlowMist dates it July 26; DefiLlama's $191,000 conflates 3 figures. Found: exploit was July 25; loss $190,156, profit $189,752, gross ~$191,000 | [allbridge-cctp-forged-message/](allbridge-cctp-forged-message/) |
-| Liquid Network | Own report cites 15:53:10 UTC for the exploit block. Found: real chain timestamp 13:53:10 UTC, two hours earlier; floor is 598.50 BTC still missing, not DefiLlama's gross pre-return figure | [liquid-rangeproof-cache/](liquid-rangeproof-cache/) |
+| Cosmos EVM (MANTRA / TAC / KiiChain) | Cosmos Labs' own post-mortem cites tx 0xf45c… as the KiiChain exploit at block 9355102. Found: that hash is a zero-log sweep at block 9355107; the real underflow tx at 9355102 is 0xaf0ac52b…, on two RPC endpoints | [cosmos-evm-vesting-underflow/](cosmos-evm-vesting-underflow/) |
+| Allbridge (CCTP Forged Message) | DefiLlama's $191,000 sits between 3 figures. Found: loss $190,156, profit $189,752, Router's gross pre-attack balance ~$191,156; SlowMist's July 26 date for the setup call matches the chain in UTC+8 (reconciliation) | [allbridge-cctp-forged-message/](allbridge-cctp-forged-message/) |
+| Liquid Network | Own report, as indexed by search engines (not fetched directly), cites 15:53:10 UTC for the exploit block. Found: chain timestamp 13:53:10 UTC, two hours earlier (possibly a time-zone conversion); 598.50 BTC still missing, against DefiLlama's gross pre-return figure (reconciliation) | [liquid-rangeproof-cache/](liquid-rangeproof-cache/) |
+| BarnBridge SMART Yield | BlockSec and DefiLlama: ~$776,000 from one transaction (Blockaid later: ~$777,000 across two). Found: 17 extraction transactions, $1,931,365.22 (2.49x); the two published transactions are 40.2% of the total | [barnbridge-dormant-dao-controller-swap/](barnbridge-dormant-dao-controller-swap/) |
 | Aquifer | DefiLlama's $2,469,729 sits ~2% above the theft-day figure. Found: pricing it one day later, when funds moved, lands within 0.05% (reconciliation, not error) | [aquifer-sweeper-arbitrary-call/](aquifer-sweeper-arbitrary-call/) |
-| Maya Protocol (MAYAChain) | DefiLlama's $1,700,000 sits ~21% above the BTC-only figure. Found: gap traces to a still-unconverted 8.87M CACAO in the attacker's wallet (reconciliation, not error) | [mayachain-cacao-slash-drain/](mayachain-cacao-slash-drain/) |
+| Maya Protocol (MAYAChain) | DefiLlama's $1,700,000 sits ~21% above the BTC-only figure. Found: gap most likely reflects the still-unconverted 8.87M CACAO in the attacker's wallet, not priced here (reconciliation, not error) | [mayachain-cacao-slash-drain/](mayachain-cacao-slash-drain/) |
 | Gravity Bridge | DefiLlama classifies this "Key Compromise" / "Validator Key Compromised". Found: every signature was genuine; the registry was poisoned via a missing collision check, not a stolen key | [gravity-bridge-denom-poisoning/](gravity-bridge-denom-poisoning/) |
-| MORE Markets (Ankr ankrFLOW E-Mode) | Blockaid's initial "$9.3M" estimate spread widely. Found: one transaction, $415,398.47, matching DefiLlama's separately-tracked $410,000 (under "Ankr") within 1.32% | [more-markets-ankrflow-emode/](more-markets-ankrflow-emode/) |
+| MORE Markets (Ankr ankrFLOW E-Mode) | Blockaid's initial "$9.3M" estimate spread widely. Found: in the WFLOW reserve, one transaction, $415,398.47, matching DefiLlama's separately-tracked $410,000 (under "Ankr") within 1.32%; other reserves not scanned (reconciliation) | [more-markets-ankrflow-emode/](more-markets-ankrflow-emode/) |
 | Verus-Ethereum Bridge | Press (Blockaid/cryptotimes.io) implied one reused bug via the same import route across 2 exploits. Found: VerusCoin's own writeup says they share only a general bug category | [verus-ethereum-bridge-forged-proof/](verus-ethereum-bridge-forged-proof/) |
 | Ostium (PrivatePriceUpKeep Compromise) | Press: 3 conflicting estimates ($18M, ~$22M, ~$24M) before Ostium settled on $23,752,746. Found: independent scan lands on $23,752,641.68, within 0.0004% | [ostium-oracle-forwarder-compromise/](ostium-oracle-forwarder-compromise/) |
 | Nomic (nBTC / Osmosis allBTC) | DefiLlama dates this 2026-09-09 (disclosure date). Found: mint happened 2026-06-25T21:49:59 UTC, 76 days earlier; DefiLlama's $3,150,000 also uses a current, not theft-day, BTC rate | [nomic-nbtc-ibc-selfmint/](nomic-nbtc-ibc-selfmint/) |
 | XRP Healthcare (XRPH Wallet) | Not tracked in DefiLlama's hacks feed at all. Found: independent totals (267,679.863641 XRP; 445,197.999216 DAI) land within 0.006% and 1.5% of the source article's own figures (a discovery, not a correction) | [xrph-wallet-key-compromise/](xrph-wallet-key-compromise/) |
 | Lazy Summer Protocol | DefiLlama dates this 2026-07-05T00:00:00Z. Found: exploit's own block timestamp is 2026-07-06T05:17:59Z, 29.3 hours later; amount and classification check out | [lazy-summer-stale-ark-donation/](lazy-summer-stale-ark-donation/) |
 | Kelp DAO (rsETH / LayerZero DVN) | DefiLlama: $293,000,000. LayerZero: "approximately $290M". Found: 116,500 rsETH moved, $273,377,225 at theft-day rate or $301,716,067 via Kelp's own oracle rate, bracketing both | [kelpdao-rseth-layerzero-rpc-spoofing/](kelpdao-rseth-layerzero-rpc-spoofing/) |
-| Virtue Protocol (VUSD CDP) | Virtue's press figure ($455,103) is face-value debt cleared, below DefiLlama's $894,500. Found: debt-cleared matches Virtue ($455,102.94); collateral seized is ≈$848,457, closer to DefiLlama (reconciliation) | [virtue-iota-switchboard-oracle/](virtue-iota-switchboard-oracle/) |
-| Float Protocol (Hypervisor Vaults) | DefiLlama's $28,000 sits 6.5-7.6% above the re-derived figure. Found: WETH event and EOA delta agree, to the wei, on 10.706591043820923 ETH ($25,869.71-$26,189.43); neither side provably wrong (reconciliation) | [float-protocol-hypervisor-spot-manipulation/](float-protocol-hypervisor-spot-manipulation/) |
+| Virtue Protocol (VUSD CDP) | Virtue's press figure ($455,103) is face-value debt cleared, below DefiLlama's $894,500. Found: debt-cleared matches Virtue ($455,102.94); collateral seized is ≈$848,190, closer to DefiLlama (reconciliation) | [virtue-iota-switchboard-oracle/](virtue-iota-switchboard-oracle/) |
+| Float Protocol (Hypervisor Vaults) | DefiLlama's $28,000 sits 6.5-7.6% above the re-derived figure. Found: WETH event and EOA delta agree, to 12 decimals, on 10.706591043821 ETH ($25,869.71-$26,189.43); neither side provably wrong (reconciliation) | [float-protocol-hypervisor-spot-manipulation/](float-protocol-hypervisor-spot-manipulation/) |
 | Oraichain (ICS-20 EVM Precompile) | DefiLlama's flat $1,000,000 matches neither reading. Found: bug minted 1,509,949,343 ORAI (78.00x baseline), reversed 4.5 hours later; confirmed floor from only 2 legs proven to have left is $4,461.73 | [oraichain-ics20-precompile-selfmint/](oraichain-ics20-precompile-selfmint/) |
 | Secured Finance (JPYC Lending Market) | DefiLlama labels this "Oracle Manipulation" / "Spot Price Manipulation", $104,000. Found: no oracle read occurs, a TokenVault accounting bug; drain is 4,360,902.135130 JPYC, $45,444.97, 0.44x DefiLlama's figure | [securedfinance-jpyc-tokenvault-selflend/](securedfinance-jpyc-tokenvault-selflend/) |
 | Full Sail (Sui Vaults) | DefiLlama: no dollar figure (`amount: null`); press: "roughly $91,000" unsourced. Found: attacker and all 3 vaults; net profit $91,605.56, 0.67% above the press estimate (a discovery, not a correction) | [fullsail-switchboard-vault-drain/](fullsail-switchboard-vault-drain/) |
-| WealthManagementV2 | DefiLlama classifies this "Key Compromise" / "Private Key Compromised", $26,414. Found: proxy was attacker-owned from genesis, no ownership transfer, nothing compromised; 4 withdraw() calls move $422,251.40, ~16.0x | [wealthmanagementv2-selfowned-proxy-drain/](wealthmanagementv2-selfowned-proxy-drain/) |
 | Weft Finance (Weft V2) | DefiLlama: $47,200, empty source, no press/protocol statement exists. Found: reconstructed net loss $61,592.84, ~30.5% above DefiLlama's figure; CDP still shows this debt against near-zero HUG collateral | [weft-finance-hug-collateral-manipulation/](weft-finance-hug-collateral-manipulation/) |
-| ether.fi Liquid (AtomicQueue) | Press: ~$38K/15.45 ETH headline, not why those 11 wallets; DefiLlama: $43,260 (~14% high), returnedFunds null. Found: 9 of 11 wallets are EIP-7702; a 300-liquidETH EOA approver was left untouched; all 11 reimbursed within ~9h | [etherfi-atomicqueue-eip7702-solver-drain/](etherfi-atomicqueue-eip7702-solver-drain/) |
+| ether.fi Liquid (AtomicQueue) | Press: ~$38K/15.45 ETH headline, not why those 11 wallets; DefiLlama: $43,260 (~13% high), returnedFunds null. Found: 7 of 11 wallets are EIP-7702; a 300-liquidETH EOA approver was left untouched; all 11 reimbursed within ~9h | [etherfi-atomicqueue-eip7702-solver-drain/](etherfi-atomicqueue-eip7702-solver-drain/) |
 | Zentra Finance (ctUSD reserve) | Press: ~$143,000, attack vector undisclosed; DefiLlama labels it "Rounding Error". Found: 140,029.999998 stablecoin units left two reserves, matching DefiLlama's $140,030 exactly; a burn-cap bug, not a rounding error | [zentra-finance-atoken-burn-clamp/](zentra-finance-atoken-burn-clamp/) |
-| BeatSwap (BTX vesting contracts) | Press (SlowMist via PANews): ~2.985M BTX / ~$77,500 lost, deposits "in two separate transactions", BTX "withdrew from the LP positions", Uniswap V3; DefiLlama: $77,512. Found: $77,512 is one sale leg; victims lost 3,072,493 BTX, attacker kept 63,704.84 USDT; one transaction; LP NFTs never withdrawn; PancakeSwap V3; contracts still unpaused, 23 open vesting records now unpayable | [beatswap-vesting-slot0-reserve-drain/](beatswap-vesting-slot0-reserve-drain/) |
+| BeatSwap (BTX vesting contracts) | Press (SlowMist via PANews): ~2.985M BTX / ~$77,500 lost, deposits "in two separate transactions", BTX "withdrew from the LP positions", Uniswap V3; DefiLlama: $77,512. Found: $77,512 is one sale leg; victims lost 3,072,493 BTX, attacker kept 63,704.84 USDT; one transaction; LP NFTs never withdrawn; PancakeSwap V3; contracts paused only on 2026-09-15 (deposit() only); V1's 5 open records unpayable, V2's being paid in full as locks end, by an unattributed top-up since 2026-09-16 | [beatswap-vesting-slot0-reserve-drain/](beatswap-vesting-slot0-reserve-drain/) |
 | Nimiq | DefiLlama tracks $50,400 (empty source field), 63.79 low; press relayed Nimiq's own $50,463 as the floor. Found: exact on-chain sum 50,463.792096, derived three independent ways to the unit | [nimiq-gsn-forwarder-unsigned-execute/](nimiq-gsn-forwarder-unsigned-execute/) |
 | Fetch.ai and NuNet | DefiLlama holds two separate records, 1,530,000 for Fetch.ai and 462,730 for NuNet, both dated 2026-09-19. Found: two distinct compromised keys (a bridge conversion authorizer and a MINTER_ROLE holder) paying out to one address, one linked incident (reconciliation, not error) | [fetchai-nunet-dual-key-compromise/](fetchai-nunet-dual-key-compromise/) |
 | The Internet Token | Press: ~$265,000. DefiLlama: $16,380 (empty source), carried over unpriced. Found: the drained pool never held $265,000; independently re-derived quantity is 5.866812895215939248 WETH, ~99.999% of the pool, across two transactions | [internet-token-liquidityunifier-fake-pool-mint/](internet-token-liquidityunifier-fake-pool-mint/) |

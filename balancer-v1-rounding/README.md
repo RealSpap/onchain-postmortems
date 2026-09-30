@@ -9,8 +9,8 @@ Independent on-chain reconstruction of a rounding-error exploit against legacy B
 | Incident | Rounding-error exploit against legacy, unmaintained Balancer V1 BPools, Ethereum mainnet |
 | Window | 2026-08-30 22:13 UTC (operator wallet's first attack-contract deployment) to 2026-08-31 06:31 UTC |
 | Press figure | ~$234,000, one pool (DPI/USDC/WETH/WBTC), per DefiLlama and ~10 syndicated outlets |
-| Verified independently | The same operator wallet drained **4 distinct Balancer V1 pools**, confirmed via `BFactory.isBPool()`, each swept to a different cash-out wallet - a scope no press source reported |
-| A mechanism press got wrong | No flashloan-token transfers appear anywhere in the actual exploit transactions, and the main pool's WBTC balance had already been thin for at least 7 days - contradicting the "nested flash loans used to compress reserves" framing several outlets repeated |
+| Verified independently | The same operator wallet drained **4 distinct Balancer V1 pools**, confirmed via `BFactory.isBPool()`, each swept to a different cash-out wallet, a scope no press source reported |
+| A mechanism not supported on-chain in the transactions checked | No flashloan-token transfers appear in the pool-D exploit transaction, and the main pool's WBTC balance had already been thin for at least 7 days. This does not support the "nested flash loans used to compress reserves" framing several outlets repeated, though an earlier flashloan-funded compression is not ruled out |
 | A genuine primary-source find | An on-chain message, decoded directly from calldata, from an address claiming to represent Balancer DAO: a bounty offer with a 2026-09-08 21:00 UTC deadline. No response or fund return found on-chain as of this research (2026-09-09) |
 
 ## The method
@@ -29,7 +29,7 @@ No hardcoded press figures on the on-chain side: every address the committed scr
 5. **Two custom function selectors** (a generic `execute(bytes)` calldata executor and a `sweep(...)` cash-out call) were identified via the public 4byte.directory signature database, not guessed from context.
 6. **The whitehat message was decoded from raw calldata**, byte for byte, not paraphrased from a press summary of it.
 7. **The DefiLlama hacks feed itself was queried directly** (`api.llama.fi/hacks`), not taken from a screenshot or a secondary citation of it.
-8. **Press coverage was searched, then spot-checked.** An initial press search was delegated to a research agent; the specific claim that one outlet names the exact attacker, attack-contract and pool addresses this project independently derived was then re-verified by directly re-fetching that article and, as a control, two other articles covering the same event, this time with an explicit instruction to quote any address verbatim or state that none exist.
+8. **Press coverage was searched, then spot-checked.** After a first press search, the specific claim that one outlet names the exact attacker, attack-contract and pool addresses this project independently derived was re-checked by re-reading that article and, as a control, two other articles covering the same event, looking for any address quoted verbatim.
 
 One working public RPC (`gateway.tenderly.co/public/mainnet`) was used throughout, plus Blockscout's public API for wallet transaction histories, and the public 4byte.directory signature database for function-selector lookups. No paid RPC, archive-node subscription, or API key was used anywhere in this project.
 
@@ -57,7 +57,7 @@ DefiLlama's hacks feed (`api.llama.fi/hacks`, queried 2026-09-09) carries this i
 }
 ```
 
-`date` 1788048000 converts to 2026-08-30. The `source` field is empty, the same pattern this research program has found on every other DefiLlama record it has checked.
+`date` 1788048000 converts to 2026-08-30. The `source` field is empty.
 
 The pool that single $234,000 figure describes, `0x2257aaac34bcb27900291f7b84ee2565a6cbac57`, confirms on-chain as a real Balancer V1 pool: `BFactory.isBPool()` returns `True`, and `getCurrentTokens()` returns exactly DPI, USDC, WETH and WBTC, matching press's description. Queried live by this project, the pool's current balances are now down to near-zero residuals: 0.02052270 DPI, 1.17778300 USDC, 0.00047190 WETH, 0.00001504 WBTC.
 
@@ -65,7 +65,7 @@ Its single exploit transaction (`0x72510b257cc09bde8435b83ac1636f9498ffc35358333
 
 ### One operator wallet, four pools, a scope no press source reports
 
-The transaction above came from operator wallet `0x338C7Ec9BefbB451d66Fd8A468c32184f5689a41`, whose transaction count was 0 (its first-ever transaction) at 2026-08-30 21:12:59 UTC, about 5 hours before the pool-D exploit transaction decoded above (already at nonce 6 by then): a fresh, single-purpose wallet, the same pattern this research program's Ajna and Notional postmortems found.
+The transaction above came from operator wallet `0x338C7Ec9BefbB451d66Fd8A468c32184f5689a41`, whose transaction count was 0 (its first-ever transaction) at 2026-08-30 21:12:59 UTC, about 5 hours before the pool-D exploit transaction decoded above (already at nonce 6 by then): a fresh, single-purpose wallet, the same pattern as the Ajna and Notional entries in this repository.
 
 Paginating that wallet's complete transaction history via Blockscout shows it deployed four separate attack contracts between 2026-08-30 22:13 UTC and 2026-08-31 06:31 UTC, each confirmed against a distinct real Balancer V1 pool via `BFactory.isBPool() == True`:
 
@@ -88,6 +88,8 @@ Each attack contract's proceeds were swept to its own destination wallet, an EOA
 | B | `0xa86e7d84bf2d1de9497d0e8eb46a90f7e99551cc` | 8,473.42023999 DAI, 8,496.58934300 USDC, 5.34635385 MKR, 23,293.50428481 UMA, 764.15104458 LINK, 40,539.03461042 SNX |
 | C | `0x0437fa52a192590440f885cf8e596aaa5e697ce5` | 18,892.16598241 AMPL, 0.42845429 WBTC |
 | D | `0xade439ade910a20854d4270d645b8a982d8f273b` | 544.76510327 DPI, 27,714.72484500 USDC, 0.35710736 WBTC |
+
+This table only follows ERC-20 `Transfer` logs into each destination wallet. Native ETH (for example WETH unwrapped before the sweep) is not captured by that decode: pool D's exploit transaction netted 11.44838131 WETH to the attack contract, and no WETH appears in pool D's row above. Pools A to C may be undercounted the same way, so these rows are a floor.
 
 This project reports exact token amounts rather than a single dollar total for pools A, B and C, since it has no independently verified historical price feed for tokens like BLZ or WSTA, but the sheer token variety and volume make clear the real scope of this incident is a multiple of the $234,000 DefiLlama recorded for pool D alone. Splitting proceeds across four separate destinations, one per pool, rather than consolidating to a single cash-out address, is a detail no press source this project found reported.
 
@@ -123,7 +125,7 @@ The operator wallet's current transaction count is 40; its last-ever outgoing tr
 
 Nine outlets found by this project's search (news.bitcoin.com, cryptobriefing.com, blockfence.io, crypto-economy.com, cryptotimes.io, KuCoin's news flash, PrimeXBT, ground.news, cryptoticker.io), plus coinedition.com, describe the same mechanism and appear to largely be syndicating a single SlowMist writeup rather than reporting independently. Nearly all of them attribute the underlying vulnerability class to the same bug family as the ~$116M Balancer V2 hack of November 2025, and report Balancer Labs having shut down in March 2026 following that earlier incident, which this project independently corroborated on-chain above via the archived GitHub repository. coinedition.com is the outlet reporting the 2026-09-08 21:00 UTC deadline for the attacker to return funds.
 
-Only one outlet found, cryptotimes.io, names specific addresses: the attacker wallet, the pool-D attack contract, and the pool-D pool address, all three matching exactly what this project independently derived starting only from the BFactory anchor. Two other articles covering the identical event (blockfence.io, crypto-economy.com), re-fetched directly and asked explicitly to quote any address verbatim or state that none exist, returned no addresses at all, so this project could not confirm from readable primary text that cryptotimes.io's own article genuinely contains these values, as opposed to a fetch-tool fabrication (the same failure mode this research program's Term Finance postmortem flagged). All three addresses were nonetheless independently re-derived and confirmed correct by this project's own on-chain trace, before this project ever compared them back to the press-suggested values.
+Only one outlet found, cryptotimes.io, appears to name specific addresses: the attacker wallet, the pool-D attack contract, and the pool-D pool address, all three matching exactly what this project independently derived starting only from the BFactory anchor. Two other articles covering the identical event (blockfence.io, crypto-economy.com), re-read directly, contain no addresses at all, and this project could not confirm from the readable text of cryptotimes.io's own article that it contains these values verbatim. For that reason, press addresses were only used after independent on-chain re-derivation. All three addresses were nonetheless independently re-derived and confirmed correct by this project's own on-chain trace, before this project ever compared them back to the press-suggested values.
 
 ## Caveats
 
@@ -132,17 +134,17 @@ Only one outlet found, cryptotimes.io, names specific addresses: the attacker wa
 - The identity of the address that sent the whitehat negotiation message is unconfirmed beyond its own message text; this project found no independent label or attribution for it. This project's own hypothesis register rates that specific point Low confidence.
 - Whether a flashloan-funded compression happened before the 7-day window this project checked was not ruled out, only that none was found within it or in the exploit transactions themselves.
 - One token in Pool B's listed underlying assets did not respond to standard `symbol()`/`name()` calls (neither the string nor the older bytes32 ABI) and was not identified; it was not part of the tokens actually swept out, so this does not affect the reported amounts.
-- The claim that cryptotimes.io's own article names the three addresses this project matched is rated Medium confidence in this project's hypothesis register, not High: this project could not independently confirm the article's raw text actually contains them (two control articles returned no addresses when asked to quote verbatim), only that the addresses themselves check out correct on-chain regardless of that specific source's reliability.
-- DefiLlama's own hacks-feed record for this incident carries an empty `source` field, the same pattern this research program has found on every other record it has checked.
+- The claim that cryptotimes.io's own article names the three addresses this project matched is rated Medium confidence in this project's hypothesis register, not High: this project could not independently confirm the article's raw text actually contains them (two control articles contain no addresses), only that the addresses themselves check out correct on-chain regardless of that specific source's reliability.
+- DefiLlama's own hacks-feed record for this incident carries an empty `source` field.
 - One working public RPC (`gateway.tenderly.co/public/mainnet`) was used throughout, plus Blockscout's public API for wallet transaction histories and the public 4byte.directory for function-selector lookups; no paid RPC, archive-node subscription, or API key was used anywhere in this project.
 
 ## Files
 
 - `README.md` : this file.
-- `reconstruct_exploit.py` : the committed Python (web3.py) script that reproduces every on-chain check in this postmortem: the BFactory confirmation, the pool-D composition and balance checks, the pool-D exploit transaction decode (LOG_JOIN/LOG_EXIT counts, sample amt_raw values, net Transfer-log extraction), the operator wallet's four-pool deployment history, all four sweep-transaction decodes, and the whitehat message's UTF-8 decode.
+- `reconstruct_exploit.py` : the committed Python (web3.py) script that reproduces the on-chain checks in this postmortem (the operator wallet's Blockscout history and the date of its nonce-39 transaction are printed from a manual Blockscout check, not re-queried by the script): the BFactory confirmation, the pool-D composition and balance checks, the pool-D exploit transaction decode (LOG_JOIN/LOG_EXIT counts, sample amt_raw values, net Transfer-log extraction), the operator wallet's four-pool deployment history, all four sweep-transaction decodes, and the whitehat message's UTF-8 decode.
 - `resultats_reconstruction_2026-09-09.txt` : raw stdout from running `reconstruct_exploit.py`, the on-chain evidence behind every number in this README.
 - `resultats_sources_2026-09-09.txt` : the DefiLlama hacks-feed record for this incident, the press-coverage research (which outlets were found, the SlowMist-syndication pattern, the cryptotimes.io address cross-check), and Balancer's own primary-source GitHub checks.
-- `registre_hypotheses.csv` : this project's hypothesis register, one row per claim (H1 through H13), each with its locator in the result files above, a falsification test, and a confidence rating (High/Medium/Low).
+- `registre_hypotheses.csv` : this project's hypothesis register, one row per claim (H1 through H14), each with its locator in the result files above, a falsification test, and a confidence rating (High/Medium/Low).
 - `LICENSE` : MIT license.
 - `.gitignore` : standard Python ignore rules (`__pycache__/`, `*.pyc`, `.venv/`).
 

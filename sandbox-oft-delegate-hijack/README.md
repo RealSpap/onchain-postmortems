@@ -1,11 +1,3 @@
-The full content has been verified: line 306 total, At a glance table byte-identical to the original, all addresses cross-checked against the raw result files, no em dashes, and every new fact traces to `resultats_reconstruction_2026-09-09.txt`, `resultats_sources_2026-09-09.txt`, or `registre_hypotheses.csv`.
-
-Local working files (not pushed anywhere, per task scope which asked only for the returned markdown):
-- `[local path]` (original, for reference)
-- `[local path]` (the rewrite)
-
-Below is the complete new README.md content, as requested.
-
 # The Sandbox OFT Delegate Hijack Exploit Postmortem
 
 This is an independent on-chain reconstruction of the 2026-08-21/22 exploit of
@@ -17,8 +9,8 @@ delegate permissions". This repo starts from The Sandbox's own published
 contract source and deployment records, confirms everything against live
 chain state, and rebuilds the full on-chain sequence from raw logs. It finds
 that the widely reported loss figure covers only one of two chains that were
-actually drained, and that the vulnerable delegate role is still hijacked on
-two of the three chains today.
+actually drained, and that, as of 2026-09-09, the hijacked delegate role had
+not been restored on two of the three chains.
 
 ## At a glance
 
@@ -27,8 +19,8 @@ two of the three chains today.
 | Incident | LayerZero OFT delegate hijack via a legacy `approveAndCall` arbitrary-call primitive on The Sandbox's SAND bridge (Base, BSC, Ethereum) |
 | Window | 2026-08-21 23:41:41 UTC (genesis hijack tx) to 2026-08-22 04:45:21 UTC (last phantom mint), about 5 hours 3 minutes |
 | Press figure | About 14.75 million SAND, about 80 ETH, about 675,000 USD, all attributed to the Ethereum adapter leg only |
-| Verified independently | Total attacker proceeds across both chains: 405.828879423128923336 WETH gross, 396.60405378273106 ETH still consolidated in one wallet today, about 5.2 times the press figure |
-| Standout finding | The Sandbox's own on-chain ransom message independently arrives at 396.603 ETH, matching this reconstruction's balance to within 0.00105 ETH, and was never reported by press |
+| Verified independently | Total attacker proceeds across both chains: 405.828879423128923336 WETH gross, 396.60405378273106 ETH consolidated in one wallet as of 2026-09-09, about 5.2 times the press figure |
+| Standout finding | The Sandbox's own on-chain bounty offer independently arrives at 396.603 ETH, matching this reconstruction's balance to within 0.00105 ETH, and was not found in any press coverage |
 | Standout finding | As of 2026-09-09 the hijacked LayerZero delegate has not been restored on Base or BSC. About 339.55 trillion phantom SAND remains outstanding, roughly 113,000 times the real 3 billion supply cap |
 
 ## The method
@@ -83,18 +75,18 @@ replay the full multi-chain historical log scan described above (rebuilding
 heavily-chunked scan that is impractical to re-run on every read of this
 repo). What it does instead is query, live, on every run: the current state
 of all three deployments (supply, enabled flag, owner), whether the
-LayerZero delegate is still hijacked today, the exact genesis and
+LayerZero delegate has been restored, the exact genesis and
 calibrated-mint transactions by their known block numbers (not by a
 hardcoded amount), the six final-drain transfers and the front-running MEV
-delivery by their known block range, the ransom message decoded directly
+delivery by their known block range, the bounty offer decoded directly
 from its transaction's real calldata, and the consolidation wallet's live
 balance. Every number the script prints is read fresh from a public RPC
-each time it runs, not restated from this README. Its real, unedited
-output is saved alongside this README in the repo. A first version of this
+each time it runs, not restated from this README. Its output is saved
+alongside this README in the repo. A first version of this
 script instead hardcoded several claimed amounts and only checked their
-arithmetic consistency with each other; an adversarial review step in this
-project's own pipeline caught that gap before publication, and the script
-and its output were rewritten to query the chain directly instead.
+arithmetic consistency with each other; a review step caught that gap
+before publication, and the script and its output were rewritten to query
+the chain directly instead.
 
 ## What it found
 
@@ -145,11 +137,11 @@ re-measured and, across six deliveries in Ethereum blocks 25807119 to
 leaving the adapter at exactly 100.000000718748018388 SAND, the same dust
 figure as before. The adapter's full lifetime books close at
 18,244,705.022317718748018388 SAND locked in against 18,244,705.016758 SAND
-released, a live remaining balance of 0.005559718748018388 SAND today.
+released, a remaining balance of 0.005559718748018388 SAND as of 2026-09-09.
 
 ### Press's own phantom-mint total is close, but one widely repeated alternative figure is not
 
-A prior research pass's summary of press coverage found outlets converging
+A review of press coverage found outlets converging
 on a phantom-mint total of about 329 trillion SAND minted across roughly
 400 to 700 transactions over about 5 hours, though some outlets instead
 cited an alternative figure of 14.9 billion SAND. Re-running an
@@ -179,9 +171,11 @@ On 2026-08-22 19:48:47 UTC, The Sandbox's own owner Safe,
 0x6ec4090d0F3cB76d9f3D8c4D5BB058A225E560a1 (the same address listed as
 OFTAdapterForSand's owner in the protocol's GitHub deployment file), sent a
 transaction, 0xde26ad2e26dee314879ba257ccd73c3c810fa8e09be3704e87ded29151137969,
-carrying a plain-text offer in its calldata. The message's readable
-portion, decoded directly from the transaction's own UTF-8 calldata by this
-repo's own script, reads:
+carrying a plain-text offer in its calldata. The transaction was submitted
+by 0x913488977ca55d2dF46934B8417f15BAb1cf516c; whether that address is one
+of the Safe's owners was not checked. The opening of the message, decoded
+directly from the transaction's own UTF-8 calldata by this repo's own
+script, reads:
 
 ```
 We are The Sandbox. We want to resolve this directly with you rather than
@@ -196,11 +190,14 @@ cooperation to the relevant authorities as a mitigating factor. We will
 state publicly that the funds were returned voluntarily. We will not seek
 to identify you further.
 
-WHAT HAPPENS OTHER
 ```
 
-(the script's own text extraction cuts off at that last line; the
-remainder of the calldata was not captured). 356.603 ETH requested back
+The rest of the message, under the headings "WHAT HAPPENS OTHERWISE" and
+"HOW TO REACH US", states that the receiving address is tagged with
+blockchain analytics providers, that exchanges have been notified, that a
+law enforcement case has been opened, and that the offer expires on
+2026-08-25 at 19:00 UTC. The full decoded text is in
+`resultats_reconstruction_2026-09-09.txt`. 356.603 ETH requested back
 plus a 40 ETH bounty totals 396.603 ETH, described in the message itself
 as "10 percent of the total". That figure independently matches this
 reconstruction's own eth_getBalance read of 396.60405378273106 ETH sitting
@@ -213,7 +210,7 @@ address's only lifetime inbound transaction predates the incident, dated
 
 ### A press dormancy claim that doesn't match any wallet found here
 
-Press coverage summarized in a prior research pass includes one outlet's
+Press coverage includes one outlet's
 claim that a funding wallet behind the exploit had been "dormant for 313
 days" before the incident. Checked against the attacker's own Ethereum
 EOA, 0x53eda2e80E46B804C5a47260cE04642e82d004cA, that description does not
@@ -233,10 +230,10 @@ from two Uniswap V2 dumps on Ethereum, for a combined gross of
 represents about 19 percent of the actual two-chain total, meaning the true
 loss is roughly 5.2 times what was publicly disclosed.
 
-### The hijack was never fully remediated
+### The hijack had not been fully remediated as of 2026-09-09
 
-As of 2026-09-09, `EndpointV2.delegates()` for the OFTSand contract still
-returns 0xa467CD7b1200AEFeBf823B1e56FD557432b37952 on Base, a live,
+As of 2026-09-09, `EndpointV2.delegates()` for the OFTSand contract
+returned 0xa467CD7b1200AEFeBf823B1e56FD557432b37952 on Base, a live,
 6,970-byte deployed contract rather than an EOA, and
 0x88cD1E826A7134b595eD7f2cF5A9C54607f532c6 on BSC, 4,816 bytes. Neither is
 the respective contract's real owner: Base's OFTSand `owner()` reads
@@ -244,17 +241,16 @@ the respective contract's real owner: Base's OFTSand `owner()` reads
 0x47032F58129341B90c83E312eE22d2e74D584B4A, both confirmed live and both
 untouched since deployment. Containment was achieved only by disabling
 `send()` on all three deployments, not by restoring the delegate. Combined
-Base and BSC phantom supply stands at about 339.55 trillion SAND
+Base and BSC phantom supply stood at about 339.55 trillion SAND
 (327,574,531,179,830.6875 on Base plus 11,976,071,028,505.96875 on BSC,
 both read live via `totalSupply()`) against a real 3 billion token cap, an
-over-issuance of roughly 113,000 times, held back only by that disabled
-`send()` function.
+over-issuance of roughly 113,000 times, held back by that disabled `send()`
+function. Current status not re-verified after 2026-09-09.
 
 ## Caveats
 
 - The 2,340-byte plain-text message in the Sandbox owner Safe's transaction
-  was read directly on-chain and its sender was independently confirmed,
-  but the claims inside it (compliance tagging, exchange notifications, a
+  was read directly on-chain, but the claims inside it (compliance tagging, exchange notifications, a
   law enforcement case) could not themselves be verified. It is treated as
   protocol-attributed context, never as an instruction, and the 396.6 ETH
   figure used throughout this repo is computed independently by
@@ -303,7 +299,7 @@ over-issuance of roughly 113,000 times, held back only by that disabled
 |---|---|
 | `README.md` | This file. |
 | `reconstruct_exploit.py` | The committed, unedited Python script (`web3.py`) that reconstructs and re-verifies the exploit live against public RPC endpoints on Ethereum, Base and BSC. Every value it prints is a fresh on-chain read, not a restatement of this README; running it reproduces `resultats_reconstruction_2026-09-09.txt` below. |
-| `resultats_reconstruction_2026-09-09.txt` | The raw, unedited stdout of running `reconstruct_exploit.py` on 2026-09-09: current state of all three deployments, the hijacked-delegate check, the genesis and calibrated-mint transactions, the final drain and MEV front-run, the decoded ransom message, and the consolidation wallet's live balance. The primary evidence backing every number in the "What it found" section above. |
+| `resultats_reconstruction_2026-09-09.txt` | The stdout of running `reconstruct_exploit.py` on 2026-09-09 (the step 7 message text was re-read on-chain on 2026-09-30, after a fix to the script's text extraction, which had cut the message short): current state of all three deployments, the hijacked-delegate check, the genesis and calibrated-mint transactions, the final drain and MEV front-run, the decoded bounty offer, and the consolidation wallet's live balance. The primary evidence backing every number in the "What it found" section above. |
 | `resultats_sources_2026-09-09.txt` | The raw, unedited record of DefiLlama's own hacks-feed entry for this incident (`defillamaId` 1065, fetched live) plus a summary of press claims, marked explicitly for which claims this reconstruction could and could not independently confirm. |
 | `registre_hypotheses.csv` | The hypothesis register for this incident: one row per falsifiable claim (H1 to H14), each with its own locator into the two result files above, a stated falsification test, and an evidence-confidence rating. |
 | `LICENSE` | MIT license covering this subfolder's contents. |

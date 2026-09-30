@@ -34,7 +34,7 @@ Net extraction to attack contract 0x9cAa8d0E44b22f50057d2F4ce0D1446529e11be3 (ex
 === Step 4: the operator wallet's full history - one wallet, four pools ===
 operator EOA: 0x338C7Ec9BefbB451d66Fd8A468c32184f5689a41
 nonce 0 (first-ever tx): 2026-08-30 21:12:59 UTC - a fresh wallet, same
-  pattern as this research program's Ajna and Notional postmortems, just
+  pattern as the Ajna and Notional entries in this repository, just
   ~5 hours before the specific exploit tx decoded above (nonce 6).
 
 Across its full history (verified via Blockscout, eth.blockscout.com, no

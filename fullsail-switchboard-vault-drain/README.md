@@ -7,10 +7,10 @@ delegated CLMM liquidity positions, priced through Full Sail's own
 `port_oracle` module reading Switchboard's oracle. Press (Yellow,
 CryptoTimes, Cointelegraph, and others) reported that Switchboard's
 oracle-signing infrastructure was compromised across its Move-based
-deployments (Aptos, Sui, IOTA, Movement) on 2026-08-28/29 -- the same
+deployments (Aptos, Sui, IOTA, Movement) on 2026-08-28/29, the same
 broader compromise this repo already covers for Virtue Protocol on IOTA
-(see [`../virtue-iota-switchboard-oracle/`](../virtue-iota-switchboard-oracle/))
--- and that an attacker used a forged key to push a Full Sail price feed
+(see [`../virtue-iota-switchboard-oracle/`](../virtue-iota-switchboard-oracle/)),
+and that an attacker used a forged key to push a Full Sail price feed
 to "roughly 100x below market", deposited, restored the price, and
 withdrew for a profit across three vaults, for a total press reports as
 "roughly $91,000". No press account this project found names an attacker
@@ -22,7 +22,7 @@ None of that is taken on faith here. Every package/object address below
 is read live from Full Sail's own published npm SDK package
 (`@fullsailfinance/sdk`, its own mainnet deployment config, not a block
 explorer or a press screenshot). The attacker address and the three
-affected vaults are not assumed from press -- they are found by
+affected vaults are not assumed from press; they are found by
 paginating the vault package's own on-chain event log for the incident
 window and clustering by sender. The "100x" manipulation is decoded
 directly from the attacker's own transactions' Programmable Transaction
@@ -35,7 +35,7 @@ Block (PTB) commands and emitted events.
 | Incident | A compromised Switchboard oracle signing key let an attacker submit a forged price, inside a Full Sail transaction that also legitimately updates the same feed and calls `port::deposit`, pushing SUI/ETH/IKA to almost exactly 100x below their real price, depositing while the fake price is active (fooling the vault's `calculate_aum` price-gated capacity check), then restoring the real price and withdrawing the resulting oversized position across three vaults (Ports) |
 | Window | 2026-08-29, first attacker deposit 02:33:25 UTC, last withdraw 05:28:07 UTC (63 withdraw calls, 63 deposit calls, all by one address) |
 | Press figures | ~$91,000 total, "three vaults", no address, tx hash, or per-vault breakdown published (Yellow, CryptoTimes, Cointelegraph). DefiLlama tracks this as "Full Sail" / Sui / "Oracle Manipulation" / "Oracle Misconfiguration" with **no dollar amount at all** |
-| Verified independently | Attacker address, the 3 exact Port objects, the exact ~100x price ratio for each of SUI/ETH/IKA (all decoded from the attacker's own transactions), and a per-port net (withdrawn minus deposited) figure in native units, converted to USD at the chain's own restored (real) oracle price at the time -- **$91,605.56 total**, 0.67% above the press estimate, computed independently of it |
+| Verified independently | Attacker address, the 3 exact Port objects, the exact ~100x price ratio for each of SUI/ETH/IKA (all decoded from the attacker's own transactions), and a per-port net (withdrawn minus deposited) figure in native units, converted to USD at the chain's own restored (real) oracle price at the time: **$91,605.56 total** with the small IKA leg at the day's high (an upper bound; $91,149.73 at a matched real/fake pair price), 0.67% above the press estimate, computed independently of it |
 | What's still open | Whether Full Sail's `vault_config::GlobalConfig.max_price_deviation_bps` guard (currently 200 bps / 2%) existed and was wired into this code path at exploit time is not established here; the attack succeeded regardless. See Caveats |
 
 ## The method
@@ -77,7 +77,7 @@ Paginating the vault package's own `port::WithdrawEvent` log (150 events,
 back through 2026-07-27) and filtering to 2026-08-29 shows one sender,
 **`0x9104d073e1fdfd76a6b756f61c5684e4affa0b3d124d383afc64aabbd87934cc`**,
 responsible for 63 of the day's withdraw calls across exactly 3 distinct
-Port objects -- the next most active sender that day made only 3 calls
+Port objects; the next most active sender that day made only 3 calls
 across 3 Ports (routine user activity, not a drain). Reading each of the
 3 Ports' own `vault.coin_a`/`vault.coin_b` fields live gives:
 
@@ -96,27 +96,27 @@ Transaction `EUcJWv6ZpMA1C3WmyrbrTbRQ8DRXj1TyqCrqJUVRoenJ`
 (2026-08-29T04:57:27.497Z), a single atomic PTB, 16 commands:
 
 1. `aggregator_submit_result_action::run` (Switchboard) followed by Full
-   Sail's own `port_oracle::external_update_price_from_switchboard` --
+   Sail's own `port_oracle::external_update_price_from_switchboard`:
    this submission sets SUI's tracked price to **74050000** raw
    (scale 1e10 => **$0.007405**).
 2. A second pair of the same two calls updates USDC's price (a routine,
    undisturbed ~$1.00 read).
 3. Reward/AUM bookkeeping (`update_pool_reward_v2` x3,
-   `update_position_reward`), then `port::calculate_aum` -- computed
+   `update_position_reward`), then `port::calculate_aum`, computed
    while SUI's tracked price is still the fake, 100x-low value.
-4. `port::deposit` -- the attacker deposits 2,786.123876 USDC
+4. `port::deposit`: the attacker deposits 2,786.123876 USDC
    (`IncreaseLiquidityEvent`: `amount_a: "2786123876"`,
    `before_aum: "70713262037"`), sized against the artificially
    depressed AUM figure.
 5. A third `aggregator_submit_result_action::run` +
    `external_update_price_from_switchboard` pair, in the **same**
    transaction, restores SUI's price to **7405000000** raw
-   (**$0.740500**) -- exactly **100.00x** the fake value submitted two
+   (**$0.740500**), exactly **100.00x** the fake value submitted two
    commands earlier.
 
 The deposit is sized and accepted while the price is fake; by the time
 the transaction ends, the price is back to normal, so nothing about the
-deposit itself looks abnormal to a later observer -- only decoding the
+deposit itself looks abnormal to a later observer; only decoding the
 transaction's own internal event sequence shows the price was ever wrong.
 Separate, later transactions (2 seconds to several minutes afterward,
 same sender) call `port::withdraw_v2` against the now-oversized position
@@ -132,10 +132,10 @@ gives, per asset (raw price, scale 1e10):
 |---|---|---|---|
 | SUI | $0.740500 | $0.007405 | **100.00x** |
 | ETH | $2,440.630000 | $24.406300 | **100.00x** |
-| IKA | $0.002145 (day's high) | $0.000020 (day's low) | 106.86x (day-wide high/low, not one matched pair -- every individual matched pair this project sampled, e.g. 20072969 vs 200729, is itself exactly 100.00x; the day-wide ratio differs slightly because the real IKA price also drifted normally across the ~3-hour attack) |
-| USDC | $1.002195 | $0.997358 | 1.00x (never manipulated -- only ever the routine, sub-1% price-feed noise expected of a real crank) |
+| IKA | $0.002145 (day's high) | $0.000020 (day's low) | 106.86x (day-wide high/low, not one matched pair; every individual matched pair this project sampled, e.g. 20072969 vs 200729, is itself exactly 100.00x; the day-wide ratio differs slightly because the real IKA price also drifted normally across the ~3-hour attack) |
+| USDC | $1.002195 | $0.997358 | 1.00x (never manipulated; only ever the routine, sub-1% price-feed noise expected of a real crank) |
 
-USDC, the quote asset in two of the three vaults, was never touched --
+USDC, the quote asset in two of the three vaults, was never touched,
 consistent with the attack manipulating exactly the one price a given
 Port needed skewed (SUI for two vaults, IKA for the third; ETH for the
 USDC/ETH vault), never the whole feed set at once.
@@ -144,7 +144,7 @@ USDC/ETH vault), never the whole feed set at once.
 
 For each Port, summing the attacker's own `WithdrawEvent` amounts minus
 their own `IncreaseLiquidityEvent` (deposit) amounts across the full
-attack window gives a net native-unit change per coin -- this nets out
+attack window gives a net native-unit change per coin; this nets out
 each vault's repeated deposit/withdraw recycling automatically, leaving
 only what the attacker actually extracted:
 
@@ -153,28 +153,31 @@ only what the attacker actually extracted:
 | USDC/ETH | -18.861463 USDC | +0.773454 ETH | **$1,868.85** |
 | IKA/SUI | +3,310,237.387089 IKA | -100.462349 SUI | **$7,026.07** |
 | USDC/SUI | -802.061839 USDC | +112,778.798369 SUI | **$82,710.64** |
-| **Total** | | | **$91,605.56** |
+| **Total** | | | **$91,605.56** (IKA leg at the day's high; $91,149.73 at a matched-pair IKA price) |
 
 USD conversion uses the *real* (restored, post-correction) price read
 directly from the chain's own `UpdatePriceEvent` log at the time of the
-attack -- $0.7405/SUI, $2,440.63/ETH, $0.002145/IKA, ~$1.00/USDC -- not
-an external price feed and not the manipulated figures.
+attack ($0.7405/SUI, $2,440.63/ETH, $0.002145/IKA, ~$1.00/USDC), not
+an external price feed and not the manipulated figures. For IKA that is
+the day's high real price, so the IKA leg ($7,026.07) is an upper bound:
+at the real price of one matched real/fake pair the attacker submitted
+(20072969 raw, $0.0020072969) it is $6,570.24, and the total $91,149.73.
 
-### Cross-check: the ETH leg matches the attacker's own swap-out transaction to the wei
+### Cross-check: the ETH leg matches the attacker's own swap-out transaction to the last raw unit
 
 Minutes after the last withdraw, transaction
 `Da67fbc4CrTiAESEtKHxwqWNKsyFNSvF2PxKgwNKWZ6r` (2026-08-29T05:42:32.810Z)
 routes through Full Sail's own multi-DEX swap router (momentum/cetus/
 turbos/bluefin aggregation) with a balance change of exactly **-77345418
 raw ETH**. This project's own independently-computed net ETH figure for
-the USDC/ETH Port above is **77345418 raw** -- an exact match, to the
-last wei, found by re-deriving both numbers separately rather than
+the USDC/ETH Port above is **77345418 raw**, an exact match, to the
+last raw unit (8 decimals), found by re-deriving both numbers separately rather than
 computing one from the other.
 
 ### Funds no longer sit at the exploit address
 
 As of this reconstruction, `0x9104d073e1...87934cc` holds 0.00098083 SUI
-and 0.040284 USDC (dust), and zero ETH or IKA -- the realized profit has
+and 0.040284 USDC (dust), and zero ETH or IKA; the realized profit has
 been moved out via the swap above and further transfers, not left
 sitting at the exploit address.
 
@@ -188,7 +191,7 @@ deployments together on 2026-08-28/29. This project did not independently
 re-verify Switchboard's own signing-key compromise itself (that would
 require access to Switchboard's own infrastructure/logs, not public chain
 data); what is independently confirmed here is the on-chain consequence
-on Sui specifically -- an oracle submission accepted by Full Sail's own
+on Sui specifically: an oracle submission accepted by Full Sail's own
 `port_oracle` module carrying a price both Switchboard's `min_responses`
 threshold and Full Sail's own logic should not have accepted from a
 single legitimate reporting round, given the coincident, same-transaction
@@ -233,7 +236,7 @@ open questions, not asserted either way; see Caveats.
 - Whether `vault_config::GlobalConfig.max_price_deviation_bps` (200 bps,
   read live and current as of this reconstruction) existed, at what
   value, and was actually enforced on the `port_oracle`/`calculate_aum`
-  path at exploit time is not established here -- only that the attack
+  path at exploit time is not established here; only that the attack
   succeeded regardless of whatever guard, if any, was live that day.
 - DefiLlama's own hacks feed tracks this incident with no dollar amount
   at all (`amount: null`), so the $91,605.56 figure above cannot be

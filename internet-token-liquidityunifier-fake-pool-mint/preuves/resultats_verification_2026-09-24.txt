@@ -1,59 +1,59 @@
-VERIFICATION, montants en entiers exacts (aucun flottant)
-fournisseur : https://gateway.tenderly.co/public/base  lecture du 2026-09-24T17:17:41.341835Z
+VERIFICATION, amounts as exact integers (no floating point)
+provider: https://gateway.tenderly.co/public/base  read on 2026-09-24T17:17:41.341835Z
 
---- 1. la premiere transaction d'exploitation ---
+--- 1. the first exploit transaction ---
   hash            : 0xed62bb27bd1058d3d7cc93d55421d6d0001ced8cb4529b02773f5126a4edb08b
-  bloc            : 51593878 2026-09-21T07:51:43Z
-  statut          : 0x1 (0x1 = reussie)
-  emetteur (EOA)  : 0x5f7ce6395818857ac20730dc990f614356d1ec68  nonce 0 (premiere transaction de ce compte)
-  destinataire    : None (None = creation de contrat)
-  contrat cree    : 0x4acac3ecb4912147cbbf9dc927368a046e35b5b6
-  gaz utilise     : 1465623
+  block           : 51593878 2026-09-21T07:51:43Z
+  status          : 0x1 (0x1 = success)
+  sender (EOA)    : 0x5f7ce6395818857ac20730dc990f614356d1ec68  nonce 0 (first transaction of this account)
+  recipient       : None (None = contract creation)
+  contract created: 0x4acac3ecb4912147cbbf9dc927368a046e35b5b6
+  gas used        : 1465623
 
---- 2. les mouvements INT et WETH de cette transaction, en wei exacts ---
+--- 2. the INT and WETH movements of this transaction, in exact wei ---
   log2  INT  MINT 0x0000000000000000000000000000000000000000 -> 0x94d9b828a9fa0d7d788127c827c8c0a268a35f69   925411678379023085745037207 wei = 925411678.379023085745037207
   log3  INT  BURN 0x94d9b828a9fa0d7d788127c827c8c0a268a35f69 -> 0x0000000000000000000000000000000000000000   925411678379023085745037207 wei = 925411678.379023085745037207
-  log4  AUTR      0x6b82fdfc0344bd76d5cb58bc24d0ffe947975516 -> 0x94d9b828a9fa0d7d788127c827c8c0a268a35f69   925411678379023085745037207 wei = 925411678.379023085745037207
+  log4  OTHR      0x6b82fdfc0344bd76d5cb58bc24d0ffe947975516 -> 0x94d9b828a9fa0d7d788127c827c8c0a268a35f69   925411678379023085745037207 wei = 925411678.379023085745037207
   log5  INT       0x837dbabc4f5fa78baf177597edbda09645822032 -> 0x94d9b828a9fa0d7d788127c827c8c0a268a35f69                             0 wei = 0.000000000000000000
   log6  INT       0x837dbabc4f5fa78baf177597edbda09645822032 -> 0xe05dd5b785f578337b2b8f695fbc521669c69403                             0 wei = 0.000000000000000000
   log7  INT  BURN 0x94d9b828a9fa0d7d788127c827c8c0a268a35f69 -> 0x0000000000000000000000000000000000000000                             0 wei = 0.000000000000000000
-  log8  AUTR      0x94d9b828a9fa0d7d788127c827c8c0a268a35f69 -> 0x6b82fdfc0344bd76d5cb58bc24d0ffe947975516   925411678379023085745037207 wei = 925411678.379023085745037207
+  log8  OTHR      0x94d9b828a9fa0d7d788127c827c8c0a268a35f69 -> 0x6b82fdfc0344bd76d5cb58bc24d0ffe947975516   925411678379023085745037207 wei = 925411678.379023085745037207
   log9  INT  MINT 0x0000000000000000000000000000000000000000 -> 0x94d9b828a9fa0d7d788127c827c8c0a268a35f69   925411678379023085745037207 wei = 925411678.379023085745037207
   log10 WETH      0xdec6eadbd8ed3f655cba4bb4eeff6fb43b16969d -> 0x94d9b828a9fa0d7d788127c827c8c0a268a35f69           5846988019325688317 wei = 5.846988019325688317
   log12 INT       0x94d9b828a9fa0d7d788127c827c8c0a268a35f69 -> 0xdec6eadbd8ed3f655cba4bb4eeff6fb43b16969d   161265976195260022578593802 wei = 161265976.195260022578593802
   log14 INT       0x94d9b828a9fa0d7d788127c827c8c0a268a35f69 -> 0x5f7ce6395818857ac20730dc990f614356d1ec68   764145702183763063166443405 wei = 764145702.183763063166443405
   log15 WETH      0x94d9b828a9fa0d7d788127c827c8c0a268a35f69 -> 0x5f7ce6395818857ac20730dc990f614356d1ec68           5846988019325688317 wei = 5.846988019325688317
-  log16 AUTR      0x94d9b828a9fa0d7d788127c827c8c0a268a35f69 -> 0x5f7ce6395818857ac20730dc990f614356d1ec68                             0 wei = 0.000000000000000000
+  log16 OTHR      0x94d9b828a9fa0d7d788127c827c8c0a268a35f69 -> 0x5f7ce6395818857ac20730dc990f614356d1ec68                             0 wei = 0.000000000000000000
 
-  evenement Swap Uniswap V3, pool 0xdec6eadbd8ed3f655cba4bb4eeff6fb43b16969d
+  Uniswap V3 Swap event, pool 0xdec6eadbd8ed3f655cba4bb4eeff6fb43b16969d
     amount0 (WETH) = -5846988019325688317 wei = -5.846988019325688317
     amount1 (INT)  = 161265976195260022578593802 wei = 161265976.195260022578593802
 
---- 3. controle arithmetique, en entiers ---
-  logs de mint INT dans la transaction : 2 valeurs ['925411678379023085745037207', '925411678379023085745037207']
-  les deux logs sont identiques : True
-  montant minte (un seul mint reel)  : 925411678379023085745037207 wei = 925411678.379023085745037207 INT
-  totalSupply avant : 808409913595513467171581989 wei = 808409913.595513467171581989 INT
-  totalSupply apres : 1733821591974536552916619196 wei = 1733821591.974536552916619196 INT
+--- 3. arithmetic check, in integers ---
+  INT mint logs in the transaction: 2 values ['925411678379023085745037207', '925411678379023085745037207']
+  the two logs are identical: True
+  minted amount (one real mint)      : 925411678379023085745037207 wei = 925411678.379023085745037207 INT
+  totalSupply before: 808409913595513467171581989 wei = 808409913.595513467171581989 INT
+  totalSupply after : 1733821591974536552916619196 wei = 1733821591.974536552916619196 INT
   delta             : 925411678379023085745037207 wei = 925411678.379023085745037207 INT
-  delta == montant minte (un seul mint net) : True
-  INT vendu au pool : 161265976195260022578593802 wei = 161265976.195260022578593802
-  INT garde (vers l'EOA) : ['764145702183763063166443405']
-  minte - vendu = 764145702183763063166443405 wei = 764145702.183763063166443405
-  egal a l'INT envoye a l'EOA : True
-  WETH sorti du pool : 5846988019325688317 wei = 5.846988019325688317
-  memes WETH transferes ensuite a l'EOA : True ['5846988019325688317', '5846988019325688317']
+  delta == minted amount (one net mint) : True
+  INT sold to the pool: 161265976195260022578593802 wei = 161265976.195260022578593802
+  INT kept (to the EOA): ['764145702183763063166443405']
+  minted - sold = 764145702183763063166443405 wei = 764145702.183763063166443405
+  equal to the INT sent to the EOA: True
+  WETH out of the pool: 5846988019325688317 wei = 5.846988019325688317
+  same WETH then transferred to the EOA: True ['5846988019325688317', '5846988019325688317']
 
---- 4. le pool ne contenait presque rien de plus que ce qui est parti ---
-  WETH du pool avant : 5847033390701967596 wei = 5.847033390701967596
-  WETH du pool apres : 45371376279279 wei = 0.000045371376279279
-  difference         : 5846988019325688317 wei = 5.846988019325688317
-  egale au WETH sorti du log Transfer : True
-  part du solde emportee : 5846988019325688317 / 5847033390701967596 = 99.999224027412748673 %
+--- 4. the pool held almost nothing beyond what left ---
+  pool WETH before: 5847033390701967596 wei = 5.847033390701967596
+  pool WETH after : 45371376279279 wei = 0.000045371376279279
+  difference      : 5846988019325688317 wei = 5.846988019325688317
+  equal to the WETH out in the Transfer log: True
+  share of the balance taken: 5846988019325688317 / 5847033390701967596 = 99.999224027412748673 %
 
---- 5. tout ce que les copieurs ont pris ensuite, fenetre 51579727-51622927 ---
-  transferts WETH sortants du pool : 36
-  total sorti      : 5866812895215939248 wei = 5.866812895215939248 WETH
-  dont 1re tx      : 5846988019325688317 wei = 5.846988019325688317 WETH
-  dont tout le reste (35 transferts) : 19824875890250931 wei = 0.019824875890250931 WETH
-  part de la 1re tx dans le total : 99.662084401798171908 %
+--- 5. everything the copycats took afterwards, window 51579727-51622927 ---
+  outgoing WETH transfers from the pool: 36
+  total out        : 5866812895215939248 wei = 5.866812895215939248 WETH
+  of which 1st tx  : 5846988019325688317 wei = 5.846988019325688317 WETH
+  of which all the rest (35 transfers): 19824875890250931 wei = 0.019824875890250931 WETH
+  share of the 1st tx in the total: 99.662084401798171908 %

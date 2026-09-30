@@ -50,7 +50,7 @@ plain Cosmos SDK / Tendermint chain queried over its own public RPC/LCD
 via `curl`, plus a plain Ethereum JSON-RPC call for the attacker's ETH
 wallet and a plain Bitcoin Esplora call for Nomic's own reserve address.
 
-RPC/API endpoints used: `rpc.nomic.basementnodes.ca` (Nomic - the only one
+RPC/API endpoints used: `rpc.nomic.basementnodes.ca` (Nomic, the only one
 of 5 Nomic endpoints in the Cosmos chain registry that actually answered;
 the other 4, including Nomic's own `stakenet-rpc.nomic.io`, all failed to
 connect, consistent with the chain still being halted), `osmosis-rest.publicnode.com`
@@ -95,14 +95,14 @@ on two independently operated Osmosis LCD nodes (publicnode.com,
 Polkachu), which return byte-identical results. Decoding all 5 pool
 denoms (the nBTC IBC denom plus 4 separate WBTC/cbBTC bridge routes) gives
 **39.83974592 BTC of nBTC still inside the alloy** against **70.73128010
-BTC of real WBTC/cbBTC collateral**, a **63.97% backing ratio** - matching
+BTC of real WBTC/cbBTC collateral**, a **63.97% backing ratio**, matching
 the forum post's own table (39.839746 / 70.731198 / 63.97%) to 5-6
 significant figures, independently, not by re-reading the same table.
 
 ### The frozen attacker balance and the Bitcoin reserve, both confirmed live
 
 The attacker's Osmosis address holds, right now, exactly 2,265,060,846
-(= 22.65060846 allBTC) and 703,055,696 uosmo (= 703.055696 OSMO) - matching
+(= 22.65060846 allBTC) and 703,055,696 uosmo (= 703.055696 OSMO), matching
 the forum post's stated frozen amounts exactly. Nomic's own Bitcoin
 reserve address (`bc1q9e3d4nca68wzh8j3gme7z7gatnrzrpgcflsu5tgeuh6g7svqykssqzxyfe`),
 checked independently via Blockstream (a Bitcoin explorer with no
@@ -122,14 +122,14 @@ Nomic-side source the report itself is not. Its open state also confirms
 the chain remains halted as of this writing: no merged fix exists yet.
 Separately, of the 5 Nomic RPC endpoints the Cosmos chain registry lists,
 only 1 (`rpc.nomic.basementnodes.ca`) answered; the other 4, including
-Nomic's own `stakenet-rpc.nomic.io`, all failed to connect - consistent
+Nomic's own `stakenet-rpc.nomic.io`, all failed to connect, consistent
 with, though not proof of, a chain that is still not producing new
 blocks.
 
 ### DefiLlama's date is the disclosure date, not the exploit date, and its dollar figure follows a different BTC price
 
 DefiLlama's hacks feed carries this incident as "Nomic", $3,150,000,
-dated 2026-09-09 - the day the halt became public, not the day the mint
+dated 2026-09-09, the day the halt became public, not the day the mint
 actually happened (2026-06-25, independently timestamped above from
 Nomic's own chain, 76 days earlier). Dividing DefiLlama's $3,150,000 by
 the full counterfeit mint (40.650602 BTC) implies a price near $77,500,
@@ -143,7 +143,7 @@ in the root README's index table.
 ### The Ethereum-side laundering trail: consistent, not independently re-derived in full
 
 The attacker's Ethereum wallet (`0x8f36fd9ffc0a8ca373aa7a4787292536a489d2b5`)
-holds, live, 0.5753708194 ETH and an outgoing nonce of 35 - consistent
+holds, live, 0.5753708194 ETH and an outgoing nonce of 35, consistent
 with the forensic report's "0.575 ETH dust" figure and its account of 33
 Tornado Cash deposits plus a handful of other transactions (the report's
 own total of "39 transactions" counts both incoming and outgoing; this

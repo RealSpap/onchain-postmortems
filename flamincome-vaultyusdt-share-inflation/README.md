@@ -82,10 +82,11 @@ YUSDT's total supply was 21,517.468169 before the block and 21,517.468169 after 
 | minus other spend (LP route and probe swap) | 157,226.4732 |
 | **Attacker net, sent to the EOA** | **345,902.669987** |
 | Governance fees paid by the Strategy in this transaction | 92,658.40215 |
-| **Strategy's net USDT outflow** (profit + fees + other spend) | **595,787.544337** |
+| Profit + fees + other spend | 595,787.545337 |
+| **Strategy's net USDT outflow** (USDT out minus in, transfer by transfer) | **595,787.544337** |
 | Strategy's USDT + aUSDT, block 25990442 to 25990443 | 3,505,438.326427 to 2,909,650.783699, down 595,787.542728 |
 
-The attacker's ledger nets to the profit transfer exactly. The Strategy's transfer-level outflow and its balance drop agree to 0.0016 USDT, the residue being aUSDT interest accrued inside the block. DefiLlama's $595,000 is the Strategy's drop. Press's "$345,900 lost" is the attacker's gain. Neither is wrong; they are different sides of the same ledger, and the 92,658.40 USDT in the middle never left Flamincome.
+The attacker's ledger nets to the profit transfer exactly. The Strategy's transfer-level outflow and its balance drop agree to 0.0016 USDT, the residue being aUSDT interest accrued inside the block. The component split (profit + fees + other spend) sums 0.001 USDT above the transfer-level outflow; that gap is left as logged, not explained. DefiLlama's $595,000 is the Strategy's drop. Press's "$345,900 lost" is the attacker's gain. Neither is wrong; they are different sides of the same ledger, and the 92,658.40 USDT in the middle never left Flamincome.
 
 ### Who actually lost it
 
@@ -107,7 +108,7 @@ The EOA was funded at 13:18:35 UTC (block 25990287) by a withdrawal from `0x12D6
 
 ## Caveats
 
-- The Strategy's implementation is unverified. That `deposited()` reads the Convex position through `virtual_price`, and not through some other function that happened to return the same number, is inferred from the unit-exact match between the backed-out `deposited()` and LP times `virtual_price`, not read from source (H17 in the registry, confidence Moyenne).
+- The Strategy's implementation is unverified. That `deposited()` reads the Convex position through `virtual_price`, and not through some other function that happened to return the same number, is inferred from the unit-exact match between the backed-out `deposited()` and LP times `virtual_price`, not read from source (H17 in the registry, confidence Medium).
 - The Morpho, Convex, Curve, Aave and Tornado Cash contracts are identified by their addresses and by the events they emit; only the Tornado Cash pool's name is taken from an explorer label.
 - The USDP token here is `0x1456688345527bE1f37E9e627DA0837D6f08C925`. Its issuer and why it trades below a dollar are outside the scope of this entry; the entry only uses prices actually paid on-chain.
 - The USDP price range quoted from inside the exploit transaction comes from the attacker's own small buys (0.583326 USDC for 33.093275 USDP, 0.89346 USDC for 1.200131 USDP, and so on). It is a range, not a market price.
@@ -128,4 +129,4 @@ The EOA was funded at 13:18:35 UTC (block 25990287) by a withdrawal from `0x12D6
 
 ## License
 
-Released under the MIT License. See `LICENSE`.
+Released under the MIT License (see `LICENSE` at the repository root).

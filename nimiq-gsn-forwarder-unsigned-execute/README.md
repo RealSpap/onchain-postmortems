@@ -4,7 +4,7 @@ On September 16, 2026, Nimiq's gas-abstraction contracts on Polygon paid out thr
 
 The mechanism was reported as a forged request. Nothing was forged. Each of the three requests carried a signature field of 65 zero bytes, and a hashlock whose preimage was the number 1. The contract read neither. Its `execute` function opens with a statement whose only purpose is to discard all five of its parameters, signature included, and the check that should have run instead lives in the paymaster half of the same contract, which an OpenGSN relay call is free to point at a different address. The attacker pointed it at himself.
 
-The price of being trusted enough to make that call was one POL, staked through the public relay registry. It is still sitting there.
+The price of being trusted enough to make that call was one POL, staked through the public relay registry. Five days later it had still not been withdrawn.
 
 ## At a glance
 
@@ -72,11 +72,11 @@ flowchart LR
 python3 reconstruct_exploit.py
 ```
 
-The script needs no dependencies beyond the standard library and no API key. It reads public Polygon and Ethereum RPC endpoints, rotating between them on failure, and re-derives all 36 of this README's checks live rather than replaying a stored answer. It runs in nine sections: the balances either side of the drain, the decoded forged requests including the signature bytes, a 1.3 million block search for the missing `Open` events, the redeem receipts, the relay stake, the four failed attempts and their revert reasons, the exit path across two chains, the fake-token noise around the cash-out address, and the current remediation state.
+The script needs no dependencies beyond the standard library and no API key. It reads public Polygon and Ethereum RPC endpoints, rotating between them on failure, and re-derives all 35 of this README's checks live rather than replaying a stored answer. It runs in nine sections: the balances either side of the drain, the decoded forged requests including the signature bytes, a 1.3 million block search for the missing `Open` events, the redeem receipts, the relay stake, the four failed attempts and their revert reasons, the exit path across two chains, the fake-token noise around the cash-out address, and whether anything changed on-chain after the drain.
 
 Contract addresses came from Nimiq's own published wallet configuration rather than from coverage, and the contract source from two independent verification mirrors that agree byte for byte. Press was read only after the reconstruction was finished, so nothing here is a paraphrase of somebody else's reading.
 
-Alongside the script, verification ran against a registry of fourteen falsifiable hypotheses (`registre_hypotheses.csv`), each pointing at a specific line range in `preuves/`, each with a stated falsification test.
+Alongside the script, verification ran against a registry of thirteen falsifiable hypotheses (`registre_hypotheses.csv`), each pointing at a specific line range in `preuves/`, each with a stated falsification test.
 
 ## What it found
 
@@ -84,7 +84,7 @@ Alongside the script, verification ran against a registry of fourteen falsifiabl
 
 **Nothing was forged.** The three `ForwardRequest` structs reach the handler with a 65-byte signature field that is entirely zero. `execute` is declared with five parameters and its first statement is `(request, domainSeparator, requestTypeHash, suffixData, signature);`, an expression with no effect, written to stop the compiler warning about parameters that are never used. In OpenGSN v2 a relay call names a paymaster and a forwarder separately, and the RelayHub calls `preRelayedCall` on the first and `execute` on the second. Nimiq put both roles in one contract, so in normal use the same contract verifies the signature in `preRelayedCall` and then trusts itself in `execute`. Split the roles back apart, which the protocol permits by design, and the verifying half never runs.
 
-**The entry price was one POL.** Three calls to the OpenGSN StakeManager and one to the RelayHub, in the same transaction as the drain, registered the attacker as his own relay: `setRelayManagerOwner`, `stakeForRelayManager` with 1 POL and a 1000 second unstake delay, `authorizeHubByOwner`, `addRelayWorkers`. That stake has never been withdrawn, so it is still visible in the StakeManager today, which is a slightly strange thing to leave behind for the price of a coffee.
+**The entry price was one POL.** Three calls to the OpenGSN StakeManager and one to the RelayHub, in the same transaction as the drain, registered the attacker as his own relay: `setRelayManagerOwner`, `stakeForRelayManager` with 1 POL and a 1000 second unstake delay, `authorizeHubByOwner`, `addRelayWorkers`. That stake had not been withdrawn five days later, so it was still visible in the StakeManager, which is a slightly strange thing to leave behind for the price of a coffee.
 
 **The drain is invisible in the contract's own event log.** `openPrivate` writes the HTLC into storage, but the `Open` event is emitted from `postRelayedCall`, which the RelayHub calls on the paymaster. The paymaster here was the attacker's own contract, so no `Open` was ever emitted. A search across 1.3 million blocks either side finds no `Open` for any of the three ids. What the chain shows instead is three `Redeem` events, 105 seconds later, for HTLCs that on the evidence of the log never existed. Any monitoring that watched this contract's events saw money leave escrow that it had never seen enter.
 
@@ -94,9 +94,7 @@ Alongside the script, verification ran against a registry of fourteen falsifiabl
 
 **The money left in ninety seconds and the trail was salted afterwards.** The cash-out address swapped the USDT0 leg on KyberSwap for 24,317.184273 USDC, losing 15.304996 to slippage, abandoned the 0.661117 USDC.e leg on Polygon, and bridged 50,447.825983 USDC to Ethereum through LI.FI's `eco` route with `jumper.exchange` as integrator. The solver delivered on Ethereum 14 seconds later, and 84 seconds after that the full amount moved on to an unlabelled EOA holding several billion USDC, which is where attribution stops. Since September 17 that same cash-out address has been hit by 57 transfers of exactly 50,447.825983 from 45 different token contracts, every one of them named "USD Coin" with the symbol USDC, none of them the canonical USDC contract. On a block explorer the address looks like it is still moving the stolen sum around several times a day. Its real USDC balance has been zero since 23:37:35 on the night of the drain.
 
-**Five days on, the fix is entirely client-side.** Nimiq's own wallet repository shows the response: a swap maintenance message committed 18 hours 57 minutes after the drain, and gas abstraction for sending stablecoins put under maintenance 23 hours 3 minutes after it. Both are configuration in the wallet front end. The handlers have no pause function, nothing was upgraded, and the drained wallet's approvals to both of them are still effectively unlimited. That wallet is empty, so nothing is at risk in it today, but the approval is live and anything sent there could go the same way. Neither handler has emitted a single event since the drain.
-
-**The same shape exists in the sibling contract.** `ERC20PermitHandler`, the transfer handler behind gas-abstracted stablecoin sends at `0x3157d422cd1be13AC4a7cb00957ed717e648DFf2` and `0x98E69a6927747339d5E543586FC0262112eBe4BD`, carries the identical `execute`: same discarded parameters, ending in `transferPrivate(request.from, requestData)` instead of `openPrivate`. Both are verified public source, and the front-end maintenance flag does not reach either of them. This entry does not enumerate who still holds approvals to those contracts, and names no wallet other than the one that was drained.
+**Five days on, the visible response was client-side.** Nimiq's own wallet repository shows it: a swap maintenance message committed 18 hours 57 minutes after the drain, and gas abstraction for sending stablecoins put under maintenance 23 hours 3 minutes after it. Both are configuration in the wallet front end. As of September 21, neither handler had emitted a single event since the drain and the drained wallet was still empty. Current patch status not re-verified; details withheld pending disclosure to the team.
 
 ## Caveats
 
@@ -104,4 +102,4 @@ Dollar figures assume one dollar per stablecoin unit; no oracle price is applied
 
 ## License
 
-MIT, same as the rest of this repository. The evidence files in `preuves/` are raw tool output and are reproduced as generated.
+MIT, same as the rest of this repository. The evidence files in `preuves/` are raw script output, reproduced as generated except for passages withheld pending disclosure to the team.

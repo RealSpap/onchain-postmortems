@@ -36,9 +36,9 @@ for this record.
 
 2. Press coverage, summarized
 -------------------------------
-This reconstruction did not itself re-read press articles. It relies on a
-summary produced by a prior research pass, which reported 8 or more outlets
-converging on the following claims:
+This reconstruction did not itself re-read the press articles one by one.
+It relies on an earlier review of press coverage, which reported 8 or more
+outlets converging on the following claims:
 
 - Mechanism described only as "approveAndCall abuse of LayerZero delegate
   permissions on Base". No outlet named the specific composition with
@@ -69,13 +69,12 @@ independently confirm from primary on-chain text:
   number produced by the eth_getLogs reconstruction of Base mint events
   (which totals 329,243,083,813,775.775083 SAND across 637 distinct
   transactions in the scanned window).
-- Any USD valuation. No price source for 2026-08-21/22 was checked in this
-  pass; the only USD-adjacent figure used anywhere in this repo is a
+- Any USD valuation. No price source for 2026-08-21/22 was checked; the only USD-adjacent figure used anywhere in this repo is a
   same-day sanity check against a live Blockscout ETH/USD display rate,
   explicitly marked as such, never as a historical valuation.
-- Whether the Sandbox's own on-chain whitehat/ransom message (tx
+- Whether the Sandbox's own on-chain whitehat bounty offer (tx
   0xde26ad2e26dee314879ba257ccd73c3c810fa8e09be3704e87ded29151137969) was
-  covered anywhere in press. No coverage of it was found in this pass.
+  covered anywhere in press. No coverage of it was found.
 
 Everything else in this repo, all addresses, transaction hashes, block
 numbers, timestamps and token amounts, was derived from primary sources:

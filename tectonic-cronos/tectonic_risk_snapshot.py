@@ -1,22 +1,22 @@
-"""Tectonic Protocol (Cronos) — live on-chain risk snapshot.
+"""Tectonic Protocol (Cronos): live on-chain risk snapshot.
 
 MVP for a post-exploit tracking dashboard. Tectonic is a Compound v2 fork
 ("tTokens"), so this reads the standard Comptroller/CToken/PriceOracle
 interface directly from contract state.
 
 Context (2026-08-30 exploit): an attacker inflated the TONIC token price
-~100x in ~20 minutes via three thin-liquidity pools, then borrowed against
-the inflated collateral. Cronos validators rolled back ~11,000 blocks to
-undo it. As of this writing, no official post-mortem has been published —
-this script is meant to give an independent, verifiable read of Tectonic's
-CURRENT state (post-rollback), not a replay of the incident itself.
+(about 147x, see README) and borrowed against the inflated collateral.
+Cronos validators rolled back 10,961 blocks to undo it (Cronos's official
+post-mortem, published 2026-09-08). This script gives an independent,
+verifiable read of Tectonic's CURRENT state (post-rollback), not a replay
+of the incident itself.
 
 Known contract addresses (Cronos mainnet, chain id 25). Tectonic actually
-runs THREE separate, isolated Comptroller pools, not one — cross-checked
+runs THREE separate, isolated Comptroller pools, not one, cross-checked
 against DefiLlama's TVL adapter history and confirmed on-chain (each pool's
 `getAllMarkets()` returns a distinct, populated list, both before and after
 the exploit). The address below is Pool 1, the one that actually lists
-tTONIC and tWBTC — it is NOT the address CronoScan labels "Tectonic: Core"
+tTONIC and tWBTC; it is NOT the address CronoScan labels "Tectonic: Core"
 (0x7De56Bd8b37827c51835e162c867848fE2403a48), which has never had a single
 market registered despite the label:
     TectonicCore (Comptroller, Pool 1): 0xb3831584acb95ED9cCb0C11f677B5AD01DeaeEc0
@@ -30,7 +30,7 @@ The other two pools (not used by this script, listed for reference):
 
 Tested against the live chain: connects fine, returns real data for all
 18 markets in Pool 1. tTONIC is still listed with an unchanged 20%
-collateral factor as of this run — no risk parameters were adjusted after
+collateral factor as of this run: no risk parameters were adjusted after
 the exploit.
 
 Usage:
@@ -53,7 +53,7 @@ DEFAULT_RPC_ENDPOINTS = [
     "https://cronos-evm-rpc.publicnode.com",
 ]
 
-# Standard Compound v2 Comptroller ABI fragment — Tectonic is a documented
+# Standard Compound v2 Comptroller ABI fragment: Tectonic is a documented
 # Compound v2 fork ("TectonicCore" plays the Comptroller role, "tTokens"
 # play the CToken role), so the canonical function signatures apply.
 COMPTROLLER_ABI = [
@@ -108,7 +108,7 @@ ERC20_DECIMALS_ABI = [
     {"constant": True, "inputs": [], "name": "decimals", "outputs": [{"name": "", "type": "uint8"}], "type": "function"},
 ]
 
-# CRO (the chain's native asset) has no ERC20 `underlying()` — Compound-fork
+# CRO (the chain's native asset) has no ERC20 `underlying()`; Compound-fork
 # markets for the native coin return the zero address instead.
 NATIVE_SENTINEL = "0x0000000000000000000000000000000000000000"
 
@@ -170,7 +170,7 @@ def snapshot(rpc_url: str) -> list[dict]:
             "available_cash_usd": cash_units * price_usd,
             "total_reserves_usd": reserves_units * price_usd,
             # utilization: how much of the pool's liquidity is currently
-            # lent out — a market with cash near zero and borrows still
+            # lent out: a market with cash near zero and borrows still
             # high after the rollback is the signal worth flagging.
             "utilization_pct": (
                 100 * borrows_units / (borrows_units + cash_units)

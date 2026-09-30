@@ -36,7 +36,7 @@ not copied from the article's count.
 |---|---|
 | Incident | Unauthorized withdrawals drained named Coinsbuy hot wallets on Ethereum and Tron within under an hour; Coinsbuy's own statement confirms the incident and reimburses users from its own reserves, but withholds the root-cause mechanism |
 | Window | 2026-08-09, roughly 12:43-18:09 UTC on the Tron leg (first inbound sweep to last outbound forward); the one independently-confirmed Ethereum transfer lands at 13:19:23 UTC |
-| Press figure | rekt.news: "$8.07 million across two blockchains" -- 6,037,005 USDT (Tron) + 210.8 ETH via FixedFloat + 150 ETH via ChangeNOW; DefiLlama tracks this incident as "Coinsbuy", $7,900,000, "Access Control" / "Improper Access Control", dated 2026-08-09 |
+| Press figure | rekt.news: "$8.07 million across two blockchains", 6,037,005 USDT (Tron) + 210.8 ETH via FixedFloat + 150 ETH via ChangeNOW; DefiLlama tracks this incident as "Coinsbuy", $7,900,000, "Access Control" / "Improper Access Control", dated 2026-08-09 |
 | Verified independently | The full Tron leg, live-summed to the cent (6,037,005.00 USDT); one direct 77 ETH Ethereum transfer, confirmed via raw JSON-RPC on 2 independent endpoints, plus its receipt status and block timestamp; a representative Tron transaction, cross-checked via TronGrid's raw transaction-info endpoint independently of the transfer-list endpoint used for the sum; Coinsbuy's own official statement, fetched live, confirms the date, the reimbursement, and that no technical detail was disclosed |
 | Not independently confirmed | The root-cause mechanism (Coinsbuy discloses none); the remaining ~283.8 ETH of rekt.news's claimed Ethereum-side total, which this project traced only as far as an unlabeled intermediary address, not back to a specific named Coinsbuy wallet; whether the 7 additional Tron source addresses feeding the attacker's collector (beyond the one address rekt.news itself names) are Coinsbuy-controlled or victim/counterparty wallets |
 
@@ -67,9 +67,9 @@ a single CoinGecko historical-price lookup.
 3. **The named Ethereum hot wallet's public tag** ("Coinsbuy 1" /
    "Exchange") is confirmed live from Blockscout's community-maintained
    labels, a corroborating signal, not proof on its own.
-4. **The one transaction this project could fully, independently confirm**
-   -- 77 ETH from that tagged wallet straight to the attacker's named
-   Ethereum collector -- is re-fetched via raw `eth_getTransactionByHash`
+4. **The one transaction this project could fully, independently confirm**,
+   77 ETH from that tagged wallet straight to the attacker's named
+   Ethereum collector, is re-fetched via raw `eth_getTransactionByHash`
    / `eth_getTransactionReceipt` / `eth_getBlockByNumber` on 2 separate
    RPC endpoints, not assumed from an indexer.
 5. **The incident-day UTC block window is located live** via binary
@@ -117,7 +117,7 @@ address separately received 551 ETH that same day across 4 transfers
 from an unlabeled address
 (`0x66790b54b891e2ebdef58a15b969ff6fb4374b17`), which itself cycles
 through 1inch's router and dozens of single-use-looking destination
-addresses -- a pattern consistent with active cash-out laundering, and
+addresses, a pattern consistent with active cash-out laundering, and
 plausibly the path rekt.news's FixedFloat/ChangeNOW figures describe, but
 this project could not independently tie that intermediary address back
 to a specific named Coinsbuy wallet, so it is not counted in the total
@@ -172,7 +172,7 @@ attacker collector's live balance is checked the same way in
 - Tron leg (exact): 6,037,005.00 USDT = **$6,037,005.00**
 - Ethereum leg (exact, one transaction): 77 ETH x CoinGecko's 2026-08-09
   historical price ($1,915.45) = **$147,489.48**
-- **Combined floor: $6,184,494.48**, reported in the Index above as
+- **Combined floor: $6,184,494.48**, reported in `INDEX.md` as
   `≥ 6,184,494`.
 
 rekt.news's own total is $8.07 million; DefiLlama tracks $7,900,000. The
@@ -205,17 +205,19 @@ wallet.
   plausibly routes through the unlabeled intermediary address noted above,
   which received 551 ETH from elsewhere that same day and forwarded
   comparable amounts onward through what looks like an automated,
-  1inch-integrated cash-out flow -- but this project could not
+  1inch-integrated cash-out flow, but this project could not
   independently confirm that intermediary is Coinsbuy-attributable rather
   than a general-purpose swap bot the attacker merely used, so none of
   that 551 ETH is counted in this entry's loss figure.
 - **The Blockscout indexer scan for additional direct transfers (method
   step 6) is best-effort, not exhaustive, and did not complete on the run
   that produced this entry.** Blockscout's free public API rate-limited
-  all 3 per-wallet queries during this research round (a real, transient
-  infrastructure limit from heavy prior use this session, not a data
-  gap); `resultats_reconstruction_2026-09-11.txt` shows exactly this
-  (`Wallets successfully scanned this run: []`). The script is written to
+  all 3 per-wallet queries during the 2026-09-11 run (a transient
+  infrastructure limit, not a data gap);
+  `resultats_reconstruction_2026-09-11.txt` shows exactly this
+  (`Wallets successfully scanned this run: []`), so the "0 ETH" total
+  printed on that run means "not determined", not zero. The script now
+  prints "not determined" in that case. The script is written to
   report which wallets it actually managed to scan rather than fail
   silently or claim a completeness it doesn't have. This entry's "no
   other direct transfer found" claim is therefore limited to what raw
@@ -230,8 +232,7 @@ wallet.
   day as the confirmed drain, which this project treats as strong but not
   certain evidence they are part of the same incident.
 - Coinsbuy's own statements beyond its official-statement page exist only
-  on X, which is not independently fetchable from this project's tooling
-  (consistent with every other entry in this repo that has tried); this
+  on X, which could not be fetched directly for this entry; this
   entry relies on rekt.news's own account of what Coinsbuy and named
   investigators found, not on independently fetching Coinsbuy's X posts.
 - Whether any of the 7 unattributed Tron source addresses, or the

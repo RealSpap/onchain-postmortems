@@ -1,4 +1,4 @@
-ROTATING FIGURE-FRESHNESS RE-CHECK: 2026-09-19
+SOURCE RE-CHECK: 2026-09-19
 Entry: coldcard-rng-seed-theft
 
 1. DefiLlama, curl https://api.llama.fi/hacks, name == "COLDCARD", 2026-09-19:

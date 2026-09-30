@@ -8,7 +8,7 @@
   evidence_threshold  : 17
   relayers registered : 28
 
-=== Step 1b: why the FIRST attempt this round (a different Coreum-branded account) was a dead end ===
+=== Step 1b: why the FIRST attempt (a different Coreum-branded account) was a dead end ===
   rcoreNywaoz2ZCQ8Lg2EbSLnGuRBmun6D: disableMasterKey=True, RegularKey=rrrrrrrrrrrrrrrrrrrrBZbvji, OwnerCount=0
   Master key disabled, RegularKey is the null placeholder, and OwnerCount is 0 (no SignerList object exists): this account is structurally incapable of signing anything, let alone the 94 multisig-authorized payments press describes. It is a blackholed legacy token issuer, not the live bridge custody account. Confirms Step 1's bridge_xrpl_address was the right correction.
 

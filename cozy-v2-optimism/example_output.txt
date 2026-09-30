@@ -1,5 +1,5 @@
-~/Library/Python/3.9/lib/python/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
-  warnings.warn(
+Raw stdout of reconstruct_exploit.py (a urllib3/LibreSSL environment warning is omitted).
+
 Attacker: 0x003FE7359A4E03C85Ac2f521eC699ED84C7c5ccB
 Cash-out EOA (final destination of both claims): 0xeb2d41bcb3c3Be8Be5D74942Fa2deB601448E240
 Confirmed Cozy Set contract: 0x17705474203F7ff7ba8a940c433AB43D1F58E249

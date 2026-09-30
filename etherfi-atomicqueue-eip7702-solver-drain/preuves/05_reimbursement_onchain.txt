@@ -1,4 +1,4 @@
-ether.fi AtomicQueue exploit — on-chain reimbursement of all 11 victims
+ether.fi AtomicQueue exploit: on-chain reimbursement of all 11 victims
 press (CryptoTimes, 2026-09-11) reported only the CEO's *pledge* to reimburse and noted
 "formal post-mortem documentation with transaction hashes remained outstanding at publication".
 the reimbursement had in fact already executed on-chain ~9 hours after the exploit.

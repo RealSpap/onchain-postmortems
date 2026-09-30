@@ -121,4 +121,4 @@ CoinGecko ETH price on 2026-09-05: $2456.0850663649
   api.llama.fi/hacks: name='Secured Finance Lending' date=2026-09-05 amount=$104,000 classification=Oracle Manipulation technique=Spot Price Manipulation source=''
   this reconstruction's $45,444.97 is 0.44x DefiLlama's tracked $104,000 -- an unreconciled gap, see README Caveats
 
-See README.md for the full reconstruction, the DepositManagementLogic.sol root-cause citation, and every caveat (the DefiLlama gap above all).
+See README.md for the full reconstruction, the root-cause note, and every caveat (the DefiLlama gap above all).

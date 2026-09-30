@@ -184,8 +184,8 @@ minter role to mint`.
 ## Caveats
 
 **The role findings are closed, the pause is not.** The reconstruction was
-first run at head block 26025495, 2026-09-20 22:09:35 UTC to 2026-09-21
-11:09:35 UTC, and re-run at head block 26048064, 2026-09-24. The role
+first run at head block 26025495 (about 2026-09-21 11:09 UTC, 73 minutes
+before the MINTER_ROLE revocation at block 26025859, 12:22:59 UTC), and re-run at head block 26048064, 2026-09-24. The role
 revocations are settled history and cannot change. The pause itself is
 still live state: NTX is paused at head and could be unpaused by the new
 admin at any time. Re-run the script before relying on that one.
@@ -209,11 +209,7 @@ stated, because they are a single swap of a single confirmed transfer.
 
 **Attribution beyond the calldata is not claimed.** This entry says which
 addresses called what and where the funds went. It does not assert who
-controls those addresses. In particular, the 9,083,551.540618 NTX that
-reached the cash-out wallet at 20:42:47 UTC came from
-`0xa7a31d206042b8a3e81aa4cf8c68c1b76856ee48`, the address that was the NuNet
-conversion manager's owner before the incident, and that fact is recorded
-here without an inference attached to it.
+controls those addresses.
 
 **DefiLlama's two dollar figures are not re-derived.** $1,530,000 and
 $462,730 are its own valuations. This entry checks that the records exist,

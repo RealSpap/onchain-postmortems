@@ -12,12 +12,12 @@ signed real payouts, against evidence that was itself fake.
 
 This reconstruction does not start from the account press names. It starts
 from the bridge's OWN smart contract on Coreum's mainnet, queried live, which
-is what actually names the correct XRPL custody address -- a necessary step,
-because a first attempt this round anchored on a different, also
+is what actually names the correct XRPL custody address, a necessary step,
+because a first attempt anchored on a different, also
 XRPSCAN-verified "Coreum"-branded XRPL account and hit a real dead end (see
-Method and Caveats). Every material figure below -- the drained amount, the
+Method and Caveats). Every material figure below (the drained amount, the
 per-attacker split, the 97-minute window, and the forged-memo mechanism
-itself -- is then independently re-derived from raw XRP Ledger data, cross-
+itself) is then independently re-derived from raw XRP Ledger data, cross-
 checked against a direct ledger-snapshot balance comparison that does not
 depend on any transaction-list indexer's completeness at all.
 
@@ -29,7 +29,7 @@ depend on any transaction-list indexer's completeness at all.
 | Window | 2026-08-09, first attacker probe 19:16:42 UTC, first real drain 19:26:30 UTC, last real drain 20:53:50 UTC (94 payments, ~97 minutes end to end) |
 | Press figure | CoinDesk / Decrypt: "nearly 200,000 XRP... ~199,916 XRP... bridge's reserve fell from ~200,410 XRP to just 493.5 XRP"; DefiLlama tracks this as "Coreum Bridge", $200,000, "Bridge & Cross-Chain" / "Bridge Logic Flaw" |
 | Verified independently | The bridge's own XRPL custody address and its 17-of-28 relayer threshold, read live from the bridge contract's own config on Coreum mainnet; the exact 199,916.334320 XRP balance reduction, from a direct before/after ledger-snapshot comparison; the 94-payment, 2-destination breakdown (107,397.5 / 92,518.8 XRP, matching press to the exact XRP); the 17-signer multisig on every payout; the forged-deposit mechanism itself, decoded from one transaction's own raw memo bytes |
-| Not independently confirmed | Downstream laundering (press: ETH via THORChain to Tornado Cash) -- not re-traced this round; no dedicated Coreum/TX blog postmortem was fetchable (docs.tx.org returned HTTP 403) |
+| Not independently confirmed | Downstream laundering (press: ETH via THORChain to Tornado Cash), not re-traced here; no dedicated Coreum/TX blog postmortem was fetchable (docs.tx.org returned HTTP 403) |
 
 ## The method
 
@@ -50,13 +50,13 @@ value. Every number below is read live from Coreum's own mainnet LCD
 2. **That contract's OWN live config** (a CosmWasm smart-query,
    `{"config":{}}`, against Coreum's public LCD) names
    `bridge_xrpl_address`, `bridge_state`, `evidence_threshold`, and the
-   full list of 28 registered relayers -- the bridge's own primary source,
+   full list of 28 registered relayers, the bridge's own primary source,
    not a press paraphrase.
-3. **Why the first attempt this round was a dead end**: a different,
+3. **Why the first attempt was a dead end**: a different,
    independently XRPSCAN-verified "Coreum"/"Issuer" account
    (`rcoreNywaoz2ZCQ8Lg2EbSLnGuRBmun6D`) is checked live and shown to be
    blackholed (master key disabled, null `RegularKey`, zero owned ledger
-   objects -- no `SignerList` at all), structurally incapable of signing
+   objects, no `SignerList` at all), structurally incapable of signing
    the 94 multisig payments press describes. Querying the bridge CONTRACT
    itself (step 2), not a plausible-looking vanity address, is what
    actually resolves this.
@@ -65,14 +65,14 @@ value. Every number below is read live from Coreum's own mainnet LCD
 5. **A direct ledger-snapshot ground truth**: `account_info` for the
    bridge's own XRP balance is queried at the ledger index bracketing the
    window's start and end. The difference is cryptographically committed
-   in each ledger's own `AccountRoot` state -- true regardless of whether
+   in each ledger's own `AccountRoot` state, true regardless of whether
    any transaction-list indexer is complete.
 6. **`account_tx` is fetched and retried against that ground truth.** This
    project found the public `account_tx` endpoint genuinely unreliable
-   within this session: 4 separate fetches of the identical ledger range
+   during this research: 4 separate fetches of the identical ledger range
    returned 4112, 4000, 4111, and 4088 raw records (see Caveats). Rather
    than trust any single fetch, the script retries until the resulting
-   balance-changing subset sums to exactly the step-5 ground truth --
+   balance-changing subset sums to exactly the step-5 ground truth,
    which it did, on the first attempt, on the run that produced this
    entry.
 7. **The 94 real payments are summed independently by destination**, and
@@ -103,21 +103,21 @@ CoreumFoundation's own token registry) live returns:
 
 This matches press's own "17 of 28 relayer keys" description exactly, from
 the contract's own live state, independent of any article. A different,
-also-plausible XRPL account tried first this round
+also-plausible XRPL account tried first
 (`rcoreNywaoz2ZCQ8Lg2EbSLnGuRBmun6D`, tagged "Coreum" / "Issuer" and
 verified on XRPSCAN) turned out to be a blackholed legacy issuer: master
 key disabled, `RegularKey` set to the null placeholder
 (`rrrrrrrrrrrrrrrrrrrrBZbvji`), and zero owned ledger objects, meaning no
 `SignerList` exists on it at all. That account's balance has sat flat at
-472.89 XRP for the entire year sampled -- it cannot have signed anything,
+472.89 XRP for the entire year sampled; it cannot have signed anything,
 let alone 94 multisig payments. It is a real, verified Coreum-branded
 address; it is simply not the bridge.
 
 ### The drain, confirmed twice over
 
 A direct comparison of the bridge's own XRP balance at the ledger closest
-to 2026-08-09 19:00 UTC against the ledger closest to 21:30 UTC --
-independent of any transaction list -- gives:
+to 2026-08-09 19:00 UTC against the ledger closest to 21:30 UTC,
+independent of any transaction list, gives:
 
 | | |
 |---|---|
@@ -140,9 +140,13 @@ Both the destination split and the total match press's own "~107,397.5 and
 ~92,518.8 XRP respectively" and "199,916.3 XRP" figures to the exact XRP.
 Every one of the 94 payments carries exactly 17 `Signers`, matching the
 contract's own `evidence_threshold`. The first real drain lands at
-19:26:30 UTC and the last at 20:53:50 UTC (87.3 minutes); counting from the
-first attacker probe transaction at 19:16:42 UTC to the last drain gives
-97.1 minutes, matching press's "94 payments... 97 minutes" almost exactly.
+19:26:30 UTC and the last at 20:53:50 UTC (87.3 minutes). The first
+fee-only transaction on the bridge's own account in the window, at 19:16:42
+UTC, is necessarily signed by the bridge itself (multisig probe or setup
+traffic, not an attacker transfer); counting from it to the last drain gives
+97.1 minutes, close to press's "94 payments... 97 minutes". The time of the
+forged-memo transfer below was not printed on the run that produced this
+entry (the script now prints it).
 
 ### The mechanism, decoded from the attacker's own memo
 
@@ -153,7 +157,7 @@ window carries a memo whose raw hex bytes decode to:
 {"type":"coreumbridge-xrpl-v1","coreum_recipient":"core1e7y6qwktg7l6ajr8e2eal5j4dnc2jyceftnjce"}
 ```
 
-That is the bridge's own real deposit-tag format -- attached to a transfer
+That is the bridge's own real deposit-tag format, attached to a transfer
 of 100 units of `coreum7c8eb29e07`, a currency the bridge itself already
 issues (an XRPL-side wrapped-token IOU), sent from one attacker wallet to
 the other and never touching the bridge's own reserve address at all. This
@@ -166,7 +170,7 @@ currency moved, not on whether XRP was actually paid to the bridge.
 As of this reconstruction, the contract's own live config still reports
 `bridge_state: halted`, and the reserve account's balance
 (763.543911 XRP) sits only a little above the immediate post-drain
-493.544224 XRP -- some small residual inflow since the halt, nowhere near
+493.544224 XRP, some small residual inflow since the halt, nowhere near
 restored.
 
 ### The independently-confirmed total
@@ -174,9 +178,9 @@ restored.
 199,916.3 XRP x CoinGecko's 2026-08-09 historical XRP/USD price
 ($1.0389339261257766) = **$207,699.83**, about 3.8% above DefiLlama's own
 tracked $200,000 for this incident. That gap is ordinary daily-price/
-headline-rounding variance, not a mechanism or classification error --
+headline-rounding variance, not a mechanism or classification error:
 DefiLlama's own "Bridge & Cross-Chain" / "Bridge Logic Flaw" tag already
-matches what this reconstruction independently found -- so this entry is
+matches what this reconstruction independently found, so this entry is
 not listed under Corrections to press and DefiLlama below.
 
 ## Caveats
@@ -185,10 +189,10 @@ not listed under Corrections to press and DefiLlama below.
   affiliated with Coreum, TX (the rebranded Coreum/Sologenic brand),
   CoinDesk, Decrypt, or DefiLlama.
 - **`account_tx` against the public `s2.ripple.com` endpoint proved
-  genuinely unreliable within this session.** Four separate fetches of the
+  genuinely unreliable during this research.** Four separate fetches of the
   identical 2026-08-09 19:00-21:30 UTC ledger range for the bridge account
-  returned 4112, 4000, 4111, and 4088 raw transaction records respectively
-  -- none of that variance touched the bridge's own XRP balance itself
+  returned 4112, 4000, 4111, and 4088 raw transaction records respectively;
+  none of that variance touched the bridge's own XRP balance itself
   (it is noise from other users' trust-line and DEX-path activity on this
   heavily-used, multi-currency-issuing account), but it meant a single
   `account_tx` fetch could not be trusted on its own. `reconstruct_exploit.py`
@@ -201,12 +205,12 @@ not listed under Corrections to press and DefiLlama below.
   (Decrypt) states the stolen XRP was converted to ETH, moved through
   THORChain, and sent to Tornado Cash. This project did not independently
   trace the two attacker XRPL addresses onward into a THORChain swap or an
-  Ethereum-side Tornado Cash deposit this round; that claim is reported as
+  Ethereum-side Tornado Cash deposit; that claim is reported as
   sourced from press, not independently verified here.
 - **No official Coreum/TX blog postmortem was fetchable.** `docs.tx.org`
-  returned HTTP 403 to this project's tooling, and the public
+  returned HTTP 403 to direct requests, and the public
   `coreumbridge-xrpl` GitHub repo's own commit and release history shows
-  no activity since 2025-09-10, over a year before this incident -- so no
+  no activity since 2025-09-10, over a year before this incident, so no
   patched, post-incident version of the relayer code was checked. This
   entry's sourcing rests on CoinDesk's and Decrypt's own published
   articles (mainstream outlets, both independently fetched live) plus this

@@ -44,7 +44,7 @@ python3 reconstruct_exploit.py
 ```
 
 RPC endpoints used: `https://rpc.tac.build` (TAC), `https://evm.archive.mantrachain.io`
-(MANTRA, archive node - MANTRA's regular RPC prunes history past a few
+(MANTRA archive node; MANTRA's regular RPC prunes history past a few
 thousand blocks), and `https://json-rpc.kiivalidator.com` (KiiChain).
 
 The `bonded_tokens_pool` address used on TAC is not looked up anywhere: it
@@ -58,7 +58,7 @@ regardless of denom, decimals, or chain ID.
 
 Cosmos Labs' post-mortem states TAC's `bonded_tokens_pool` lost
 2,985,651,403.40 TAC at block 24662148. This project computed that pool's
-address independently (it is not chain-specific - see above), queried its
+address independently (it is not chain-specific, see above), queried its
 balance on TAC's own public RPC at the block immediately before and at the
 exploit block itself, and found: 2,985,651,403.404713 TAC before, exactly
 0 TAC after. That matches the post-mortem's figure to the two decimal
@@ -108,25 +108,25 @@ post-mortem itself gets wrong. Cosmos Labs' document reads: "KiiChain is
 exploited via the identified vulnerability (tx `0xf45c07e94a4d4474220c96b1fff5f798bf22f4a4adf159d8f3e28c52caf1e840`,
 block 9355102)." Fetching that exact transaction hash from KiiChain's own RPC,
 by two independent methods (`eth_getTransactionReceipt` and
-`eth_getTransactionByHash`), returns block **9355107**, not 9355102 - a
+`eth_getTransactionByHash`), returns block **9355107**, not 9355102, a
 five-block, roughly eleven-second gap. This is not fixable by rounding:
 block 9355102 is a real, populated block, five blocks earlier, containing
 a *different* transaction entirely.
 
-That other transaction - `0xaf0ac52bbef9996ef0c22a93cba5f55a71de79d1799175c6d8bcc35988d7ae9b`,
-genuinely at block 9355102 - is the one that actually matches the
+That other transaction, `0xaf0ac52bbef9996ef0c22a93cba5f55a71de79d1799175c6d8bcc35988d7ae9b`,
+genuinely at block 9355102, is the one that actually matches the
 mechanism the post-mortem describes: it carries a log at the staking
 precompile address (`0x0000000000000000000000000000000000000800`), the
 same event signature (`topic0`) seen on both the TAC and MANTRA exploit
 transactions, decoding to a delegation of exactly
-2,000,000,000,000,000,001 akii - 2 KII plus 1 wei. That is the same "2 KII
+2,000,000,000,000,000,001 akii (2 KII plus 1 wei). That is the same "2 KII
 + 1 wei" delegate pattern rekt.news documented independently (by different
 means) for a different one of KiiChain's 18 repeated exploit iterations.
 
 The transaction the post-mortem actually cites by hash
 (really at block 9355107, not 9355102) carries **zero** event logs and
 calls a helper contract with function selector `0x01681a62` and the
-attacker's own address as its sole parameter - consistent with a
+attacker's own address as its sole parameter, consistent with a
 downstream "sweep to attacker" call, not the underflow-triggering
 delegation itself. In short: Cosmos Labs' own post-mortem paired the right
 block number with the wrong transaction hash for its single KiiChain
@@ -141,7 +141,7 @@ KiiChain ($9.7M, the only one of the three without a registered
 `defillamaId`). Summed, that is $17.2M for three of the six chains Cosmos
 Labs says were exploited. Cosmos Labs' own post-mortem states a combined
 realized total, across **all six** chains, of only about $5.72M (2.87M
-sold on DEXes + 2.85M sold on centralized exchanges) - explicitly flagged
+sold on DEXes + 2.85M sold on centralized exchanges), explicitly flagged
 by Cosmos Labs itself as "not independently audited."
 
 Dividing each DefiLlama dollar figure by the *full* amount extracted on
@@ -149,13 +149,13 @@ that chain gives an implied price of $0.0654/KII and $0.00251/TAC.
 Dividing the post-mortem's own cited swap outputs (1,607,323.41 USDT for
 64.6M KII sold via PancakeSwap; roughly $1,005,293 for about 1.2085B TAC
 sold via KyberSwap plus a smaller STON.fi leg) by the amount actually sold
-gives a realized price of $0.0249/KII and $0.00083/TAC - 2.6x and 3.0x
+gives a realized price of $0.0249/KII and $0.00083/TAC, 2.6x and 3.0x
 lower, respectively. DefiLlama's figures track much closer to the full
 amount an attacker *extracted* than to what the post-mortem says was
 actually turned into stablecoins. This project could not trace DefiLlama's
 exact price source (its own `source` field is empty for all three rows),
 so this is reported as a directional finding, not a reproduction of
-DefiLlama's exact arithmetic - see `registre_hypotheses.csv` H10.
+DefiLlama's exact arithmetic (see `registre_hypotheses.csv` H10).
 
 MANTRA's own DefiLlama row, meanwhile, shows $0, even though the
 widely-reported $3.6M figure is independently plausible from this
@@ -174,11 +174,11 @@ nothing at all for the third.
   the loss figure in the root README's index is marked as a floor (≥) for
   this reason, and because the $5.72M total this entry leans on is itself
   "not independently audited" per its own source.
-- The $0.006/OM and $0.0654/KII / $0.00251/TAC price points in this
+- The ~$0.0050/OM and $0.0654/KII / $0.00251/TAC price points in this
   README are implied prices solved backward from other reported dollar
   figures, not independently sourced historical price-feed lookups. They
   are reported as order-of-magnitude cross-checks, explicitly flagged as
-  weaker evidence in `registre_hypotheses.csv` (confidence "Moyenne"),
+  weaker evidence in `registre_hypotheses.csv` (confidence "Medium"),
   not as confirmed facts.
 - The KiiChain tx-hash/block mismatch found here is about Cosmos Labs' own
   document, not about the underlying facts of the exploit: the actual
@@ -199,4 +199,4 @@ nothing at all for the third.
 
 MIT
 
-<!-- source externe: https://github.com/cosmos/security/blob/main/communications/cosmos_evm_GHSA-7g4w-cg88-2cq2_post_mortem.md -->
+<!-- external source: https://github.com/cosmos/security/blob/main/communications/cosmos_evm_GHSA-7g4w-cg88-2cq2_post_mortem.md -->

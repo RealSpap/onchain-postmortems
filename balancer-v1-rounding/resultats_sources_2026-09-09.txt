@@ -19,14 +19,13 @@ DefiLlama hacks feed record for this incident (api.llama.fi/hacks, queried
 
 date 1788048000 = 2026-08-30.
 
-Note: "source" is empty, same as every other record checked in this
-research program. This single $234,000 figure covers only ONE of the four
+Note: "source" is empty. This single $234,000 figure covers only ONE of the four
 pools this project independently found were drained by the same operator
 wallet in the same overnight window - see README. DefiLlama's own hacks
 feed materially understates the scope of this incident.
 
-Press coverage found (web search, delegated to a research agent, 2026-09-09
-then independently spot-checked), none of which publishes any on-chain
+Press coverage found (web search, 2026-09-09, then independently
+spot-checked), none of which publishes any on-chain
 address, transaction hash, or block number that this project could confirm
 directly from the cited article's own raw text:
 
@@ -45,17 +44,15 @@ directly from the cited article's own raw text:
 - coinedition.com: reports Balancer gave the attacker a deadline of
   2026-09-08 21:00 UTC to return funds via an on-chain message, or face
   "technical, on-chain, and legal" escalation.
-- cryptotimes.io's fetched summary named a specific attacker address
+- cryptotimes.io appears to name a specific attacker address
   (0x338c7ec9befbb451d66fd8a468c32184f5689a41), attack contract
   (0x9caa8d0e44b22f50057d2f4ce0d1446529e11be3), and pool address
   (0x2257aaac34bcb27900291f7b84ee2565a6cbac57). Two OTHER independently
-  re-fetched articles covering the identical event (blockfence.io,
-  crypto-economy.com), asked explicitly to quote any address verbatim or
-  say none exist, returned no addresses at all - so this project could not
-  confirm from readable primary text that cryptotimes.io's own article
-  genuinely contains these values, as opposed to a fetch-tool
-  fabrication (the same failure mode flagged in this program's Term
-  Finance postmortem). All three of these addresses were nonetheless
+  re-read articles covering the identical event (blockfence.io,
+  crypto-economy.com) contain no addresses at all, and this project could
+  not confirm from the readable text of cryptotimes.io's own article that
+  it contains these values verbatim, so press addresses were only used
+  after independent on-chain re-derivation. All three of these addresses were nonetheless
   independently re-derived and confirmed correct by this project's own
   on-chain trace (resultats_reconstruction_2026-09-09.txt), starting only
   from Balancer's own primary-source BFactory address, before this

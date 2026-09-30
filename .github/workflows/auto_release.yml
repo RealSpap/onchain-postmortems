@@ -1,83 +1,82 @@
-name: Auto Release
+name: Release new incidents
+
+# Runs only after the consistency check has passed on a push to main.
+# Creates a release only when new incident folders were added since the
+# previous release, and at most one release per day: incidents added later
+# the same day are included in the next release.
 
 on:
-  push:
+  workflow_run:
+    workflows: ["Check README self-consistency"]
+    types: [completed]
     branches: [main]
   workflow_dispatch: {}
 
-permissions:
-  contents: write
+permissions: {}
 
 jobs:
   release:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.workflow_run.conclusion == 'success' &&
+       github.event.workflow_run.event == 'push')
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v4
+      - name: Check out the commit that passed the check
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
         with:
-          fetch-depth: 1
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
 
-      - name: Decide whether this push is a research pass
-        id: gate
-        run: |
-          SUBJECT="$(git log -1 --format=%s)"
-          echo "Commit subject: $SUBJECT"
-          SKIP=false
-          # Bot/state-only automation commits (e.g. "chore(monitor): update
-          # signer-monitor state") are not a research pass, skip those.
-          if printf '%s' "$SUBJECT" | grep -Eqi '^(chore|ci|bot|build)(\([^)]*\))?:.*(monitor|signer|heartbeat|state|status)'; then
-            SKIP=true
-          fi
-          # Merge commits carry no research content of their own.
-          if printf '%s' "$SUBJECT" | grep -Eqi '^merge (pull request|branch)'; then
-            SKIP=true
-          fi
-          echo "skip=$SKIP" >> "$GITHUB_OUTPUT"
-
-      - name: Build release title and body
-        if: steps.gate.outputs.skip != 'true'
-        id: build
-        run: |
-          SHORT_SHA="$(git rev-parse --short HEAD)"
-          DATE_UTC="$(date -u +%Y-%m-%d)"
-          TAG="pass-${DATE_UTC}-${SHORT_SHA}"
-          TITLE="$(git log -1 --format=%s)"
-
-          BODY_FILE="${RUNNER_TEMP}/release_body.txt"
-          git log -1 --format=%b > "$BODY_FILE"
-
-          # Drop attribution trailers, they aren't reader-facing release
-          # content, matching how CHANGELOG.md entries already read.
-          sed -i '/^Co-Authored-By:/d' "$BODY_FILE"
-
-          # Trim leading and trailing blank lines left behind.
-          sed -i '/./,$!d' "$BODY_FILE"
-          sed -i -e :a -e '/^\n*$/{$d;N;};/\n$/ba' "$BODY_FILE"
-
-          # Some commits (small doc tweaks) have no body at all; fall back
-          # to the subject line so the release never ships an empty body.
-          if ! grep -q '[^[:space:]]' "$BODY_FILE"; then
-            printf '%s\n' "$TITLE" > "$BODY_FILE"
-          fi
-
-          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
-          echo "title=$TITLE" >> "$GITHUB_OUTPUT"
-          echo "body_file=$BODY_FILE" >> "$GITHUB_OUTPUT"
-
-      - name: Create GitHub Release
-        if: steps.gate.outputs.skip != 'true'
+      - name: Create a release for new incidents
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          REL_TAG: ${{ steps.build.outputs.tag }}
-          REL_TITLE: ${{ steps.build.outputs.title }}
-          REL_BODY_FILE: ${{ steps.build.outputs.body_file }}
-          REL_TARGET: ${{ github.sha }}
+          GH_REPO: ${{ github.repository }}
         run: |
-          if gh release view "$REL_TAG" >/dev/null 2>&1; then
-            echo "Release $REL_TAG already exists for this commit, skipping."
+          set -euo pipefail
+          HEAD_SHA="$(git rev-parse HEAD)"
+          TODAY="$(date -u +%Y-%m-%d)"
+
+          LAST_TAG="$(gh release list --limit 1 --json tagName --jq '.[0].tagName // ""')"
+          LAST_DATE="$(gh release list --limit 1 --json createdAt --jq '.[0].createdAt // ""' | cut -c1-10)"
+          if [ "$LAST_DATE" = "$TODAY" ]; then
+            echo "A release already exists today; later additions go in the next one."
             exit 0
           fi
-          gh release create "$REL_TAG" \
+
+          if [ -n "$LAST_TAG" ] && git rev-parse -q --verify "refs/tags/$LAST_TAG^{commit}" >/dev/null; then
+            BASE="$LAST_TAG"
+          else
+            BASE="$(git rev-parse HEAD^)"
+          fi
+
+          NEW="$(git diff --name-only --diff-filter=A "$BASE" "$HEAD_SHA" \
+                 | grep -E '^[^./][^/]*/README\.md$' | cut -d/ -f1 | sort -u || true)"
+          if [ -z "$NEW" ]; then
+            echo "No new incident folder since $BASE; no release."
+            exit 0
+          fi
+
+          NOTES="${RUNNER_TEMP}/notes.md"
+          : > "$NOTES"
+          COUNT=0
+          for SLUG in $NEW; do
+            TITLE="$(head -n 1 "$SLUG/README.md" | sed -e 's/^#* *//')"
+            printf -- '- [%s](https://github.com/%s/tree/main/%s/)\n' "$TITLE" "$GH_REPO" "$SLUG" >> "$NOTES"
+            COUNT=$((COUNT + 1))
+          done
+          printf '\nFull index: https://github.com/%s/blob/main/INDEX.md\n' "$GH_REPO" >> "$NOTES"
+
+          if [ "$COUNT" -eq 1 ]; then
+            REL_TITLE="$TITLE"
+          else
+            REL_TITLE="$COUNT new incidents, $TODAY"
+          fi
+
+          gh release create "incidents-$TODAY" \
             --title "$REL_TITLE" \
-            --notes-file "$REL_BODY_FILE" \
-            --target "$REL_TARGET"
+            --notes-file "$NOTES" \
+            --target "$HEAD_SHA"

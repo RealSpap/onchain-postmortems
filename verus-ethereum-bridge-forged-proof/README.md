@@ -186,7 +186,7 @@ consolidation to a total, for the reasons in Caveats below.
   before landing as ETH in the loot wallet, and fully and correctly
   reconstructing that consolidation (avoiding double-counting swap legs,
   correctly attributing DEX fees/slippage) was judged to need more
-  verification than this round's time allowed. DefiLlama's own tracked
+  verification than was done for this entry. DefiLlama's own tracked
   figure for that date ($7,530,000) is reported above as sourced, not
   independently re-derived.
 - The DAI amount in the second exploit's table (`220,357,027,072,980,000,

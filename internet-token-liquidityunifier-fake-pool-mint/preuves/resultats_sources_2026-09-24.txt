@@ -1,7 +1,7 @@
-SOURCES ET IDENTITE DES CONTRATS
-lecture du 2026-09-24T17:19:09.837129Z
+SOURCES AND CONTRACT IDENTITY
+read on 2026-09-24T17:19:09.837129Z
 
---- 1. la fiche DefiLlama, brute ---
+--- 1. the DefiLlama record, raw ---
   source : https://api.llama.fi/hacks
     amount             16380
     bridgeHack         False
@@ -15,20 +15,20 @@ lecture du 2026-09-24T17:19:09.837129Z
     source             ''
     targetType         'Token'
     technique          'Arbitrary External Call'
-    date lisible      : 2026-09-21T00:00:00Z
-  le champ source est vide : DefiLlama ne renvoie vers aucun lien d'incident.
+    readable date      : 2026-09-21T00:00:00Z
+  the source field is empty: DefiLlama links to no incident report.
 
---- 2. identite des contrats, par les sources verifiees de Blockscout Base ---
-    (endpoint : https://base.blockscout.com/api/v2/smart-contracts/<adresse>)
-  0x968d6a288d7b024d5012c0b25d67a889e4e3ec19  RewardToken                  verifie=True  le jeton INT lui-meme
-  0x837dbabc4f5fa78baf177597edbda09645822032  LiquidityUnifier             verifie=True  le contrat exploite
-  0x6b82fdfc0344bd76d5cb58bc24d0ffe947975516  Convertor                    verifie=True  le contrat qui rend l'exploitation payante
-  0xd5d1a16084a116f8a6c2c706c110dbad2e99be83  RoleStore                    verifie=True  le registre de roles
-  0x1d34e08120dbd1ea9bdbcd90c2dc919b50ddff4c  OptimismMintableERC20        verifie=True  l'ancien jeton INT ponte
-  0x71c51c4ae1d76f262339593f01b9085d44fb2d98  TradeFeeCallback             verifie=True  un callback de transfert, PAS le contrat exploite
-  0xfd5bbca6942ac19c6ce7a65b11f3521237172079  AllowListCallback            verifie=True  un autre callback de transfert
+--- 2. contract identity, from Blockscout Base's verified sources ---
+    (endpoint: https://base.blockscout.com/api/v2/smart-contracts/<address>)
+  0x968d6a288d7b024d5012c0b25d67a889e4e3ec19  RewardToken                  verified=True  the INT token itself
+  0x837dbabc4f5fa78baf177597edbda09645822032  LiquidityUnifier             verified=True  the exploited contract
+  0x6b82fdfc0344bd76d5cb58bc24d0ffe947975516  Convertor                    verified=True  the contract that makes the exploit pay
+  0xd5d1a16084a116f8a6c2c706c110dbad2e99be83  RoleStore                    verified=True  the role registry
+  0x1d34e08120dbd1ea9bdbcd90c2dc919b50ddff4c  OptimismMintableERC20        verified=True  the legacy bridged INT token
+  0x71c51c4ae1d76f262339593f01b9085d44fb2d98  TradeFeeCallback             verified=True  a transfer callback, NOT the exploited contract
+  0xfd5bbca6942ac19c6ce7a65b11f3521237172079  AllowListCallback            verified=True  another transfer callback
 
---- 3. les selecteurs du chemin d'attaque, recalcules par keccak local ---
+--- 3. the attack path's selectors, recomputed with the local keccak ---
   0xd28e8f03  swapV3(address,address)
   0xfa461e33  uniswapV3SwapCallback(int256,int256,bytes)
   0x40c10f19  mint(address,uint256)
@@ -39,31 +39,31 @@ lecture du 2026-09-24T17:19:09.837129Z
   0x128acb08  swap(address,bool,int256,uint160,bytes)
   0x18160ddd  totalSupply()
   0x70a08231  balanceOf(address)
-  ces selecteurs sont ceux que l'on retrouve dans la trace callTracer de la
-  transaction 0xed62bb27..., ce qui identifie le chemin sans dependre d'un nom.
+  these selectors are the ones found in the callTracer trace of
+  transaction 0xed62bb27..., which identifies the path without relying on a name.
 
---- 4. couverture de presse lue APRES la reconstruction ---
-  Recherche web sur 'Internet Token Base exploit September 2026'. Les resumes
-  agreges renvoyes decrivent : un LiquidityUnifier qui fait confiance a une
-  adresse de pool fournie par l'appelant, un faux callback de pool qui minte
-  environ 925 millions d'INT, 5,847 WETH soit environ 16 033,55 $ sortis du
-  pool officiel INT/WETH, environ 764 millions d'INT gardes, un role de mint
-  non revoque a temps, des copieurs qui portent la supply a environ
-  156 milliards, et une proposition de gouvernance de l'attaquant visant la
-  tresorerie. Perte totale annoncee : environ 265 000 $.
-  Ce qui se verifie sur la chaine : le nom LiquidityUnifier, le pool fourni
-  par l'appelant, le montant du mint, le WETH sorti, l'INT garde, et le pic
-  de supply a 156 milliards (156 277 572 881 INT exactement).
-  Ce qui ne se verifie pas : la perte de 265 000 $ (le pool ne contenait que
-  5,847033390701967596 WETH en tout), et la proposition de gouvernance, que
-  cette entree n'affirme pas puisqu'elle ne l'a pas reconstruite.
-  Ce que la presse ne dit pas du tout : le mint seul ne rapporte rien, il est
-  annule par validateSupply et par _clearPool dans la meme transaction. Sans
-  le Convertor il n'y a pas d'exploitation. Une transaction le prouve :
-  0x0af9d052... a minte environ 2**224 wei et son delta de supply est nul.
+--- 4. press coverage read AFTER the reconstruction ---
+  Web search for 'Internet Token Base exploit September 2026'. The aggregated
+  summaries returned describe: a LiquidityUnifier that trusts a pool address
+  supplied by the caller, a fake pool callback that mints about
+  925 million INT, 5.847 WETH or about $16,033.55 taken out of the
+  official INT/WETH pool, about 764 million INT kept, a mint role
+  not revoked in time, copycats that push the supply to about
+  156 billion, and a governance proposal by the attacker targeting the
+  treasury. Total reported loss: about $265,000.
+  What checks out on-chain: the LiquidityUnifier name, the caller-supplied
+  pool, the mint amount, the WETH taken, the INT kept, and the supply peak
+  at 156 billion (156,277,572,881 INT exactly).
+  What does not check out: the $265,000 loss (the pool only held
+  5.847033390701967596 WETH in total), and the governance proposal, which
+  this entry does not assert since it did not reconstruct it.
+  What the press does not say at all: the mint alone yields nothing, it is
+  undone by validateSupply and by _clearPool in the same transaction. Without
+  the Convertor there is no exploit. One transaction proves it:
+  0x0af9d052... minted about 2**224 wei and its supply delta is zero.
 
---- 5. extraits verbatim de la source verifiee de LiquidityUnifier ---
-    0x837dbabc4f5fa78baf177597edbda09645822032, recopie tel quel depuis
+--- 5. verbatim extracts of LiquidityUnifier's verified source ---
+    0x837dbabc4f5fa78baf177597edbda09645822032, copied as-is from
     https://base.blockscout.com/api/v2/smart-contracts/0x837dbabc4f5fa78baf177597edbda09645822032
         modifier validateSupply() {
             uint256 supply = IERC20(rewardToken).totalSupply();
@@ -128,16 +128,16 @@ lecture du 2026-09-24T17:19:09.837129Z
                 revert("invalid pool");
             }
         }
-    (fin de l'extrait)
-    A retenir : swapV3 est external et ne porte aucun onlyRole. _validatePool
-    ne verifie que trois choses, dont aucune n'etablit qu'il s'agit d'un vrai
-    pool Uniswap V3 : adresse non nulle, code non vide, absence de la liste
-    d'exclusion. _validatePoolV3Tokens interroge le pool LUI-MEME. Le callback
-    ne verifie que msg.sender == currentPoolV3, que le faux pool satisfait par
-    construction, puis minte le delta que ce meme pool annonce. Aucun appel a
-    une factory Uniswap n'apparait dans le fichier.
+    (end of extract)
+    Key point: swapV3 is external and carries no onlyRole. _validatePool
+    checks only three things, none of which establishes that this is a real
+    Uniswap V3 pool: non-zero address, non-empty code, absence from the
+    exclusion list. _validatePoolV3Tokens queries the pool ITSELF. The callback
+    only checks msg.sender == currentPoolV3, which the fake pool satisfies by
+    construction, then mints the delta that same pool reports. No call to
+    a Uniswap factory appears in the file.
 
---- 6. la source verifiee de Convertor, en entier, 38 lignes ---
+--- 6. Convertor's verified source, in full, 38 lines ---
     0x6b82fdfc0344bd76d5cb58bc24d0ffe947975516
     contract Convertor is ReentrancyGuard {
         using SafeERC20 for IERC20;
@@ -169,7 +169,7 @@ lecture du 2026-09-24T17:19:09.837129Z
             revert("invalid from token");
         }
     }
-    (fin de l'extrait)
-    A retenir : convert est external et ne porte aucun modificateur de role.
-    Le contrat detient lui-meme TOKEN_MINTER et TOKEN_BURNER sur l'INT, donc
-    n'importe quel appelant peut faire l'aller-retour dans les deux sens.
+    (end of extract)
+    Key point: convert is external and carries no role modifier.
+    The contract itself holds TOKEN_MINTER and TOKEN_BURNER on INT, so
+    any caller can make the round trip in both directions.

@@ -1,4 +1,4 @@
-ether.fi AtomicQueue exploit — adversarial self-check
+ether.fi AtomicQueue exploit: adversarial self-check
 the reconstruction derives the loss two independent ways and asserts they reconcile:
 
   A) sum of Transfer logs from the 11 victims into the attacker's solver contract:

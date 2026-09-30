@@ -17,9 +17,9 @@ rather than simply repeated.
 | | |
 |---|---|
 | Incident | Permissionless `deployERC20()` plus a missing registry collision check in Gravity Bridge's Ethereum contract let an attacker register a fabricated Cosmos denom string embedding a real custody-token address, poisoning the bridge's token registry |
-| Window | 2026-05-30 01:52:35 UTC to 02:31:11 UTC (the 8 Ethereum transactions); Cosmos-side setup reported by rekt.news as starting weeks earlier with a minimal validator self-delegation |
+| Window | 2026-05-30 01:52:35 UTC to 02:31:11 UTC (the 8 Ethereum transactions); Cosmos-side setup (a minimal validator self-delegation, then fake-token minting on Osmosis) reported by rekt.news as laid before the first Ethereum withdrawal, with no date given |
 | Press figure | rekt.news / PeckShield: ~$5.4M ($4.3M USDC, $434K USDT, 274.34 WETH, 14.16 PAXG) |
-| Verified independently | Exact same 4 assets, to 6 decimals, read directly from the bridge contract's own `Transfer` and `TransactionBatchExecutedEvent` logs; total $5,397,931.45 at CoinGecko's theft-day prices, within 0.04% of DefiLlama's own tracked $5,400,000 |
+| Verified independently | Exact same 4 assets, to 6 decimals, read directly from the bridge contract's own `Transfer` and `TransactionBatchExecutedEvent` logs; total $5,397,931.45 at CoinGecko's daily prices dated 2026-05-29 (the 00:00 UTC snapshot, about a day before the drain), within 0.04% of DefiLlama's own tracked $5,400,000 |
 | A real correction | DefiLlama's own hacks feed classifies this "Key Compromise" / "Validator Key Compromised". Every validator signature on the 4 outgoing batches was genuine; the registry itself was poisoned via a permissionless function call with no collision check, not a compromised key |
 | What's still open | The Gravity Chain (Cosmos-side) validator-registration transaction and validator address rekt.news names could not be independently re-confirmed; see Caveats |
 
@@ -43,8 +43,8 @@ query to Osmosis's own tokenfactory module, independent of anything
 Ethereum-side.
 
 RPC endpoints used, all public, no key: `eth.drpc.org` (Ethereum),
-`rest.cosmos.directory/osmosis` (Osmosis LCD), `api.coingecko.com` (theft-day
-pricing), `api.llama.fi/hacks` (DefiLlama's own tracked record).
+`rest.cosmos.directory/osmosis` (Osmosis LCD), `api.coingecko.com` (daily
+pricing, 2026-05-29 snapshot), `api.llama.fi/hacks` (DefiLlama's own tracked record).
 
 ## What it found
 
@@ -133,9 +133,8 @@ May 29th". DefiLlama's own tracked date (2026-05-30) agrees with this
 project's on-chain reading rather than with the article's prose; this may
 simply be a timezone framing in the article rather than an outright date
 error (the same UTC window falls on the evening of May 29th in North
-American time zones), so it is reported here as a discrepancy, not
-asserted as a clear-cut mistake the way the Allbridge or MAYAChain
-entries in this repo report theirs.
+American time zones), so it is reported here as a note, not asserted as
+a mistake.
 
 ## Caveats
 
@@ -147,7 +146,7 @@ entries in this repo report theirs.
   Gravity Chain nodes (both live and synced, checked 2026-09-10), and the
   named validator address fails bech32 checksum validation on both. This
   is most likely public nodes not retaining tx history back to the
-  2026-06-25/07-17 window the article describes, or a transcription
+  pre-exploit setup the article describes (undated, before 2026-05-30), or a transcription
   artifact somewhere upstream of this project, not evidence the claim is
   false. It is reported as unconfirmed rather than silently repeated or
   silently dropped. See `resultats_sources_2026-09-10.txt` for the full

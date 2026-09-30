@@ -129,7 +129,7 @@ continues), with zero user funds lost, matching DefiLlama's own tracked
 $4,500,000 for "Across" (classification "Bridge & Cross-Chain", technique
 "Spoofed Event Log"), queried live here. Reconstructing all 581 filled
 deposits across 18 chains from raw logs was outside the scope of what
-this project could complete this round; what is independently confirmed
+this project could complete; what is independently confirmed
 above is the mechanism itself, one specific ~$4.1M forged deposit
 matching the incident's own scale, and (below) a fully re-derived, much
 smaller figure from a documented side-effect of the same incident. The

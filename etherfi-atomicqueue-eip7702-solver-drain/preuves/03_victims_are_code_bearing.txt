@@ -1,4 +1,4 @@
-ether.fi AtomicQueue exploit — every drained wallet has code (necessary for the solve() path)
+ether.fi AtomicQueue exploit: every drained wallet has code (necessary for the solve() path)
 solve() calls IAtomicSolver(solver).finishSolve(...), a high-level Solidity call that reverts on a
 code-less address, so only contracts / EIP-7702-delegated accounts can be named as `solver`.
 

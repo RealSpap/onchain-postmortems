@@ -1,4 +1,4 @@
-ether.fi AtomicQueue exploit — attacker cash-out to Tornado Cash
+ether.fi AtomicQueue exploit: attacker cash-out to Tornado Cash
 attacker EOA: 0xa5CC6e490Bce9185fA47b421f2EaC677A83B64Ea
 destination : 0xd90e2f925da726b50c4ed8d0fb90ad053324f31b (labelled 'TornadoRouter' on Blockscout)
 the attacker swapped the drained liquidETH/USDC to ETH inside the exploit tx (nonce 0),
@@ -18,4 +18,4 @@ nonce  time (UTC)             value ETH   to
   10  2026-09-11T07:27:23     0.1000  0xd90e2f925da726b50c4ed8d0fb90ad053324f31b
   11  2026-09-11T07:27:59     0.1000  0xd90e2f925da726b50c4ed8d0fb90ad053324f31b
 
-total sent to TornadoRouter: 15.5000 ETH (one 10, five 1, five 0.1) — matches press exactly.
+total sent to TornadoRouter: 15.5000 ETH (one 10, five 1, five 0.1), matches press exactly.

@@ -1,4 +1,4 @@
-=== Step 1: fetch Summer.fi's own post-mortem, raw HTML, not an AI paraphrase ===
+=== Step 1: fetch Summer.fi's own post-mortem, raw HTML, not a paraphrase ===
 fetched 52,438 bytes from https://blog.summer.fi/lazy-summer-usdc-vault-exploit-post-mortem-what-happened-and-what-comes-next/
   beneficiary EOA (regex-extracted from blog's own etherscan link): 0x7BF716167B48CF527725722C6d79494b45B3BDCa
   executor contract (regex-extracted from blog's own etherscan link): 0x0514F827C129C16418a0933E03C99A6AF982FC61
@@ -33,7 +33,7 @@ Both match the blog's own truncated hints (prefix+suffix) exactly.
 === Step 5: cross-confirm the HigherRisk vault a SECOND, independent way: ===
 Summer.fi's own GitHub governance-proposal JSON, same-day Safe batch
   GitHub proposal file: deployment/proposals/prod_remove_arks_phase1_sweep_mainnet_2026-07-06T13-45-17-049Z.json
-  meta.name: Remove arks — phase 1: sweep stuck assets
+  meta.name: Remove arks - phase 1: sweep stuck assets
   meta.description (first 140 chars): Recovers stuck receipt tokens from ark(s) 0xfD899321B1FD8d75e255119766D9097C98568519 to 0xB0F53Fc4e15301147de9b3e49C3DB942E3F118F2 via Raft....
   fleetCommanderAddress named in this governance JSON: 0xE9cDA459bED6dcfb8AC61CD8cE08E2D52370cB06
   MATCH: independently confirms the HigherRisk vault address via a completely

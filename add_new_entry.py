@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
 """
 Scaffold a new incident subfolder in onchain-postmortems and update
-INDEX.md's Index (year -> month grouped) and README.md's "at a glance"
-block plus its opening headline sentence to match.
+INDEX.md (year -> month grouped) and README.md's "At a glance" block plus
+its opening headline sentence to match.
 
-Inspired by SunWeb3Sec/DeFiHackLabs's add_new_entry.py, adapted for this
-repo's actual layout: one subfolder per incident, each holding a Python
+Inspired by SunWeb3Sec/DeFiHackLabs's add_new_entry.py, adapted to this
+repo's layout: one subfolder per incident, each holding a Python
 reconstruction script, a registre_hypotheses.csv falsification registry,
-and raw resultats_*.txt script output, rather than DeFiHackLabs's
-Foundry-POC-per-year layout.
+and raw resultats_*.txt script output.
 
 The Index groups incidents by year, then by month (the incident's primary,
 i.e. earliest, date if --date is a range), each month holding its own
@@ -21,12 +20,8 @@ with the table data. The script also keeps the "(current month)" label on
 whichever month is chronologically latest after the new incident is
 inserted.
 
-ADDED 2026-09-29: the Index moved out of README.md into INDEX.md (a
-compaction pass, README.md was 459 lines, half of it this table) -- this
-script now reads/writes INDEX.md for everything Index-shaped, and
-README.md only for "at a glance" + the headline sentence, in two separate
-file writes. It never touches CORRECTIONS.md or the "Corrections made"
-line, both stay a human judgment call.
+It never touches CORRECTIONS.md or the "Corrections made" line: both stay
+a human judgment call.
 
 Usage:
     python3 add_new_entry.py \\
@@ -44,6 +39,11 @@ you can actually source (the same situation as the Sandbox and Balancer V1
 entries already in this repo): the table then shows "≥" instead of "≈"
 and the combined-loss total is flagged as a floor, matching how those two
 existing entries are already handled.
+
+Use --loss-sourced when the dollar figure comes from the protocol's own
+post-mortem, press or DefiLlama and was not independently recomputed: the
+cell then carries "†", and the headline's recomputed share excludes it.
+Both flags can be combined ("≥ †").
 """
 import argparse
 import re
@@ -52,11 +52,6 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent
 README_PATH = REPO_ROOT / "README.md"
-# ADDED 2026-09-29: the Index (year/month tables + footnotes) moved out of
-# README.md into its own file, part of a compaction pass (README.md was 459
-# lines, half of it this table). This script now writes INDEX.md for
-# everything Index-shaped, and only touches README.md for the "At a glance"
-# block, which stays there.
 INDEX_PATH = REPO_ROOT / "INDEX.md"
 
 MONTH_NAMES = ["January", "February", "March", "April", "May", "June",
@@ -85,24 +80,21 @@ MONTH_SUBTOTAL_RE = re.compile(
     r"^\*\*(" + "|".join(MONTH_NAMES) + r") (\d{4}) subtotal: \$([\d,]+)\*\* across (\d+) incidents?\b(.*)$"
 )
 
-LOSS_NUM_RE = re.compile(r"([≈≥]?)\s*([\d][\d\s,]*)")
+LOSS_NUM_RE = re.compile(r"^\s*((?:[≈≥†]\s*)*)(\d[\d,]*(?:\.\d+)?)")
 
 
 def parse_loss_cell(cell: str):
-    """Returns (float_amount, is_floor) for sorting/summing a loss cell."""
-    m = LOSS_NUM_RE.search(cell)
+    """Returns (amount, is_floor, is_sourced) for a loss cell such as
+    '≥ † 675,000 [^sandbox]'. Exits instead of guessing: an unreadable cell
+    counted as 0 would silently lower every total."""
+    m = LOSS_NUM_RE.match(cell)
     if not m:
-        return 0.0, False
-    digits = m.group(2).replace(" ", "").replace(",", "")
-    try:
-        amount = float(digits)
-    except ValueError:
-        amount = 0.0
-    return amount, m.group(1) == "≥"
+        sys.exit(f"Unreadable Loss ($) cell in INDEX.md: {cell!r}")
+    return float(m.group(2).replace(",", "")), "≥" in m.group(1), "†" in m.group(1)
 
 
-def format_loss_cell(loss_usd: float, slug: str, partial: bool) -> str:
-    prefix = "≥" if partial else "≈"
+def format_loss_cell(loss_usd: float, slug: str, partial: bool, sourced: bool = False) -> str:
+    prefix = " ".join(s for s, on in (("≥", partial), ("†", sourced)) if on) or "≈"
     return f"{prefix} {loss_usd:,.0f}" + f" [^{slug}]"
 
 
@@ -240,11 +232,16 @@ def month_sum_and_floor(lines, block: MonthBlock):
     total = 0.0
     floor_names = []
     for idx, m in rows_in_block(lines, block):
-        amount, is_floor = parse_loss_cell(m.group("loss_cell"))
+        amount, is_floor, _ = parse_loss_cell(m.group("loss_cell"))
         total += amount
         if is_floor:
             floor_names.append(m.group("name"))
     return total, floor_names
+
+
+def month_sourced(lines, block: MonthBlock):
+    return sum(a for a, _, s in (parse_loss_cell(m.group("loss_cell"))
+                                 for _, m in rows_in_block(lines, block)) if s)
 
 
 def build_note(floor_names):
@@ -350,8 +347,18 @@ def main():
         action="store_true",
         help="the real loss exceeds this figure but the source doesn't support claiming more (like Sandbox, Balancer V1)",
     )
+    p.add_argument(
+        "--loss-sourced",
+        action="store_true",
+        help="the figure is the protocol's, press's or DefiLlama's, not independently recomputed (shown as †)",
+    )
     p.add_argument("--skip-scaffold", action="store_true", help="don't create the subfolder, only update the README")
     args = p.parse_args()
+
+    for flag in ("name", "date", "chain", "mechanism", "link"):
+        value = getattr(args, flag) or ""
+        if "|" in value or "\n" in value:
+            sys.exit(f"--{flag} must not contain '|' or a line break (it would break the Index table).")
 
     link = args.link or f"{args.slug}/"
     target_year, target_month = parse_primary_date(args.date)
@@ -369,7 +376,7 @@ def main():
     index_start, index_end = find_index_bounds(lines)
     months, years = parse_index_structure(lines, index_start, index_end)
 
-    loss_cell = format_loss_cell(args.loss_usd, args.slug, args.loss_known_partial)
+    loss_cell = format_loss_cell(args.loss_usd, args.slug, args.loss_known_partial, args.loss_sourced)
     new_row = (f"| {args.name} | {args.date} | {loss_cell} | {args.chain} | "
                f"{args.category} | {args.mechanism} | [{link}]({link}) |")
 
@@ -384,7 +391,7 @@ def main():
         existing_rows = rows_in_block(lines, target)
         parsed = []
         for idx, m in existing_rows:
-            amount, _ = parse_loss_cell(m.group("loss_cell"))
+            amount, _, _ = parse_loss_cell(m.group("loss_cell"))
             parsed.append((amount, lines[idx]))
         parsed.append((args.loss_usd, new_row))
         parsed.sort(key=lambda pair: pair[0], reverse=True)
@@ -484,11 +491,8 @@ def main():
         is_current = block.key == latest_key
         lines[block.heading_line_idx] = f"#### {month_heading_text}" + (" (current month)" if is_current else "")
 
-    # Recompute overall totals from the years' stated totals -- these now feed
-    # README.md's "At a glance" block AND its opening headline sentence
-    # (ADDED 2026-09-29: both moved/added when the Index moved out to its own
-    # file; neither is INDEX.md's own content, so update README.md separately
-    # below instead of writing these into `lines`, which is INDEX.md's).
+    # Overall totals feed README.md's "At a glance" block and its opening
+    # headline sentence (written to README.md below, not into INDEX.md).
     index_start, index_end = find_index_bounds(lines)
     months, years = parse_index_structure(lines, index_start, index_end)
     overall_total = sum(month_sum_and_floor(lines, b)[0] for b in months)
@@ -496,6 +500,8 @@ def main():
     overall_has_floor = any(month_sum_and_floor(lines, b)[1] for b in months)
     total_str = f"{overall_total:,.0f}"
     total_m = round(overall_total / 100_000) / 10  # nearest 0.1M
+    recomputed = overall_total - sum(month_sourced(lines, b) for b in months)
+    recomputed_m = round(recomputed / 100_000) / 10
     floor_note = (
         " At least one entry is a known floor, so the real total is higher."
         if overall_has_floor else ""
@@ -525,21 +531,22 @@ def main():
     # overall_total/overall_count just derived from INDEX.md -- kept as two
     # separate writes to two separate files, never both baked into one.
     readme_lines = read_readme().splitlines()
-    new_incidents_line = f"| Incidents covered | {overall_count}, independently reconstructed on-chain, see [the full index](INDEX.md) for detail |"
+    new_incidents_line = f"| Incidents covered | {overall_count}, each reconstructed on-chain, see [the full index](INDEX.md) for detail |"
     new_loss_line = (
-        f"| Cumulative loss, recomputed | About ${total_m:.1f}M across the {overall_count} "
-        f"incidents (${total_str} exactly, sum of the figures in the index)."
-        f"{floor_note} |"
+        f"| Cumulative loss | About ${total_m:.1f}M across the {overall_count} "
+        f"incidents (${total_str} exactly, sum of the figures in the index); "
+        f"${recomputed:,.0f} of it independently recomputed, the rest (marked † in the index) "
+        f"sourced from the protocol, press or DefiLlama.{floor_note} |"
     )
     new_headline = (
-        f"**${total_m:.1f}M in DeFi and on-chain losses, "
-        f"independently recomputed from raw chain data across {overall_count} "
-        f"incidents.**"
+        f"**${total_m:.1f}M in DeFi and on-chain losses across {overall_count} incidents, "
+        f"each reconstructed from raw chain data; ${recomputed_m:.1f}M of it independently "
+        f"recomputed, the rest sourced from the protocol, press or DefiLlama.**"
     )
     for idx, line in enumerate(readme_lines):
         if line.startswith("| Incidents covered |"):
             readme_lines[idx] = new_incidents_line
-        elif line.startswith("| Cumulative loss, recomputed |"):
+        elif line.startswith("| Cumulative loss |"):
             readme_lines[idx] = new_loss_line
         elif line.startswith("**$") and "in DeFi and on-chain losses" in line:
             readme_lines[idx] = new_headline

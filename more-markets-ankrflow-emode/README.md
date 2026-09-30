@@ -18,7 +18,7 @@ directly from raw Flow EVM chain data.
 | Window | 2026-08-31 06:18:52 UTC, a single transaction |
 | Press figure | Blockaid's initial estimate: "$9.3M" (widely repeated); a later, uncredited correction: "~$410,000" / "~$246,000 realized after slippage" |
 | Verified independently | 15,488,124.145039 WFLOW borrowed out of the Pool's WFLOW reserve in one transaction, decoded from the Pool's own `Borrow` event and cross-checked against the underlying WFLOW token's own `Transfer` events; $415,398.47 at CoinGecko's theft-day price, within 1.32% of DefiLlama's own tracked $410,000 |
-| A real correction | The widely-repeated Blockaid "$9.3M" figure is not supported by this reconstruction: the only Pool activity touching the WFLOW or ankrFLOW reserve in the entire 2026-08-30/09-01 window is this one transaction, and its own Borrow event totals $415,398.47, not $9.3M |
+| Figure reconciliation | The widely-repeated Blockaid "$9.3M" figure is not found in the part of the Pool this reconstruction scanned: the only Pool activity touching the WFLOW or ankrFLOW reserve in the 2026-08-30/09-01 window is this one transaction, and its WFLOW-reserve Borrow events total $415,398.47. Other reserves of the Pool were not scanned |
 | What's still open | The exact internal mechanism inside Ankr's own (unverified, not open-source as far as this project found) staking contract that let the recursive loop inflate ankrFLOW is characterized at the level press described, not independently decoded opcode-by-opcode; the attacker's downstream conversion of the borrowed WFLOW into whatever they ultimately kept happened after this transaction and was not traced here. See Caveats |
 
 ## The method
@@ -116,14 +116,18 @@ figure, obtained from a completely different starting point (the native
 WFLOW amount actually borrowed, priced independently) than whatever
 DefiLlama's own pipeline used.
 
-### The widely-repeated $9.3M figure does not hold up
+### The widely-repeated $9.3M figure is not found in the WFLOW reserve
 
 Blockaid's initial estimate of "$9.3M" was carried by essentially every
 outlet that covered this incident in the days immediately after. This
 project's own reconstruction, anchored in the Pool's own event log across
 the full incident window, finds exactly one transaction touching the
 WFLOW or ankrFLOW reserve that could plausibly be the exploit, and its
-Borrow events total $415,398.47, not $9.3M, a difference of roughly 22x.
+WFLOW-reserve Borrow events total $415,398.47, roughly 22x less than
+$9.3M. Borrow and Withdraw events on the Pool's other reserves were not
+scanned, so a loss outside the WFLOW reserve is not excluded by this
+reconstruction; the figure is consistent with DefiLlama's $410,000 and
+with the later press figure.
 Some outlets later carried a walked-back figure closer to $410,000
 without a byline explaining the revision or citing a transaction hash;
 this project's own independent number was derived before finding those
@@ -153,8 +157,8 @@ corrected figure, not merely a repetition of it.
   addresses, but the specific swaps or transfers that moved them out are
   a separate matter from the Pool-level loss this entry reconstructs, and
   were not independently retraced.
-- `--readme-url` above points to one of several outlets covering this
-  incident; none found published the transaction hash, block number, or
+- [The spendnode.io article](https://www.spendnode.io/blog/more-markets-flow-evm-lending-exploit-9-3-million-august-2026/)
+  is one of several outlets covering this incident; none found published the transaction hash, block number, or
   full attacker address independently confirmed here.
 
 ## License

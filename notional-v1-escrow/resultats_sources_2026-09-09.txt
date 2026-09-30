@@ -17,9 +17,8 @@ DefiLlama hacks feed record for this incident (api.llama.fi/hacks, queried
   "language": "Solidity"
 }
 
-Note: "source" is empty, same as every other record checked in this
-research program - DefiLlama's own hacks feed never links a primary
-source directly.
+Note: "source" is empty, like the other DefiLlama records checked for
+this repository.
 
 Press coverage found (web search, 2026-09-09), none of which publishes
 any on-chain address, transaction hash, or block number beyond the two
@@ -29,7 +28,7 @@ timestamps used to locate blocks 25900220/25900234 in this project:
   Finance Hack": the most technical writeup found, describing the
   uint128 downcast in free-collateral valuation and the two
   mintfCashPair() calls engineered to sum to exactly 2^128. Not
-  independently fetchable by this project's tools (HTTP 403), summarized
+  independently fetchable by automated requests (HTTP 403), summarized
   here via search-result excerpts only.
 - CryptoRank.io / BeInCrypto, "Notional Finance Hit by $1.7 Million
   Exploit From Integer Overflow Bug": corroborates the ~$1.7M figure and

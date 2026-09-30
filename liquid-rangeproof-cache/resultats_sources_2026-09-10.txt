@@ -35,12 +35,11 @@ Run 2026-09-10, alongside reconstruct_exploit.py.
    account, @Liquid_BTC ("Liquid Network"), thread titled "LIQUID NETWORK
    UPDATE: INCIDENT REPORT," status as of September 8, 2026, 19:10 UTC.
    Direct fetch of https://x.com/Liquid_BTC/status/2097404704028545175
-   returned HTTP 402 (Payment Required) from the fetch tool available in
-   this session. Retried once via a different method per this round's
-   uncertainty-handling rule: (a) Twitter's public syndication endpoint
+   returned HTTP 402 (Payment Required) to an automated request. Retried
+   once via a different method: (a) Twitter's public syndication endpoint
    (cdn.syndication.twimg.com/tweet-result?id=...) returned an empty object,
    (b) a Nitter mirror (nitter.net) is offline. Neither alternate fetch
-   route worked. What is used instead: two independent WebSearch queries,
+   route worked. What is used instead: two independent web search queries,
    worded differently ('"15:53:10 UTC" Liquid block 4,050,336 incident
    report' and '"4,050,336" Liquid Network incident report what happened'),
    both returned the identical exact string as the indexed page title of
@@ -81,8 +80,8 @@ Run 2026-09-10, alongside reconstruct_exploit.py.
 5) BTC/USD conversion: CoinGecko's public API (api.coingecko.com), live
    price at script-run time and the historical daily snapshot for
    2026-09-06, both fetched directly by the script, not copied from a press
-   figure. The live price ($77,809-77,821 across separate fetches within
-   the same session) and the 2026-09-06 historical snapshot ($79,821.70)
+   figure. The live price ($77,809-77,821 across separate fetches on
+   2026-09-10) and the 2026-09-06 historical snapshot ($79,821.70)
    are both within the range press coverage cites ($78,000-79,930), an
    independent cross-check rather than a re-statement of it.
 

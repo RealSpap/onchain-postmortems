@@ -33,7 +33,7 @@ walks that wallet's complete on-chain signature history, decodes the raw
 logs of its transactions, derives the Solana programs those logs actually
 name, and reads each program's own on-chain `ProgramData` account (the
 upgradeable-loader's own bookkeeping of when a program's live bytecode was
-last deployed) - the same primary-source pattern this repo's Aquifer entry
+last deployed), the same primary-source pattern this repo's Aquifer entry
 uses for a Solana program's upgrade authority, applied here to 3 programs
 instead of 1.
 
@@ -55,7 +55,7 @@ stated 13:40 UTC minute), and, filtering to only the transactions that
 touch the attacker's own USDC token account
 (`A5fBB5sLNMiF6NGz8JPpeKM2Ke6tCvmmAZ7PZVsp6rZy`, itself derived live via
 `getTokenAccountsByOwner`, not assumed), its earliest transaction lands at
-**2026-08-28T16:49:48Z** - an exact match, to the second, against the
+**2026-08-28T16:49:48Z**, an exact match, to the second, against the
 article's separately-stated figure.
 
 One press claim does not hold up under this project's own count, however:
@@ -96,7 +96,7 @@ one fixed "collateral" program (`WithdrawCollateralAsset`) and one fixed
 "authorization" program (`SubmitSignatures` / `AddCollateralAdmin`).
 Widening the sample overturned that: all 3 named instructions actually
 appear, in different sampled transactions, on **3 different program
-addresses** -
+addresses**:
 `26DkA98jjctzPkBEteUsN935CR4dsKx3XvjrtE7MeL4a`,
 `CWgkFB7ngUc9cGD1LryyhP7h6xYWtwrAjhSKKCoR1gkz`, and
 `3zVB27Gap6fbxpAcV2hsBBUcV3vRjkCikBXREiyBzDuc`. That is not a
@@ -158,7 +158,7 @@ Ethereum, a claim this project did not independently trace).
   A full, exhaustive (non-sampled) sum over all 5,392 transactions would
   settle this, and was not done here for time. One point of scale when
   reading that gap: the attacker's transactions touch all 3 program
-  deployments described below, not Avici's alone, so the loot account is
+  deployments described above, not Avici's alone, so the loot account is
   not necessarily an Avici-only figure. Press puts the loss across the
   affected Rain-powered programs at roughly $1.1 million (CoinDesk,
   2026-08-29, citing Avici's $500,800 and Tria's over $430,000 as parts of

@@ -1,4 +1,4 @@
-Re-check 2026-09-19 (onchain-postmortems-pipeline, scheduled run). Raw command output.
+Re-check 2026-09-19. Raw command output.
 RPCs: bsc-dataseed.binance.org (state, tx), bsc.rpc.blxrbdn.com (eth_getLogs).
 
 == 1. V2 vesting records ==

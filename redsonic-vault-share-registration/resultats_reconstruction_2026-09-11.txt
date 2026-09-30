@@ -48,34 +48,34 @@ The address that actually drove the exploit (the WETH-unwrapping contract): 0x39
 Is that address the vault's owner: False -> registerErc20 was called by an address with no special privilege on this vault
 
 === Step 6: decoding the exploit's own event log, in order ===
-  log[0]  0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2  Transfer  0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2  0xba12222222228d8ba445958a75a0704d566bf2c8 -> 0x39a2aee44bd9ef106917d94880a9f8f7cfaf09d5  1139.615952950658083864
-  log[1]  0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2  WETH Withdrawal  by 0x39a2aee44bd9ef106917d94880a9f8f7cfaf09d5  1139.615952950658083864 ETH unwrapped
+  log[0]  0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2  Transfer  0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2  0xba12222222228d8ba445958a75a0704d566bf2c8 -> 0x39a2aee44bd9ef106917d94880a9f8f7cfaf09d5  1139.615952950658009506
+  log[1]  0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2  WETH Withdrawal  by 0x39a2aee44bd9ef106917d94880a9f8f7cfaf09d5  1139.615952950658009506 ETH unwrapped
   log[2]  0xf65e1ec6093642ba9d439ac25af1b767054e1558  OwnershipTransferred  0xf65e1ec6093642ba9d439ac25af1b767054e1558  0x0000000000000000000000000000000000000000 -> 0x4315990d9eeaffdfafd49958b4851f203fa1126f
   log[3]  0x4315990d9eeaffdfafd49958b4851f203fa1126f  (vault/unverified-facet event, topic0=0x2e2b3f61b70d2d131b2a807371103cc98d51adcaa5e9a8f9c32658ad8426e74e)
   log[4]  0x4315990d9eeaffdfafd49958b4851f203fa1126f  (vault/unverified-facet event, topic0=0xf9b652c16f9592f9f14353a739befc296a75e6b930ee497a499090bfb852ac72)
-  log[5]  0xca9de1f80df74331c5fcb7eee2d05e746d47bfb2  Transfer  0xca9de1f80df74331c5fcb7eee2d05e746d47bfb2  0x0000000000000000000000000000000000000000 -> 0x39a2aee44bd9ef106917d94880a9f8f7cfaf09d5  1118.002170814811506716
+  log[5]  0xca9de1f80df74331c5fcb7eee2d05e746d47bfb2  Transfer  0xca9de1f80df74331c5fcb7eee2d05e746d47bfb2  0x0000000000000000000000000000000000000000 -> 0x39a2aee44bd9ef106917d94880a9f8f7cfaf09d5  1118.002170814811445360
   log[6]  0x4315990d9eeaffdfafd49958b4851f203fa1126f  (vault/unverified-facet event, topic0=0x66ff7c8f71ccc7c36152a41920d0d3b46ef3034359f76aa1498ed4478c204b5c)
   log[7]  0xae7ab96520de3a18e5e111b5eaab095312d7fe84  (vault/unverified-facet event, topic0=0x96a25c8ce0baabc1fdefd93e9ed25d8e092a3332f3aa9a41722b5697231d1d1a)
-  log[8]  0xae7ab96520de3a18e5e111b5eaab095312d7fe84  Transfer  0xae7ab96520de3a18e5e111b5eaab095312d7fe84  0x0000000000000000000000000000000000000000 -> 0x39a2aee44bd9ef106917d94880a9f8f7cfaf09d5  9.356655446343745908
+  log[8]  0xae7ab96520de3a18e5e111b5eaab095312d7fe84  Transfer  0xae7ab96520de3a18e5e111b5eaab095312d7fe84  0x0000000000000000000000000000000000000000 -> 0x39a2aee44bd9ef106917d94880a9f8f7cfaf09d5  9.356655446343746206
   log[9]  0xae7ab96520de3a18e5e111b5eaab095312d7fe84  (vault/unverified-facet event, topic0=0x9d9c909296d9c674451c0c24f02cb64981eb3b727f99865939192f880a755dcb)
   log[10]  0xae7ab96520de3a18e5e111b5eaab095312d7fe84  (vault/unverified-facet event, topic0=0x8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925)
-  log[11]  0xf65e1ec6093642ba9d439ac25af1b767054e1558  Transfer  0xf65e1ec6093642ba9d439ac25af1b767054e1558  0x0000000000000000000000000000000000000000 -> 0x39a2aee44bd9ef106917d94880a9f8f7cfaf09d5  9.336655446343746334
-  log[12]  0xae7ab96520de3a18e5e111b5eaab095312d7fe84  Transfer  0xae7ab96520de3a18e5e111b5eaab095312d7fe84  0x39a2aee44bd9ef106917d94880a9f8f7cfaf09d5 -> 0x4315990d9eeaffdfafd49958b4851f203fa1126f  9.336655446343746334
+  log[11]  0xf65e1ec6093642ba9d439ac25af1b767054e1558  Transfer  0xf65e1ec6093642ba9d439ac25af1b767054e1558  0x0000000000000000000000000000000000000000 -> 0x39a2aee44bd9ef106917d94880a9f8f7cfaf09d5  9.336655446343746204
+  log[12]  0xae7ab96520de3a18e5e111b5eaab095312d7fe84  Transfer  0xae7ab96520de3a18e5e111b5eaab095312d7fe84  0x39a2aee44bd9ef106917d94880a9f8f7cfaf09d5 -> 0x4315990d9eeaffdfafd49958b4851f203fa1126f  9.336655446343746204
   log[13]  0xae7ab96520de3a18e5e111b5eaab095312d7fe84  (vault/unverified-facet event, topic0=0x9d9c909296d9c674451c0c24f02cb64981eb3b727f99865939192f880a755dcb)
   log[14]  0x4315990d9eeaffdfafd49958b4851f203fa1126f  (vault/unverified-facet event, topic0=0x2d5dab2aa92e2fb8f3f21237c453da2ca46e6f7ea35e1f0f379368a5b90ab5a3)
-  log[15]  0xca9de1f80df74331c5fcb7eee2d05e746d47bfb2  Transfer  0xca9de1f80df74331c5fcb7eee2d05e746d47bfb2  0x39a2aee44bd9ef106917d94880a9f8f7cfaf09d5 -> 0x0000000000000000000000000000000000000000  1118.002170814811506716
+  log[15]  0xca9de1f80df74331c5fcb7eee2d05e746d47bfb2  Transfer  0xca9de1f80df74331c5fcb7eee2d05e746d47bfb2  0x39a2aee44bd9ef106917d94880a9f8f7cfaf09d5 -> 0x0000000000000000000000000000000000000000  1118.002170814811445360
   log[16]  0x4315990d9eeaffdfafd49958b4851f203fa1126f  (vault/unverified-facet event, topic0=0x8455ae6be5d92f1df1c3c1484388e247a36c7e60d72055ae216dbc258f257d4b)
-  log[17]  0xf65e1ec6093642ba9d439ac25af1b767054e1558  Transfer  0xf65e1ec6093642ba9d439ac25af1b767054e1558  0x39a2aee44bd9ef106917d94880a9f8f7cfaf09d5 -> 0x0000000000000000000000000000000000000000  9.336655446343746334
-  log[18]  0xae7ab96520de3a18e5e111b5eaab095312d7fe84  Transfer  0xae7ab96520de3a18e5e111b5eaab095312d7fe84  0x4315990d9eeaffdfafd49958b4851f203fa1126f -> 0x39a2aee44bd9ef106917d94880a9f8f7cfaf09d5  9.336655446343746334
+  log[17]  0xf65e1ec6093642ba9d439ac25af1b767054e1558  Transfer  0xf65e1ec6093642ba9d439ac25af1b767054e1558  0x39a2aee44bd9ef106917d94880a9f8f7cfaf09d5 -> 0x0000000000000000000000000000000000000000  9.336655446343746204
+  log[18]  0xae7ab96520de3a18e5e111b5eaab095312d7fe84  Transfer  0xae7ab96520de3a18e5e111b5eaab095312d7fe84  0x4315990d9eeaffdfafd49958b4851f203fa1126f -> 0x39a2aee44bd9ef106917d94880a9f8f7cfaf09d5  9.336655446343746250
   log[19]  0xae7ab96520de3a18e5e111b5eaab095312d7fe84  (vault/unverified-facet event, topic0=0x9d9c909296d9c674451c0c24f02cb64981eb3b727f99865939192f880a755dcb)
   log[20]  0x4315990d9eeaffdfafd49958b4851f203fa1126f  (vault/unverified-facet event, topic0=0xcd43b20ab5058a2a0a057681c9d3754aa8971fe74dacc8b6e4be0a49dae13101)
   log[21]  0xae7ab96520de3a18e5e111b5eaab095312d7fe84  (vault/unverified-facet event, topic0=0x8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925)
   log[22]  0xae7ab96520de3a18e5e111b5eaab095312d7fe84  (vault/unverified-facet event, topic0=0x8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925)
-  log[23]  0xae7ab96520de3a18e5e111b5eaab095312d7fe84  Transfer  0xae7ab96520de3a18e5e111b5eaab095312d7fe84  0x39a2aee44bd9ef106917d94880a9f8f7cfaf09d5 -> 0xdc24316b9ae028f1497c275eb9192a3ea0f67022  9.356655446343745908
+  log[23]  0xae7ab96520de3a18e5e111b5eaab095312d7fe84  Transfer  0xae7ab96520de3a18e5e111b5eaab095312d7fe84  0x39a2aee44bd9ef106917d94880a9f8f7cfaf09d5 -> 0xdc24316b9ae028f1497c275eb9192a3ea0f67022  9.356655446343746253
   log[24]  0xae7ab96520de3a18e5e111b5eaab095312d7fe84  (vault/unverified-facet event, topic0=0x9d9c909296d9c674451c0c24f02cb64981eb3b727f99865939192f880a755dcb)
   log[25]  0xdc24316b9ae028f1497c275eb9192a3ea0f67022  (vault/unverified-facet event, topic0=0x8b3e96f2b889fa771c53c981b40daf005f63f637f1869f707052d15a3dd97140)
   log[26]  0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2  (vault/unverified-facet event, topic0=0xe1fffcc4923d04b559f4d29a8bfc6cda04eb5b0d3c460751c2402c5c5cc9109c)
-  log[27]  0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2  Transfer  0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2  0x39a2aee44bd9ef106917d94880a9f8f7cfaf09d5 -> 0xba12222222228d8ba445958a75a0704d566bf2c8  1139.615952950658083864
+  log[27]  0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2  Transfer  0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2  0x39a2aee44bd9ef106917d94880a9f8f7cfaf09d5 -> 0xba12222222228d8ba445958a75a0704d566bf2c8  1139.615952950658009506
   log[28]  0xba12222222228d8ba445958a75a0704d566bf2c8  (vault/unverified-facet event, topic0=0x0d7d75e01ab95780d3cd1c8ec0dd6c2ce19e3a20427eec8bf53283b6fb8e95f0)
 
   -> log[4] is emitted BY THE VAULT ITSELF with two indexed (i.e. ABI-safe,
@@ -88,13 +88,13 @@ Is that address the vault's owner: False -> registerErc20 was called by an addre
 (topics/order only -- names below are this script's own inference from position and
  data shape, since the owning facet is unverified; each amount is still read directly
  off the vault's own raw log data, an ABI-safe 32-byte word, not offset-guessed)
-  log[6]  vault event, indexed=0x39a2aee44bd9ef106917d94880a9f8f7cfaf09d5  ETH deposited: 1130.259297504314190519
-  log[16] vault event, indexed=0x39a2aee44bd9ef106917d94880a9f8f7cfaf09d5  ETH withdrawn: 1139.513928645387068173
-  -> withdrawn minus deposited, for the SAME position (1,118.002170814811506716 rsvETH
-     minted at log[5], the identical amount burned at log[15]): 9.254631141072739098 ETH
+  log[6]  vault event, indexed=0x39a2aee44bd9ef106917d94880a9f8f7cfaf09d5  ETH deposited: 1130.259297504314263299
+  log[16] vault event, indexed=0x39a2aee44bd9ef106917d94880a9f8f7cfaf09d5  ETH withdrawn: 1139.513928645387002525
+  -> withdrawn minus deposited, for the SAME position (1,118.002170814811445360 rsvETH
+     minted at log[5], the identical amount burned at log[15]): 9.254631141072739226 ETH
      gained purely from the vault's own share-price math after the stETH class was registered.
-  log[14] vault event, indexed asset=0xae7ab96520de3a18e5e111b5eaab095312d7fe84  stETH deposited: 9.336655446343746334
-  log[20] vault event, indexed withdrawer=0x39a2aee44bd9ef106917d94880a9f8f7cfaf09d5, asset(data word0)=0xae7ab96520de3a18e5e111b5eaab095312d7fe84  stETH withdrawn: 9.336655446343746334
+  log[14] vault event, indexed asset=0xae7ab96520de3a18e5e111b5eaab095312d7fe84  stETH deposited: 9.336655446343746204
+  log[20] vault event, indexed withdrawer=0x39a2aee44bd9ef106917d94880a9f8f7cfaf09d5, asset(data word0)=0xae7ab96520de3a18e5e111b5eaab095312d7fe84  stETH withdrawn: 9.336655446343746250
   -> the stETH side is essentially made whole (difference 0.000000000000000046 ETH,
      a rounding artifact, not a second source of loss)
 
@@ -113,16 +113,12 @@ Candidate Curve pool address (the one other contract emitting its own, non-ERC20
   -> matches a native-ETH/stETH pool: True
 
 === Step 9: the attacker's realized profit -- read directly off-chain state, not assumed ===
-Attacker EOA balance immediately after block 25912201: 9.261768945208000758 ETH
+Attacker EOA balance immediately after block 25912201: 9.261768945207999792 ETH
 Since nonce was 0 before this tx (Step 1), and gas paid was only 0.00071931 ETH,
 this balance is the attacker's realized take-home profit, up to at most that much
 pre-funding this script cannot separately net out (see caveats in README.md).
 
-=== Step 10: is registerErc20 still exploitable today? (read-only simulation, no tx sent) ===
-Simulated registerErc20(WETH) from an arbitrary, unprivileged address -> '0x' (no revert = still callable by anyone today)
-Simulated re-registering stETH (already registered): eth_call[{'from': '0x1111111111111111111111111111111111111111', 'to': '0x4315990d9eeaffdfafd49958b4851f203fa1126f', 'data': '0xa4a3c9ef000000000000000000000000ae7ab96520de3a18e5e111b5eaab095312d7fe84'}, 'latest'] -> {'code': 3, 'message': 'execution reverted: Vaults: vToken already registered', 'data': '0x08c379a0000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000215661756c74733a2076546f6b656e20616c7265616479207265676973746572656400000000000000000000000000000000000000000000000000000000000000'}
-
-=== Step 11: USD conversion, CoinGecko's own historical snapshot ===
+=== Step 10: USD conversion, CoinGecko's own historical snapshot ===
 ETH/USD, CoinGecko daily snapshot 2026-09-05 (theft day): 2456.085066364875
 9.261768945208 ETH @ that price -> $22,747.69
 DefiLlama's own tracked figure for this incident ('Reddio RedSonic'): $22,800

@@ -9,10 +9,8 @@ nimiq/wallet, src/config/config.mainnet.ts, branch master, fetched
 2026-09-21 from raw.githubusercontent.com:
 
   polygon.usdc.htlcContract         0x0cFD862bE942846Cebad797d7c1BC6e47714959b
-  polygon.usdc.transferContract     0x3157d422cd1be13AC4a7cb00957ed717e648DFf2
   polygon.usdc_bridged.htlcContract 0xF615bD7EA00C4Cc7F39Faad0895dB5f40891359f
   polygon.usdt_bridged.htlcContract 0xF615bD7EA00C4Cc7F39Faad0895dB5f40891359f
-  polygon.usdc_bridged.transferContract 0x98E69a6927747339d5E543586FC0262112eBe4BD
   polygon.openGsnRelayHubContract   0x6C28AfC105e65782D9Ea6F2cA68df84C9e7d750d
 
 The same file carries two flags that are themselves evidence of the
@@ -32,9 +30,6 @@ agree byte for byte on the relevant functions:
   versionRecipient   2.2.6+opengsn.recipient.erc20meta.htlc.handler
   versionPaymaster   2.2.6+opengsn.paymaster.erc20meta.htlc.handler
 
-  0x3157d422cd1be13AC4a7cb00957ed717e648DFf2 is a different contract,
-  ERC20PermitHandler, same OpenGSN base, same execute() shape.
-
 The two lines that matter, ERC20MetaHTLCHandler.sol lines 221 to 229
 (289 lines total in the verified source):
 
@@ -50,9 +45,6 @@ The first statement of the body is a no-op that exists only to silence the
 unused-parameter warning. The signature is never read. Authentication for
 this call path lives in preRelayedCall, which is the paymaster half of the
 same contract, and which a relay call is free to point somewhere else.
-
-ERC20PermitHandler.sol lines 122 to 134 carry the identical pattern, ending
-in transferPrivate(request.from, requestData).
 
 3. THE TRANSACTIONS
 -------------------
@@ -97,7 +89,8 @@ fetched 2026-09-21. All times UTC.
 First mitigation commit lands 18 hours 57 minutes after the drain. The
 gas-abstraction switch lands 23 hours 3 minutes after it. Both are wallet
 configuration. Neither touches the chain: the handlers have no pause
-function, nothing was upgraded, and no approval was revoked.
+function and nothing was upgraded as of the collection date. Current patch
+status not re-verified; details withheld pending disclosure to the team.
 
 5. DEFILLAMA
 ------------
@@ -119,8 +112,7 @@ loss, credits a SlowMist alert, and describes the flaw as "the
 ERC20PermitHTLCHandler's execute function, which failed to validate crucial
 parameters". No address, no transaction hash, no chain named in the body.
 ERC20PermitHTLCHandler is not a contract that exists at either drained
-address: the drained ones are ERC20MetaHTLCHandler, and ERC20PermitHandler
-is the separate transfer contract.
+address: the drained ones are ERC20MetaHTLCHandler.
 
 okx.com orbit insight 87713771195840, relaying Defimon Alerts, read the
 same way. It is the most accurate public account: it names the paymaster

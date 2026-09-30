@@ -37,10 +37,10 @@
   block 25806879 (2026-08-21 23:44:11 UTC) tx a7d48611455b840cb8c832550bab45ac437d744ebf5ff632dc82d8837c639085 to=0xd7ca08ec1aee9cce8a8eda9365343ef197674e1a amount=642,471.515074 SAND <- MEV_BOT
   block 25806882 (2026-08-21 23:44:47 UTC) tx d819a1bde7fa17d496d57e8e6baf71ab9e9af40a8cedea3f770c8db7a8dde510 to=0x84a260fd2be522f1384fba4a678555b99cbb288a amount=5,307.175651 SAND
 
-=== Step 7: the on-chain whitehat/ransom message, decoded directly ===
+=== Step 7: the on-chain whitehat bounty offer, decoded directly ===
   tx: 0xde26ad2e26dee314879ba257ccd73c3c810fa8e09be3704e87ded29151137969
   block: 25812880  timestamp: 2026-08-22 19:48:47 UTC
-  from (Safe signer): 0x913488977ca55d2dF46934B8417f15BAb1cf516c
+  from (transaction sender): 0x913488977ca55d2dF46934B8417f15BAb1cf516c
   to (The Sandbox owner Safe, 171-byte contract): 0x6ec4090d0F3cB76d9f3D8c4D5BB058A225E560a1
   value: 0 wei (0.0 ETH)
   calldata: 2340 bytes (4682 hex characters including 0x prefix)
@@ -50,11 +50,19 @@
   Return 356.603 ETH, and keep 40 ETH as a whitehat bounty. That is 10% of the total. Send the returned amount to 0xC99853A0559CD3acc7C3e87EC575886D6a555b56.
   If you complete the return within 72 hours of this message, The Sandbox will bring no civil claim against you, and we will formally report your cooperation to the relevant authorities as a mitigating factor. We will state publicly that the funds were returned voluntarily. We will not seek to identify you further.
   
-  WHAT HAPPENS OTHER
+  WHAT HAPPENS OTHERWISE
+  Your address is tagged with Chainalysis and TRM. That designation propagates automatically to compliant exchanges, bridges, and payment processors worldwide. We have direct escalation channels with major exchanges and their compliance teams are already notified. Any deposit that reaches a centralized venue will be frozen on arrival.
+  If you convert to USDC or USDT, both issuers freeze on law enforcement request and have done so routinely in cases like this.
+  We have opened a case with law enforcement and are working with blockchain forensics partners. The full transaction graph, including your funding path, is being reconstructed.
+  The practical position is that this ETH is difficult to move and getting harder. A clean 10% is worth more than a larger number you cannot spend.
+  HOW TO REACH US
+  Reply via the input data of a 0 ETH transaction to 0xC99853A0559CD3acc7C3e87EC575886D6a555b56, or email security@sandbox.game from any address. We will respond. If you want to discuss the terms, we are willing to have that conversation.
+  This offer expires Tuesday, August 25, 2026, at 7:00 PM UTC.
+  The Sandbox
 
 === Step 8: the consolidation wallet's current balance ===
   0xaC76B04397c9296dfc00e25c96D8e51b4edFaF29: 396.60405378273 ETH, nonce 3
-  The Sandbox's own ransom message asked for 356.603 ETH + offered 40 ETH bounty = 396.603 ETH
+  The Sandbox's own bounty offer asked for 356.603 ETH + offered 40 ETH bounty = 396.603 ETH
   independently observed balance: 396.604054 ETH (matches to within gas spent after consolidation)
 
 === Step 9: does the adapter's current dust balance match the claimed lifetime ledger? ===

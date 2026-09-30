@@ -38,8 +38,7 @@ python3 reconstruct_exploit.py
 ```
 
 Starting anchor: `blog.summer.fi`'s own post-mortem article, fetched live
-as raw HTML and regex-parsed directly (not an AI-summarized paraphrase of
-it), cross-checked against `github.com/OasisDEX/summer-earn-protocol`
+as raw HTML and regex-parsed directly (not a paraphrase of it), cross-checked against `github.com/OasisDEX/summer-earn-protocol`
 (Summer.fi's own GitHub org and repo, its deployment-governance commit
 history), neither a press screenshot nor a block-explorer label. From
 there, every address is confirmed against the live transaction's own
@@ -108,7 +107,7 @@ The HigherRisk vault address is independently cross-confirmed a **second,
 completely separate** way: Summer.fi's own GitHub org (`OasisDEX`)
 committed `b77fe629cc`
 ("chore(deployment): Safe batches to sweep + remove Term_Summer_USDC ark
-from LazyVault_HigherRisk_USDC (mainnet)") 6 hours after the exploit,
+from LazyVault_HigherRisk_USDC (mainnet)") about 8.5 hours after the exploit,
 adding a governance-proposal JSON file
 (`packages/deployment/proposals/prod_remove_arks_phase1_sweep_mainnet_2026-07-06T13-45-17-049Z.json`,
 fetched live) whose own `grantCuratorRole` call names

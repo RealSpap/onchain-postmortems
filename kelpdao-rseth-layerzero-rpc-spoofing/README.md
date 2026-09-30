@@ -1,7 +1,7 @@
 # Kelp DAO (rsETH / LayerZero DVN) Postmortem
 
-Independent reconstruction of the largest single incident this repo has
-covered to date: on 2026-04-18, a forged LayerZero cross-chain message
+Independent reconstruction of the second-largest incident this repo covers,
+after Drift Protocol: on 2026-04-18, a forged LayerZero cross-chain message
 minted 116,500 real rsETH on Ethereum against a burn that never happened
 on the message's claimed source chain, Unichain. The forgery was possible
 because Kelp DAO's rsETH bridge ran a 1-of-1 DVN (Decentralized Verifier
@@ -44,7 +44,7 @@ Sourcify's public contract-verification API, DefiLlama's own
    writeup, not a press paraphrase.** DarkNavy (darknavy.org), an
    established blockchain-security research outfit, names the exploit
    transaction hash and every contract/attacker address directly. Its raw
-   HTML (fetched with `curl`, not summarized by any AI tool) was grepped
+   HTML (fetched directly with `curl`) was grepped
    to confirm every address/hash actually appears on the page, before any
    of them were trusted as a starting point.
 2. **Every one of those addresses is then independently re-derived from
@@ -101,9 +101,8 @@ The `Transfer` log decodes to exactly
 `116500000000000000000000` wei), moving from the `RSETH_OFTAdapter`
 contract directly to `0x8b1b6c9a6db1304000412dd21ae6a70a82d60d3b`, a
 recipient Etherscan's own public tag independently labels "Kelp DAO
-Exploiter 13" (confirmed by fetching the raw Etherscan page directly, not
-through any AI summarizer). This is Kelp DAO's largest, and this repo's
-largest, single incident.
+Exploiter 13" (confirmed by fetching the raw Etherscan page directly).
+This is Kelp DAO's largest single incident.
 
 ### Why this is a genuine forgery, not a legitimate mint
 

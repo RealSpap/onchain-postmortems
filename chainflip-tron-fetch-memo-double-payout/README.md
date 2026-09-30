@@ -4,7 +4,7 @@ On September 12, 2026, Chainflip's Tron USDT vault paid out six deposits twice. 
 
 That account is accurate and it is also missing the part that makes the incident legible. Chainflip published no address and no transaction hash, so nothing in the coverage says where the money came from, where it went, or how the attacker got hold of 1.1 million USDT to feed into a vault holding 788,000.
 
-The answer is that he did not. The entire attack was funded by a single transfer of 13,260.798955 USDT that landed fifty-four minutes before the first deposit. Every subsequent deposit was the previous round's payout, put straight back in. Eight rounds later the attacker held 749,639.222676 USDT and stopped, because the vault no longer had enough left to double him again.
+The answer is that he did not. The entire attack was funded by a single transfer of 13,260.798955 USDT that landed fifty-four minutes before the first deposit. Every later deposit was funded from earlier payouts, most of them put straight back in. Eight rounds later the attacker held 749,639.222676 USDT and stopped, because the vault no longer had enough left to double him again.
 
 Reading the chain also supplies the mechanism as a one-to-one test rather than a description. Each round is a deposit swept into the vault by a "fetch" transaction. Six of the eight fetches were broadcast by the attacker himself with a 121-byte memo attached, and those six are exactly the six that paid twice. The other two were broadcast by Chainflip's own validators with no memo, and those two paid once. Eight rounds, eight matches, no exceptions.
 
@@ -73,7 +73,7 @@ Alongside the script, verification ran against a registry of eleven falsifiable 
 
 The attacker's address received exactly one inbound transfer before the attack: 13,260.798955 USDT from `TDGbEeTP6QQ1iCJ6twP5FNCDrbHTBme44f` at 00:49:42 UTC, in block 86,167,376. Nothing else ever funded it.
 
-Fifty-four minutes later it sent 13,000 USDT into a Chainflip deposit channel, and from there every deposit is the previous round's proceeds:
+Fifty-four minutes later it sent 13,000 USDT into a Chainflip deposit channel, and from there every deposit is funded from earlier proceeds:
 
 | Round | Deposit UTC | Deposit | Payouts | Paid out | Excess over deposit |
 |---|---|---|---|---|---|
@@ -87,7 +87,7 @@ Fifty-four minutes later it sent 13,000 USDT into a Chainflip deposit channel, a
 | 8 | 03:00:15 | 330,000.000000 | 2 | 659,988.555790 | 329,988.555790 |
 | | **Total** | **1,125,030.910613** | **14** | **1,861,409.334334** | **736,378.423721** |
 
-From round three onward the deposit is the previous round's payout total to the last decimal: round four stakes 52,467.901204, which is precisely what round three paid. The 1.1 million USDT figure that the deposit column adds up to is the same few hundred thousand dollars going round the loop, and reporting it as capital at risk would be a misreading of the same kind this entry exists to avoid.
+From round four to round six the deposit is the previous round's payout total to the last decimal: round four stakes 52,467.901204, which is precisely what round three paid. Round three's deposit (26,240.189620) is slightly above round two's payout, round seven puts back 375,563.327997 of round six's 419,658.822710, and round eight stakes 330,000. The 1.1 million USDT figure that the deposit column adds up to is the same few hundred thousand dollars going round the loop, and reporting it as capital at risk would be a misreading of the same kind this entry exists to avoid.
 
 At the end the attacker held 749,639.222676 USDT against a starting stake of 13,260.798955, a multiple of 56.53.
 
@@ -128,7 +128,7 @@ Two rounds did not double, and both are informative.
 
 Round one is the test. The attacker deposited 13,000 USDT, let Chainflip's own validator fetch it, and received a single ordinary payout of 12,991.856400, losing 8.14 USDT to fees. That is what the system does when it works.
 
-Round seven is the more interesting miss, because it is the largest stake of the whole attack. At 02:51:39 the attacker put in 375,563.327997 USDT, the entire proceeds of round six. The fetch was broadcast at 02:54:45 by a Chainflip validator, not by him, and the round paid once: 375,555.172173, a loss of 9.84 USDT. On the pattern the other seven rounds establish, that reads as him losing the race to broadcast his own fetch, though nothing on chain states why he did not get there first. Three minutes later he staked 330,000 instead, got the fetch out himself, and doubled it.
+Round seven is the more interesting miss, because it is the largest stake of the whole attack. At 02:51:39 the attacker put in 375,563.327997 USDT, most of round six's 419,658.822710 proceeds. The fetch was broadcast at 02:54:45 by a Chainflip validator, not by him, and the round paid once: 375,555.172173, a loss of 9.84 USDT. On the pattern the other seven rounds establish, that reads as him losing the race to broadcast his own fetch, though nothing on chain states why he did not get there first. Three minutes later he staked 330,000 instead, got the fetch out himself, and doubled it.
 
 Chainflip's post-mortem says the attacker "ran this eight times". Both accounts agree on eight. Only the chain says which two failed, and that the failure mode was losing a race to broadcast rather than anything the protocol detected.
 

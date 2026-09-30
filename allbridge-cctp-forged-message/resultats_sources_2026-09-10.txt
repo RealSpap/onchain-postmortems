@@ -105,13 +105,13 @@ What this project independently verified, live, against both chains
    step 3, and a forged amount of exactly 1,000,000,000,000 (1,000,000
    USDC at 6 decimals) sitting in the message body - matching SlowMist's
    stated "declared amount was 1,000,000 USDC" exactly.
-5. A real, citable discrepancy: SlowMist's article states this setup
-   call happened "On July 26, 2026". The transaction this project found
-   is timestamped 2026-07-25 20:32:55 UTC by the Polygon chain itself
+5. A date note: SlowMist's article states this setup call happened
+   "On July 26, 2026", without a time zone. The transaction this project
+   found is timestamped 2026-07-25 20:32:55 UTC by the Polygon chain itself
    (eth_getBlockByNumber on block 90871052, cross-checked against a
-   second RPC endpoint), one calendar day earlier. Every other number
-   and address in SlowMist's account checks out exactly against the
-   chain; this is the one place it does not.
+   second RPC endpoint), which is 2026-07-26 04:32:55 in UTC+8. The two
+   agree once the time zone is accounted for. Every number and address
+   in SlowMist's account checks out exactly against the chain.
 
 Circle's own official CCTP domain assignments (ETH=0, AVA=1, OPT=2,
 ARB=3, SOL=5, BAS=6, POL=7, SUI=8) were read from Allbridge's own SDK

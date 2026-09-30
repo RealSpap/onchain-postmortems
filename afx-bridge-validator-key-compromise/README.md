@@ -1,10 +1,11 @@
 # AFX Bridge Postmortem
 
-Independent reconstruction of the AFX Bridge exploit: an attacker
-compromised the signing keys of 5 of the bridge's 7 validators and used
-them to authorize a fraudulent withdrawal of 24,150,000 USDC from the
-bridge's Arbitrum custody, then moved the entire amount to Ethereum via
-Circle's own CCTP and swapped it out. No AFX-owned GitHub repository or
+Independent reconstruction of the AFX Bridge exploit: 5 of the bridge's 7
+validators co-signed a fraudulent withdrawal (through malware on validator
+nodes according to AFX's own postmortem, a key compromise according to
+DefiLlama's label), authorizing the release of 24,150,000 USDC from the
+bridge's Arbitrum custody. The attacker then moved the entire amount to
+Ethereum via Circle's own CCTP and swapped it out. No AFX-owned GitHub repository or
 deployment registry was found, so this reconstruction starts from a
 transaction hash a press article cited, verifies live that it actually
 resolves on-chain and matches every claimed figure, then goes further
@@ -18,10 +19,10 @@ bridge to a single Ethereum-side destination.
 
 | | |
 |---|---|
-| Incident | Compromised signing keys for 5 of 7 bridge validators authorized a withdrawal request that should have needed all 7 (or at least a majority not concentrated in one compromise) to be trustworthy |
+| Incident | 5 of 7 bridge validators co-signed a fraudulent withdrawal (malware on validator nodes per AFX; key compromise per DefiLlama), a request that should have needed all 7 (or at least a majority not concentrated in one compromise) to be trustworthy |
 | Window | 2026-07-22T21:26:55 UTC (validator-signed submission) to 2026-07-22T21:30:25 UTC (finalization, 210 seconds later) |
 | Press/DefiLlama figure | DefiLlama: "AFX Bridge", $24,150,000, Arbitrum, classification "Key Compromise", technique "Validator Key Compromised". Press (CoinDesk, KuCoin, crypto.news, Halborn) converges on "$24.15 million", "5 of 7 validators", "7,142 of 10,000 voting units", and roughly "12,467.5 ETH" bought with the proceeds |
-| Verified independently | The finalization transaction moved exactly 24,150,000.000000 USDC from the bridge contract to one attacker address, at the exact second press reports. The submission transaction's raw calldata independently decodes to 5 signatures, a 7-validator address list, and a weight table summing to exactly 10,000, whose only three possible 5-of-7 signing totals are 7,142 / 7,143 / 7,144 - 7,142 being press's exact figure, reproduced here without reading it from press first |
+| Verified independently | The finalization transaction moved exactly 24,150,000.000000 USDC from the bridge contract to one attacker address, at the exact second press reports. The submission transaction's raw calldata independently decodes to 5 signatures, a 7-validator address list, and a weight table summing to exactly 10,000, whose only three possible 5-of-7 signing totals are 7,142 / 7,143 / 7,144, 7,142 being press's exact figure, reproduced here without reading it from press first |
 | Fund flow, traced in full | All 24,150,000.000000 USDC left the attacker's Arbitrum address in 6 transactions to one contract, which forwarded it via Circle's CCTP (`cctp-forward`, decoded from the burn call's own event data); the same attacker address received 24,146,274.281809 USDC on Ethereum minutes later (a 0.0154% CCTP fee accounts for the gap), then forwarded all of it, in full, to a single Ethereum address. Neither the Arbitrum nor the Ethereum attacker address holds any USDC, WETH, or meaningful ETH today |
 
 ## The method
@@ -30,11 +31,9 @@ No primary source in this project's usual sense (a protocol's own GitHub
 deployment registry) exists for AFX: `afx.trade` resolves to an unrelated
 Venezuela-based exchange, and no AFX-branded GitHub organization was
 found. The starting anchor is instead a transaction hash a CoinDesk
-article cites for the finalization transaction. This project has twice
-already found a fetch/search tool invent a plausible-looking hex string
-that did not actually resolve on-chain (the Nesa and Enjin candidates
-recorded elsewhere in this repo's issue tracker) - so Step 1 below is
-exactly the check that would catch that, before anything else is trusted.
+article cites for the finalization transaction. A hash quoted in secondary
+coverage is only used after it has been checked on-chain, so Step 1 below
+confirms it resolves and matches before anything else is trusted.
 
 ```bash
 python3 reconstruct_exploit.py
@@ -107,7 +106,7 @@ word by word:
   validator set, decoded directly from the transaction's own bytes.
 - A second word holding `7`, followed by 7 numbers
   (`1428, 1429, 1429, 1428, 1428, 1429, 1429`) that **sum to exactly
-  10,000** - independently reproducing press's "10,000 voting units"
+  10,000**, independently reproducing press's "10,000 voting units"
   figure without reading it from press first.
 
 With 5 of 7 validators signing, exactly 2 are excluded. Enumerating all
@@ -155,8 +154,10 @@ rather than a plain DEX swap), to a single further address,
 `0x225a38bc71102999dd13478bfabd7c4d53f2dc17`. Press reports this leg as
 the attacker buying "approximately 12,467.5 ETH"; this reconstruction
 independently confirms the full USDC amount moved to that one address but
-did not itself identify what protocol that address belongs to or trace
-the ETH-denominated proceeds further, see Caveats.
+did not trace the ETH-denominated proceeds further, see Caveats. Etherscan
+tags `0x225a38bc…dc17` as "Rizzolver: Uniswap X" (as cited in this
+repository's Bitget entry; the tag was not re-checked here), which fits the
+solver-style fill described above.
 
 Both of the attacker's own addresses, checked live today (2026-09-10, 50
 days after the incident), hold no USDC, no WETH, and no meaningful native
@@ -185,8 +186,8 @@ funds still resting at an address this reconstruction can check.
   running on a subset of validator nodes (reached through an internal
   Ansible operations bastion) that "interfered with consensus-message
   handling", causing those validators to co-sign the withdrawal. It does
-  not state that signing keys were exfiltrated. "Compromised signing
-  keys" above follows DefiLlama's "Validator Key Compromised" label; the
+  not state that signing keys were exfiltrated. The key-compromise
+  reading follows DefiLlama's "Validator Key Compromised" label; the
   on-chain evidence (5 valid validator signatures) is consistent with
   either reading and cannot distinguish them.
 - The excluded 2-of-7 validators (the ones whose keys were *not* used,
@@ -200,12 +201,13 @@ funds still resting at an address this reconstruction can check.
   postmortem, not independently confirmed; this project has no forensic
   method for attributing an exploit to a specific threat actor.
 - The final destination address on Ethereum
-  (`0x225a38bc71102999dd13478bfabd7c4d53f2dc17`) was not identified as
-  belonging to any specific named protocol; this reconstruction confirms
+  (`0x225a38bc71102999dd13478bfabd7c4d53f2dc17`) carries the Etherscan tag
+  "Rizzolver: Uniswap X" (cited from this repository's Bitget entry, not
+  re-checked here); this reconstruction confirms
   the USDC arrived there in full but does not independently verify press's
   "~12,467.5 ETH" resulting purchase figure, since that would require
-  tracing that contract's own internal accounting or a further hop this
-  round did not pursue.
+  tracing that contract's own internal accounting or a further hop that
+  was not pursued.
 - As with every entry in this repo, this reflects a snapshot as of
   2026-09-10; balances at any address named above may have changed since.
 

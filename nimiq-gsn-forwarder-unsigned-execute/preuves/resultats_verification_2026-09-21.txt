@@ -59,10 +59,9 @@ Polygon head block 94191108, Ethereum head block 26025722
   [OK  ] the real USDC balance of that address is zero
   [OK  ] no fake contract is the canonical USDC  ->  46 distinct token contracts touched that address
 
-9. Five days on: no on-chain remediation
-----------------------------------------
+9. Five days on: no on-chain pause or upgrade observed
+------------------------------------------------------
   [OK  ] neither HTLC handler has emitted anything since the drain  ->  0 events between the drain and head
-  [OK  ] the drained wallet's approvals were never revoked  ->  3 of them are still effectively unlimited
-  [OK  ] the drained wallet is empty, so nothing is at risk there now
+  [OK  ] the drained wallet is still empty
 
-36 checks passed, 0 failed.
+35 checks passed, 0 failed.

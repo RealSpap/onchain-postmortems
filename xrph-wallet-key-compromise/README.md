@@ -32,7 +32,7 @@ transaction history, which the article itself does not attempt.
 | Incident | Mass compromise of XRPH Wallet users' private keys; every wallet's own balance was swept in an ordinary, validly-signed payment, not a ledger-level exploit |
 | Window | 2026-09-03T21:36:32Z (collector funded) to 2026-09-04T01:10:11Z (178 ETH swapped for DAI); a handful of stragglers continued until 2026-09-09 |
 | Press figure | XRP Healthcare's own count (per press paraphrase of its X posts, X itself not independently fetchable, returns HTTP 402): 4,011 wallets, 267,664 XRP, about $452,000, traced to about 445,000 DAI on one Ethereum address |
-| Verified independently | Every hop of the fund flow, XRPL and Ethereum, re-fetched live and matching the source article to the second at every timestamp checked; a full independent pagination of the collector's own transaction history (10,936 transactions), not present in any source; the DAI balance confirmed still sitting untouched 6 days later |
+| Verified independently | Every hop of the fund flow, XRPL and Ethereum, re-fetched live with its timestamp read from the chain itself (one gap differs from the source article: the first ETH landing comes 30 seconds after the XRPL bridge-wallet payment, not eighteen); a full independent pagination of the collector's own transaction history (10,936 transactions), not present in any source; the DAI balance confirmed still sitting untouched 6 days later |
 | Not independently confirmed | The root-cause mechanism (weak, non-random private-key generation plus a staking feature allegedly leaking seed phrases to XRP Healthcare's own server) rests entirely on xrpl.to's own, unreproduced decompilation of the wallet app; no XRP Healthcare GitHub source repo exists to check it against directly |
 
 ```mermaid
@@ -51,7 +51,7 @@ flowchart LR
     VT -->|"4,258 token Payments,<br/>liquidated to XRP on XRPL order book"| COL
     COL -->|"307,000 XRP<br/>2026-09-04T00:42:32Z"| ND
     ND -->|"306,998.99999 XRP<br/>9s later"| W2
-    W2 -->|"175.80878485237295 ETH<br/>18s later"| ETHA
+    W2 -->|"175.80878485237295 ETH<br/>30s later"| ETHA
     W2 -->|"2.6481672253280544 ETH<br/>2026-09-04T01:04:35Z"| ETHA
     COL -.->|"13 payments,<br/>about 217 XRP"| FEE
     ETHA -->|"178.0 ETH in<br/>2026-09-04T01:10:11Z"| SWAP
@@ -83,9 +83,9 @@ CoinGecko historical-price lookup.
    addresses and hashes from the page's own raw HTML rather than
    guessing). No XRP Healthcare GitHub source repo exists to anchor to
    instead: the `XRPHealthcare` GitHub org, checked live via the GitHub
-   API, holds exactly one public repo, `.github` - not the
-   "XRPH-Mobile-Wallet" open-source wallet repo a web search's own
-   synthesized answer claimed exists (Step 0).
+   API, holds exactly one public repo, `.github`; no "XRPH-Mobile-Wallet"
+   open-source wallet repo, which a search-engine result claimed exists,
+   was found (Step 0).
 2. **Every hop is independently re-fetched from the chain it happened
    on**, not assumed from the article's narrative: the collector's
    genesis transaction (Step 1), its first and largest incoming sweep
@@ -101,7 +101,7 @@ CoinGecko historical-price lookup.
    against `s1.ripple.com`, not committed to the script's own output but
    in `registre_hypotheses.csv` H9).
 4. **A full, independent pagination of the collector's entire transaction
-   history** (Step 9) - every transaction the account has ever sent or
+   history** (Step 9): every transaction the account has ever sent or
    received, paginated from genesis, not a curated subset. This is the
    one thing that goes beyond what xrpl.to's own article does: it lets
    this project independently total the raw XRP swept from victims
@@ -113,7 +113,7 @@ CoinGecko historical-price lookup.
 
 ## What it found
 
-### The whole chain, confirmed to the second, hop by hop
+### The whole chain, hop by hop, with on-chain timestamps
 
 | Step | When (UTC, live-confirmed) | What | Tx |
 |---|---|---|---|
@@ -121,21 +121,23 @@ CoinGecko historical-price lookup.
 | Largest single sweep | 2026-09-03T22:07:40Z | 97,829.051309 XRP from `rUdG4couJtA5PTB3WwjtWwGNkqFyeFKMkx` | `B50E7C83AE...8467E6A` |
 | Collector to NEAR Intents deposit address | 2026-09-04T00:42:32Z | 307,000 XRP | `15430E73FA...F01825A` |
 | Deposit address to second XRPL wallet | 2026-09-04T00:42:41Z (9s later) | 306,998.99999 XRP | `73F6E8DC9B...B133A4D39` |
-| ETH lands on Ethereum | 2026-09-04T00:43:11Z (18s later) | 175.80878485237295 ETH | `0xc18beb44...52f2f9edd3c` |
+| ETH lands on Ethereum | 2026-09-04T00:43:11Z (30s later) | 175.80878485237295 ETH | `0xc18beb44...52f2f9edd3c` |
 | Second, smaller ETH landing | 2026-09-04T01:04:35Z | 2.6481672253280544 ETH | `0x4212d860...9ad0b25` |
 | 178 ETH swapped for DAI, one transaction | 2026-09-04T01:10:11Z | 178.0 ETH in, 445,197.999216 DAI out | `0x67e11aa4...c8a769b05` |
 
 Every timestamp in that table was read directly off the block or ledger
 header that carries the transaction, on the chain the transaction
-actually happened on, not copied from the source article. Every one
-independently matches the article's own stated time to the second.
+actually happened on, not copied from the source article. One gap
+differs from the article: it says the ETH landed "eighteen seconds
+later", while the chain shows 30 seconds between the XRPL bridge-wallet
+payment (00:42:41) and the Ethereum block (00:43:11).
 
 ### The DAI is still there, six days later
 
 A live `eth_call` to DAI's own `balanceOf` for the destination address,
-run today (2026-09-10), returns exactly 445,197.99921599997 DAI - the
+run on 2026-09-10, returns exactly 445,197.99921599997 DAI, the
 identical amount, to the last wei, that the swap transaction delivered
-five days ago. The address's live ETH balance, 0.45274778737565824 ETH,
+six days earlier. The address's live ETH balance, 0.45274778737565824 ETH,
 is consistent with dust left over after spending exactly 178.0 ETH on
 the swap. On the XRPL side, the collector account itself, queried live
 against a second, independently-operated node (`s1.ripple.com`, Ripple's
@@ -152,7 +154,7 @@ own genesis (10,936 transactions total) rather than trusting the
 article's summary finds:
 
 - **6,030 incoming native-XRP Payment transactions from 3,630 distinct
-  sending addresses, totaling 267,679.863641 XRP** - within 0.006% of the
+  sending addresses, totaling 267,679.863641 XRP**, within 0.006% of the
   article's stated 267,664 XRP, independently re-derived from raw
   transaction data. This project's own sender count (3,630) sits about
   9.5% below the article's stated 4,011 wallets; the likely explanation,
@@ -183,7 +185,7 @@ independently-summed raw-XRP leg alone (267,679.863641 XRP) is
 XRPHAI tokens separately drained and then liquidated on-ledger into that
 same XRP total. The **445,197.999216 DAI figure (about $445,198)**,
 independently confirmed above as the amount that actually landed on
-Ethereum and is still sitting there today, is the more complete number:
+Ethereum and was still sitting there on 2026-09-10, is the more complete number:
 it reflects both the raw XRP theft and the proceeds of liquidating the
 stolen tokens, realized at the attacker's own accepted exchange rate
 rather than a historical daily snapshot. It sits within 1.5% of XRP
@@ -206,8 +208,7 @@ of its X statement).
   was found to check it against directly (the `XRPHealthcare` org has
   exactly one public repo, `.github`).
 - XRP Healthcare's own statements exist only on X, which returns HTTP 402
-  to this project's fetch tooling (consistent with every other entry in
-  this repo that has tried); this entry relies on press outlets (crypto.
+  to automated requests; this entry relies on press outlets (crypto.
   news, coinpaper, among others) that directly quote or link specific X
   post URLs, not on independently fetching those posts.
 - This incident is not tracked in DefiLlama's hacks feed at all (checked
@@ -222,8 +223,8 @@ of its X statement).
   xrpl.to's article, not independently confirmed by this project beyond
   observing the mechanism itself (an XRPL deposit address that forwards
   to a second XRPL wallet within seconds, matched by an ETH arrival at a
-  fixed Ethereum address within 18-24 seconds of the original XRPL
-  payment, twice).
+  fixed Ethereum address about 30 seconds after the second wallet's
+  payment for the main leg).
 - Whether any of the 4,011 affected users will be made whole, and by
   whom, is outside this project's scope; nothing here should be read as
   confirming or denying any compensation claim.

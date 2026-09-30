@@ -1,4 +1,4 @@
-ether.fi Liquid — DefiLlama hacks feed record vs on-chain reality
+ether.fi Liquid: DefiLlama hacks feed record vs on-chain reality
 
 DefiLlama record (https://api.llama.fi/hacks, grep name=="ether.fi Liquid"):
 {
@@ -25,9 +25,11 @@ On-chain exploit block 25952624 timestamp: 2026-09-11T07:20:11Z. The date is cor
 DefiLlama amount: 43260 USD.
 On-chain realized: attacker gross 15.453645063 ETH (EOA balance delta 15.452960135 + gas 0.000684929),
 which also equals the sum of drained value (14.4455 liquidETH-equiv + 7.05 USDC).
-ETH/USD at 2026-09-11T07:20Z (coins.llama.fi, coingecko:ethereum, confidence 0.99): 2459.2370891934406
-  -> realized value = 15.453645063 * 2459.2371 + 7.047848 USDC = ~$38,011.
-  -> DefiLlama's $43,260 is ~14% high; it implies an ETH price of ~$2,799, not the ~$2,459 that
+ETH/USD at 2026-09-11T07:20:00Z (coins.llama.fi/prices/historical/1789111211/coingecko:ethereum,
+returned timestamp 1789111200, confidence 0.99, re-fetched 2026-09-30): 2468.7338806177486
+  (the first version of this file used the point returned at 05:20:00 UTC, 2459.2370891934406, giving ~$38,011)
+  -> realized value = 15.453645063 * 2468.7339 + 7.047848 USDC = ~$38,158.
+  -> DefiLlama's $43,260 is ~13% high; it implies an ETH price of ~$2,799, not the ~$2,469 that
      DefiLlama's OWN price oracle reports for that timestamp. Press (CryptoTimes) reported ~$38,000,
      which reconciles with the on-chain figure. The classification/technique
      ('Access Control' / 'Arbitrary External Call') is accurate.

@@ -1,4 +1,4 @@
-Figure-freshness review of cosmos-evm-vesting-underflow, 2026-09-14.
+Source re-check of cosmos-evm-vesting-underflow, 2026-09-14.
 
 1. DefiLlama hacks feed re-fetched (https://api.llama.fi/hacks, 2026-09-14): unchanged since 2026-09-10.
    MANTRA Chain amount 0, TAC amount 7500000, KiiChain amount 9700000, all three with an empty "source" field.

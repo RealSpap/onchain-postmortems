@@ -1,4 +1,4 @@
-Rotating figure-freshness re-check, 2026-09-21
+Source re-check, 2026-09-21
 ==============================================
 
 Entry: dreamhealthchain-award-two-wei-reclaim

@@ -1,8 +1,8 @@
-ROTATING FIGURE-FRESHNESS RE-CHECK: 2026-09-18
+SOURCE RE-CHECK: 2026-09-18
 Entry: beatswap-vesting-slot0-reserve-drain
 Original reconstruction: 2026-09-14, snapshot block 121829657.
 
-This entry came up in the pipeline's rotating re-check. Nothing was suspected
+A routine re-check. Nothing was suspected
 wrong with it. One live claim had in fact gone stale, and is corrected in the
 README's new section "Both contracts were paused on 2026-09-15, and it
 changes less than it looks". Nothing in the original reconstruction of the
@@ -183,11 +183,3 @@ Ethereum, gateway.tenderly.co/public/mainnet:
   eth_getTransactionCount = 4
 
 Unchanged. Still untouched since 2026-09-10.
-
-
---------------------------------------------------------------------------
-6. EFFECT ON THE QUEUED X THREAD
---------------------------------------------------------------------------
-This entry's drafted thread said "Five days on, neither contract is paused".
-That is now false. The thread was rewritten on 2026-09-18 against the facts
-above before being posted. See the pipeline's x_queue.json notes.

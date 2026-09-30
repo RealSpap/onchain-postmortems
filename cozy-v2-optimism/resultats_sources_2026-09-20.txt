@@ -1,4 +1,4 @@
-Rotating figure-freshness re-check, 2026-09-20
+Source re-check, 2026-09-20
 ==============================================
 
 Scope: the "3 distinct USDC.e source addresses" phrasing in README.md, which

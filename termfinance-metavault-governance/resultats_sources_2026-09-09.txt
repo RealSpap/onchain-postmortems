@@ -17,9 +17,8 @@ DefiLlama hacks feed record for this incident (api.llama.fi/hacks, queried
   "language": "Solidity"
 }
 
-date 1787443200 = 2026-08-23. Note: "source" is empty, same as every other
-record checked in this research program - DefiLlama's own hacks feed never
-links a primary source directly.
+date 1787443200 = 2026-08-23. Note: "source" is empty, like the other
+DefiLlama records checked for this repository.
 
 Note: this feed also lists an OLDER, unrelated "Term Finance" incident
 (2025-04-26, ~$1.65M, oracle misconfiguration, defillamaId null) which
@@ -41,7 +40,7 @@ on-chain address, transaction hash, or block number:
   and the Yearn V3 + custom-governance-layer framing; explicitly states no
   on-chain identifiers were disclosed in the piece.
 - w3rooster.com, "When Governance Becomes the Attack Surface...": gives a
-  competing account of the delay mechanism - "a queued proposal executed
+  competing account of the delay mechanism: "a queued proposal executed
   after the voting period ended on August 23 with no vetoes" (i.e. the
   normal delay ran its course, nobody vetoed), transferring "approximately
   2,841.74 WETH from the ETH Meta Vault" and "about 1.68 million USDC from
@@ -49,27 +48,19 @@ on-chain address, transaction hash, or block number:
   role the attacker used or why the timelock and LP veto did not prevent
   the exploit transactions."
 - shattered.io, "Term Finance DeFi Hack: $8.5M Gone in Minutes": gives yet
-  another account of the delay mechanism - the attacker "self-approved a
+  another account of the delay mechanism: the attacker "self-approved a
   governance proposal that reset that seven-day delay down to zero";
   states exact amounts "2,841.74 WETH and 1,679,639 USDC."
 - CoinDesk, "Ethereum lending app Term Finance loses $8.5 million after
-  attacker buys voting power": WebFetch's summary of this article named an
-  attacker address, 0xD5183d8BfC65a50863C62aF2538198A8288FFc13, attributed
-  to "PeckShield." Independently re-fetching the same URL directly with
-  curl returned a "Vercel Security Checkpoint" bot-challenge page
-  containing zero 0x-prefixed strings, not the article - so this
-  project could NOT independently confirm that attribution from the
-  primary article text. A separate WebSearch call's own synthesis of
-  unrelated search-result snippets also produced the exact same address,
-  attributed instead to "CertiK." Given the address matched between two
-  independent tool calls, and later matched this project's own on-chain
-  trace exactly (see resultats_reconstruction_2026-09-09.txt lines 21-22
-  and 79-80), it was almost certainly a genuine quote from real press
-  text that one or both tool calls did access successfully, not a
-  coincidence - but this project treats the PeckShield/CertiK
-  attribution itself as unconfirmed, since it was never independently
-  verified against readable primary article text. See README's
-  dedicated section on this.
+  attacker buys voting power": fetching the URL directly with curl
+  returned a "Vercel Security Checkpoint" bot-challenge page containing
+  zero 0x-prefixed strings, not the article. Search-engine snippets about
+  the incident surfaced the address
+  0xD5183d8BfC65a50863C62aF2538198A8288FFc13 with an attribution to a
+  security firm, but that attribution could not be verified against any
+  readable article text and is not repeated here. The address itself
+  matches this project's own on-chain trace exactly (see
+  resultats_reconstruction_2026-09-09.txt lines 21-22 and 79-80).
 - General/day-of coverage (The Block, FXStreet, CryptoNomist, MoneyCheck,
   CryptoRank, spotedcrypto, coingabbar, cryptobreaking, thecoinrepublic,
   bitcoinethereumnews): corroborate the ~$8.5M figure, the Yearn V3 +

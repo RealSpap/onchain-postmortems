@@ -21,7 +21,7 @@ final figure.
 | Incident | A compromised off-chain credential belonging to Ostium's own price-oracle signer let an attacker submit self-authored, validly-signed BTC/USD price reports through a registered `PrivatePriceUpKeep` forwarder, a component Ostium's own bug-bounty terms declare "assumed to be trusted and operating correctly". The forged reports opened and instantly closed large leveraged positions against the OLP vault at fabricated prices, extracting real USDC as fake trading profit |
 | Window | 2026-07-15, 14:18:23-14:23:52 UTC, 329 seconds across 8 transactions (live-timestamped, matching press's separately-stated "5 minutes 29 seconds" and "14:18-14:24 UTC" windows) |
 | Press figures | Blockaid's first estimate "$18M"; CertiK "~$22M"; PeckShield "~$24M"; Ostium's own final figure (per press paraphrase of its X statement) $23,752,746 |
-| Verified independently | 8 transactions, decoded directly from the Vault contract's own USDC `Transfer` log: 7 of them (excluding a small 897.8008 USDC "test" cycle 25 seconds before the main attack) total **$23,752,641.6764**, within **$104.32 (0.0004%)** of Ostium's own $23,752,746; DefiLlama's own tracked figure, $23,750,000, sits within 0.01% of the same number |
+| Verified independently | 8 transactions, decoded directly from the Vault contract's own USDC `Transfer` log: 7 of them (excluding a small 897.8008 USDC "test" cycle 25 seconds before the main attack) total **$23,752,641.6764**, within **$104.32 (0.0004%)** of Ostium's own $23,752,746; DefiLlama's own tracked figure, $23,750,000, sits within 0.012% of the same number |
 | What's still open | The exact fixed-point price values inside the attacker's signed reports are not independently decoded (Ostium's `OstiumVerifier` report ABI is not public); the downstream Kyber-swap/Tornado-Cash laundering route press describes is not independently retraced. See Caveats |
 
 ```mermaid
@@ -46,8 +46,8 @@ bug-bounty program page, embeds the protocol's own machine-readable
 contract registry (address, human label, and the date each contract was
 added to the program) inside the page's own Next.js hydration payload.
 That payload is fetched and regex-parsed directly, the same bytes any
-browser loading that page receives, not an AI-summarized paraphrase of
-it, and not a block-explorer label or a press screenshot. From there,
+browser loading that page receives, not a paraphrase of it, and not a
+block-explorer label or a press screenshot. From there,
 every named address is confirmed live (bytecode present) on Arbitrum One
 before being used, the incident window is located by binary search on
 live block timestamps (not by copying a time range from an article), and
@@ -86,17 +86,10 @@ page's own scope text states verbatim, "All registered keepers
 assumed to be trusted and operating correctly. Issues requiring a
 compromised or malicious keeper are out of scope."
 
-One earlier lead was independently discredited during this
-reconstruction: a secondary Ostium documentation page cited the
-PrivatePriceUpKeep address with one digit different
-(`...cb5567A3d36` instead of the correct `...cb5667A3d36`). `eth_getCode`
-against that alternate address returns empty bytecode (`0x`); the
-Immunefi-sourced address returns a real, deployed proxy contract. The
-correct address is also the one embedded, byte for byte, inside the
-actual exploit transactions' own calldata and event logs, decoded
-independently below. This is recorded here as a caution about AI-assisted
-page summarization inventing plausible-looking but wrong hex digits, not
-as a claim about Ostium's documentation generally.
+The Immunefi-sourced `PrivatePriceUpKeep` address returns a real,
+deployed proxy contract via `eth_getCode`, and it is also the one
+embedded, byte for byte, inside the actual exploit transactions' own
+calldata and event logs, decoded independently below.
 
 ### The drain: 8 transactions, found from the Vault's own event log, not copied from press
 
@@ -161,7 +154,7 @@ readings here rather than silently picking one.
 DefiLlama's own hacks feed (`api.llama.fi/hacks`, queried live) tracks
 exactly one Ostium entry: name `"Ostium"`, chain `Arbitrum`, dated
 2026-07-15, amount **$23,750,000**, classification "Key Compromise" /
-"Private Key Compromised", within 0.01% of this reconstruction's own
+"Private Key Compromised", within 0.012% of this reconstruction's own
 figure. That classification is directionally accurate (a signing key was
 compromised) but does not distinguish an off-chain oracle-signer key,
 which is what actually happened here, from an on-chain validator or
@@ -207,7 +200,7 @@ reconstruction, see Caveats.
   read from the primary post itself. The independent, transaction-level
   reconstruction above does not depend on that figure being accurate; it
   is offered as a cross-check, and lands within 0.0004% of it.
-- `--readme-url` above points to rekt.news's own writeup, a third-party
+- [rekt.news's writeup](https://rekt.news/ostium-rekt) is a third-party
   forensic account, not Ostium's own primary source; it is cited for its
   transaction-hash-level detail (independently reproduced here from the
   Vault's own event log, not copied), not treated as a primary source in

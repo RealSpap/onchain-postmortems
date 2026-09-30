@@ -69,11 +69,11 @@ identified in the protocol."
 
 "There is zero contagion to any other cross-chain assets or applications."
 
-=== 3. DarkNavy technical writeup (darknavy.org/web3/exploits/kelpdao-rseth-layerzero-packet-drain/), fetched live via curl (raw HTML, not WebFetch's summarizer) ===
+=== 3. DarkNavy technical writeup (darknavy.org/web3/exploits/kelpdao-rseth-layerzero-packet-drain/), fetched live via curl (raw HTML) ===
 Used only as a lead to the exploit transaction hash and contract addresses;
 every one of the following addresses/hash was found by grep on the raw
-downloaded HTML (confirming they are really printed on the page, not
-invented by a summarization step) and then independently re-derived from
+downloaded HTML (confirming they are really printed on the page)
+and then independently re-derived from
 the raw transaction receipt in Step 3-4 of reconstruct_exploit.py:
   0x1ae232da212c45f35c1525f851e4c41d529bf18af862d9ce9fd40bf709db4222 (tx hash)
   0x85d456b2dff1fd8245387c0bfb64dfb700e98ef3 (OFTAdapter)
@@ -115,7 +115,7 @@ year before the exploit (rules out a post-hoc relabeling).
 independently names the same rsETH token address the exploit tx's own
 Transfer log shows.
 
-=== 7. Etherscan address labels, fetched live via curl (raw HTML, not an API key or AI summary) ===
+=== 7. Etherscan address labels, fetched live via curl (raw HTML, no API key) ===
 GET https://etherscan.io/address/0x8b1b6c9a6db1304000412dd21ae6a70a82d60d3b
   grep -io "kelp[^<\"]*" -> "Kelp DAO Exploiter 13" (repeated tag/tooltip text)
 GET (same page) for 0xa1290d69c65a6fe4df752f95823fae25cb99e5a7

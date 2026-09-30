@@ -1,4 +1,4 @@
-Figure-freshness review, 2026-09-16 (onchain-postmortems-pipeline step 6)
+Source re-check, 2026-09-16
 
 1. DefiLlama api.llama.fi/hacks, re-fetched 2026-09-16:
    "AFX Bridge", amount 24150000, chain ["Arbitrum"], classification "Key Compromise",

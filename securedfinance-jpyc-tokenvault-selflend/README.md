@@ -21,14 +21,14 @@ happened.
 |---|---|
 | Incident | Two flash-loan-funded transactions used a self-matched lend/borrow pair on Secured Finance's JPYC market to withdraw more JPYC from TokenVault than either flash loan ever put in |
 | Window | 2026-09-05 23:55:35 UTC and 2026-09-06 00:53:59 UTC (58 minutes apart); the proceeds were converted to ETH and mostly moved into Tornado Cash within the following 9.5 hours |
-| DefiLlama figure | "Secured Finance Lending", $104,000, "Oracle Manipulation" / "Spot Price Manipulation" -- no source cited, and no oracle read anywhere in either transaction |
+| DefiLlama figure | "Secured Finance Lending", $104,000, "Oracle Manipulation" / "Spot Price Manipulation"; no source cited, and no oracle read anywhere in either transaction |
 | Verified independently | 4,360,902.135130 JPYC drained from TokenVault across 2 transactions, decoded directly from JPYC's own `Transfer` events and cross-checked against TokenVault's `Deposit`/`Withdraw` events; $45,444.97 at CoinGecko's theft-day price, 0.44x DefiLlama's tracked figure |
-| A real correction | Not an oracle exploit: both fills happened at unremarkable unit prices on Secured Finance's own order book, and neither transaction reads any price feed. This is a collateral-accounting bug in `TokenVault`/`DepositManagementLogic`, confirmed by reading Secured Finance's own currently-live Solidity source |
+| Classification note | Not an oracle exploit: both fills happened at unremarkable unit prices on Secured Finance's own order book, and neither transaction reads any price feed. The observed behavior points to a collateral-accounting issue in the TokenVault deposit and withdrawal path |
 | What's still open | The DefiLlama figure is not reconciled (see Caveats); 8 other transactions active on the same two contracts in the surrounding 72 hours are not conclusively cleared or implicated, and are reported here as an open question, not folded into the total either way |
 
 ```mermaid
 flowchart TD
-    subgraph TX1["Tx 1 -- 2026-09-05 23:55:35 UTC"]
+    subgraph TX1["Tx 1, 2026-09-05 23:55:35 UTC"]
         U1["Uniswap V4 PoolManager<br/>0x0000...8a90"]
         C1["Attacker contract<br/>deployed in same tx"]
         TV1["TokenVault 0xB747...9393<br/>deposit, self-matched lend/borrow,<br/>then withdraw more than deposited"]
@@ -37,7 +37,7 @@ flowchart TD
         C1 -.->|"flash loan repaid in full, same tx"| U1
     end
 
-    subgraph TX2["Tx 2 -- 2026-09-06 00:53:59 UTC, 58 min later"]
+    subgraph TX2["Tx 2, 2026-09-06 00:53:59 UTC, 58 min later"]
         U2["Uniswap V4 PoolManager<br/>0x0000...8a90"]
         C2["Attacker contract<br/>deployed in same tx"]
         TV2["TokenVault 0xB747...9393<br/>deposit, lend order matched by<br/>2nd attacker address, then<br/>withdraw more than deposited"]
@@ -149,44 +149,16 @@ places the matching borrow order, not a genuine third-party
 counterparty), and then withdraws more JPYC from TokenVault than was
 ever deposited, before repaying the loan and keeping the difference.
 
-### Root cause, read directly from Secured Finance's own currently-live source
+### Root cause, at a high level
 
-`contracts/protocol/libraries/logics/DepositManagementLogic.sol` in
-`Secured-Finance/contracts` (fetched live; most recent commit touching
-this file is `3421edeb294555d0ac809bfca39aa34036acfee8`, dated
-2026-02-09, seven months before this incident and, as of this
-reconstruction, still the most recent commit touching the file -- no
-patch has landed since) computes withdrawable collateral like this
-(`_calculateCollateral`, lines 231-280, and `getWithdrawableCollateral`,
-lines 283-333):
-
-```solidity
-uint256 plusDeposit = totalInternalDepositAmount + vars.borrowedAmount;
-uint256 minusDeposit = vars.workingLendOrdersAmount + vars.lentAmount;
-uint256 plusCollateral = plusDeposit + vars.collateralAmount;
-
-totalCollateral = plusCollateral >= minusDeposit ? plusCollateral - minusDeposit : 0;
-totalUsedCollateral = vars.workingBorrowOrdersAmount + vars.debtAmount;
-totalDeposit = plusDeposit >= minusDeposit ? plusDeposit - minusDeposit : 0;
-```
-
-`withdraw()` (line 377) then calls
-`getWithdrawableCollateral(_ccy, _user)`, which is capped by this
-`totalCollateral` figure whenever `usedCollateralExists` is true, and
-otherwise (when the user carries no used collateral at all, the case
-that applies here, since these are freshly-created single-transaction
-contracts) returns the *raw deposit total* uncapped. `vars.collateralAmount`
-and `vars.lentAmount` come from `LendingMarketController.calculateFunds`/
-`calculateTotalFundsInBaseCurrency`, a separate contract this
-reconstruction did not independently re-derive line by line; what is
-independently confirmed here is the structural shape of the bug (a
-same-block deposit immediately reflected as spendable collateral, with
-no check that the matching lend claim survived any real settlement
-period or counterparty risk), not a line-by-line proof of every internal
-value that feeds it. This is reported as this project's own reading of
-the fetched source, at the same confidence level the rest of this
-project uses for a structurally-confirmed-but-not-opcode-traced
-mechanism (compare the ankrFLOW loop in `more-markets-ankrflow-emode/`).
+Both transactions behave the same way: JPYC deposited into TokenVault and
+paired, in the same transaction, with a self-matched lend/borrow position
+on Secured Finance's own order book, is then treated as withdrawable
+collateral, and the contract pays out more JPYC than was deposited. The
+observed event sequence is consistent with a collateral-accounting issue
+in the TokenVault deposit and withdrawal path rather than with any price
+manipulation. This reading was not traced opcode by opcode. Current patch
+status not re-verified; details withheld pending disclosure to the team.
 
 ### Where the money went: Tornado Cash, not idle
 
@@ -194,7 +166,7 @@ The attacker's complete transaction history (10 transactions, matching
 the live `eth_getTransactionCount` nonce on this EOA exactly) was pulled
 in full from Blockscout, not just the 2 exploit transactions. After both
 drains, the JPYC was swapped to ETH via the 1inch v6 Aggregation Router
-twice (0.290391383832752 ETH and 10.835307363065763292 ETH -- the second
+twice (0.290391383832752 ETH and 10.835307363065763292 ETH; the second
 figure decoded directly from WETH's own `Withdrawal` event inside the
 swap transaction, `0xde87c71f7111f7fed33cec42687af072e5cb922b51d04b1bcb692eecd0410eeb`,
 and independently cross-checked a second way against the attacker EOA's
@@ -211,7 +183,8 @@ realized. Of that:
   (`0x4cD00E387622C35bDDB9b4c962C136462338BC31`, "RelayDepository").
 - **0.3 ETH** was sent as a plain transfer to an externally-owned
   account with no code.
-- **0.690316 ETH** remains on the attacker's own EOA today, live-queried.
+- **0.690316 ETH** remained on the attacker's own EOA when it was queried
+  (2026-09-11).
 
 Routing the large majority of the proceeds through Tornado Cash is
 itself independent evidence this was not a routine, authorized, or
@@ -230,10 +203,10 @@ DefiLlama's tracked amount, and the classification does not hold up
 either: neither transaction reads any price oracle, and every order fill
 inside them happens at an unremarkable unit price on Secured Finance's
 own order book (Secured Finance is an order-book fixed-rate lending
-protocol, not an AMM with a spot price to manipulate). This entry
-corrects the mechanism with confidence (an access-control /
-collateral-accounting bug, not a price exploit) but does not claim to
-know where DefiLlama's larger figure comes from; see Caveats.
+protocol, not an AMM with a spot price to manipulate). The on-chain
+evidence points to a collateral-accounting issue rather than a price
+exploit; this entry does not claim to know where DefiLlama's larger
+figure comes from; see Caveats.
 
 ## Caveats
 
@@ -241,10 +214,10 @@ know where DefiLlama's larger figure comes from; see Caveats.
   affiliated with Secured Finance, DefiLlama, Uniswap, 1inch, Tornado
   Cash, or Relay.
 - **The DefiLlama figure ($104,000) is not reconciled.** This project's
-  own two independently-derived numbers -- $45,444.97 (JPYC drained from
+  own two independently-derived numbers, $45,444.97 (JPYC drained from
   TokenVault, priced at the drain-day rate) and $27,325.66 (the
   attacker's own realized ETH proceeds after DEX slippage on an illiquid
-  token) -- sit 2.3x and 3.8x below DefiLlama's tracked figure
+  token), sit 2.3x and 3.8x below DefiLlama's tracked figure
   respectively, and no unmatched third transaction, second market, or
   later-dated follow-up from this attacker's wallet was found that would
   close that gap. DefiLlama's `source` field for this entry is empty, so
@@ -254,9 +227,9 @@ know where DefiLlama's larger figure comes from; see Caveats.
   entries' protocol-side loss.
 - **8 other transactions were active on `LendingMarketController` or
   `TokenVault` in the same 72-hour window and are neither counted nor
-  cleared.** Two addresses among them --
+  cleared.** Two addresses among them,
   `0xc0ffeebabe5d496b2dde509f9fa189c25cf29671` (nonce 222,969) and
-  `0xfc3facd67138966ab0c841e905b0c4bca1abe92f` (nonce 264) -- show a
+  `0xfc3facd67138966ab0c841e905b0c4bca1abe92f` (nonce 264), show a
   same-transaction deposit-then-withdraw pattern on USDC or WBTC with a
   nonzero net outflow, superficially similar in shape to the JPYC exploit.
   Unlike the confirmed attacker, though, none of these 8 transactions
@@ -270,15 +243,9 @@ know where DefiLlama's larger figure comes from; see Caveats.
   transaction-by-transaction the way the 2 JPYC transactions above are.
   These 8 transactions are not included in the loss total in either
   direction.
-- The root-cause citation above confirms the structural shape of the bug
-  in `DepositManagementLogic.sol` (fetched live, current as of this
-  reconstruction) but does not independently re-derive
-  `LendingMarketController.calculateFunds`/`calculateTotalFundsInBaseCurrency`,
-  a separate, more deeply nested contract, line by line. The claim that
-  no patch has shipped rests on GitHub's own commit history for this one
-  file only (last touched 2026-02-09), not a diff against a specific
-  known-vulnerable version pinned to a security advisory, since no
-  advisory for this incident was found anywhere.
+- The root-cause reading above is structural (the observed event
+  sequence), not a line-by-line proof of every internal value that feeds
+  the withdrawable-collateral figure.
 - No press, security-firm writeup, or official Secured Finance statement
   was found for this incident by this project, despite a genuine search
   (general web search, the protocol's own GitHub issues, and

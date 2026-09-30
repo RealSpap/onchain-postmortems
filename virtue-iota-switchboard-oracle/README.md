@@ -23,8 +23,8 @@ same atomic transaction as the mint.
 | Incident | All 14 Switchboard oracle signing keys for Virtue's IOTA price queue were compromised; in one atomic transaction the attacker self-submitted a fake $10,000,000 IOTA price through all 14 of them, opened a CDP position with 1 real IOTA of collateral, minted 4,942,703.659474 VUSD against it, and deposited 1,000,000 VUSD of that into Virtue's own stability pool. The price was then crashed toward zero, triggering a cascade of 47 liquidations against 45 real, honestly-collateralized users |
 | Window | 2026-08-28, exploit mint at 21:53:10 UTC; liquidation cascade 21:52:12-22:45:02 UTC (the first liquidation, a small wash/test cycle, is 58 seconds BEFORE the mint; see What it found) |
 | Press figures | Virtue's own account (per press paraphrase of its X posts, X itself not independently fetchable by this project): 47 liquidations / 45 users, 455,103 VUSD debt cleared against 23,215,117 IOTA-equivalent seized. DefiLlama tracks $894,500, "Oracle Manipulation" / "Oracle Misconfiguration" |
-| Verified independently | The exploit transaction, its 14 compromised-oracle submissions, the mint, and the stability-pool deposit, all decoded directly from the transaction's own commands and events; the 47/45 liquidation count matches Virtue's account exactly once the attacker's own 1 wash-test liquidation is identified and excluded from the raw 48; the VUSD debt-cleared figure independently reconstructs to $455,102.94, within 7 cents of Virtue's own number; a second, independent figure -- the real-user collateral's value at theft-day prices, ≈$848,457 -- sits much closer to DefiLlama's $894,500 than to the face-value debt figure |
-| What's still open | The stIOTA/vIOTA-to-IOTA exchange-rate conversion behind the ≈$848,457 figure is this project's own approximation of Virtue's internal accounting, not a byte-for-byte replication of it (6.8% below Virtue's own stated IOTA-equivalent). The attacker's own 4.94M-VUSD position is never seen being liquidated in this project's own capture of the event log. See Caveats |
+| Verified independently | The exploit transaction, its 14 compromised-oracle submissions, the mint, and the stability-pool deposit, all decoded directly from the transaction's own commands and events; the 47/45 liquidation count matches Virtue's account exactly once the attacker's own 1 wash-test liquidation is identified and excluded from the raw 48; the VUSD debt-cleared figure independently reconstructs to $455,102.94, within 7 cents of Virtue's own number; a second, independent figure, the real-user collateral's value at theft-day prices, ≈$848,190, sits much closer to DefiLlama's $894,500 than to the face-value debt figure |
+| What's still open | The stIOTA/vIOTA-to-IOTA exchange-rate conversion behind the ≈$848,190 figure is this project's own approximation of Virtue's internal accounting, not a byte-for-byte replication of it (6.8% below Virtue's own stated IOTA-equivalent). The attacker's own 4.94M-VUSD position is never seen being liquidated in this project's own capture of the event log. See Caveats |
 
 ## The method
 
@@ -90,8 +90,8 @@ commands total) shows the entire attack was atomic:
    `aggregator_submit_result_action::run` (package
    `0x8650249d...`, matching the SDK's own config above), each preceded by
    a `SplitCoins` (paying that oracle's own submission fee). Each of the
-   14 calls carries a **distinct `oracle_id`** -- 14 distinct signers in
-   total -- and each emits an `AggregatorUpdated` event with the
+   14 calls carries a **distinct `oracle_id`**, 14 distinct signers in
+   total, and each emits an `AggregatorUpdated` event with the
    **identical** raw value `10000000000000000000000000`. Fourteen
    distinct legitimate oracles do not independently agree on the same
    manipulated price by chance; this is 14 compromised keys submitting
@@ -104,20 +104,20 @@ commands total) shows the entire attack was atomic:
    poisoned submission to a `PriceAggregated<IOTA>` event with
    `result: "10000000000000000"`. At this Oracle's own 9-decimal price
    convention (independently confirmed below against a normal price for
-   the same coin type), that is **exactly $10,000,000.00 per IOTA** --
+   the same coin type), that is **exactly $10,000,000.00 per IOTA**,
    not just "a very large number", but the specific figure press
    reports, decoded from the raw event data.
 3. The CDP package (`request::debtor_request`, `vault::update_position`)
    opens the position and mints VUSD against it, using that poisoned
    price. Its own `vusd::Mint` event records `amount: 4942703659474`
    (4,942,703.659474 VUSD) with `total_supply` immediately after the mint
-   at **5,592,035.484667 VUSD** -- meaning this single fraudulent mint was
+   at **5,592,035.484667 VUSD**, meaning this single fraudulent mint was
    about **88.4%** of the entire VUSD supply the instant after it
    happened, a detail no press account this project found states.
 4. In the **same transaction**, a `stability_pool::Deposit` event shows
    the attacker depositing exactly **1,000,000.000000 VUSD** of that
    freshly-minted, essentially unbacked stablecoin into Virtue's own
-   stability pool -- the pool whose depositors absorb the collateral from
+   stability pool, the pool whose depositors absorb the collateral from
    liquidations that follow, in exchange for having their own VUSD
    burned. This directly connects the mint to the liquidation cascade
    below: positioning fake VUSD in the stability pool before crashing the
@@ -138,7 +138,7 @@ $10,000,000.00.
 ### Root cause, one layer deeper than press: a real-time-verifiable dependency Virtue's own team had already flagged
 
 Virtue's own GitHub SDK repository shows commit `b1ba8f80b3`, merged
-**2026-08-27T03:13:38Z -- less than 24 hours before the exploit** --
+**2026-08-27T03:13:38Z, less than 24 hours before the exploit**,
 titled "remove Pyth and iBTC; Switchboard is now the only price source".
 Its own commit message states verbatim: Pyth's Hermes endpoint had been
 "answering `401 unauthorized`... to us and to anyone... persistently,"
@@ -151,8 +151,8 @@ Separately, this project independently confirms (via
 `iota_tryGetPastObject` against the price-aggregator config object at the
 exact version the exploit transaction itself used, `0x052c40b4...`
 version `759082917`) that the **on-chain** config still listed BOTH
-`PythRule` and `SwitchboardRule` as valid sources, `weight_threshold: 1`
--- meaning a single source alone was always sufficient by the contract's
+`PythRule` and `SwitchboardRule` as valid sources, `weight_threshold: 1`,
+meaning a single source alone was always sufficient by the contract's
 own design. Removing Pyth client-side did not change that on-chain
 threshold; it meant that, in practice, only Switchboard was ever going to
 be the source any normal caller actually fed in, since a broken upstream
@@ -169,7 +169,7 @@ to the same debtor address as the exploit-mint transaction above: a small
 wash/test cycle (2 IOTA deposited, 0.066941 VUSD borrowed, then
 immediately closed) 58 seconds **before** the main exploit, at the real,
 pre-manipulation price. Excluding it leaves **exactly 47 liquidation
-events across 45 distinct debtor addresses** -- matching Virtue's own
+events across 45 distinct debtor addresses**, matching Virtue's own
 press-relayed account ("47 liquidation events had affected 45 users")
 exactly on both counts, independently arrived at from the raw event log,
 not copied from that account.
@@ -201,13 +201,13 @@ transaction itself used, not today's rate) gives:
 
 **Total: 21,644,320.39 IOTA-equivalent**, about 6.8% below Virtue's own
 stated 23,215,117 IOTA-equivalent. At the independently-sourced
-theft-window mean spot price ($0.039188/IOTA), that is **≈$848,457** --
+theft-window mean spot price ($0.039188/IOTA), that is **≈$848,190**,
 much closer to DefiLlama's tracked **$894,500** ("Oracle Manipulation" /
 "Oracle Misconfiguration") than to the $455,103 face-value debt figure
 Virtue's own account (and, by extension, most press paraphrasing it)
 emphasizes. The gap is not a case of either side being "wrong": debt
 cleared and collateral seized are two different numbers by construction
-whenever a liquidation happens at a manipulated, crashed price -- exactly
+whenever a liquidation happens at a manipulated, crashed price, exactly
 what happened here. DefiLlama's classification and figure track the real
 economic value taken from the 45 real users; Virtue's own $455,103
 statement tracks the smaller, nominal VUSD amount that was technically
@@ -218,7 +218,7 @@ statement tracks the smaller, nominal VUSD amount that was technically
 - This is independent research, not a security audit, and is not
   affiliated with Virtue Protocol, Switchboard, IOTA, or any outlet cited
   above.
-- The stIOTA/vIOTA exchange-rate conversion behind the ≈$848,457 figure is
+- The stIOTA/vIOTA exchange-rate conversion behind the ≈$848,190 figure is
   this project's own reconstruction (raw `total_staked`/`total_supply`
   read at the exact historical object version each liquidation
   transaction used), not a byte-for-byte replication of however Virtue's

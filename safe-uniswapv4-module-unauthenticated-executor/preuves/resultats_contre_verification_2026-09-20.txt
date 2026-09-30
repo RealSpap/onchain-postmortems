@@ -38,7 +38,7 @@ mask the result). Confirms the quantities the headline rests on.
 
 
 SECOND ATTEMPT AT CROSS-PROVIDER CONFIRMATION, fresh endpoints
-(the three used by the main script were rate-limited by this session's
+(the three used by the main script were rate-limited by this run's
 own query volume, so independence is established on different infra).
 ==========================================================================
 

@@ -1,6 +1,6 @@
-SOURCES, relevees le 2026-09-26
+SOURCES, collected 2026-09-26
 
-== 1. DefiLlama, https://api.llama.fi/hacks, enregistrement Payy Network ==
+== 1. DefiLlama, https://api.llama.fi/hacks, Payy Network record ==
 {
  "date": 1790208000,
  "name": "Payy Network",
@@ -18,9 +18,9 @@ SOURCES, relevees le 2026-09-26
  "language": "Solidity"
 }
 
-== 2. Source verifiee, Sourcify, https://sourcify.dev/server/v2/contract/1/0x7d8837b547f4fea0053571cb149e845fc58e9b2d ==
-match exact_match runtimeMatch exact_match contrat contracts/rollup3/RollupV1.sol:RollupV1 compilateur 0.8.20+commit.a1b79de6
--- contracts/rollup3/RollupV1.sol, lignes 314-372 (verifyRollup) --
+== 2. Verified source, Sourcify, https://sourcify.dev/server/v2/contract/1/0x7d8837b547f4fea0053571cb149e845fc58e9b2d ==
+match exact_match runtimeMatch exact_match contract contracts/rollup3/RollupV1.sol:RollupV1 compiler 0.8.20+commit.a1b79de6
+-- contracts/rollup3/RollupV1.sol, lines 314-372 (verifyRollup) --
  314      function verifyRollup(
  315          uint256 height,
  316          bytes32 verificationKeyHash,
@@ -80,7 +80,7 @@ match exact_match runtimeMatch exact_match contrat contracts/rollup3/RollupV1.so
  370  
  371          emit RollupVerified(height, newRoot);
  372      }
--- contracts/rollup3/RollupV1.sol, lignes 442-470 (verifyBurn) --
+-- contracts/rollup3/RollupV1.sol, lines 442-470 (verifyBurn) --
  442      function verifyBurn(
  443          uint i,
  444          bytes32[] calldata messages
@@ -110,7 +110,7 @@ match exact_match runtimeMatch exact_match contrat contracts/rollup3/RollupV1.so
  468  
  469          return i + 5;
  470      }
--- contracts/rollup3/RollupV1.sol, lignes 725-765 (verifyValidatorSignatures) --
+-- contracts/rollup3/RollupV1.sol, lines 725-765 (verifyValidatorSignatures) --
  725      function verifyValidatorSignatures(
  726          bytes32 newRoot,
  727          uint256 height,
@@ -153,14 +153,14 @@ match exact_match runtimeMatch exact_match contrat contracts/rollup3/RollupV1.so
  764          }
  765      }
 
-== 3. Presse, lue APRES la reconstruction (resume, pas de citation longue) ==
+== 3. Press, read AFTER the reconstruction (summary, no long quotation) ==
 Unchained, 2026-09-25, https://unchainedcrypto.com/payy-rules-out-a-compromised-key-in-1-92-million-drain-of-users-deposits/
-  total annonce 1,92 M USDC ; premier lot 1 828 589 USDC a 04:21 UTC ; second lot 90 202 USDC a 09:30 UTC ;
-  environ 700 USDC restants ; premier lot converti en environ 683 ETH via UniswapX (non re-derive ici) ;
-  Payy exclut une cle compromise, l'ingenierie sociale et une faille de son infrastructure hors chaine ;
-  ne mentionne ni le hash nul des burns, ni le jeu de validateurs a un seul membre, ni le paiement anticipe d'1 USDC.
+  reported total 1.92M USDC, first batch 1,828,589 USDC at 04:21 UTC, second batch 90,202 USDC at 09:30 UTC,
+  about 700 USDC left, first batch converted into about 683 ETH via UniswapX (not re-derived here),
+  Payy rules out a compromised key, social engineering and a flaw in its off-chain infrastructure,
+  mentions neither the zero hash of the burns, nor the single-member validator set, nor the early 1 USDC payment.
 CryptoSlate, 2026-09-25, https://cryptoslate.com/payy-bridge-exploit-freezes-crypto-cards-and-no-balances-remain-safe/
-  1 832 149,4681 USDC sortis en une transaction au bloc 26044909 ; contrat 'vide de tout son solde' ;
-  aucune cause technique ; aucun second lot.
-Cybersecuritynews / GBHackers, 2026-09 : 'drain du solde complet', environ 1,83 M$.
-Recherche web du 2026-09-26 : 'Payy Network bridge exploit September 2026', 10 resultats, aucun post-mortem technique de Payy trouve.
+  1,832,149.4681 USDC out in one transaction at block 26044909, contract "emptied of its entire balance",
+  no technical cause, no second batch.
+Cybersecuritynews / GBHackers, 2026-09: "drain of the full balance", about $1.83M.
+Web search on 2026-09-26: 'Payy Network bridge exploit September 2026', 10 results, no technical post-mortem from Payy found.

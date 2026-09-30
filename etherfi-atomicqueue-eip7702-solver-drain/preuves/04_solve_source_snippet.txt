@@ -1,5 +1,5 @@
-AtomicQueue.sol — verified source (compiler 0.8.21+commit.d9974bed), the vulnerable solve()
-contract: 0xd45884b592e316eb816199615a95c182f75dea07 (non-proxy, immutable, no owner()/pause())
+AtomicQueue.sol: verified source (compiler 0.8.21+commit.d9974bed), the vulnerable solve()
+contract: 0xd45884b592e316eb816199615a95c182f75dea07 (non-proxy)
 
 The `solver` argument is caller-supplied and is NEVER required to equal msg.sender.
 Loop 2 executes  want.safeTransferFrom(solver, users[i], assetsToUser)  which pulls the WANT

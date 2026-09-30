@@ -1,7 +1,6 @@
-ROTATING SOURCE-FRESHNESS REVIEW: 2026-09-18
+SOURCE RE-CHECK: 2026-09-18
 Entry: barnbridge-dormant-dao-controller-swap
-Reviewed because this entry came up in the pipeline's rotating figure-freshness
-step, not because anything was suspected wrong with it.
+A routine re-check, not prompted by any suspected error in the entry.
 
 Two questions were asked: (1) does a more authoritative source exist now than
 existed on 2026-09-11, and (2) has DefiLlama's own record moved.
@@ -41,7 +40,7 @@ drain at this time".
 Blockaid has since published a full write-up:
   "Governance Takeovers: How $22M Was Drained and How to Stop Them"
   https://blockaid.io/blog/governance-takeovers-how-22m-was-drained-and-how-to-stop-them
-  Retrieved 2026-09-18 via WebFetch.
+  Retrieved 2026-09-18.
 
 What it states about BarnBridge, verbatim where quoted:
   Loss:            "$777,000" (described as approximately $776,600 across two

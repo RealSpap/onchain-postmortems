@@ -60,11 +60,11 @@ Zentra's post-mortem, as relayed by press, describes an inconsistent accounting 
 
 ## Files
 
-- `reconstruct_exploit.py`: live reconstruction; re-derives every figure above and ends with an adversarial self-check that recomputes the loss two independent ways.
-- `registre_hypotheses.csv`: 12 falsifiable hypotheses, each with a precise locator and a falsification test (0 anomalies under the `hypotheses-falsifiables` guard-rail tool).
+- `reconstruct_exploit.py`: live reconstruction; re-derives every figure above and ends with a self-check that recomputes the loss two independent ways.
+- `registre_hypotheses.csv`: 12 falsifiable hypotheses, each with a precise locator and a falsification test.
 - `resultats_reconstruction_2026-09-13.txt`: raw, unedited output of the reconstruction run (identical to `preuves/09_reconstruction_output.txt`).
-- `preuves/`: raw evidence, including the exploit receipt, the attacker's Citrea and Ethereum transaction lists, verified source of both aToken implementations and of `BorrowLogic`, the proxy `Upgraded` and `ReservePaused` logs, the funder wallet's history, Zentra's on-chain messages, the DefiLlama record, a claim-by-claim check of press coverage, the failed replay attempt, the captured reconstruction run, and the separate adversarial verification pass (different RPCs and data sources).
+- `preuves/`: raw evidence, including the exploit receipt, the attacker's Citrea and Ethereum transaction lists, verified source of both aToken implementations and of `BorrowLogic`, the proxy `Upgraded` and `ReservePaused` logs, the funder wallet's history, Zentra's on-chain messages, the DefiLlama record, a claim-by-claim check of press coverage, the failed replay attempt, the captured reconstruction run, and a separate independent cross-check (different RPCs and data sources).
 
 ## License
 
-Released under the MIT License. See `LICENSE`.
+Released under the MIT License. See the repository's root `LICENSE`.

@@ -48,7 +48,7 @@ flowchart LR
     G --> U3
     U1 -->|"sample: 5,648,410.24 USDT, within 0.002% of Drift's $5,648,410.13"| H
     U2 -->|"sample: 5,254,017.07 USDS, within 0.002% of Drift's $5,254,126.13"| H
-    U3 -->|"over $103M USDC, consistent with Drift's $71.4M USDC + swapped JLP"| H
+    U3 -->|"over $103M USDC (manual scan, not reproduced by the script), consistent with Drift's $71.4M USDC + swapped JLP"| H
     H --> I
 ```
 
@@ -238,7 +238,8 @@ official figures for the same two assets are $5,648,410.13 (5,648,410.15
 tokens) and $5,254,126.13 (5,254,016.98 tokens) respectively, both
 independently matched to within 0.002%, without this reconstruction
 having reproduced Drift's own internal ledger transaction-by-transaction.
-A separate, broader (unsampled) scan of just the USDC leg found over
+A separate, broader (unsampled) manual scan of just the USDC leg, not
+reproduced by the committed script (registry H11), found over
 $103M in USDC alone reaching the same consolidation address across the
 full window, consistent with Drift's own $71.4M native-USDC figure plus
 a large share of the $159.3M JLP figure having been swapped into USDC

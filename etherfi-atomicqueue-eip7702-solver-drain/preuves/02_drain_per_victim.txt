@@ -1,4 +1,4 @@
-ether.fi liquidETH AtomicQueue exploit — funds drained per victim (from exploit tx logs)
+ether.fi liquidETH AtomicQueue exploit: funds drained per victim (from exploit tx logs)
 each victim was named as `solver` in a solve() call; their stale token approval to the queue was pulled
 
 0x69da29127bc31909c26080105b585345dde847d4  liquidETH  12366762997907905993  (12.366762997907907007)

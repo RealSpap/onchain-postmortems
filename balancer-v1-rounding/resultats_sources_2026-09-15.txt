@@ -1,4 +1,4 @@
-balancer-v1-rounding, figure-freshness review of 2026-09-15 (pipeline step 6)
+balancer-v1-rounding, source re-check of 2026-09-15
 RPC: gateway.tenderly.co/public/mainnet, queried 2026-09-15
 
 eth_getTransactionCount latest:
