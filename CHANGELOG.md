@@ -8,6 +8,7 @@ GitHub releases.
 ## 2026-10-01
 
 - Added Duelbits hot wallet drain, Ethereum leg (Ethereum, 2026-09-24).
+- Added the September 2026 digest.
 
 ## 2026-09-30
 

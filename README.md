@@ -66,6 +66,7 @@ One file per month, published once the month closes: headline loss
 total, breakdown by root-cause technique, the three biggest incidents,
 and a full linked table.
 
+- [September 2026](digests/2026-09.md): 22 incidents, at least $185.8M
 - [August 2026](digests/2026-08.md): first edition, 19 incidents, at least $47.6M
 
 Full history: [`digests/`](digests/)
