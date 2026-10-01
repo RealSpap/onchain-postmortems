@@ -1,6 +1,6 @@
 # On-Chain Postmortems
 
-**$917.6M in DeFi and on-chain losses across 52 incidents, each reconstructed from raw chain data; $580.7M of it independently recomputed, the rest sourced from the protocol, press or DefiLlama.**
+**$920.7M in DeFi and on-chain losses across 53 incidents, each reconstructed from raw chain data; $583.7M of it independently recomputed, the rest sourced from the protocol, press or DefiLlama.**
 
 Forensic reconstructions done on-chain. Each entry rebuilds the exploit
 from raw chain data (`eth_getLogs`, decoded transaction receipts,
@@ -31,8 +31,8 @@ and raw proof files.
 
 | | |
 |---|---|
-| Incidents covered | 52, each reconstructed on-chain, see [the full index](INDEX.md) for detail |
-| Cumulative loss | About $917.6M across the 52 incidents ($917,631,511 exactly, sum of the figures in the index); $580,663,353 of it independently recomputed, the rest (marked † in the index) sourced from the protocol, press or DefiLlama. At least one entry is a known floor, so the real total is higher. |
+| Incidents covered | 53, each reconstructed on-chain, see [the full index](INDEX.md) for detail |
+| Cumulative loss | About $920.7M across the 53 incidents ($920,652,177 exactly, sum of the figures in the index); $583,684,019 of it independently recomputed, the rest (marked † in the index) sourced from the protocol, press or DefiLlama. At least one entry is a known floor, so the real total is higher. |
 | Corrections made | 34 entries correct, reconcile, or newly surface a press or DefiLlama figure, label, date, or classification (23 corrections, 8 reconciliations, 3 discoveries not previously priced by DefiLlama at all). See [Corrections to press and DefiLlama](CORRECTIONS.md). |
 | Method | Each subfolder keeps its Python reconstruction script, its `registre_hypotheses.csv` falsification registry, and its script's raw output in `resultats_*.txt`, so each recomputed figure can be checked against the file that produced it |
 | License | MIT across all 52 entries, single author (Spap, 2026) |
@@ -158,13 +158,14 @@ request a correction privately, see [SECURITY.md](SECURITY.md).
   from an old summary unchecked. Figures marked † come from the
   protocol's own post-mortem, press or DefiLlama and are not
   independently recomputed; each footnote names the source.
-- 13 entries report a dollar figure that is a known floor, not a complete
+- 14 entries report a dollar figure that is a known floor, not a complete
   total. Read the linked subfolder for the full accounting in native
   units.
 
 | Protocol | Why it's a floor | Link |
 |---|---|---|
 | Bitget hot wallet drain (Ethereum leg) | Ethereum leg only; XRPL, Tron and a probable Zcash leg not reconstructed | [bitget-hot-wallet-spoofed-withdrawals/](bitget-hot-wallet-spoofed-withdrawals/) |
+| Duelbits hot wallet drain (Ethereum leg) | Ethereum leg only; BNB Chain, Tron and Bitcoin legs not reconstructed | [duelbits-hot-wallet-drain/](duelbits-hot-wallet-drain/) |
 | Limit Break Payment Processor V2 | Drains observed until the end of the window (2026-09-28); WILD and APE not priced | [limit-break-payment-processor-forwarder-spoof/](limit-break-payment-processor-forwarder-spoof/) |
 | Symbiosis | Prices only the realized cash-out; syBTC float unresolved | [symbiosis-sybtc-mpc-signed-mint/](symbiosis-sybtc-mpc-signed-mint/) |
 | Liquid Network | Some smaller destination addresses left untraced | [liquid-rangeproof-cache/](liquid-rangeproof-cache/) |
