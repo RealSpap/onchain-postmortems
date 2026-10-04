@@ -1,0 +1,20 @@
+Independent re-read on two other endpoints, 2026-10-04 (UTC).
+
+ethereum-rpc.publicnode.com, receipt of 0x75328f916b1a0878724d364da5eb12b255160b894cb36c63ed5d718efc616fc4:
+  status 0x1, block 26098264, 48 logs, from 0x42c2633438609881c8fbab82414eb9a0c45f9353
+  Morpho FlashLoan to 0xf091...67ff, WETH: 11537239738536922710940 wei
+  Aave Repay, reserve WETH, user 0xcfed...169f, repayer 0xf091...67ff: 1335255802777509633370 wei
+  Aave Withdraw, reserve weETH, user 0xcfed...169f, to 0xf091...67ff: 1306482324969756972729 wei
+  ExecutionFromModuleSuccess on 0xe3b2...8520 and 0xcfed...169f, module 0x16bb...83d8
+  WETH Withdrawal by 0xf091...67ff: 114096151469674448809 wei
+  isModuleEnabled(module) on 0xe3b2...8520 at latest: 0
+  (publicnode refuses historical state without a token)
+
+eth.drpc.org, state at block 26098263:
+  weETH getRate: 0x0f5532b0878c6ac8 = 1.104845017359084232
+  Chainlink ETH/USD latestRoundData answer 0x3e9a621f1f = 2688.78094111, updatedAt 0x6abe7527
+  isModuleEnabled(module): 1 on 0xcfed...169f, 1 on 0xe3b2...8520
+  Aave getUserAccountData 0xcfed...169f: collateral 3870090.78093108, debt 3579981.00982958 (USD, 8 decimals)
+  Aave getUserAccountData 0xe3b2...8520: collateral 0, debt 0
+
+All values identical to resultats_verification_2026-10-04.txt.

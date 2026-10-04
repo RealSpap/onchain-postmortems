@@ -1,0 +1,54 @@
+== 1. The exploit transaction
+  tx 0x75328f916b1a0878724d364da5eb12b255160b894cb36c63ed5d718efc616fc4
+  block 26098264 2026-10-01 15:08:47 UTC  status 1  from 0x42c2633438609881c8fbab82414eb9a0c45f9353  to 0xf09168963ac7b31917a02aa82fa9cd667f4b67ff
+  sender nonce 3; 48 logs
+== 2. Module state on the two Safes
+  0xcfedf95a3653a128dfc2e4288758a1a1850d169f: module enabled at block 26098263: True; at latest: False; owners ['0x329c54289ff5d6b7b7dae13592c6b1eda1543ed4'], threshold 1
+  0xe3b23e47df7cd85876ac6cb05bdb9d7cd5b28520: module enabled at block 26098263: True; at latest: False; owners ['0x329c54289ff5d6b7b7dae13592c6b1eda1543ed4'], threshold 1
+  EnabledModule for the module: Safe 0xe3b23e47df7cd85876ac6cb05bdb9d7cd5b28520 block 25551132 2026-07-17 08:12:23 UTC tx 0xb43db7a76c8756d87ce3eed6fc36ca05fb7c6dad22e9b5ee10e1570dc46d4d4c
+  EnabledModule for the module: Safe 0xcfedf95a3653a128dfc2e4288758a1a1850d169f block 25552508 2026-07-17 12:48:35 UTC tx 0x44b55cee8282731f92b06d1f8cc4b09b91c670af10dfc8bad3de0379cfcd1eab
+  DisabledModule for the module: Safe 0xcfedf95a3653a128dfc2e4288758a1a1850d169f block 26098681 2026-10-01 16:32:23 UTC tx 0x0f8244302016b8d8ae28e960332c503c478c425e99ff5334c31f7ebd9e3c1413
+  DisabledModule for the module: Safe 0xe3b23e47df7cd85876ac6cb05bdb9d7cd5b28520 block 26098681 2026-10-01 16:32:23 UTC tx 0x0f8244302016b8d8ae28e960332c503c478c425e99ff5334c31f7ebd9e3c1413
+== 3. Aave v3 position and wallet balance of the two Safes, block before and block of the exploit
+  0xcfedf95a3653a128dfc2e4288758a1a1850d169f block 26098263: Aave collateral $3,870,090.78, debt $3,579,981.01; weETH in wallet 0.010130
+  0xcfedf95a3653a128dfc2e4288758a1a1850d169f block 26098264: Aave collateral $0.00, debt $0.00; weETH in wallet 0.010130
+  0xe3b23e47df7cd85876ac6cb05bdb9d7cd5b28520 block 26098263: Aave collateral $0.00, debt $0.00; weETH in wallet 6.426087
+  0xe3b23e47df7cd85876ac6cb05bdb9d7cd5b28520 block 26098264: Aave collateral $0.00, debt $0.00; weETH in wallet 0.000000
+== 4. What the exploit transaction moved (decoded from its own logs)
+  Morpho flash loan to 0xf09168963ac7b31917a02aa82fa9cd667f4b67ff: 11,537.239739 WETH
+  Aave Repay: 1,335.255803 WETH of 0xcfedf95a3653a128dfc2e4288758a1a1850d169f's debt, paid by 0xf09168963ac7b31917a02aa82fa9cd667f4b67ff
+  weETH Transfer 0xe3b23e47df7cd85876ac6cb05bdb9d7cd5b28520 -> 0xf09168963ac7b31917a02aa82fa9cd667f4b67ff: 6.426087
+  Aave Withdraw: 1,306.482325 weETH of 0xcfedf95a3653a128dfc2e4288758a1a1850d169f's collateral, sent to 0xf09168963ac7b31917a02aa82fa9cd667f4b67ff
+  WETH from AugustusV6 to the attack contract: 1,449.351954
+  WETH unwrapped by the attack contract: 114.096151
+  ExecutionFromModuleSuccess on Safe 0xe3b23e47df7cd85876ac6cb05bdb9d7cd5b28520, module 0x16bb8b912da187870c23ec6756bb3fad061283d8
+  ExecutionFromModuleSuccess on Safe 0xcfedf95a3653a128dfc2e4288758a1a1850d169f, module 0x16bb8b912da187870c23ec6756bb3fad061283d8
+  weETH taken in total: 1,312.908412
+  check: WETH from swap minus WETH repaid = 114.096151; unwrapped = 114.096151; equal: True
+== 5. Valuation at the block before the exploit
+  weETH getRate 1.104845017359084232; Chainlink ETH/USD 2688.78094111 (updated 2026-10-01 14:58:47 UTC)
+  Safe 0xcfedf95a3653a128dfc2e4288758a1a1850d169f: equity lost 108.204684 ETH ($290,939)
+  Safe 0xe3b23e47df7cd85876ac6cb05bdb9d7cd5b28520: lost 7.099830 ETH ($19,090)
+  victims' combined loss: 115.304514 ETH = $310,029
+  attacker's net take: 114.096151 ETH = $306,780
+  difference (swap cost through AugustusV6): 1.208363 ETH
+== 6. Before and after: funding, deployment, exit, response
+  attacker at block 26097999 (2026-10-01 14:15:11 UTC): balance 0.000000 ETH, nonce 0
+  attacker at block 26098000 (2026-10-01 14:15:23 UTC): balance 0.049875 ETH, nonce 0
+  attack contract code size at block 26098234: 0, at 26098235 (2026-10-01 15:02:47 UTC): 5574 bytes (deploy tx from 0x42c2633438609881c8fbab82414eb9a0c45f9353)
+  tx 0x3a5663d9a3d32bdea3c3012fd9dbaf490195ed413204c4db8f1097e1e7f753f9: 0x42c2633438609881c8fbab82414eb9a0c45f9353 -> 0x951ad21b85c1ce165f15d548a7c7d42520a32f1a 114.130726 ETH, block 26098748 2026-10-01 16:45:59 UTC
+  tx 0xa20636bf3792f705ae51a48afdec336fb0518cd43365a8fc3e596dea23266dc9: 0x951ad21b85c1ce165f15d548a7c7d42520a32f1a -> 0xac9f360ae85469b27aeddeafc579ef2d052ad405 114.030726 ETH, block 26098753 2026-10-01 16:46:59 UTC
+  0x42c2633438609881c8fbab82414eb9a0c45f9353 now: balance 0.010028 ETH, nonce 5
+  0x951ad21b85c1ce165f15d548a7c7d42520a32f1a now: balance 0.098206 ETH, nonce 1
+  module disabled on ['0xcfedf95a3653a128dfc2e4288758a1a1850d169f', '0xe3b23e47df7cd85876ac6cb05bdb9d7cd5b28520'] in tx 0x0f8244302016b8d8ae28e960332c503c478c425e99ff5334c31f7ebd9e3c1413, block 26098681 2026-10-01 16:32:23 UTC
+  on-chain message 0x329c54289ff5d6b7b7dae13592c6b1eda1543ed4 -> 0x42c2633438609881c8fbab82414eb9a0c45f9353, block 26100032 2026-10-01 21:03:23 UTC:
+    | To the exploiter of tx 0x75328f916b1a0878724d364da5eb12b255160b894cb36c63ed5d718efc616fc4:
+    | We are the owners of the two Safes drained in this transaction.
+    | We are offering a 10% whitehat bounty. Keep 11.41 ETH and return 102.69 ETH to 0x329c54289Ff5D6B7b7daE13592C6B1EDA1543eD4 before 2026-10-03 18:00 UTC. If the funds come back in full by then, we will treat this as a whitehat rescue and close the matter.
+    | After the deadline the offer ends and the case moves forward with the relevant parties.
+    | Reply on-chain to this address.
+== 7. Verified source of the module and of the exit contract (Blockscout)
+  0x16bb8b912da187870c23ec6756bb3fad061283d8: name FlashLoopAdapter, compiler v0.8.28+commit.7893614a
+    line 92: if (!ISafe(msg.sender).isModuleEnabled(address(this))) revert ModuleNotEnabled();
+    line 189: (bool ok, bytes memory ret) = router.call(data);
+  0xac9f360ae85469b27aeddeafc579ef2d052ad405: name RelayAdapt, source mentions RailgunSmartWallet: True

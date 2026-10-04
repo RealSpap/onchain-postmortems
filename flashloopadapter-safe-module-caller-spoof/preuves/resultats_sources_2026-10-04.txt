@@ -1,0 +1,18 @@
+Sources read on 2026-10-04 (UTC), for comparison after the on-chain reconstruction.
+
+1. DefiLlama, https://api.llama.fi/hacks, record "FlashLoopAdapter":
+   {"date": 1790812800, "name": "FlashLoopAdapter", "classification": "Access Control", "technique": "Improper Access Control", "amount": 305000, "chain": ["Ethereum"], "bridgeHack": false, "targetType": "DeFi Protocol", "source": "", "returnedFunds": null, "language": "Solidity"}
+2. Safe contract version, VERSION() at latest block on both victim Safes: "1.4.1" (0xe3b23e47df7cd85876ac6cb05bdb9d7cd5b28520 and 0xcfedf95a3653a128dfc2e4288758a1a1850d169f).
+3. Press, as read on 2026-10-04:
+   - The Crypto Times, 2026-10-02, "FlashLoopAdapter Exploit Drains $305K From Two Aave-Linked Safes": names the exploit transaction 0x75328f91...6fc4 and the Safe 0xE3b23E47...8520.
+   - DEV Community, "FlashLoopAdapter Exploit: How a Caller-Authentication Flaw in Aave V3 Safe Module Drained $305K": "$305,000 to $310,000" net loss (Defimon Alerts vs. SlowMist), "$3.88 million" gross, 1,335 WETH debt repaid, 1,306.48 weETH withdrawn, 6.4 weETH from the second Safe, 114.09 ETH kept.
+   - SlowMist, as relayed by MPost and KuCoin News: access-control flaw in open()/close(), 114.09 ETH stolen from two Safes.
+   - Aave founder, as relayed by press: a third-party adapter, no effect on Aave v3.
+   - Defimon Alerts flagged the activity at 15:08:57 UTC (as relayed by press; the X post itself was not read).
+4. Blockscout public API (eth.blockscout.com/api/v2):
+   - 0x16bb8b912da187870c23ec6756bb3fad061283d8: verified as FlashLoopAdapter, compiler v0.8.28, created by 0x3cbded22f878afc8d39dcd744d3fe62086b76193 in tx 0x96897f63cebf4a2b34e379392cdf4b8b8dad4c357dd90722e5cd39efcafda9ed.
+   - 0xac9f360ae85469b27aeddeafc579ef2d052ad405: verified as RelayAdapt; its sources reference RailgunSmartWallet and RailgunLogic.
+   - 0x6a000f20005980200259b80c5102003040001068: verified as AugustusV6.
+   - 0xf09168963ac7b31917a02aa82fa9cd667f4b67ff (attack contract): not verified, created by 0x4a418c7132d452705a2123e95b5b9bfdf3b1f84a in tx 0x0c2bbaf2b5ebf1102e0df4acb1bcc2c7bc920896c45da6f85b4e9442506a3884, itself created by the attacker in tx 0x378c128dec9e0d436502ae8df31d8363483816394695edd036e1ca409dc08e71 (14:44:23 UTC).
+   - Attacker 0x42c2633438609881c8fbab82414eb9a0c45f9353: one incoming internal transfer before the exploit, 0.049875 ETH from the RelayAdapt contract above, tx 0xc5dc2606e42ebfad29fce601056248b9b3f3571318c9a0de2910ac7c0363852b (block 26098000).
+   - After the exploit the attacker and 0x951ad21b85c1ce165f15d548a7c7d42520a32f1a received dust from lookalike addresses 0x951A25c9...0f1a, 0x951A089B...2F1A and 0x951b4647...2f1a (address poisoning).

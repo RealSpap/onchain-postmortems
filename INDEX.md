@@ -23,9 +23,17 @@ reimbursements a protocol paid from its own reserves are not.
 
 ### 2026
 
-**2026 total: $920,652,177** across 53 incidents (6 months, April through September). At least one entry this year is a known floor, so the true total is higher.
+**2026 total: $920,962,206** across 54 incidents (7 months, April through October). At least one entry this year is a known floor, so the true total is higher.
 
-#### September 2026 (current month)
+#### October 2026 (current month)
+
+| Protocol | Date | Loss ($) | Chain | Category | Type/Mechanism | Link |
+|---|---|---|---|---|---|---|
+| FlashLoopAdapter Safe module | 2026-10-01 | ≈ 310,029 [^flashloopadapter-safe-module-caller-spoof] | Ethereum | Access-Control | A custom Safe module for leveraged Aave positions trusted any caller that claimed to have it enabled and forwarded caller-supplied calldata to a caller-chosen address, so a fake Safe made it drain the two real Safes that had enabled it | [flashloopadapter-safe-module-caller-spoof/](flashloopadapter-safe-module-caller-spoof/) |
+
+**October 2026 subtotal: $310,029** across 1 incident.
+
+#### September 2026
 
 | Protocol | Date | Loss ($) | Chain | Category | Type/Mechanism | Link |
 |---|---|---|---|---|---|---|
@@ -173,4 +181,5 @@ reimbursements a protocol paid from its own reserves are not.
 [^limit-break-payment-processor-forwarder-spoof]: 541.375935595563059375 WETH (preuves/resultats_verification_2026-09-28.txt section 4) valued at Chainlink ETH/USD 2685.17247359 at block 26053260 (preuves/resultats_sources_2026-09-28.txt section 8) = $1,453,688, plus 8,426.531308 USDC at face value = $1,462,114. WILD and APE not priced. A floor: drains were still active at end of window.
 [^bitget-hot-wallet-spoofed-withdrawals]: Ethereum leg only, re-derived live by `bitget-hot-wallet-spoofed-withdrawals/reconstruct_exploit.py`: 24,596.575940615 ETH from Bitget 6 and Bitget 35 (`preuves/resultats_verification_2026-09-29.txt:1-12`) plus 34,751,168.12099 USDT, 12,852,046.242513 USDC and 3,000.322053 XAUt (`:13-20`), valued at Chainlink ETH/USD 2682.69107541 and XAU/USD 4275.82 at block 26049341, stablecoins at par: $65,985,015 + $47,603,214.36 + $12,828,837 = $126,417,066 (`:103-106`). Agrees with Hypernative's $126.5M for Ethereum. A floor for the incident: Bitget's own total across four chains is $387.5M (XRPL, Tron and a probable Zcash leg not reconstructed here), DefiLlama carries $387,000,000 with an empty source field (`preuves/resultats_sources_2026-09-29.txt:2-4`). See `bitget-hot-wallet-spoofed-withdrawals/README.md`. External sources: https://api.llama.fi/hacks, https://www.hypernative.io/insights/blog/how-spoofed-requests-got-bitgets-own-wallets-to-sign-away-387m.
 [^duelbits-hot-wallet-drain]: Ethereum leg only, re-derived live by `duelbits-hot-wallet-drain/reconstruct_exploit.py`: 836 ETH, 593,430.319285 USDT, 96,804.683231 USDC, 31,515 DAI and 12,397,915,453.4 SHIB from the Duelbits hot wallet (`preuves/resultats_verification_2026-10-01.txt:1-8`), valued at Chainlink ETH/USD 2665.33 and SHIB/ETH 2.139547212e-09 at block 26046301, stablecoins at par: $2,228,216 + $721,750 + $70,700 = $3,020,666 (`:86-89`). Same token amounts as CoinDesk. A floor for the incident: Duelbits puts the total across four chains at about $7M, DefiLlama carries $7,000,000 with an empty source field (`preuves/resultats_sources_2026-10-01.txt:1-2`). See `duelbits-hot-wallet-drain/README.md`. External sources: https://api.llama.fi/hacks, https://www.coindesk.com/business/2026/09/24/crypto-casino-duelbits-goes-offline-after-usd7m-hot-wallet-hack.
+[^flashloopadapter-safe-module-caller-spoof]: Victims' combined loss in one transaction at block 26098264: 1,306.482325 weETH of Aave v3 collateral withdrawn from Safe 0xcfedf95a3653a128dfc2e4288758a1a1850d169f after its 1,335.255803 WETH debt was repaid, plus 6.426087 weETH taken from Safe 0xe3b23e47df7cd85876ac6cb05bdb9d7cd5b28520, valued at weETH's own getRate (1.104845017359084232) and Chainlink ETH/USD (2,688.78094111) at block 26098263: 115.304514 ETH, $310,029. Derived in `flashloopadapter-safe-module-caller-spoof/preuves/resultats_verification_2026-10-04.txt:17-34`, re-read on two other endpoints in `preuves/resultats_contre_verification_2026-10-04.txt`. The attacker's net take is 114.096151 ETH ($306,780); the 1.21 ETH difference is the cost of selling the weETH in one swap. DefiLlama tracks $305,000 with an empty source field, which matches the attacker's take rather than the victims' loss; press gives $305,000 to $310,000. See `flashloopadapter-safe-module-caller-spoof/README.md`. External sources: https://api.llama.fi/hacks, https://www.cryptotimes.io/2026/10/02/flashloopadapter-exploit-drains-305k-from-two-aave-linked-safes/.
 

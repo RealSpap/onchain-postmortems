@@ -5,6 +5,10 @@ incident's own README carries the full detail and supersedes any earlier
 wording; this file is a short log. New incidents are also announced as
 GitHub releases.
 
+## 2026-10-04
+
+- Added FlashLoopAdapter Safe module (Ethereum, 2026-10-01).
+
 ## 2026-10-01
 
 - Added Duelbits hot wallet drain, Ethereum leg (Ethereum, 2026-09-24).
