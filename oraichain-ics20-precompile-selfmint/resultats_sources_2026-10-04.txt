@@ -1,0 +1,5 @@
+Rotating review, 2026-10-04 (UTC).
+
+1. DefiLlama, https://api.llama.fi/hacks, record "Oraichain": amount 1000000, classification "Bridge & Cross-Chain", technique "Unbacked Cross-Chain Mint", source field empty. Unchanged.
+2. Coinfomania, "Oraichain Completes On-Chain Restoration After Security", dated 2026-08-12, https://coinfomania.com/oraichain-completes-on-chain-restoration-after-security/ : "Approximately 3.9M unauthorized ORAI tokens are targeted for recovery", "deposited by the attacker at MEXC and KuCoin"; links Oraichain's X post https://x.com/oraichain/status/2087469990693990836 (not read directly). No dollar figure, no technical post-mortem.
+3. No official Oraichain technical post-mortem found on 2026-10-04.

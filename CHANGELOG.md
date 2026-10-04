@@ -8,6 +8,7 @@ GitHub releases.
 ## 2026-10-04
 
 - Added FlashLoopAdapter Safe module (Ethereum, 2026-10-01).
+- Oraichain: noted Oraichain's statement that about 3.9M unauthorized ORAI were deposited at MEXC and KuCoin (no figure changed).
 
 ## 2026-10-01
 

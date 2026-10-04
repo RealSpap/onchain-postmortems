@@ -149,7 +149,10 @@ The cash-out address's own complete transaction history (17 transactions,
   `uatom` on `transfer/channel-15` and `uosmo` on `transfer/channel-13` via
   Oraichain's own live `denom_traces` endpoint, an authoritative,
   independent check, not a trust of the packet's own self-reported memo.
-- **3.9M ORAI** split across two further internal transfers, and
+- **3.9M ORAI** split across two further internal transfers (Oraichain
+  later stated that about 3.9M unauthorized ORAI had been deposited by the
+  attacker at MEXC and KuCoin, X post of 2026-08-12 relayed by
+  Coinfomania; not matched on-chain to these two transfers here), and
   **59,255,027.190012 ORAI locked as collateral** in an on-chain lending
   market (`deposit_collateral` then `lock_collateral`) with no matching
   `borrow` transaction from this address anywhere in its recorded history
