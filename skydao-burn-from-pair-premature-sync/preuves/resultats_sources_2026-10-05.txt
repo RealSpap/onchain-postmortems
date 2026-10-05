@@ -1,0 +1,3 @@
+DefiLlama api.llama.fi/hacks, read 2026-10-05 06:50 UTC: {"date": 1790726400 (2026-09-30), "name": "SKYDAO", "classification": "Protocol Logic", "technique": "Swap Logic Flaw", "amount": 183482.88, "chain": ["BSC"], "source": "", "returnedFunds": null}
+DeFiHackLabs pull request 1286 (github.com/SunWeb3Sec/DeFiHackLabs/pull/1286), read 2026-10-05: "~59,914.12 USDT net to the attacker, pair lost its entire 183,482.88 USDT reserve"; names the exploit tx 0x8e3016674ea8e5d2ad3af422ae5328f5a1f448e6b5a93d5d773e358bd2e440eb, block 124921242, and the Moolah flash pool 0x8F73b65B4caAf64FBA2aF91cC5D4a2A1318E5D8C. It does not mention where the remaining 123,568.76 USDT went.
+No SKYDAO post-mortem or team statement was found (web search, 2026-10-05).

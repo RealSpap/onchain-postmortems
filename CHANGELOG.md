@@ -5,6 +5,10 @@ incident's own README carries the full detail and supersedes any earlier
 wording; this file is a short log. New incidents are also announced as
 GitHub releases.
 
+## 2026-10-05
+
+- Added SKYDAO pair drain (BSC, 2026-09-30).
+
 ## 2026-10-04
 
 - Added FlashLoopAdapter Safe module (Ethereum, 2026-10-01).

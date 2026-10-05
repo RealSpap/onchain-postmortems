@@ -1,6 +1,6 @@
 # On-Chain Postmortems
 
-**$921.0M in DeFi and on-chain losses across 54 incidents, each reconstructed from raw chain data; $584.0M of it independently recomputed, the rest sourced from the protocol, press or DefiLlama.**
+**$921.1M in DeFi and on-chain losses across 55 incidents, each reconstructed from raw chain data; $584.2M of it independently recomputed, the rest sourced from the protocol, press or DefiLlama.**
 
 Forensic reconstructions done on-chain. Each entry rebuilds the exploit
 from raw chain data (`eth_getLogs`, decoded transaction receipts,
@@ -31,8 +31,8 @@ and raw proof files.
 
 | | |
 |---|---|
-| Incidents covered | 54, each reconstructed on-chain, see [the full index](INDEX.md) for detail |
-| Cumulative loss | About $921.0M across the 54 incidents ($920,962,206 exactly, sum of the figures in the index); $583,994,048 of it independently recomputed, the rest (marked † in the index) sourced from the protocol, press or DefiLlama. At least one entry is a known floor, so the real total is higher. |
+| Incidents covered | 55, each reconstructed on-chain, see [the full index](INDEX.md) for detail |
+| Cumulative loss | About $921.1M across the 55 incidents ($921,145,689 exactly, sum of the figures in the index); $584,177,531 of it independently recomputed, the rest (marked † in the index) sourced from the protocol, press or DefiLlama. At least one entry is a known floor, so the real total is higher. |
 | Corrections made | 34 entries correct, reconcile, or newly surface a press or DefiLlama figure, label, date, or classification (23 corrections, 8 reconciliations, 3 discoveries not previously priced by DefiLlama at all). See [Corrections to press and DefiLlama](CORRECTIONS.md). |
 | Method | Each subfolder keeps its Python reconstruction script, its `registre_hypotheses.csv` falsification registry, and its script's raw output in `resultats_*.txt`, so each recomputed figure can be checked against the file that produced it |
 | License | MIT across all 52 entries, single author (Spap, 2026) |
