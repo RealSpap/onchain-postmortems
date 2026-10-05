@@ -1,0 +1,11 @@
+USDT to 0xe07bd590e1198666230932bad5db3dbbe21e7d57: 19 transfers in, total 1,470,226.529858, first at block 26049676 (2026-09-24 20:23:47 UTC), senders ['0x5427fefa711eff984124bfbb1ab6fbf5e3da1820', '0x60ac95ec1153aa8199751917ede25d0ca49a36e2', '0xd78d199f8c402e7b5cc2abe278df0412400a3bae', '0xe347a7aa40f814469279760735c289cbcdbe1964'], any sender among this entry's addresses: False
+USDT from 0xe07bd590e1198666230932bad5db3dbbe21e7d57: 11 transfers out, total 1,252,203.562881, recipients ['0x225a38bc71102999dd13478bfabd7c4d53f2dc17', '0x74de5d4fcbf63e00296fd95d33236b9794016631', '0xe3478b0bb1a5084567c319096437924948be1964']
+USDC to 0xe07bd590e1198666230932bad5db3dbbe21e7d57: 13 transfers in, total 771,170.064750, first at block 26049975 (2026-09-24 21:23:59 UTC), senders ['0x40ffe85a28dc9993541449464d7529a922142960', '0x60ac95ec1153aa8199751917ede25d0ca49a36e2'], any sender among this entry's addresses: False
+USDC from 0xe07bd590e1198666230932bad5db3dbbe21e7d57: 9 transfers out, total 671,180.156392, recipients ['0x74de5d4fcbf63e00296fd95d33236b9794016631']
+balances at block 26124529: USDT 218,022.966977 USDC 99,989.908358
+USDT isBlackListed: True  USDC isBlacklisted: True
+freeze events: USDC Blacklisted tx 0xa112187d419a9eae5c6ef89defb40227f10793467cd470447be9b1d2a2ac4fb2 block 26052241 ( 2026-09-25 05:00:59 UTC); USDT AddedBlackList tx 0xdd30e4831ea7d2cfe68e5ac0150ae1c388b08f8ef86dab8ae6f9dbbd0a94db07 block 26054422 ( 2026-09-25 12:19:23 UTC)
+last token sale by this entry's relay: 19:29:35 UTC on 2026-09-24 (README, At a glance)
+Press: CoinDesk, 2026-09-25 ("Circle and Tether step in to freeze hacker wallet after massive Bitget crypto heist"): an address labeled "Bitget Exploiter 8" holding about 170.47 ETH, 218,023 USDT and 99,990 USDC, blacklisted by Circle at 05:00 UTC and by Tether about seven hours later; no address given.
+Press: PANews, 2026-09-25 (panews.io/articles/01a0d8d6-4dd7-76db-9927-364fcf71b47a): names the frozen address as 0xe07b...7d57 and ties it to stolen TRX converted into USDT in batches.
+Etherscan public name tag of 0xe07bd590e1198666230932bad5db3dbbe21e7d57, as cited by CoinDesk: "Bitget Exploiter 8" (not fetched from Etherscan directly).
