@@ -9,6 +9,7 @@ GitHub releases.
 
 - Added SKYDAO pair drain (BSC, 2026-09-30).
 - Bitget: noted that the roughly $318K frozen by Circle and Tether on 2026-09-25 sits on an address outside the Ethereum leg traced here (no figure changed).
+- README: incident count in the License row and above the 5 biggest losses brought up to date (55 incidents, 7 months).
 
 ## 2026-10-04
 
