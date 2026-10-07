@@ -5,6 +5,10 @@ incident's own README carries the full detail and supersedes any earlier
 wording; this file is a short log. New incidents are also announced as
 GitHub releases.
 
+## 2026-10-07
+
+- Secured Finance: corrected to $27,860 (was $45,445). JPYC had been priced with the CoinGecko id of an older JPYC contract; CoinGecko maps the drained contract to `jpycoin`. The figure now agrees within 2% with the attacker's own realized proceeds. 2026 total: $921,128,104.
+
 ## 2026-10-05
 
 - Added SKYDAO pair drain (BSC, 2026-09-30).

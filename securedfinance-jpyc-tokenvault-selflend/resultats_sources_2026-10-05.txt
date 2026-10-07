@@ -1,0 +1,15 @@
+=== Re-pricing check, 2026-10-05 (read-only, public APIs) ===
+Drained token: JPYC, contract 0xe7c3d8c9a439fede00d2600032d5db0be71c3c29 (Ethereum)
+GET https://api.coingecko.com/api/v3/coins/ethereum/contract/0xe7c3d8c9a439fede00d2600032d5db0be71c3c29
+  -> id=jpycoin, platforms.ethereum=0xe7c3d8c9a439fede00d2600032d5db0be71c3c29
+GET https://api.coingecko.com/api/v3/coins/jpy-coin
+  -> id=jpy-coin, platforms.ethereum=0x431d5dff03120afa4bdf332c61a6e1766ef37bdb (a different, older JPYC contract)
+GET https://api.coingecko.com/api/v3/coins/jpycoin/history?date=05-09-2026
+  -> market_data.current_price.usd = 0.006388523568169463
+4,360,902.135130 JPYC x $0.006388523568169463 = $27,859.73
+Cross-check, ECB reference rates for 2026-09-04 (data-api.ecb.europa.eu, EXR D.JPY/D.USD .EUR.SP00.A):
+  EUR/JPY 181.59, EUR/USD 1.1622 -> 156.25 JPY per USD; 4,360,902.135130 / 156.247 = $27,910 at par with the yen
+Attacker's realized ETH proceeds (resultats_reconstruction_2026-09-11.txt): $27,325.66, within 2% of $27,859.73
+The first version of this entry (2026-09-11) priced JPYC with id jpy-coin ($0.01042100273802522), which is not the drained contract, and published $45,444.97.
+api.llama.fi/hacks on 2026-10-05: name='Secured Finance Lending' amount=104000 classification='Oracle Manipulation' technique='Spot Price Manipulation'
+$27,859.73 is 0.27x DefiLlama's $104,000.

@@ -22,7 +22,7 @@ happened.
 | Incident | Two flash-loan-funded transactions used a self-matched lend/borrow pair on Secured Finance's JPYC market to withdraw more JPYC from TokenVault than either flash loan ever put in |
 | Window | 2026-09-05 23:55:35 UTC and 2026-09-06 00:53:59 UTC (58 minutes apart); the proceeds were converted to ETH and mostly moved into Tornado Cash within the following 9.5 hours |
 | DefiLlama figure | "Secured Finance Lending", $104,000, "Oracle Manipulation" / "Spot Price Manipulation"; no source cited, and no oracle read anywhere in either transaction |
-| Verified independently | 4,360,902.135130 JPYC drained from TokenVault across 2 transactions, decoded directly from JPYC's own `Transfer` events and cross-checked against TokenVault's `Deposit`/`Withdraw` events; $45,444.97 at CoinGecko's theft-day price, 0.44x DefiLlama's tracked figure |
+| Verified independently | 4,360,902.135130 JPYC drained from TokenVault across 2 transactions, decoded directly from JPYC's own `Transfer` events and cross-checked against TokenVault's `Deposit`/`Withdraw` events; $27,859.73 at CoinGecko's theft-day price, 0.27x DefiLlama's tracked figure (corrected 2026-10-05, see below) |
 | Classification note | Not an oracle exploit: both fills happened at unremarkable unit prices on Secured Finance's own order book, and neither transaction reads any price feed. The observed behavior points to a collateral-accounting issue in the TokenVault deposit and withdrawal path |
 | What's still open | The DefiLlama figure is not reconciled (see Caveats); 8 other transactions active on the same two contracts in the surrounding 72 hours are not conclusively cleared or implicated, and are reported here as an open question, not folded into the total either way |
 
@@ -193,12 +193,18 @@ launder its own output.
 
 ### USD total, independently priced, and DefiLlama's figure does not reconcile
 
-4,360,902.135130 JPYC at CoinGecko's own 2026-09-05 historical price
-($0.01042100273802522, queried live) is **$45,444.97**. DefiLlama's own
+4,360,902.135130 JPYC at CoinGecko's own 2026-09-05 historical price for
+this exact contract (CoinGecko id `jpycoin`, $0.006388523568169463) is
+**$27,859.73**. Cross-check: at the ECB reference rate of 2026-09-04
+(156.25 JPY per USD), the same amount of a yen stablecoin is $27,910.
+**Corrected 2026-10-05:** this entry first priced JPYC with the CoinGecko
+id `jpy-coin` ($0.01042100273802522), which belongs to an older JPYC
+contract, not the drained one, and published $45,444.97
+(`resultats_sources_2026-10-05.txt`). DefiLlama's own
 hacks feed (`api.llama.fi/hacks`, queried live) tracks this incident as
 "Secured Finance Lending", chain Ethereum, dated 2026-09-05, amount
 **$104,000**, classification "Oracle Manipulation" / "Spot Price
-Manipulation", `source` field empty. This project's own figure is 0.44x
+Manipulation", `source` field empty. This project's own figure is 0.27x
 DefiLlama's tracked amount, and the classification does not hold up
 either: neither transaction reads any price oracle, and every order fill
 inside them happens at an unremarkable unit price on Secured Finance's
@@ -214,15 +220,15 @@ figure comes from; see Caveats.
   affiliated with Secured Finance, DefiLlama, Uniswap, 1inch, Tornado
   Cash, or Relay.
 - **The DefiLlama figure ($104,000) is not reconciled.** This project's
-  own two independently-derived numbers, $45,444.97 (JPYC drained from
+  own two independently-derived numbers, $27,859.73 (JPYC drained from
   TokenVault, priced at the drain-day rate) and $27,325.66 (the
   attacker's own realized ETH proceeds after DEX slippage on an illiquid
-  token), sit 2.3x and 3.8x below DefiLlama's tracked figure
-  respectively, and no unmatched third transaction, second market, or
+  token), agree within 2% and sit 3.7x and 3.8x below DefiLlama's
+  tracked figure respectively, and no unmatched third transaction, second market, or
   later-dated follow-up from this attacker's wallet was found that would
   close that gap. DefiLlama's `source` field for this entry is empty, so
   this project cannot check what its own figure was based on. The
-  $45,444.97 headline figure above is the amount that actually left
+  $27,859.73 headline figure above is the amount that actually left
   TokenVault, the closest analog to how this project prices other
   entries' protocol-side loss.
 - **8 other transactions were active on `LendingMarketController` or
