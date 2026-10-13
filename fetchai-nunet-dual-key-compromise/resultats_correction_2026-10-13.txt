@@ -1,0 +1,6 @@
+INFO  block 26014054: totalSupply 591467121866548, MAX_SUPPLY() 1000000000000000, cap() reverts
+PASS  MAX_SUPPLY() is 1,000,000,000 NTX (6 decimals): 1000000000000000
+PASS  the attacker's mint is exactly the headroom MAX_SUPPLY - totalSupply: 408532878133452 vs 408532878133452
+PASS  mint(headroom) from the minter key passes: OK
+PASS  mint(headroom + 1) from the minter key is refused: REVERT: execution reverted: Mint: Cannot mint more than initial supply 0x08c379a000000000000000000
+PASS  mint(headroom) from a stranger is refused (the witness fails): REVERT

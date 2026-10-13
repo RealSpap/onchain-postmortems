@@ -15,10 +15,9 @@ Four things this reconstruction found that no source consulted reports.
 
 First, the NTX mint was not a round-ish large number. It took total supply
 from 591,467,121.866548 to **exactly 1,000,000,000.000000**. The attacker
-minted precisely the headroom remaining under the token's nominal one
-billion supply, to the last of six decimal places, and stopped there. The
-token has no on-chain cap enforcing that number, so stopping on it was a
-choice, not a limit.
+minted precisely the headroom remaining under the token's `MAX_SUPPLY()` of one
+billion, to the last of six decimal places: the most the contract allowed (see
+the Correction of 2026-10-13 below).
 
 Second, at least one outlet headlined this as a forged signature. It was
 not forged. Recovering the signer from the `v`, `r`, `s` in the exploit
@@ -48,6 +47,11 @@ UTC on 2026-09-21, **39.55 hours after the mint**. This entry was first
 written 73 minutes before that, against the still-open state, and is
 published with the closure verified rather than with the finding it
 originally carried.
+
+
+## Correction, 2026-10-13
+
+The earlier version of this entry said the NTX token has no on-chain cap and that stopping at exactly 1,000,000,000 was a choice. That was wrong. The token exposes its cap as `MAX_SUPPLY()`, not `cap()`: it returns 1,000,000,000 NTX (6 decimals), `mint` of exactly the remaining headroom passes when simulated from the minter key on the state just before the mint (the end of block 26,014,054; the mint itself is in block 26,014,055), and `mint` of one unit more is refused with "Mint: Cannot mint more than initial supply". The attacker minted the most the contract allowed. `verify_correction_2026-10-13.py` reads this (output in `resultats_correction_2026-10-13.txt`). The recipient, amounts and the rest of the entry are unchanged.
 
 ## At a glance
 
@@ -159,7 +163,8 @@ and DefiLlama's two unlinked records miss it.
 
 **The mint landed on a round number to six decimals.** 591,467,121.866548
 plus 408,532,878.133452 is 1,000,000,000.000000. `cap()` reverts on this
-token, so no on-chain cap produced that figure.
+token, but the cap is exposed as `MAX_SUPPLY()` and equals 1,000,000,000, so the
+figure is the contract's own limit (see Correction, 2026-10-13).
 
 **The pause did not reach the proceeds it is credited with stopping.** The
 cash-out wallet's NTX balance is 0 at the pause block 26017641 and 0 at

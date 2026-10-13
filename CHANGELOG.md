@@ -8,6 +8,10 @@ GitHub releases.
 ## 2026-10-13
 
 - Added MakerDAO ETH-A dormant keeper (Ethereum, 2026-10-06).
+- Term Finance: corrected the mechanism. The Delay module's cooldown went from 608,400 s to 0 in the execution block (it did not elapse), the 6 days 1 hour was the vote, and the votes came from a wrapper of the ETH Meta Vault, not from TERM. No figure changed.
+- Fetch.ai and NuNet: corrected the cap claim. The NTX token has a cap, exposed as `MAX_SUPPLY()` (1,000,000,000 NTX); the attacker minted the headroom to it. No figure changed.
+- Ostium: corrected the description of the 231-byte contract. It had been registered as a forwarder on 2026-05-30, 46 days before the attack; it was not built for the attack. No figure changed.
+- Each of the three entries has a `verify_correction_2026-10-13.py` and its output.
 
 ## 2026-10-07
 

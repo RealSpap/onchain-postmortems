@@ -390,7 +390,7 @@
    "sourced": true,
    "chain": "Ethereum",
    "category": "Governance",
-   "mechanism": "Hijacked governance: a proposal self-voted by a fresh wallet through an attacker-deployed executor, normal 6-day delay elapsed with no veto",
+   "mechanism": "Hijacked governance: a proposal self-voted by a fresh wallet through an attacker-deployed executor, carried by votes from the vault's own share wrapper, with the Delay module's 7-day cooldown reset to zero in the execution block",
    "url": "https://github.com/RealSpap/onchain-postmortems/tree/main/termfinance-metavault-governance/",
    "note": "Press figure, not recomputed, consistent with the amounts independently verified on-chain (2,841.7435 WETH plus 1,679,639.290442 USDC swept and converted to DAI). No dollar total was independently recomputed in the source repo. See `termfinance-metavault-governance/README.md`."
   },

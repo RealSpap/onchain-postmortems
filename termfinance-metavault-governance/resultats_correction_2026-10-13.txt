@@ -1,0 +1,8 @@
+INFO  Delay txCooldown one block before execution -> in the execution block: 608400 -> 0
+INFO  Delay txExpiration one block before execution -> in the execution block: 604800 -> 0
+PASS  the cooldown was 7 days 1 hour (608,400 s) and became 0: 608400 -> 0
+PASS  TransactionAdded events from the Delay module inside the execution transaction: 7
+PASS  execution block: 25816049
+PASS  the voting token's underlying() is the ETH Meta Vault, not TERM: 0x26fcb50eec367ddab060ccf5e7394cecd95f7db2
+INFO  voting token totalSupply (raw, 18 decimals) before the attacker's deposit / at propose() / one block before execution: {25772680: 50000000000000000, 25772694: 535216182805348480, 25816048: 535216182805348480}
+PASS  the attacker's executor held most of the votes one block before execution: 485216182805348480 of 535216182805348480 = 90.66%

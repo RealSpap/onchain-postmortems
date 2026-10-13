@@ -1,0 +1,8 @@
+PASS  the forwarder is 231 bytes of code just before the attack: 231
+PASS  owner() of the forwarder just before the attack is the attack's sender: 0xd1794196f0fc99c7f27970e661597d77d9a85869
+PASS  the keeper lists the forwarder as registered just before the attack: 1
+PASS  the sender account itself is not a registered forwarder (the witness): 0
+PASS  the registration transaction succeeded in the block the log search gave: status 0x1, block 468285055
+PASS  the keeper emitted a log naming the forwarder in that transaction: 1 log(s)
+INFO  registered 2026-05-30 15:34:09 UTC, attack block 2026-07-15 14:18:23 UTC: 45.9 days apart
+PASS  the registration came about 46 days before the attack: 45.9

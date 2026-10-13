@@ -14,6 +14,11 @@ data, arriving at the same 8 transactions a third-party forensic writeup
 (rekt.news) separately names, and a total within 0.0004% of Ostium's own
 final figure.
 
+
+## Correction, 2026-10-13
+
+The earlier version of this entry described the 231-byte contract the attack was sent through (`0xfe12f6360000de49d5506d52ee5ac4bc9dd5bd2e`) as "a purpose-built batching contract used only to execute the attack". It was not. It had been registered as a forwarder on the PrivatePriceUpKeep contract (`0xb71ec9ebd8145dacacf6724363143cb5667a3d36`) in transaction `0x56e36ae77eb7de9ff9129af7422794bbabe287f2bcd109b95b141e57f008f24e` (block 468,285,055, 2026-05-30 15:34:09 UTC), 45.9 days before the attack and in the same transaction as three other forwarders. Just before the attack the keeper listed it as a registered forwarder, and its `owner()` was the externally owned account that sent the attack (`0xd1794196f0fc99c7f27970e661597d77d9a85869`). `verify_correction_2026-10-13.py` reads these (output in `resultats_correction_2026-10-13.txt`). Who authorised the registration, and through which path, was not traced here. The loss figures and the rest of the entry are unchanged.
+
 ## At a glance
 
 | | |
@@ -128,9 +133,8 @@ externally-owned account) called a small contract
 (`0xfe12f6360000de49d5506d52ee5ac4bc9dd5bd2e`, 231 bytes of live
 bytecode, checked via `eth_getCode`) that in turn drove the whole
 sequence; the beneficiary of every USDC payout, `0x321df194...bfd9`
-itself, is a separate, plain EOA (0 bytecode), consistent with a
-purpose-built batching contract used only to execute the attack
-atomically, not to hold funds.
+itself, is a separate, plain EOA (0 bytecode); the small contract is not described as built for the attack
+because it had been registered as a forwarder 46 days earlier (see Correction, 2026-10-13).
 
 The first and last of these 8 transactions' own block timestamps, both
 live-read rather than copied from any article, are **14:18:23 UTC** and
