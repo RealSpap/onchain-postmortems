@@ -23,15 +23,16 @@ reimbursements a protocol paid from its own reserves are not.
 
 ### 2026
 
-**2026 total: $921,128,104** across 55 incidents (7 months, April through October). At least one entry this year is a known floor, so the true total is higher.
+**2026 total: $921,668,704** across 56 incidents (7 months, April through October). At least one entry this year is a known floor, so the true total is higher.
 
 #### October 2026 (current month)
 
 | Protocol | Date | Loss ($) | Chain | Category | Type/Mechanism | Link |
 |---|---|---|---|---|---|---|
+| MakerDAO ETH-A dormant keeper | 2026-10-06 | ≈ 540,600 [^makerdao-eth-a-dormant-keeper-drain] | Ethereum | Access-Control | A dormant keeper contract that had won four 2020 ETH-A liquidation auctions exposed a public function that handed a caller-supplied contract control of its Vat position, so a fresh account claimed the collateral and withdrew 200 ETH | [makerdao-eth-a-dormant-keeper-drain/](makerdao-eth-a-dormant-keeper-drain/) |
 | FlashLoopAdapter Safe module | 2026-10-01 | ≈ 310,029 [^flashloopadapter-safe-module-caller-spoof] | Ethereum | Access-Control | A custom Safe module for leveraged Aave positions trusted any caller that claimed to have it enabled and forwarded caller-supplied calldata to a caller-chosen address, so a fake Safe made it drain the two real Safes that had enabled it | [flashloopadapter-safe-module-caller-spoof/](flashloopadapter-safe-module-caller-spoof/) |
 
-**October 2026 subtotal: $310,029** across 1 incident.
+**October 2026 subtotal: $850,629** across 2 incidents.
 
 #### September 2026
 
@@ -184,4 +185,5 @@ reimbursements a protocol paid from its own reserves are not.
 [^duelbits-hot-wallet-drain]: Ethereum leg only, re-derived live by `duelbits-hot-wallet-drain/reconstruct_exploit.py`: 836 ETH, 593,430.319285 USDT, 96,804.683231 USDC, 31,515 DAI and 12,397,915,453.4 SHIB from the Duelbits hot wallet (`preuves/resultats_verification_2026-10-01.txt:1-8`), valued at Chainlink ETH/USD 2665.33 and SHIB/ETH 2.139547212e-09 at block 26046301, stablecoins at par: $2,228,216 + $721,750 + $70,700 = $3,020,666 (`:86-89`). Same token amounts as CoinDesk. A floor for the incident: Duelbits puts the total across four chains at about $7M, DefiLlama carries $7,000,000 with an empty source field (`preuves/resultats_sources_2026-10-01.txt:1-2`). See `duelbits-hot-wallet-drain/README.md`. External sources: https://api.llama.fi/hacks, https://www.coindesk.com/business/2026/09/24/crypto-casino-duelbits-goes-offline-after-usd7m-hot-wallet-hack.
 [^flashloopadapter-safe-module-caller-spoof]: Victims' combined loss in one transaction at block 26098264: 1,306.482325 weETH of Aave v3 collateral withdrawn from Safe 0xcfedf95a3653a128dfc2e4288758a1a1850d169f after its 1,335.255803 WETH debt was repaid, plus 6.426087 weETH taken from Safe 0xe3b23e47df7cd85876ac6cb05bdb9d7cd5b28520, valued at weETH's own getRate (1.104845017359084232) and Chainlink ETH/USD (2,688.78094111) at block 26098263: 115.304514 ETH, $310,029. Derived in `flashloopadapter-safe-module-caller-spoof/preuves/resultats_verification_2026-10-04.txt:17-34`, re-read on two other endpoints in `preuves/resultats_contre_verification_2026-10-04.txt`. The attacker's net take is 114.096151 ETH ($306,780); the 1.21 ETH difference is the cost of selling the weETH in one swap. DefiLlama tracks $305,000 with an empty source field, which matches the attacker's take rather than the victims' loss; press gives $305,000 to $310,000. See `flashloopadapter-safe-module-caller-spoof/README.md`. External sources: https://api.llama.fi/hacks, https://www.cryptotimes.io/2026/10/02/flashloopadapter-exploit-drains-305k-from-two-aave-linked-safes/.
 [^skydao-burn-from-pair-premature-sync]: 183,482.883981 USDT counted at face value, the pair's USDT reserve the block before minus the block of the exploit, re-derived live by `skydao-burn-from-pair-premature-sync/reconstruct_exploit.py`: 59,914.122886 USDT to the attacker and 123,568.761095 USDT paid out by SKYDAO's tax controller to five contracts in the same transaction. DefiLlama lists the same 183,482.88.
+[^makerdao-eth-a-dormant-keeper-drain]: 200 ETH of ETH-A collateral claimed from Flipper auctions 1457 to 1460 and withdrawn in one transaction at block 26131471 (`makerdao-eth-a-dormant-keeper-drain/preuves/resultats_verification_2026-10-13.txt:19-38`), valued at Chainlink ETH/USD 2703.00 at block 26131470: $540,600 (`:69-70`). DefiLlama tracks $538,000 with an empty source field (`preuves/resultats_sources_2026-10-13.txt:1-4`), the same 200 ETH at a slightly lower price. See `makerdao-eth-a-dormant-keeper-drain/README.md`. External sources: https://api.llama.fi/hacks, https://www.cryptotimes.io/2026/10/06/dormant-makerdao-keeper-drained-of-538k-core-remains-intact/.
 

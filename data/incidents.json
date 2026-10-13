@@ -3,6 +3,20 @@
  "license": "MIT",
  "incidents": [
   {
+   "slug": "makerdao-eth-a-dormant-keeper-drain",
+   "protocol": "MakerDAO ETH-A dormant keeper",
+   "date": "2026-10-06",
+   "loss_usd": 540600,
+   "floor": false,
+   "approximate": true,
+   "sourced": false,
+   "chain": "Ethereum",
+   "category": "Access-Control",
+   "mechanism": "A dormant keeper contract that had won four 2020 ETH-A liquidation auctions exposed a public function that handed a caller-supplied contract control of its Vat position, so a fresh account claimed the collateral and withdrew 200 ETH",
+   "url": "https://github.com/RealSpap/onchain-postmortems/tree/main/makerdao-eth-a-dormant-keeper-drain/",
+   "note": "200 ETH of ETH-A collateral claimed from Flipper auctions 1457 to 1460 and withdrawn in one transaction at block 26131471 (`makerdao-eth-a-dormant-keeper-drain/preuves/resultats_verification_2026-10-13.txt:19-38`), valued at Chainlink ETH/USD 2703.00 at block 26131470: $540,600 (`:69-70`). DefiLlama tracks $538,000 with an empty source field (`preuves/resultats_sources_2026-10-13.txt:1-4`), the same 200 ETH at a slightly lower price. See `makerdao-eth-a-dormant-keeper-drain/README.md`. External sources: https://api.llama.fi/hacks, https://www.cryptotimes.io/2026/10/06/dormant-makerdao-keeper-drained-of-538k-core-remains-intact/."
+  },
+  {
    "slug": "flashloopadapter-safe-module-caller-spoof",
    "protocol": "FlashLoopAdapter Safe module",
    "date": "2026-10-01",

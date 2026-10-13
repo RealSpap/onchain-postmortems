@@ -1,0 +1,14 @@
+Sources read on 2026-10-13 (UTC), after the on-chain reconstruction, for comparison.
+
+1. DefiLlama, https://api.llama.fi/hacks, record "MakerDAO ETH-A Liquidation Keeper Bot":
+   {"date": 1791244800, "name": "MakerDAO ETH-A Liquidation Keeper Bot", "classification": "Access Control", "technique": "Improper Access Control", "amount": 538000, "chain": ["Ethereum"], "bridgeHack": false, "targetType": "DeFi Protocol", "source": "", "returnedFunds": null, "defillamaId": null, "language": "Solidity"}
+   (date 1791244800 = 2026-10-06 00:00 UTC; the source field is empty.)
+2. Press, as read on 2026-10-13:
+   - The Crypto Times, 2026-10-06, "Dormant MakerDAO Keeper Drained of $538K, Core Remains Intact": names the exploit transaction 0xbb6940f7...a88c, the attacker 0x01EB957e...a5FA, 200 WETH (~$538,000), auctions 1457 to 1460 with 50 WETH each, and says the MakerDAO core contracts were not breached.
+   - KuCoin News flash relaying CertiK: a keeper bot exploit in the MakerDAO liquidation system, attack vector and impact not yet confirmed at the time of that item. CertiK attributes it, per other coverage, to a missing access control in a function of the keeper implementation.
+   - Defimon Alerts, as relayed by press: the withdrawing address was funded through Tornado Cash.
+3. Blockscout public API (eth.blockscout.com/api/v2):
+   - 0x9c05a05893ada984fc20d0da0c046de5cc0e8273: verified as AdminUpgradeabilityProxy.
+   - 0x68399ed8aa33c5b43f863ee6782de492006a5546 (implementation): no verified source on Blockscout on this date. The selector list in resultats_verification_2026-10-13.txt comes from its bytecode.
+   - 0xd90e2f925da726b50c4ed8d0fb90ad053324f31b: labelled TornadoRouter. 0x12d66f87a04a9e220743712ce6d9bb1b5616b8fc: labelled TornadoCash_Eth_01.
+4. Not found: a statement from the keeper's operator, from MakerDAO or from Sky. The MakerDAO core was not involved on the chain evidence either (see README).

@@ -1,0 +1,79 @@
+1. tx 0xbb6940f7c2a1e68cafbae7bb9b94d09af9af06ec3a114f6996f2cab993f3a88c status 0x1 block 26131471 time 2026-10-06 06:13:11 UTC
+   from 0x01eb957e5c7dcddd60f3c875956ccc6fb9bda5fa to 0xec997d2ad033277913d6002277353368e8321dcf nonce 2 gas used 705293
+   sender nonce before this tx: 2 (a fresh account)
+   sender code size: 0 bytes (EOA if 0)
+2. proxy 0x9c05a05893ada984fc20d0da0c046de5cc0e8273 EIP-1967 implementation 0x68399ed8aa33c5b43f863ee6782de492006a5546 admin 0x5b492f7483da1778c450b9b18f5df9d95cab8efe (zos slot impl 0x0000000000000000000000000000000000000000)
+   implementation: 10185 bytes, 58 distinct PUSH4 values; auth-related and drain selectors present:
+     bf7e214f authority()                present
+     8da5cb5b owner()                    present
+     13af4035 setOwner(address)          present
+     7a9e5e4b setAuthority(address)      present
+     f2fde38b transferOwnership(address) absent
+     8804d1de the drain function         present
+   owner() on the proxy at 26131470: 0xadc374e77b89af0b8b39f7c47e8e0a37b6daf073
+   owner() on the proxy at latest: 0xadc374e77b89af0b8b39f7c47e8e0a37b6daf073
+   authority() on the proxy at 26131470: 0x0000000000000000000000000000000000000000
+   authority() on the proxy at latest: 0x0000000000000000000000000000000000000000
+   proxy code size 2240 bytes
+3. Flipper 0xd8a04f5412223f513dc55f839574430f5ec15531 bids(id) at block 26131470 (before) and 26131471 (exploit)
+   block 26131470 id 1457: bid 1000000000000000000 (rad) lot 50.0 guy 0x9c05a05893ada984fc20d0da0c046de5cc0e8273 tic 1584027368 (2020-03-12 15:36:08) end 1584285968 (2020-03-15 15:26:08) tab 5371.431992122239 DAI
+   block 26131470 id 1458: bid 1000000000000000000 (rad) lot 50.0 guy 0x9c05a05893ada984fc20d0da0c046de5cc0e8273 tic 1584027368 (2020-03-12 15:36:08) end 1584285968 (2020-03-15 15:26:08) tab 5371.431992122239 DAI
+   block 26131470 id 1459: bid 1000000000000000000 (rad) lot 50.0 guy 0x9c05a05893ada984fc20d0da0c046de5cc0e8273 tic 1584027368 (2020-03-12 15:36:08) end 1584285968 (2020-03-15 15:26:08) tab 5371.431992122239 DAI
+   block 26131470 id 1460: bid 1000000000000000000 (rad) lot 50.0 guy 0x9c05a05893ada984fc20d0da0c046de5cc0e8273 tic 1584027368 (2020-03-12 15:36:08) end 1584285968 (2020-03-15 15:26:08) tab 5371.431992122239 DAI
+   block 26131471 id 1457: bid 0 (rad) lot 0.0 guy 0x0 tic 0 (-) end 0 (-) tab 0.0 DAI
+   block 26131471 id 1458: bid 0 (rad) lot 0.0 guy 0x0 tic 0 (-) end 0 (-) tab 0.0 DAI
+   block 26131471 id 1459: bid 0 (rad) lot 0.0 guy 0x0 tic 0 (-) end 0 (-) tab 0.0 DAI
+   block 26131471 id 1460: bid 0 (rad) lot 0.0 guy 0x0 tic 0 (-) end 0 (-) tab 0.0 DAI
+   Vat.gem(ETH-A, keeper proxy) at block 26131470: 0.0
+   Vat.gem(ETH-A, keeper proxy) at block 26131471: 0.0
+   Vat.gem(ETH-A, Flipper) at block 26131470: 547.1484328039633
+   Vat.gem(ETH-A, Flipper) at block 26131471: 347.14843280396326
+   Vat.gem(ETH-A, ETH-A GemJoin) at block 26131470: 1.0
+   Vat.gem(ETH-A, ETH-A GemJoin) at block 26131471: 1.0
+   owner of the proxy 0xadc374e77b89af0b8b39f7c47e8e0a37b6daf073: code 0 bytes, nonce 1876
+4. logs of the transaction: 16
+   WETH Transfer 0x2f0b23f53734252bda2277357e97e1517d6b042a -> 0xf09a13072ed939b79bc25b66aa3a836ea6dcc170 200.0
+   WETH Transfer 0xf09a13072ed939b79bc25b66aa3a836ea6dcc170 -> 0xec997d2ad033277913d6002277353368e8321dcf 200.0
+   WETH Withdrawal by 0xec997d2ad033277913d6002277353368e8321dcf 200.0 (200000000000000000000 wei)
+   Flipper deal() auction ids in the logs: [1457, 1458, 1459, 1460]
+   call trace:
+   CALL 0x01eb957e -> 0xec997d2ad033277913d6002277353368e8321dcf 0x0e763dd6
+    CREATE 0xec997d2a -> 0xf09a13072ed939b79bc25b66aa3a836ea6dcc170 0x61016060
+    CALL 0xec997d2a -> 0x9c05a05893ada984fc20d0da0c046de5cc0e8273 0x8804d1de
+     DELEGATECALL 0x9c05a058 -> 0x68399ed8aa33c5b43f863ee6782de492006a5546 0x8804d1de
+      CALL 0x9c05a058 -> 0xf09a13072ed939b79bc25b66aa3a836ea6dcc170 0x9f678cca
+      CALL 0x9c05a058 -> 0xf09a13072ed939b79bc25b66aa3a836ea6dcc170 0x36569e77
+      STATICCALL 0x9c05a058 -> 0x35d1b3f3d7966a1dfe207aa4514c12a259a0492b 0x4538c4eb
+      CALL 0x9c05a058 -> 0x35d1b3f3d7966a1dfe207aa4514c12a259a0492b 0xa3b22fc4
+      CALL 0x9c05a058 -> 0xf09a13072ed939b79bc25b66aa3a836ea6dcc170 0x049878f3
+       CALL 0xf09a1307 -> 0xd8a04f5412223f513dc55f839574430f5ec15531 0xc959c42b
+        CALL 0xd8a04f54 -> 0x35d1b3f3d7966a1dfe207aa4514c12a259a0492b 0x6111be2e
+       CALL 0xf09a1307 -> 0xd8a04f5412223f513dc55f839574430f5ec15531 0xc959c42b
+        CALL 0xd8a04f54 -> 0x35d1b3f3d7966a1dfe207aa4514c12a259a0492b 0x6111be2e
+       CALL 0xf09a1307 -> 0xd8a04f5412223f513dc55f839574430f5ec15531 0xc959c42b
+        CALL 0xd8a04f54 -> 0x35d1b3f3d7966a1dfe207aa4514c12a259a0492b 0x6111be2e
+       CALL 0xf09a1307 -> 0xd8a04f5412223f513dc55f839574430f5ec15531 0xc959c42b
+        CALL 0xd8a04f54 -> 0x35d1b3f3d7966a1dfe207aa4514c12a259a0492b 0x6111be2e
+       STATICCALL 0xf09a1307 -> 0x35d1b3f3d7966a1dfe207aa4514c12a259a0492b 0x214414d5
+       CALL 0xf09a1307 -> 0x35d1b3f3d7966a1dfe207aa4514c12a259a0492b 0x6111be2e
+       CALL 0xf09a1307 -> 0x2f0b23f53734252bda2277357e97e1517d6b042a 0xef693bed
+        CALL 0x2f0b23f5 -> 0x35d1b3f3d7966a1dfe207aa4514c12a259a0492b 0x7cdd3fde
+        CALL 0x2f0b23f5 -> 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2 0xa9059cbb
+       STATICCALL 0xf09a1307 -> 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2 0x70a08231
+       CALL 0xf09a1307 -> 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2 0xa9059cbb
+    STATICCALL 0xec997d2a -> 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2 0x70a08231
+    CALL 0xec997d2a -> 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2 0x2e1a7d4d
+     CALL 0xc02aaa39 -> 0xec997d2ad033277913d6002277353368e8321dcf 0x value 200.0 ETH
+    CALL 0xec997d2a -> 0x01eb957e5c7dcddd60f3c875956ccc6fb9bda5fa 0x value 200.0 ETH
+   final top-level ETH transfer to the sender: see 'value' on the last call above
+5. Chainlink ETH/USD at block 26131470: 2703.00 (updatedAt 2026-10-06 05:16:23 UTC)
+   200.000000 ETH x 2703.00 = $540600
+6. attacker 0x01eb957e5c7dcddd60f3c875956ccc6fb9bda5fa: nonce 23, balance 0.070091 ETH now
+   balance one block before: 0.095743 ETH, after: 200.095237 ETH
+   23 transactions sent by the attacker (Blockscout), first 2026-10-06T06:09:23.000000Z, last 2026-10-06T06:28:35.000000Z
+     2 tx to contract creation, 0.000000 ETH total
+     1 tx to 0xEc997d2aD033277913d6002277353368E8321dcF (None), 0.000000 ETH total
+     20 tx to 0xd90e2f925DA726b50C4Ed8D0Fb90Ad053324F31b (TornadoRouter), 200.000000 ETH total
+   incoming ETH 2026-10-06T05:57:23.000000Z from 0x12D66f87A04A9E220743712cE6d9bB1B5616B8Fc (TornadoCash_Eth_01) 0.097837305 ETH
+   incoming ETH 2026-10-06T06:13:11.000000Z from 0xEc997d2aD033277913d6002277353368E8321dcF (None) 200.000000000 ETH
+7. keeper 0x9c05a05893ada984fc20d0da0c046de5cc0e8273 now: ETH 0.000000, WETH 0.0, Vat.gem(ETH-A) 0.0
