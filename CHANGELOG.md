@@ -5,6 +5,10 @@ incident's own README carries the full detail and supersedes any earlier
 wording; this file is a short log. New incidents are also announced as
 GitHub releases.
 
+## 2026-10-16
+
+- Added UNCX Vesting V2, Ethereum leg (Ethereum, 2026-10-14), counted net of the 82,143,476 X tokens and 8.10335 ETH returned.
+
 ## 2026-10-13
 
 - Added MakerDAO ETH-A dormant keeper (Ethereum, 2026-10-06).

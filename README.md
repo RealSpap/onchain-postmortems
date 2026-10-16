@@ -1,6 +1,6 @@
 # On-Chain Postmortems
 
-**$921.7M in DeFi and on-chain losses across 56 incidents, each reconstructed from raw chain data; $584.7M of it independently recomputed, the rest sourced from the protocol, press or DefiLlama.**
+**$921.8M in DeFi and on-chain losses across 57 incidents, each reconstructed from raw chain data; $584.8M of it independently recomputed, the rest sourced from the protocol, press or DefiLlama.**
 
 Forensic reconstructions done on-chain. Each entry rebuilds the exploit
 from raw chain data (`eth_getLogs`, decoded transaction receipts,
@@ -31,8 +31,8 @@ and raw proof files.
 
 | | |
 |---|---|
-| Incidents covered | 56, each reconstructed on-chain, see [the full index](INDEX.md) for detail |
-| Cumulative loss | About $921.7M across the 56 incidents ($921,668,704 exactly, sum of the figures in the index); $584,700,546 of it independently recomputed, the rest (marked † in the index) sourced from the protocol, press or DefiLlama. At least one entry is a known floor, so the real total is higher. |
+| Incidents covered | 57, each reconstructed on-chain, see [the full index](INDEX.md) for detail |
+| Cumulative loss | About $921.8M across the 57 incidents ($921,808,557 exactly, sum of the figures in the index); $584,840,399 of it independently recomputed, the rest (marked † in the index) sourced from the protocol, press or DefiLlama. At least one entry is a known floor, so the real total is higher. |
 | Corrections made | 34 entries correct, reconcile, or newly surface a press or DefiLlama figure, label, date, or classification (23 corrections, 8 reconciliations, 3 discoveries not previously priced by DefiLlama at all). See [Corrections to press and DefiLlama](CORRECTIONS.md). |
 | Machine-readable data | [`data/incidents.json`](data/incidents.json) and [`data/incidents.csv`](data/incidents.csv), one row per incident, regenerated from INDEX.md; cite via [`CITATION.cff`](CITATION.cff) |
 | Method | Each subfolder keeps its Python reconstruction script, its `registre_hypotheses.csv` falsification registry, and its script's raw output in `resultats_*.txt`, so each recomputed figure can be checked against the file that produced it |
@@ -160,7 +160,7 @@ request a correction privately, see [SECURITY.md](SECURITY.md).
   from an old summary unchecked. Figures marked † come from the
   protocol's own post-mortem, press or DefiLlama and are not
   independently recomputed; each footnote names the source.
-- 14 entries report a dollar figure that is a known floor, not a complete
+- 15 entries report a dollar figure that is a known floor, not a complete
   total. Read the linked subfolder for the full accounting in native
   units.
 
@@ -180,10 +180,11 @@ request a correction privately, see [SECURITY.md](SECURITY.md).
 | Oraichain (ICS-20 EVM Precompile) | Prices only 2 legs; excludes Injective-bridged/locked ORAI | [oraichain-ics20-precompile-selfmint/](oraichain-ics20-precompile-selfmint/) |
 | COLDCARD (Weak Seed RNG) | Only 1st of 4 theft waves traced, about a third | [coldcard-rng-seed-theft/](coldcard-rng-seed-theft/) |
 | Verus-Ethereum Bridge | 2nd exploit (2026-07-23, $7,530,000 per DefiLlama) not priced | [verus-ethereum-bridge-forged-proof/](verus-ethereum-bridge-forged-proof/) |
+| UNCX Vesting V2 (Ethereum leg) | Ethereum leg only; Base, BNB Chain and Robinhood Chain legs not reconstructed | [uncx-vesting-v2-share-accounting/](uncx-vesting-v2-share-accounting/) |
 
 - Counting rule: funds returned by the attacker or reversed on-chain are
-  deducted, so Liquid Network, Tectonic, Oraichain and the Safe LP Module
-  report the unrecovered figure, and Moonwell its uncovered debt, not the
+  deducted, so Liquid Network, Tectonic, Oraichain, the Safe LP Module and UNCX
+  Vesting V2 report the unrecovered figure, and Moonwell its uncovered debt, not the
   higher gross amount (each footnote gives both readings).
   Reimbursements a protocol paid from its own reserves are not deducted.
 - `tectonic-cronos/`'s script reads the chain's current state

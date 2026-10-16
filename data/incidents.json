@@ -31,6 +31,20 @@
    "note": "Victims' combined loss in one transaction at block 26098264: 1,306.482325 weETH of Aave v3 collateral withdrawn from Safe 0xcfedf95a3653a128dfc2e4288758a1a1850d169f after its 1,335.255803 WETH debt was repaid, plus 6.426087 weETH taken from Safe 0xe3b23e47df7cd85876ac6cb05bdb9d7cd5b28520, valued at weETH's own getRate (1.104845017359084232) and Chainlink ETH/USD (2,688.78094111) at block 26098263: 115.304514 ETH, $310,029. Derived in `flashloopadapter-safe-module-caller-spoof/preuves/resultats_verification_2026-10-04.txt:17-34`, re-read on two other endpoints in `preuves/resultats_contre_verification_2026-10-04.txt`. The attacker's net take is 114.096151 ETH ($306,780); the 1.21 ETH difference is the cost of selling the weETH in one swap. DefiLlama tracks $305,000 with an empty source field, which matches the attacker's take rather than the victims' loss; press gives $305,000 to $310,000. See `flashloopadapter-safe-module-caller-spoof/README.md`. External sources: https://api.llama.fi/hacks, https://www.cryptotimes.io/2026/10/02/flashloopadapter-exploit-drains-305k-from-two-aave-linked-safes/."
   },
   {
+   "slug": "uncx-vesting-v2-share-accounting",
+   "protocol": "UNCX Vesting V2 (Ethereum leg)",
+   "date": "2026-10-14",
+   "loss_usd": 139853,
+   "floor": true,
+   "approximate": false,
+   "sourced": false,
+   "chain": "Ethereum",
+   "category": "Rounding/Math-Bug",
+   "mechanism": "A shared vesting pool's release and cancel paths kept share accounting inconsistent, so a fresh account claimed tokens deposited by others; three more senders followed within the hour",
+   "url": "https://github.com/RealSpap/onchain-postmortems/tree/main/uncx-vesting-v2-share-accounting/",
+   "note": "Ethereum leg only. The VestingManager's balance of six tokens fell between block 26191744 and block 26204197 by an amount worth $242,605 at DefiLlama's historical prices for the first drain's time, the gross figure ($87,307 in the first transaction, then $151,584, $3,032 and $683 from three other senders; `uncx-vesting-v2-share-accounting/preuves/resultats_reconstruction_2026-10-16.txt:4-20`). The X token line ($151,584) has a price confidence of 0.84. Two returns came back: 82,143,476.36 X tokens, and 8.10335 ETH sent 36 seconds earlier, both on 2026-10-16 (blocks 26205564 and 26205561) by the address that had received the X in the second drain to a Safe, which on 2026-10-19 (blocks 26227870 and 26227881) handed them to the address that had deposited the X (`uncx-vesting-v2-share-accounting/preuves/resultats_retours_2026-10-21.txt`). At the same snapshot prices that is $83,011 and $19,741, so under the counting rule above the figure is **$139,853** (gross $242,605; $159,594 net of the X alone). DefiLlama tracks \"UNCX Network V2\", $86,000, \"Incorrect Share Accounting\" on four chains with an empty source field, which matches the first transaction only (`preuves/resultats_sources_2026-10-16.txt:2`). Blockaid, via press, estimates about $1.49 million across four chains including about $242,000 on Ethereum; the Base, BNB Chain and Robinhood Chain legs are not reconstructed here. See `uncx-vesting-v2-share-accounting/README.md`. External sources: https://api.llama.fi/hacks, https://www.cryptotimes.io/2026/10/15/uncx-exploit-escalates-vesting-v2-bug-drains-1-5m-across-4-chains-as-copycats-join-in/."
+  },
+  {
    "slug": "bitget-hot-wallet-spoofed-withdrawals",
    "protocol": "Bitget hot wallet drain (Ethereum leg)",
    "date": "2026-09-24",

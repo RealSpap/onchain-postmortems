@@ -1,0 +1,7 @@
+DefiLlama api.llama.fi/hacks, record read 2026-10-16:
+name=UNCX Network V2 date=2026-10-14 amount=86000 chain=['Ethereum', 'Base', 'BSC', 'Robinhood Chain'] classification=Token & Share Accounting technique=Incorrect Share Accounting source='' defillamaId=1765
+Press and security firms, read 2026-10-16 (not used for any figure in the Index):
+- Blockaid, relayed by Crypto Briefing and The Crypto Times (2026-10-15): about $86,000 drained from UNCX's Ethereum vesting pool, later about $1.49 million across four chains, with per-chain estimates of roughly $969,000 BNB Smart Chain, $242,000 Ethereum, $169,000 Robinhood Chain and $114,000 Base. One report states the larger figure is Blockaid's estimate, not a confirmed total.
+- UNCX security update (2026-10-15), relayed by Blockfence and KuCoin News: 10 tokens affected across Ethereum, Base, BNB Chain and Robinhood Chain; Ethereum tokens pepecoin, EDGEN, ZC, X, LO0P, PAAL; bounty offer for return of funds within 48 hours.
+- SlowMist and ExVul, relayed by PANews and Cryptonews: an accounting inconsistency between the release and cancel paths of the VestingManager. No private key compromise reported.
+No post-mortem from UNCX had been found at the time of writing.
