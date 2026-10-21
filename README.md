@@ -36,11 +36,11 @@ and raw proof files.
 | Corrections made | 34 entries correct, reconcile, or newly surface a press or DefiLlama figure, label, date, or classification (23 corrections, 8 reconciliations, 3 discoveries not previously priced by DefiLlama at all). See [Corrections to press and DefiLlama](CORRECTIONS.md). |
 | Machine-readable data | [`data/incidents.json`](data/incidents.json) and [`data/incidents.csv`](data/incidents.csv), one row per incident, regenerated from INDEX.md; cite via [`CITATION.cff`](CITATION.cff) |
 | Method | Each subfolder keeps its Python reconstruction script, its `registre_hypotheses.csv` falsification registry, and its script's raw output in `resultats_*.txt`, so each recomputed figure can be checked against the file that produced it |
-| License | MIT across all 55 entries, single author (Spap, 2026) |
+| License | MIT across all 57 entries, single author (Spap, 2026) |
 
 ## The 5 biggest losses
 
-Full history is 55 incidents across 7 months; these are the largest, by
+Full history is 57 incidents across 7 months; these are the largest, by
 loss. Full table, sortable by month: [INDEX.md](INDEX.md).
 
 | Protocol | Loss ($) | Chain | Mechanism | Link |
