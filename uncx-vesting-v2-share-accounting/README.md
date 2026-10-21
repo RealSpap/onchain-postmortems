@@ -1,6 +1,6 @@
 # UNCX Vesting V2, Ethereum Leg, Post-Mortem
 
-On October 14, 2026, at 15:49:59 UTC, one transaction took tokens belonging to other users out of UNCX's VestingManager (v2) on Ethereum. In the next hour three more accounts, none of them the first attacker's address, emptied a 150 million token position and most of what was left of one more token (ZC) from the same contract. Rebuilt from the chain, the contract lost tokens worth about $242,605 on Ethereum alone; 82,143,476 of the X tokens and 8.10335 ETH were later returned (see Returned below), which leaves $139,853. DefiLlama lists $86,000 for the whole incident, which matches the first transaction ($87,307) and none of what came after.
+On October 14, 2026, at 15:49:59 UTC, one transaction took tokens belonging to other users out of UNCX's VestingManager (v2) on Ethereum. In the next hour three more accounts, none of them the first attacker's address, emptied a 150 million token position and most of what was left of one more token (ZC) from the same contract. Rebuilt from the chain, the contract lost tokens worth about $242,605 on Ethereum alone; 82,143,476 of the X tokens and 8.10335 ETH were later returned (see Returned below), which leaves $139,853. DefiLlama lists $86,000 on four chains, which matches the first transaction ($87,307) and none of what came after.
 
 The flaw is in how the contract keeps its share accounting when a vesting position is released and cancelled. No key was involved: the transactions come from ordinary accounts and call the contract's normal functions. UNCX reports four chains affected; only Ethereum is reconstructed here.
 
@@ -92,7 +92,7 @@ A fifth transaction at 03:01 UTC on 15 October moved a net of 496.87 ZC *into* t
 
 ### Dollar value, and why the figures differ
 
-DefiLlama's $86,000 is the first transaction: $87,307 at DefiLlama's prices, 1.5% above. The press figure of about $242,000 for Ethereum (Blockaid) matches the balance method to within 0.3%. The $1.49 million is Blockaid's four-chain estimate, which one outlet describes as not confirmed; the Base, BNB Chain and Robinhood Chain legs are not reconstructed here because the contract sits at a different address on each of them and none was named in the sources. The Index carries the Ethereum figure as a floor.
+DefiLlama's $86,000 matches the first transaction ($87,307 at DefiLlama's prices, 1.5% above) and Blockaid's first-day figure for that one transaction; DefiLlama gives no source, so that it came from Blockaid is an inference. The press figure of about $242,000 for Ethereum (Blockaid) matches the balance method to within 0.3%. The $1.49 million is Blockaid's four-chain estimate, which one outlet describes as not confirmed; the Base, BNB Chain and Robinhood Chain legs are not reconstructed here because the contract sits at a different address on each of them and none was named in the sources. The Index carries the Ethereum figure as a floor.
 
 ### Where things stand
 
