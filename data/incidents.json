@@ -353,6 +353,20 @@
    "note": "50,463.792096 units of stablecoin out of Nimiq's Polygon swap liquidity wallet in two transactions at blocks 93930784 and 93930854 (2026-09-16 23:26:49 and 23:28:34 UTC): 26,130.641710 USDC, 24,332.489269 USDT0 and 0.661117 USDC.e, each priced at $1. Derived three ways that agree to the unit: from the wallet's `balanceOf` either side of the drain, from the two handlers' `balanceOf` either side of the redeem, and from the Transfer legs of the redeem receipt (`nimiq-gsn-forwarder-unsigned-execute/preuves/resultats_verification_2026-09-21.txt:6-10` and `:33-36`, re-read on a different provider in `preuves/resultats_contre_verification_2026-09-21.txt`). Each of the three legs is 100% of the wallet's balance in that token, which is why the smallest is worth sixty-six cents. DefiLlama tracks $50,400 against an empty source field, 63.79 low; Nimiq's own figure as relayed by press, 50,463, is the floor of the on-chain sum. The attacker realized 50,447.825983 USDC on Ethereum after 15.304996 of swap slippage and one abandoned leg. See `nimiq-gsn-forwarder-unsigned-execute/README.md`. External sources: https://api.llama.fi/hacks, https://coinfomania.com/nimiq-reports-50463-loss-due-to-exploit/."
   },
   {
+   "slug": "bonfireswap-router-arbitrary-from-forced-sell",
+   "protocol": "BonfireSwap (router)",
+   "date": "2026-09-15",
+   "loss_usd": 47364,
+   "floor": false,
+   "approximate": true,
+   "sourced": false,
+   "chain": "BSC",
+   "category": "Access-Control",
+   "mechanism": "A router function pulls tokens from any holder the caller names, using the allowance the holder once gave the router and without checking that the caller is that holder: one constructor pulled the tokens of 65 holders and had them sold for 66.08 BNB, which still sits in a contract whose code only reverts",
+   "url": "https://github.com/RealSpap/onchain-postmortems/tree/main/bonfireswap-router-arbitrary-from-forced-sell/",
+   "note": "66.080052256436953636 BNB, the BNB the attack contract holds after two WBNB withdrawals by the BonfireSwap router in the exploit transaction (BSC block 122003954, 2026-09-15 09:15:32 UTC), priced at DefiLlama's BNB price of 716.77 at the block time: about $47,364, re-derived live by `bonfireswap-router-arbitrary-from-forced-sell/reconstruct_exploit.py`. DefiLlama lists $47,400 (\"Bonfire\", \"Access Control\" / \"Improper Access Control\", 2026-09-15), 0.08% higher; a Coinfomania article citing one SlowMist post says about $50,000 and about 41 holders. The BNB is still in the attack contract, whose code only reverts, so it cannot be withdrawn. See `bonfireswap-router-arbitrary-from-forced-sell/README.md`. External sources: https://github.com/SunWeb3Sec/DeFiHackLabs (src/test/2026-09/BonfireSwap_exp.sol), https://api.llama.fi/hacks, https://coinfomania.com/security-breach-costs-bonfiretoken-50k-as-community-reacts/."
+  },
+  {
    "slug": "etherfi-atomicqueue-eip7702-solver-drain",
    "protocol": "ether.fi Liquid (AtomicQueue)",
    "date": "2026-09-11",

@@ -15,6 +15,7 @@ GitHub releases.
 - Added NEAR Intents, Omni MetaWallet on BNB Chain (2026-09-30 and 2026-10-01).
 - Added BitBay UsdcDaiV4Vault (Polygon, 2026-10-09).
 - Added DoinGud Diamond (Polygon, 2026-09-21).
+- Added BonfireSwap router (BSC, 2026-09-15).
 
 ## 2026-10-16
 

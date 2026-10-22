@@ -1,0 +1,36 @@
+# Negative witness 1: python3 reconstruct_exploit.py --tx 0xf03db0a620fed3c0796e0c5a093b8e0aba6729d911aaa85a4d655cb396dbd8ff   (another transaction of the same block as the exploit; the checks that read the exploit transaction must fail)
+tx 0xf03db0a620fed3c0796e0c5a093b8e0aba6729d911aaa85a4d655cb396dbd8ff
+block 122003954, 2026-09-15 09:15:32 UTC, from 0x4848489f0b2bedd788c696e2d79b6b69d7484848, to 0x4848489f0b2bedd788c696e2d79b6b69d7484848, created None, status 0x1, 0 logs
+CHECK PASS H1 the transaction succeeded in block 122003954 (block 122003954)
+CHECK FAIL H2 it is a contract creation sent by the attacker's EOA that created the attack contract (from 0x4848489f0b2bedd788c696e2d79b6b69d7484848, created None)
+CHECK PASS H3 it was mined on 2026-09-15 between 09:00 and 10:00 UTC (2026-09-15 09:15:32 UTC)
+CHECK PASS H4 the router is verified on Sourcify (match, BonfireSwap) (match match, BonfireSwap, solc 0.8.7+commit.e28d00a7)
+CHECK PASS H5 the router has transfer(address to, uint amountAIn, address beneficiary, uint deadline)
+CHECK PASS H6 that function pulls the tokens from `to` with transferFrom and never compares msg.sender with `to` (no msg.sender in the function body)
+CHECK PASS H7 the helper _safeTransferFrom calls the token's transferFrom(from, to, amount) with the given `from` and checks nothing about the caller (helper found)
+CHECK PASS H8 loggedTransfer pulls the same way: transferFrom from the `to` it is given, no msg.sender in its body
+CHECK FAIL H9 the creation code of the attack contract contains the router's selectors for transfer, sell and skimPool (transfer 0x335a9406: 0x, sell 0x8a038a54: 0x, skimPool 0x8757c3ab: 0x)
+CHECK FAIL H10 65 distinct holders other than the attack contract and the token contract were pulled into the pair (0)
+CHECK FAIL H11 the largest holder lost 5,289.104767128481849088 BONFIRE, in two transfers (None: 0)
+CHECK FAIL H12 the pair handed 5,082.493249693713424971 BONFIRE back to the attack contract in 61 transfers (0 transfers, 0)
+CHECK PASS H13 each of the five largest holders had a balance and an allowance to the router, one block before, at least as large as what was pulled
+CHECK PASS H14 none of the five largest holders is the sender of the transaction or the attack contract
+CHECK FAIL H15 the router withdrew WBNB twice in the transaction, 33.223195564710982431 and 32.856856691725971205, for a total equal to the expected proceeds (total 0, expected 66080052256436953636)
+CHECK PASS H16 the attack contract held exactly that amount of BNB at the end of the transaction (66080052256436953636)
+CHECK PASS H17 it holds the same amount now: nothing left it (66080052256436953636 at block 129187972)
+CHECK PASS H18 the attack contract's code is 6080604052600080fd..., which reverts on every call, so the BNB cannot be withdrawn by calling it (63 bytes)
+CHECK PASS H19 the sender's EOA received none of the proceeds in this transaction (its balance fell by the gas it paid) (EOA nonce 10 now)
+CHECK PASS H20 the sender had sent 9 transactions before this one (nonce 9), this was its 10th, and it has sent none since (nonce 9 before, 10 after, 10 now)
+CHECK PASS H21 the sender's nine earlier transactions are the ones listed: four contract creations (nonces 0, 1, 2, 5), two plain BNB transfers to 0xdf4c...c695 (nonces 3, 8) and one to 0x0710...f9d3 
+CHECK PASS H22 the proceeds are worth between $47,000 and $47,800 at the block-time BNB price ($47,364.38)
+CHECK PASS H23 DefiLlama lists Bonfire, BSC, $47,400, 2026-09-15, Access Control / Improper Access Control, source empty
+CHECK PASS H24 DefiLlama's $47,400 is within 1% of this reconstruction's value of the proceeds (-0.08%)
+18/24 checks passed
+exit code: 1
+
+# Negative witness 2: python3 reconstruct_exploit.py --expect-bnb 66080052256436953637   (one wei more than the proceeds)
+CHECK FAIL H15 the router withdrew WBNB twice in the transaction, 33.223195564710982431 and 32.856856691725971205, for a total equal to the expected proceeds (total 66080052256436953636, expected 6608
+CHECK FAIL H16 the attack contract held exactly that amount of BNB at the end of the transaction (66080052256436953636)
+CHECK FAIL H17 it holds the same amount now: nothing left it (66080052256436953636 at block 129188067)
+21/24 checks passed
+exit code: 1

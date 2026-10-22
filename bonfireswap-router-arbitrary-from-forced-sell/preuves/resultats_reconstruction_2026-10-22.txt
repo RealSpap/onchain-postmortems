@@ -1,0 +1,65 @@
+=== 1. The exploit transaction
+tx 0xb4c00e8f3ba815b6c70f45026f8794d2c1f079646a89919077688ce60692193f
+block 122003954, 2026-09-15 09:15:32 UTC, from 0x2b5bf7d9d9dc1eec68f40c6b7a8f197e65f9731a, to None, created 0x28e976ea7b83553d6d1d45ce81334156a2632127, status 0x1, 346 logs
+CHECK PASS H1 the transaction succeeded in block 122003954 (block 122003954)
+CHECK PASS H2 it is a contract creation sent by the attacker's EOA that created the attack contract (from 0x2b5bf7d9d9dc1eec68f40c6b7a8f197e65f9731a, created 0x28e976ea7b83553d6d1d45ce81334156a2632127)
+CHECK PASS H3 it was mined on 2026-09-15 between 09:00 and 10:00 UTC (2026-09-15 09:15:32 UTC)
+
+=== 2. The router: verified source, and the function that pulls the tokens
+CHECK PASS H4 the router is verified on Sourcify (match, BonfireSwap) (match match, BonfireSwap, solc 0.8.7+commit.e28d00a7)
+source file: contracts/BonfireSwap.sol
+CHECK PASS H5 the router has transfer(address to, uint amountAIn, address beneficiary, uint deadline)
+function transfer(address to, uint amountAIn, address beneficiary, uint deadline) public ensure(deadline) returns (uint amountAOut, uint amountBOut) {
+        _safeTransferFrom(tokenAddress, to, pancakePair, amountAIn);
+        (amountAOut, amountBOut) = skimPools(beneficiary);
+    }
+CHECK PASS H6 that function pulls the tokens from `to` with transferFrom and never compares msg.sender with `to` (no msg.sender in the function body)
+CHECK PASS H7 the helper _safeTransferFrom calls the token's transferFrom(from, to, amount) with the given `from` and checks nothing about the caller (helper found)
+CHECK PASS H8 loggedTransfer pulls the same way: transferFrom from the `to` it is given, no msg.sender in its body
+CHECK PASS H9 the creation code of the attack contract contains the router's selectors for transfer, sell and skimPool (transfer 0x335a9406: 1x, sell 0x8a038a54: 2x, skimPool 0x8757c3ab: 1x)
+
+=== 3. The pull, victim by victim, from the receipt's own logs
+BONFIRE transfers into the pair: 70 from 67 distinct senders; without the attack contract and the token contract itself: 65 holders, 5,420.900973001337074887 BONFIRE
+BONFIRE sent by the pair to the attack contract: 61 transfers, 5,082.493249693713424971 BONFIRE
+CHECK PASS H10 65 distinct holders other than the attack contract and the token contract were pulled into the pair (65)
+CHECK PASS H11 the largest holder lost 5,289.104767128481849088 BONFIRE, in two transfers (0xeff2fc4e3145f58f534d68a36bcd3085be6a4096: 5,289.104767128481849088)
+CHECK PASS H12 the pair handed 5,082.493249693713424971 BONFIRE back to the attack contract in 61 transfers (61 transfers, 5,082.493249693713424971)
+
+=== 4. The holders had granted the router an allowance, one block before
+0xeff2fc4e3145f58f534d68a36bcd3085be6a4096: lost 5,289.104767128481849088, balance before 5,875.946668764761448339, allowance to the router before above 2^128
+0xb5fa67eaa51b82dcf807021714af6e9469a8c60a: lost 35.793541251552693748, balance before 39.747963403847531735, allowance to the router before above 2^128
+0x0e209754d8ad3d277f94288a5fc10854e11e9636: lost 8.914921028910356181, balance before 9.899791336448693641, allowance to the router before above 2^128
+0x7a8a1060cc281d0263dc45b0ff5b98a6cd3b9acd: lost 8.879656371956250055, balance before 9.860621376520083757, allowance to the router before above 2^128
+0x1aa7202824a667783be76b64d4d38a74a322f604: lost 8.844138239216892382, balance before 9.82117005121229928, allowance to the router before above 2^128
+CHECK PASS H13 each of the five largest holders had a balance and an allowance to the router, one block before, at least as large as what was pulled
+CHECK PASS H14 none of the five largest holders is the sender of the transaction or the attack contract
+
+=== 5. The proceeds, and where they are
+WBNB withdrawn by the router: ['33.223195564710982431', '32.856856691725971205'], total 66.080052256436953636
+BNB held by the attack contract: 66.080052256436953636 at block 122003954; 66.080052256436953636 at block 129187846
+CHECK PASS H15 the router withdrew WBNB twice in the transaction, 33.223195564710982431 and 32.856856691725971205, for a total equal to the expected proceeds (total 66080052256436953636, expected 66080052256436953636)
+CHECK PASS H16 the attack contract held exactly that amount of BNB at the end of the transaction (66080052256436953636)
+CHECK PASS H17 it holds the same amount now: nothing left it (66080052256436953636 at block 129187846)
+attack contract runtime code: 0x6080604052600080fdfea2646970667358221220895fb33d162509d6d3f810322a1f1c5239934ea2d0b1312d7c496f37b383080564736f6c63430008130033
+CHECK PASS H18 the attack contract's code is 6080604052600080fd..., which reverts on every call, so the BNB cannot be withdrawn by calling it (63 bytes)
+CHECK PASS H19 the sender's EOA received none of the proceeds in this transaction (its balance fell by the gas it paid) (EOA nonce 10 now)
+CHECK PASS H20 the sender had sent 9 transactions before this one (nonce 9), this was its 10th, and it has sent none since (nonce 9 before, 10 after, 10 now)
+previous transaction nonce 0: block 96327585, to None, value 0.0, created 0xe1882b2a4c5b3df3343fde3e4d35100d4d85fd33
+previous transaction nonce 1: block 101289379, to None, value 0.0, created 0xda30a4feb9f432292731da3c28301fdaed06ce69
+previous transaction nonce 2: block 101292573, to None, value 0.0, created 0xc950e1c8ae77812c6b20b832e1958764796029fa
+previous transaction nonce 3: block 101472774, to 0xdf4cfe8a6fceb731198a7c356b955f8d1a1cc695, value 0.046790558, created None
+previous transaction nonce 4: block 101473162, to 0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c, value 0.0, created None
+previous transaction nonce 5: block 105642157, to None, value 0.0, created 0xb982b3fe61b246be7c86390d4d464b38398fca49
+previous transaction nonce 6: block 108360807, to 0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c, value 0.0, created None
+previous transaction nonce 7: block 121021020, to 0x07103126442f54856fc50afceae4f36b1bc0f9d3, value 0.5, created None
+previous transaction nonce 8: block 121431150, to 0xdf4cfe8a6fceb731198a7c356b955f8d1a1cc695, value 0.4, created None
+CHECK PASS H21 the sender's nine earlier transactions are the ones listed: four contract creations (nonces 0, 1, 2, 5), two plain BNB transfers to 0xdf4c...c695 (nonces 3, 8) and one to 0x0710...f9d3 (nonce 7), a WBNB transfer call (nonce 4) and a WBNB withdrawal (nonce 6), all successful (9 of 9 match)
+
+=== 6. Value, and DefiLlama's record
+66.080052256436953636 BNB x 716.77 (DefiLlama coins at the block time) = $47,364.38
+CHECK PASS H22 the proceeds are worth between $47,000 and $47,800 at the block-time BNB price ($47,364.38)
+DefiLlama: {'name': 'Bonfire', 'date': 1789430400, 'amount': 47400, 'chain': ['BSC'], 'classification': 'Access Control', 'technique': 'Improper Access Control', 'source': ''}
+CHECK PASS H23 DefiLlama lists Bonfire, BSC, $47,400, 2026-09-15, Access Control / Improper Access Control, source empty
+CHECK PASS H24 DefiLlama's $47,400 is within 1% of this reconstruction's value of the proceeds (-0.08%)
+
+24/24 checks passed
