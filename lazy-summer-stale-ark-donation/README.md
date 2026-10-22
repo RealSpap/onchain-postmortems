@@ -174,6 +174,7 @@ current near-zero balance is independently confirmed.
 
 ## Caveats
 
+- **Summer.fi's post-mortem is no longer online at its address.** `blog.summer.fi` stopped serving it: on 2026-10-22 the host answered with a fallback certificate and the page returned 404. The Internet Archive holds copies of the page captured on 2026-07-20 03:32:58 UTC, 2026-08-09, 2026-08-11 and 2026-09-19 (the link is in the comment at the end of this file, next to the original). The 2026-07-20 copy contains the two attacker-controlled addresses and the exploit transaction `0x0db528c4...` that this entry cites, and the figure of "approximately $6.04 million". `reconstruct_exploit.py` reads the blog live, so that step can no longer be re-run from the original address. The original link is kept.
 - This is independent research, not a security audit, and is not
   affiliated with Summer.fi, Lazy Summer Protocol, or any outlet cited
   above.
@@ -216,3 +217,4 @@ current near-zero balance is independently confirmed.
 MIT
 
 <!-- external source: https://blog.summer.fi/lazy-summer-usdc-vault-exploit-post-mortem-what-happened-and-what-comes-next/ -->
+<!-- archived copy of that page, captured 2026-07-20 03:32:58 UTC by the Internet Archive: https://web.archive.org/web/20260720033258/https://blog.summer.fi/lazy-summer-usdc-vault-exploit-post-mortem-what-happened-and-what-comes-next/ -->
