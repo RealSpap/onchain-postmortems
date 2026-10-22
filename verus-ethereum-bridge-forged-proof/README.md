@@ -169,6 +169,10 @@ consolidation to a total, for the reasons in Caveats below.
 
 ## Caveats
 
+- The index lists the $11,775,898 figure as a floor (≥), not as the
+  incident's full loss. It prices the one transaction of the first
+  exploit at theft-day prices; the second exploit on the same contract
+  (2026-07-23, DefiLlama $7,530,000) is not priced here.
 - This is independent research, not a security audit, and is not
   affiliated with VerusCoin, Threshold Network, or any outlet cited
   above.

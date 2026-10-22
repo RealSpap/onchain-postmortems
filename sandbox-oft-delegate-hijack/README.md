@@ -249,6 +249,12 @@ function. Current status not re-verified after 2026-09-09.
 
 ## Caveats
 
+- The index lists the $675,000 figure as a floor (≥) and as sourced
+  (†): it is the press figure for the Ethereum adapter leg only, not
+  recomputed. This reconstruction finds 405.828879423128923336 WETH
+  gross across Base and Ethereum, about 5.2 times the press figure, and
+  does not convert it to dollars, so the true loss is higher than the
+  figure in the index.
 - The 2,340-byte plain-text message in the Sandbox owner Safe's transaction
   was read directly on-chain, but the claims inside it (compliance tagging, exchange notifications, a
   law enforcement case) could not themselves be verified. It is treated as
