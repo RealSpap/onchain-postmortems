@@ -1,0 +1,10 @@
+# Negative witness 1: python3 reconstruct_exploit.py --account 0x07626d8137ede6b922bcecf3b67f82a21100a612   (another account given as the receiver: the checks on it must FAIL; run 2026-10-22)
+CHECK PASS H0 self-test of the pure-Python keccak256: the selector of withdraw(uint128,address,address,uint128,bytes) is 0xd9e7c316 and keccak256('') begins c5d24601
+CHECK PASS H1 the treasury 0x233c...b4cd is a verified full match on Sourcify (contract MetaWallet, solc 0.8.27, 8,632 bytes of code); its withdraw(nonce, token, receiver, amount, signature) pays if t ...
+CHECK FAIL H2 the account 0x09fd...ad37 has sent 77 transactions (nonces 0 to 77 except 45, the second increment of its EIP-7702 transaction of nonce 44, type 0x4), the first on 2026-09-28 20:42:44 UT ...
+the account does not have the expected 77 transactions: the checks that need them cannot run
+2 of 3 checks passed
+
+# Negative witness 2: the same script with the expected total of H3 changed by one dollar (3,865,021 -> 3,865,022 USDT)
+CHECK FAIL H3 the account sent 7 withdraw() calls to the treasury, at nonces 3, 4, 5, 22, 43, 52 and 65, all successful, all naming itself as receiver and USDT as token, moving 10, 11, 800,000, 1,200, ...
+8 of 9 checks passed

@@ -12,6 +12,7 @@ GitHub releases.
 - Added GoldPesa GPXHooks (Base, 2026-10-02).
 - Added EtherVista (Ethereum, 2026-10-09).
 - Added Enjin (Ethereum, 2026-08-25).
+- Added NEAR Intents, Omni MetaWallet on BNB Chain (2026-09-30 and 2026-10-01).
 
 ## 2026-10-16
 

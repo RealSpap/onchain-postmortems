@@ -101,6 +101,20 @@
    "note": "A range-proof cache-key collision in Elements let a peg-out register as fully backed; the federation's real multisig then genuinely signed 4,007.82220180 BTC out of its reserve on 2026-09-06, 3,400.00000000 BTC came back the next day, and 598.50041569 BTC remains unrecovered as of this reconstruction, the floor reported here, priced at the 2026-09-10 spot rate ($77,809/BTC) because it is a balance still held. Also notes an apparent 2-hour gap between Liquid Network's incident report, seen only through search-engine indexing, and block 4,050,336's chain time (13:53:10 UTC vs. the stated 15:53:10 UTC), possibly a time-zone conversion. DefiLlama tracks this as $320,000,000, the gross pre-return figure. See `liquid-rangeproof-cache/README.md`."
   },
   {
+   "slug": "near-intents-omni-metawallet-signed-withdrawals",
+   "protocol": "NEAR Intents (Omni MetaWallet, BNB Chain)",
+   "date": "2026-09-30 / 10-01",
+   "loss_usd": 3865021,
+   "floor": true,
+   "approximate": false,
+   "sourced": false,
+   "chain": "BNB Chain",
+   "category": "Bridge",
+   "mechanism": "One account called withdraw() seven times on a BNB Chain wallet that holds users' USDT for the Omni bridge; the contract pays any call whose signature comes from its configured signer and never looks at what was deposited, and all seven signatures were the signer's, so 3,865,021 USDT left in seven hours",
+   "url": "https://github.com/RealSpap/onchain-postmortems/tree/main/near-intents-omni-metawallet-signed-withdrawals/",
+   "note": "Floor: 3,865,021 USDT at face value, the seven withdraw() calls of one account on the BNB Chain wallet contract 0x233c...b4cd between 2026-09-30 18:57 UTC and 2026-10-01 06:08 UTC (800,000 + 1,200,000 + 1,500,000 + 330,000 + 35,000 + 10 + 11), re-derived live by `near-intents-omni-metawallet-signed-withdrawals/reconstruct_exploit.py`, which also shows that every signature the contract accepted recovers to its configured signer. DefiLlama lists $3,800,000, the press about $3.8 to $3.87 million; NEAR Intents blamed its Omni deposit and withdrawal infrastructure. Why the signer signed is not established, the press name of the victim is unsettled (NEAR Intents or the HOT Bridge Treasury), and the USDT was forwarded within the hour and not traced beyond five addresses."
+  },
+  {
    "slug": "duelbits-hot-wallet-drain",
    "protocol": "Duelbits hot wallet drain (Ethereum leg)",
    "date": "2026-09-24",
@@ -325,20 +339,6 @@
    "note": "50,463.792096 units of stablecoin out of Nimiq's Polygon swap liquidity wallet in two transactions at blocks 93930784 and 93930854 (2026-09-16 23:26:49 and 23:28:34 UTC): 26,130.641710 USDC, 24,332.489269 USDT0 and 0.661117 USDC.e, each priced at $1. Derived three ways that agree to the unit: from the wallet's `balanceOf` either side of the drain, from the two handlers' `balanceOf` either side of the redeem, and from the Transfer legs of the redeem receipt (`nimiq-gsn-forwarder-unsigned-execute/preuves/resultats_verification_2026-09-21.txt:6-10` and `:33-36`, re-read on a different provider in `preuves/resultats_contre_verification_2026-09-21.txt`). Each of the three legs is 100% of the wallet's balance in that token, which is why the smallest is worth sixty-six cents. DefiLlama tracks $50,400 against an empty source field, 63.79 low; Nimiq's own figure as relayed by press, 50,463, is the floor of the on-chain sum. The attacker realized 50,447.825983 USDC on Ethereum after 15.304996 of swap slippage and one abandoned leg. See `nimiq-gsn-forwarder-unsigned-execute/README.md`. External sources: https://api.llama.fi/hacks, https://coinfomania.com/nimiq-reports-50463-loss-due-to-exploit/."
   },
   {
-   "slug": "securedfinance-jpyc-tokenvault-selflend",
-   "protocol": "Secured Finance (JPYC Lending Market)",
-   "date": "2026-09-05/09-06",
-   "loss_usd": 27860,
-   "floor": false,
-   "approximate": true,
-   "sourced": false,
-   "chain": "Ethereum",
-   "category": "Access-Control",
-   "mechanism": "Flash-loan-funded self-matched lend/borrow position on the JPYC market let TokenVault's collateral accounting treat the just-deposited amount as withdrawable, before the flash loan was repaid",
-   "url": "https://github.com/RealSpap/onchain-postmortems/tree/main/securedfinance-jpyc-tokenvault-selflend/",
-   "note": "Two flash-loan-funded, self-matched lend/borrow transactions on Secured Finance's JPYC market drained 4,360,902.135130 JPYC from TokenVault (decoded directly from JPYC's own Transfer events, cross-checked against TokenVault's Deposit/Withdraw events), $27,859.73 at CoinGecko's theft-day price for this contract (corrected 2026-10-05 from $45,444.97, which used the CoinGecko id of an older JPYC contract). DefiLlama tracks this incident as \"Secured Finance Lending\", $104,000, \"Oracle Manipulation\"/\"Spot Price Manipulation\" with an empty source field; this project's figure is 0.27x DefiLlama's, an unreconciled gap, and no oracle read appears in either transaction, contradicting DefiLlama's own classification. 91% of the attacker's realized ETH proceeds were routed through Tornado Cash. See `securedfinance-jpyc-tokenvault-selflend/README.md`. External source: https://api.llama.fi/hacks."
-  },
-  {
    "slug": "etherfi-atomicqueue-eip7702-solver-drain",
    "protocol": "ether.fi Liquid (AtomicQueue)",
    "date": "2026-09-11",
@@ -351,6 +351,20 @@
    "mechanism": "Legacy Veda AtomicQueue.solve() never checks solver==msg.sender; attacker named victims as solver to spend their stale approvals. Reachable only for code-bearing accounts (7 of 11 were EIP-7702), fully reimbursed on-chain",
    "url": "https://github.com/RealSpap/onchain-postmortems/tree/main/etherfi-atomicqueue-eip7702-solver-drain/",
    "note": "14.445541086626480620 liquidETH plus 7.047848 USDC drained from 11 wallets, realized by the attacker as 15.453645063 ETH (EOA balance delta plus gas), which at the 2,468.73 dollars/ETH price DefiLlama's own coins oracle reports for 2026-09-11 07:20:00 UTC is about 38,151 dollars; DefiLlama's hacks feed lists 43,260 dollars, roughly 13 percent high (it implies about 2,799 dollars/ETH, unsupported by its own oracle). All 11 wallets were reimbursed on-chain within about 9 hours, though DefiLlama still records returnedFunds null. See etherfi-atomicqueue-eip7702-solver-drain/README.md and preuves/07_defillama_vs_onchain.txt. External source: https://www.cryptotimes.io/2026/09/11/ether-fi-loses-15-45-eth-in-legacy-atomicqueue-exploit-ceo-pledges-full-user-reimbursement/."
+  },
+  {
+   "slug": "securedfinance-jpyc-tokenvault-selflend",
+   "protocol": "Secured Finance (JPYC Lending Market)",
+   "date": "2026-09-05/09-06",
+   "loss_usd": 27860,
+   "floor": false,
+   "approximate": true,
+   "sourced": false,
+   "chain": "Ethereum",
+   "category": "Access-Control",
+   "mechanism": "Flash-loan-funded self-matched lend/borrow position on the JPYC market let TokenVault's collateral accounting treat the just-deposited amount as withdrawable, before the flash loan was repaid",
+   "url": "https://github.com/RealSpap/onchain-postmortems/tree/main/securedfinance-jpyc-tokenvault-selflend/",
+   "note": "Two flash-loan-funded, self-matched lend/borrow transactions on Secured Finance's JPYC market drained 4,360,902.135130 JPYC from TokenVault (decoded directly from JPYC's own Transfer events, cross-checked against TokenVault's Deposit/Withdraw events), $27,859.73 at CoinGecko's theft-day price for this contract (corrected 2026-10-05 from $45,444.97, which used the CoinGecko id of an older JPYC contract). DefiLlama tracks this incident as \"Secured Finance Lending\", $104,000, \"Oracle Manipulation\"/\"Spot Price Manipulation\" with an empty source field; this project's figure is 0.27x DefiLlama's, an unreconciled gap, and no oracle read appears in either transaction, contradicting DefiLlama's own classification. 91% of the attacker's realized ETH proceeds were routed through Tornado Cash. See `securedfinance-jpyc-tokenvault-selflend/README.md`. External source: https://api.llama.fi/hacks."
   },
   {
    "slug": "wealthmanagementv2-selfowned-proxy-drain",
