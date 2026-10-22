@@ -14,6 +14,7 @@ GitHub releases.
 - Added Enjin (Ethereum, 2026-08-25).
 - Added NEAR Intents, Omni MetaWallet on BNB Chain (2026-09-30 and 2026-10-01).
 - Added BitBay UsdcDaiV4Vault (Polygon, 2026-10-09).
+- Added DoinGud Diamond (Polygon, 2026-09-21).
 
 ## 2026-10-16
 

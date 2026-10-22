@@ -9,7 +9,7 @@ python3 sandbox-oft-delegate-hijack/reconstruct_exploit.py
 
 The historical figures should match `sandbox-oft-delegate-hijack/resultats_reconstruction_2026-09-09.txt`; balances and roles read today may have moved since. To check that the README totals add up from the Index, run `python3 check_readme_consistency.py`. A difference is useful: see [CONTRIBUTING.md](CONTRIBUTING.md).
 
-**$926.0M in DeFi and on-chain losses across 62 incidents, each reconstructed from raw chain data; $589.0M of it independently recomputed, the rest sourced from the protocol, press or DefiLlama.**
+**$926.0M in DeFi and on-chain losses across 63 incidents, each reconstructed from raw chain data; $589.0M of it independently recomputed, the rest sourced from the protocol, press or DefiLlama.**
 
 Forensic reconstructions done on-chain. Each entry rebuilds the exploit
 from raw chain data (`eth_getLogs`, decoded transaction receipts,
@@ -40,16 +40,16 @@ and raw proof files.
 
 | | |
 |---|---|
-| Incidents covered | 62, each reconstructed on-chain, see [the full index](INDEX.md) for detail |
-| Cumulative loss | About $926.0M across the 62 incidents ($925,962,376 exactly, sum of the figures in the index); $588,994,218 of it independently recomputed, the rest (marked † in the index) sourced from the protocol, press or DefiLlama. At least one entry is a known floor, so the real total is higher. |
+| Incidents covered | 63, each reconstructed on-chain, see [the full index](INDEX.md) for detail |
+| Cumulative loss | About $926.0M across the 63 incidents ($925,997,853 exactly, sum of the figures in the index); $589,029,695 of it independently recomputed, the rest (marked † in the index) sourced from the protocol, press or DefiLlama. At least one entry is a known floor, so the real total is higher. |
 | Corrections made | 34 entries correct, reconcile, or newly surface a press or DefiLlama figure, label, date, or classification (23 corrections, 8 reconciliations, 3 discoveries not previously priced by DefiLlama at all). See [Corrections to press and DefiLlama](CORRECTIONS.md). |
 | Machine-readable data | [`data/incidents.json`](data/incidents.json) and [`data/incidents.csv`](data/incidents.csv), one row per incident, regenerated from INDEX.md; cite via [`CITATION.cff`](CITATION.cff) |
 | Method | Each subfolder keeps its Python reconstruction script, its `registre_hypotheses.csv` falsification registry, and its script's raw output in `resultats_*.txt`, so each recomputed figure can be checked against the file that produced it |
-| License | MIT across all 62 entries, single author (Spap, 2026) |
+| License | MIT across all 63 entries, single author (Spap, 2026) |
 
 ## The 5 biggest losses
 
-Full history is 62 incidents across 7 months; these are the largest, by
+Full history is 63 incidents across 7 months; these are the largest, by
 loss. Full table, sortable by month: [INDEX.md](INDEX.md).
 
 | Protocol | Loss ($) | Chain | Mechanism | Link |

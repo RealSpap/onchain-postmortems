@@ -367,6 +367,20 @@
    "note": "14.445541086626480620 liquidETH plus 7.047848 USDC drained from 11 wallets, realized by the attacker as 15.453645063 ETH (EOA balance delta plus gas), which at the 2,468.73 dollars/ETH price DefiLlama's own coins oracle reports for 2026-09-11 07:20:00 UTC is about 38,151 dollars; DefiLlama's hacks feed lists 43,260 dollars, roughly 13 percent high (it implies about 2,799 dollars/ETH, unsupported by its own oracle). All 11 wallets were reimbursed on-chain within about 9 hours, though DefiLlama still records returnedFunds null. See etherfi-atomicqueue-eip7702-solver-drain/README.md and preuves/07_defillama_vs_onchain.txt. External source: https://www.cryptotimes.io/2026/09/11/ether-fi-loses-15-45-eth-in-legacy-atomicqueue-exploit-ceo-pledges-full-user-reimbursement/."
   },
   {
+   "slug": "doingud-diamond-acceptoffer-double-payout",
+   "protocol": "DoinGud (Diamond marketplace)",
+   "date": "2026-09-21",
+   "loss_usd": 35477,
+   "floor": false,
+   "approximate": true,
+   "sourced": false,
+   "chain": "Polygon",
+   "category": "Rounding/Math-Bug",
+   "mechanism": "A marketplace Diamond's accept call pays the offer's price out of escrow without consuming the offer: an offer from the attacker's own contract at a price equal to the escrow's whole USDC.e balance, funded by a flash swap, was accepted twice with identical arguments and paid twice, the second time with funds already in escrow",
+   "url": "https://github.com/RealSpap/onchain-postmortems/tree/main/doingud-diamond-acceptoffer-double-payout/",
+   "note": "35,486.935717 USDC.e, the whole balance of the marketplace escrow before the exploit transaction (Polygon block 94170781, 2026-09-21 03:27:25 UTC), paid out twice to the attacker's contract by two identical accept calls, priced at DefiLlama's USDC.e price of 0.99972 at the block time: about $35,477, re-derived live by `doingud-diamond-acceptoffer-double-payout/reconstruct_exploit.py`. DefiLlama lists $35,486 (\"Protocol Logic\", \"Swap Logic Flaw\"), the USDC.e count truncated to the dollar. The facet that handles the calls is not published, so the failing code was not read; that the offer is never consumed is a public proof of concept's reading, not established here. The holders of the escrowed funds and DoinGud's own statements were not read (none was found)."
+  },
+  {
    "slug": "securedfinance-jpyc-tokenvault-selflend",
    "protocol": "Secured Finance (JPYC Lending Market)",
    "date": "2026-09-05/09-06",

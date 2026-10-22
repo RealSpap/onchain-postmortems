@@ -1,0 +1,28 @@
+DoinGud Diamond double payout, Polygon: live reconstruction
+Polygon head block 95991732
+
+1. The exploit transaction
+tx 0x56818a63077f5ba8bfc0bc0877ac33502a5d65cc79dbf5dfaac2a0b8545216a8 block 94170781 index 0 time 2026-09-21 03:27:25 status 0x1 from 0xb8c717239bcace558c3a8dc471c16e07bf57a1eb to 0xe588834aa3161a0720e8f6bf223748d6098a4b76 selector 0xa6588745
+CHECK PASS H1 the exploit transaction succeeded in block 94170781 at index 0 and nonce 943, at 2026-09-21 03:27:25 UTC, sent by the EOA 0xb8c7...a1eb to its contract 0xe588...4b76 with the selector 0xa6588745 2026-09-21 03:27:25
+
+2. The attacker's contract and account
+CHECK PASS H2 the contract 0xe588...4b76 was created by the same EOA's transaction 0xb4af...b9b9, its nonce 4 and index 193 of block 86325225, at 2026-05-03 01:08:14 UTC, 141 days before the exploit; its code (6,269 bytes) is not published (no Sourcify match) code 6269 bytes
+CHECK PASS H3 the EOA's nonce is 943 at the block before the exploit and 944 at the exploit's block: it had sent 943 transactions before; whether they are related is not examined nonces 943, 944
+
+3. The Diamond: balance, verified proxy and unverified facet
+CHECK PASS H4 one block before the exploit the contract 0xe3a1...ed6a held exactly 35,486.935717 USDC.e; at the exploit's block it holds 0 (and 0 now); it is `DoinGudDiamond` (a Diamond proxy, solc 0.8.9, a Sourcify match) whose facet 0x123a...2dde1 that the exploit's calls reach is NOT published (no Sourcify match) 35,486.935717 USDC.e then 0
+
+4. Call trace
+CHECK PASS H5 inside the exploit the attacker's contract calls the Diamond three times: selector 0xf6dbe82d (an offer from itself, token id 1, price 35,486.935717 USDC.e) then selector 0x5c924960 (which a public proof of concept names `acceptOffer`) TWICE with the identical four arguments (itself, id 1, the same price, amount 0); each call is delegated to the facet 0x123a...2dde1 and none reverts 0xf6dbe82d 0x5c924960 0x5c924960
+
+5. Money flows
+CHECK PASS H6 the attacker's contract takes a flash swap of 35,486.935717 USDC.e from the pair 0x1605...4dad, sends the same amount to the Diamond (the offer's escrow), receives it back twice from the Diamond (two payouts of 35,486.935717 in one transaction), repays the pair 35,593.716868 (a fee of 106.781151, 0.3009 %) and sends 35,380.154566 to the EOA payouts ['35,486.935717', '35,486.935717']
+CHECK PASS H7 the Diamond emits one event for the offer and then, for each of the two accepts, the same three events (one a transfer of 0 units of token id 1 from the attacker's contract to itself, one carrying the price 35,486.935717, one naming the attacker's contract), with identical topics and identical data except ONE word of the second event, a counter that goes from 0x39fc to 0x39fd: the second accept is processed as a fresh action, not refused 7 events, counter 39fc then 39fd
+CHECK PASS H8 the escrow paid out twice is the Diamond's own balance before the exploit: after the attacker's deposit of 35,486.935717 the Diamond held 70,973.871434, paid 2 x 35,486.935717 and ended at 0; the loss to others is therefore the 35,486.935717 USDC.e it held before 70,973.871434 then 0
+
+6. Value and DefiLlama's record
+USDC.e price 0.9997246075909872 value 35,477.16 DefiLlama {'date': 1789948800, 'name': 'DoinGud', 'classification': 'Protocol Logic', 'technique': 'Swap Logic Flaw', 'amount': 35486, 'chain': ['Polygon'], 'bridgeHack': False, 'targetType': 'NFTfi', 'source': '', 'returnedFunds': None, 'defillamaId': None, 'language': 'Solidity'}
+CHECK PASS H9 at DefiLlama's USDC.e price at the block time the 35,486.935717 USDC.e are worth about $35,477 (rounded to the dollar), which is the loss counted 35,477.16 at 0.9997246075909872
+CHECK PASS H10 DefiLlama lists DoinGud on 2026-09-21, $35,486, Polygon, `Protocol Logic` / `Swap Logic Flaw`, target type NFTfi, with no source; its figure is the USDC.e count truncated to the dollar
+
+10 of 10 checks passed
