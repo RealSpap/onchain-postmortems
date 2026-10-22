@@ -59,6 +59,20 @@
    "note": "114,536.134217 USDC counted at face value, the Uniswap v4 PoolManager's net USDC outflow over the exploit transaction, re-derived live by `goldpesa-hook-rebalance-shared-positionmanager/reconstruct_exploit.py`: 114,428.509331 USDC to the attacker (swapped for 96,388.996061 USDT) and 107.624886 to two fee recipients; the hook's liquidity position fell by 114,999.999187 USDC before the attacker's swaps paid part of it back. DefiLlama lists $114,900."
   },
   {
+   "slug": "ethervista-pair-k-check-uint112-overflow",
+   "protocol": "EtherVista",
+   "date": "2026-10-09",
+   "loss_usd": 18626,
+   "floor": true,
+   "approximate": false,
+   "sourced": false,
+   "chain": "Ethereum",
+   "category": "Rounding/Math-Bug",
+   "mechanism": "A pair whose swap() compares balance0 * balance1 with reserve0 * reserve1 computed in uint112 let the factory's router, set to the attacker's contract by the router setter, take 21.37 WETH out for 1 wei of VISTA, because the reserve product wrapped",
+   "url": "https://github.com/RealSpap/onchain-postmortems/tree/main/ethervista-pair-k-check-uint112-overflow/",
+   "note": "Floor: 7.477952467865157795 WETH counted at DefiLlama's price of 2,490.83 at the block time, the pair's loss in WETH over the exploit transaction, re-derived live by `ethervista-pair-k-check-uint112-overflow/reconstruct_exploit.py`. The 43,855.902196275763910451 VISTA taken in the same transaction (35.0% of the pair's VISTA) are not valued; they would add about $17,900 at DefiLlama's price, and the attacker sent them to the dead address. DefiLlama lists $18,600."
+  },
+  {
    "slug": "bitget-hot-wallet-spoofed-withdrawals",
    "protocol": "Bitget hot wallet drain (Ethereum leg)",
    "date": "2026-09-24",

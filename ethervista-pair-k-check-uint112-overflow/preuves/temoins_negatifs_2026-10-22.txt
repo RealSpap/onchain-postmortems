@@ -1,0 +1,14 @@
+# Negative witness 1: python3 reconstruct_exploit.py --tx 0x172795c3db39d498f08e329d1cd6f5e145a71ce589efbbdfea3980741670696b   (the attacker's 100-wei approve, a different Ethereum transaction: the checks must FAIL; run 2026-10-22)
+tx 0x172795c3db39d498f08e329d1cd6f5e145a71ce589efbbdfea3980741670696b
+block 26152255 index 42 time 2026-10-09 03:47:11 UTC status 1 logs 1
+CHECK FAIL H1 the transaction succeeded in block 26152259 at 2026-10-09 03:47:59 UTC, sent by the EOA to contract 0x4694...b120 with selector 0x5ee3f775 and the arguments (VISTA token, 1)
+CHECK PASS H2 the attacker EOA's first transaction (nonce 0), 2026-10-09 03:42:23 UTC (block 26152231), created the contract 0x4694...b120 2026-10-09 03:42:23
+CHECK PASS H3 108 s before the exploit the factory's routerSetter sent setRouter(0x4694...b120), the attacker's contract; 72 s after it sent setRouter(0x9bd6...a72a); both succeeded 2026-10-09 03:46:11 / 2026-10-09 03:49:11
+CHECK FAIL H4 the factory's router() was 0x9bd6...a72a at block 26152249, the attacker's contract at blocks 26152258 and 26152259, and 0x9bd6...a72a again at block 26152266; routerSetter() is 0xca90...c7cb ['0x9bd63c5d44ff28390df1eaafd4eb4bd73e94a72a', '0x469424b628a9d2036e41496e814db500d683b120', '0x469424b628a9d2036e41496e814db500d683b120', '0x469424b628a9d2036e41496e814db500d683b120']
+CHECK PASS H5 48 s before the exploit the EOA approved the attacker's contract for 100 wei of VISTA
+CHECK FAIL H6 the pair's token0 is WETH, token1 is VISTA; reserves went from (21.365578509624935898 WETH, 125302.577879645672649896 VISTA) to (13.887626041759778103, 81446.675683369908739445)
+CHECK FAIL H7 the first swap took 21.365578479614736555 WETH out for 1 wei of VISTA in, leaving the pair 30,010,199,343 wei of WETH
+
+# Negative witness 2: the same script with one expected number changed (swap output 21365578479614736555 -> 21365578479614736556 in H7), trace read from the saved file
+CHECK FAIL H7 the first swap took 21.365578479614736555 WETH out for 1 wei of VISTA in, leaving the pair 30,010,199,343 wei of WETH
+15 of 16 checks passed

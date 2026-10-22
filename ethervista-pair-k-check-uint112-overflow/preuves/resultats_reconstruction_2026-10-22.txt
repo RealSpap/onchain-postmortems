@@ -1,0 +1,32 @@
+# python3 reconstruct_exploit.py   (live; run 2026-10-22 14:26 UTC)
+tx 0xb2c7332d9e1be6a86d9d37083aa4cc0d94b60eb95cc9b29494555a3c09764930
+from 0xbbf8f3fe8e4fdf6b594e6107144d78293d2018fa to 0x469424b628a9d2036e41496e814db500d683b120
+block 26152259 index 122 time 2026-10-09 03:47:59 UTC status 1 logs 12
+CHECK PASS H1 the transaction succeeded in block 26152259 at 2026-10-09 03:47:59 UTC, sent by the EOA to contract 0x4694...b120 with selector 0x5ee3f775 and the arguments (VISTA token, 1)
+CHECK PASS H2 the attacker EOA's first transaction (nonce 0), 2026-10-09 03:42:23 UTC (block 26152231), created the contract 0x4694...b120 2026-10-09 03:42:23
+CHECK PASS H3 108 s before the exploit the factory's routerSetter sent setRouter(0x4694...b120), the attacker's contract; 72 s after it sent setRouter(0x9bd6...a72a); both succeeded 2026-10-09 03:46:11 / 2026-10-09 03:49:11
+CHECK PASS H4 the factory's router() was 0x9bd6...a72a at block 26152249, the attacker's contract at blocks 26152258 and 26152259, and 0x9bd6...a72a again at block 26152266; routerSetter() is 0xca90...c7cb ['0x9bd63c5d44ff28390df1eaafd4eb4bd73e94a72a', '0x469424b628a9d2036e41496e814db500d683b120', '0x469424b628a9d2036e41496e814db500d683b120', '0x9bd63c5d44ff28390df1eaafd4eb4bd73e94a72a']
+CHECK PASS H5 48 s before the exploit the EOA approved the attacker's contract for 100 wei of VISTA
+
+pair reserves (WETH, VISTA): block 26152258: (21365578509624935898, 125302577879645672649896); block 26152259: (13887626041759778103, 81446675683369908739445)
+CHECK PASS H6 the pair's token0 is WETH, token1 is VISTA; reserves went from (21.365578509624935898 WETH, 125302.577879645672649896 VISTA) to (13.887626041759778103, 81446.675683369908739445)
+Swap events (amount0In, amount1In, amount0Out, amount1Out): [[0, 1, 21365578479614736555, 0], [4860669107788601981, 0, 0, 43855902196275763910452]]
+Sync events (reserve0, reserve1): [[30010199343, 125302577879645672649897], [9026956933971176122, 125302577879645672649897], [13887626041759778103, 81446675683369908739445]]
+CHECK PASS H7 the first swap took 21.365578479614736555 WETH out for 1 wei of VISTA in, leaving the pair 30,010,199,343 wei of WETH
+K check of the first swap: balance0*balance1 = 3760355340359948898430732018417671; reserve0*reserve1 exact = 2677162065145962451132398363044340796366608; the same product in uint112 arithmetic = 3760355340290237821639216231751440
+CHECK PASS H8 the pair's invariant check `balance0 * balance1 >= reserve0 * reserve1` fails on the exact product and passes on the product wrapped modulo 2^112 wrapped 3760355340290237821639216231751440 <= 3760355340359948898430732018417671 < 2677162065145962451132398363044340796366608
+CHECK PASS H9 Sourcify holds the pair's source (EtherVistaPair, solc 0.5.16, exact match): reserve0 and reserve1 are declared uint112, swap() requires msg.sender to be the factory's router and then compares `balance0 * balance1 >= reserve0 * reserve1` without converting to uint match 0.5.16+commit.9c3226ce
+CHECK PASS H10 the attacker's contract is NOT verified on Sourcify (404); its runtime code is 6,835 bytes None
+
+call trace (callTracer):
+CHECK PASS H11 inside the transaction the attacker's contract does, in order: transferFrom of 1 wei of VISTA from the EOA to the pair, pair.swap(21.365578479614736555 WETH out, to itself), 9.026956903960976779 WETH back to the pair, pair.sync(), 4.860669107788601981 WETH to the pair, pair.swap(43,855.902196275763910452 VISTA out, to the EOA), and 7.477952467865157795 WETH to the EOA
+
+net over the transaction: EOA WETH +7477952467865157795 wei, VISTA +43855902196275763910451; pair reserves WETH -7477952467865157795, VISTA -43855902196275763910451
+CHECK PASS H12 the pair lost 7.477952467865157795 WETH and 43,855.902196275763910451 VISTA (35.0% of its VISTA reserve); the EOA gained 7.477952467865157795 WETH and 43,855.902196275763910451 VISTA net (910452 received, 1 wei sent) 0.3500
+WETH price at the block (DefiLlama coins): 2490.8273418683393; WETH leg 18,626.29; VISTA price 0.40871260756997735, VISTA leg at that price 17,924.46 (not counted)
+CHECK PASS H13 at DefiLlama's price of 2490.83 per WETH the WETH leg is worth 18,626.29; the VISTA leg (43,855.9 VISTA at 0.4087) would add 17,925, not counted 18,626.29
+CHECK PASS H14 between 04:41 and 04:44 UTC the EOA swapped ETH for 18,590.716460 USDC in three Universal Router transactions, and between 05:36 and 05:43 UTC sent 11,000 USDC in three transfers to 0x043c...42d3 (an EOA); where it went from there was not traced 18,590.716460 / 11,000.000000
+CHECK PASS H15 Sourcify holds the factory's source (match): its constructor makes the deployer the routerSetter, and setRouter(address) requires msg.sender to be the routerSetter; the factory has one router for all its pairs match
+CHECK PASS H16 at 03:55:47 UTC, 7 minutes 48 seconds after the exploit, the EOA sent 43,930.080656851986168396 VISTA to the dead address 0x...dead; the VISTA taken from the pair was destroyed, not sold 43,930.080656851984 at 2026-10-09 03:55:47
+
+16 of 16 checks passed
