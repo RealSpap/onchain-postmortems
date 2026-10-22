@@ -1,5 +1,14 @@
 # On-Chain Postmortems
 
+**Don't trust us. Redo it.** Every entry rebuilds one incident from public chain data, and its script reads the chain live. Try one against a public RPC:
+
+```bash
+pip install web3
+python3 sandbox-oft-delegate-hijack/reconstruct_exploit.py
+```
+
+The historical figures should match `sandbox-oft-delegate-hijack/resultats_reconstruction_2026-09-09.txt`; balances and roles read today may have moved since. To check that the README totals add up from the Index, run `python3 check_readme_consistency.py`. A difference is useful: see [CONTRIBUTING.md](CONTRIBUTING.md).
+
 **$921.8M in DeFi and on-chain losses across 57 incidents, each reconstructed from raw chain data; $584.8M of it independently recomputed, the rest sourced from the protocol, press or DefiLlama.**
 
 Forensic reconstructions done on-chain. Each entry rebuilds the exploit

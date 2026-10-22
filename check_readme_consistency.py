@@ -552,6 +552,28 @@ def check_registries() -> None:
                      f"(a ';' or quote inside a field is probably unquoted).")
 
 
+WRITTEN_TOTAL_RES = (
+    ("License row", re.compile(r"MIT across all (\d+) entries")),
+    ("'Full history' line", re.compile(r"Full history is (\d+) incidents across (\d+) months")),
+)
+
+
+def check_written_totals(readme_text: str, years: dict, all_rows: list) -> None:
+    """Totals written in prose must equal the Index: the License row and the line above the largest losses.
+    A sentence that can no longer be found fails too, so the check cannot go blind after a rewrite."""
+    incidents = len(all_rows)
+    months = sum(len(y["months"]) for y in years.values())
+    for label, pattern in WRITTEN_TOTAL_RES:
+        found = list(pattern.finditer(readme_text))
+        if not found:
+            fail(f"README: the {label} sentence was not found; update WRITTEN_TOTAL_RES if it was reworded.")
+        for m in found:
+            if int(m.group(1)) != incidents:
+                fail(f"README: the {label} says {m.group(1)}, but INDEX.md lists {incidents} incidents.")
+            if m.lastindex and m.lastindex >= 2 and int(m.group(2)) != months:
+                fail(f"README: the {label} says {m.group(2)} months, but INDEX.md covers {months}.")
+
+
 def main() -> int:
     try:
         readme_text = read_file(README_PATH)
@@ -567,6 +589,7 @@ def main() -> int:
         check_headline(readme_text, years, all_rows)
         check_corrections_count(readme_text, corrections_text)
         check_floors(readme_text, all_rows)
+        check_written_totals(readme_text, years, all_rows)
         check_registries()
     except ConsistencyError as exc:
         print(f"README self-consistency check FAILED: {exc}", file=sys.stderr)

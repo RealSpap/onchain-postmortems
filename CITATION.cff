@@ -1,9 +1,10 @@
 cff-version: 1.2.0
-message: "If you use these reconstructions or the dataset in data/, please cite them as below."
+message: "If you use this work, please cite it as below."
 type: dataset
-title: "On-Chain Postmortems: DeFi and crypto exploits reconstructed from raw chain data"
+title: "On-Chain Postmortems"
+abstract: "Forensic on-chain reconstructions of DeFi and crypto exploits, with sourced corrections to press and DefiLlama figures."
 authors:
-  - name: "Spap (RealSpap)"
+  - name: "RealSpap"
 url: "https://github.com/RealSpap/onchain-postmortems"
 repository-code: "https://github.com/RealSpap/onchain-postmortems"
 license: MIT
@@ -13,6 +14,3 @@ keywords:
   - forensics
   - on-chain-analysis
   - postmortem
-  - security
-version: "2026-10-07"
-date-released: "2026-10-07"
