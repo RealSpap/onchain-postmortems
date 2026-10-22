@@ -1,0 +1,49 @@
+# python3 reconstruct_exploit.py   (live; run 2026-10-21 15:09 UTC)
+tx 0x5c1febd5047c2a15c37988b6abd5c8b984236dddf6fd24eed96b0f43951ad2c9
+from 0x4a5fd2e9357cc87df4cd6a1808174dbc8646899f to 0x3d69591a3868fe77b531187486862c459cce4e86
+block 52078502 index 154 time 2026-10-02 13:05:51 UTC status 1 logs 62
+CHECK PASS H1 the transaction succeeded, in block 52078502 at 2026-10-02 13:05:51 UTC, sent by the EOA to the attack contract
+
+net flows over the transaction (Transfer logs):
+  USDC 0x498581ff718922c3f8e6a244956af099b2652b2b -114,536.134217
+  USDC 0xdbc69e9a9d61b8f61385d9a748b0542797f27c7a +53.812443
+  USDC 0x14701fd0ce989c66587402512ea9b8fb4a50b85b +53.812443
+  USDC 0xd56da2b74ba826f19015e6b7dd9dae1903e85da1 +114,428.509331
+  GPX  0x498581ff718922c3f8e6a244956af099b2652b2b -31,519.350418
+  GPX  0x64f85dcd28bb6cb0538c941da536c8d5a4336639 +8.567900
+  GPX  0xa76b99311bc399d5fa7aeed3bed0644eed652866 +8.567900
+  GPX  0x4519e2b040ff1b64fa03abe2aef0bc99d7cceaa8 +31,502.214618
+  USDT 0xd56da2b74ba826f19015e6b7dd9dae1903e85da1 -96,388.996061
+  USDT 0x4a5fd2e9357cc87df4cd6a1808174dbc8646899f +96,388.996061
+  PoolManager USDC -114,536.134217; the attack contract's USDC then went to a Uniswap pool 114,428.509331; the two fee recipients received 107.624886
+CHECK PASS H2 the PoolManager's USDC balance fell by 114,536.134217 over the transaction, 114,428.509331 of it sent on to a Uniswap pool by the attack contract and 107.624886 to the two fee recipients -114,536.134217
+CHECK PASS H3 the EOA ended with 96,388.996061 USDT and the attack contract holds no USDT 96,388.996061
+
+call trace (callTracer):
+CHECK PASS H4 one Morpho Blue flash loan of 175,000.000000 USDC, repaid in the same transaction 175,000.000000
+  PositionManager -> PoolManager.modifyLiquidity calls, in order (callerDelta = amount0, amount1 as returned):
+    position 3106205 liquidityDelta +8346512432733306153 pool 0x420000../0x833589.. delta0 +0 delta1 -114999999187
+    position 3078078 liquidityDelta -101370163916652631 pool 0x454f8c../0x833589.. delta0 +40780334982392197810812 delta1 +148868602189
+    position 3106206 liquidityDelta +23063189219641299 pool 0x454f8c../0x833589.. delta0 -9278120364021267648639 delta1 -33868603002
+    position 3106205 liquidityDelta -8346512432733306153 pool 0x420000../0x833589.. delta0 +0 delta1 +114999999186
+CHECK PASS H5 the attack contract minted position 3106205 in the WETH/USDC pool for a USDC debt of 114,999.999187, never paid -114,999.999187
+CHECK PASS H6 the hook's burn of its own position 3078078 released 148,868.602189 USDC and 40,780.33 GPX 148,868.602189
+  PositionManager -> PoolManager.take of USDC: to hook ['33,868.603002'], to attack contract ['114,999.999186']
+CHECK PASS H7 the hook received only 33,868.603002 USDC from that burn, the 114,999.999187 difference having cleared the attacker's debt in the shared PositionManager account 33,868.603002
+CHECK PASS H8 the hook then minted position 3106206 with 33,868.603002 USDC and 9,278.12 GPX, sized from what it received -33,868.603002
+CHECK PASS H9 the attack contract burned its position and took 114,999.999186 USDC from the PoolManager ['114,999.999186']
+  the hook's USDC in its position: before 148,868.602189, after 33,868.603002; difference 114,999.999187
+
+hook.lastRebalance(): block 52078501 -> 1790046001, block 52078502 -> 1790946351
+CHECK PASS H10 the hook's last rebalance was 900,350 s (10.4 days) before the transaction; the transaction's own rebalance reset it to the block time 900350 s
+CHECK PASS H11 Sourcify holds the hook's source with an exact match (creation and runtime), verified 2025-11-28 exact_match 2025-11-28T12:03:16Z
+CHECK PASS H12 208 s later (block 52078606) the EOA sent all 96,388.996061 USDT to a second EOA 0x93ee88a3bc41e98848b9293046756446ce7875bc
+CHECK PASS H13 that address put the 96,388.996061 USDT through a verified bridge contract in three transactions between 13:28 and 13:32 UTC 96,388.996061
+CHECK PASS H14 69 minutes after the first, the EOA called the attack contract again with the same selector; that call reverted and left no log block 52080567
+
+current state at block 52902988:
+  EOA              0x4a5fd2e9357cc87df4cd6a1808174dbc8646899f USDC 0.000000 USDT 0.000000 GPX 0.00 code 0 bytes nonce 5
+  attack contract  0x3d69591a3868fe77b531187486862c459cce4e86 USDC 0.000000 USDT 0.000000 GPX 0.00 code 9182 bytes nonce 1
+  hook             0x4519e2b040ff1b64fa03abe2aef0bc99d7cceaa8 USDC 0.000000 USDT 0.000000 GPX 99,930,888.38 code 19046 bytes nonce 3
+
+14 of 14 checks passed

@@ -1,0 +1,22 @@
+# Negative witness 1: python3 reconstruct_exploit.py --tx 0x592113e005edcc28755a3219f0ebddfbb82a610f8b33d60b2c3e60c5729ebcd8   (a different, later Base transaction of the same EOA: the checks must FAIL; run 2026-10-21)
+tx 0x592113e005edcc28755a3219f0ebddfbb82a610f8b33d60b2c3e60c5729ebcd8
+block 52078606 index 17 time 2026-10-02 13:09:19 UTC status 1 logs 1
+CHECK FAIL H1 the transaction succeeded, in block 52078502 at 2026-10-02 13:05:51 UTC, sent by the EOA to the attack contract
+CHECK FAIL H2 the PoolManager's USDC balance fell by 114,536.134217 over the transaction, 114,428.509331 of it sent on to a Uniswap pool by the attack contract and 107.624886 to the two fee recipients 0.000000
+CHECK FAIL H3 the EOA ended with 96,388.996061 USDT and the attack contract holds no USDT -96,388.996061
+CHECK FAIL H4 one Morpho Blue flash loan of 175,000.000000 USDC, repaid in the same transaction no flash loan
+CHECK FAIL H5 the attack contract minted position 3106205 in the WETH/USDC pool for a USDC debt of 114,999.999187, never paid
+CHECK FAIL H6 the hook's burn of its own position 3078078 released 148,868.602189 USDC and 40,780.33 GPX
+CHECK FAIL H7 the hook received only 33,868.603002 USDC from that burn, the 114,999.999187 difference having cleared the attacker's debt in the shared PositionManager account
+CHECK FAIL H8 the hook then minted position 3106206 with 33,868.603002 USDC and 9,278.12 GPX, sized from what it received
+CHECK FAIL H9 the attack contract burned its position and took 114,999.999186 USDC from the PoolManager []
+CHECK FAIL H10 the hook's last rebalance was 900,350 s (10.4 days) before the transaction; the transaction's own rebalance reset it to the block time 208 s
+CHECK PASS H11 Sourcify holds the hook's source with an exact match (creation and runtime), verified 2025-11-28 exact_match 2025-11-28T12:03:16Z
+CHECK PASS H12 208 s later (block 52078606) the EOA sent all 96,388.996061 USDT to a second EOA 0x93ee88a3bc41e98848b9293046756446ce7875bc
+CHECK PASS H13 that address put the 96,388.996061 USDT through a verified bridge contract in three transactions between 13:28 and 13:32 UTC 96,388.996061
+CHECK PASS H14 69 minutes after the first, the EOA called the attack contract again with the same selector; that call reverted and left no log block 52080567
+4 of 14 checks passed
+
+# Negative witness 2: the same script with one expected number changed (114999999187 -> 114999999188 in H5), trace read from the saved file
+CHECK FAIL H5 the attack contract minted position 3106205 in the WETH/USDC pool for a USDC debt of 114,999.999187, never paid -114,999.999187
+13 of 14 checks passed

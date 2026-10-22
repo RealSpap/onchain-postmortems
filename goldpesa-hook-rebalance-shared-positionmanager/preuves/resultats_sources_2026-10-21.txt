@@ -1,0 +1,8 @@
+DefiLlama api.llama.fi/hacks, record read 2026-10-21 15:10:00 UTC:
+name=GoldPesa date=1790899200 (2026-10-02) amount=114900 chain=['Base'] classification=Token & Share Accounting technique=Incorrect Share Accounting source='' returnedFunds=None defillamaId=None; records named GoldPesa: 1
+Press and security firms, read 2026-10-21 (not used for any figure in the Index):
+- Edgex news page (aggregator, dated 2026-10-03; https://pro.edgex.exchange/en-US/news/article/goldpesatoken-exploit-defi-loss): about $114.9K lost; the flaw highlighted by @SlowMist_Team is that GPXHooks' reBalance() did not check currency deltas through its shared PositionManager, letting an attacker mint positions; no funds returned mentioned; no protocol statement.
+- Crypto Times (2026-10-03, https://www.cryptotimes.io/2026/10/03/goldpesas-gpxhooks-allegedly-drained-for-114k-in-base-exploit/): page refused to this reader (HTTP 403); known only through a search result summary, not cited.
+No post-mortem from GoldPesa had been found at the time of writing.
+Verified source of the hook, Sourcify chain 8453 address 0x4519e2b040ff1B64fa03aBe2AeF0BC99D7CcEaA8, file src/gpx/GPXHooks.sol: sha256 c4361c1a1e75ae9e09bb978d3ecf1453e7ffa6fda41c2a1342a9179d81754a94, 1074 lines (the content field of that file in https://sourcify.dev/server/v2/contract/8453/0x4519e2b040ff1B64fa03aBe2AeF0BC99D7CcEaA8?fields=all, hashed as UTF-8; SPDX-License-Identifier: MIT on line 1).
+Lines the registry cites: line 50 (header comment: the contract cannot be paused, modified or censored), lines 873 to 1005 (function reBalance), line 576 (the one-hour condition before a rebalance routine).
