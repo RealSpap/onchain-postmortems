@@ -1,0 +1,9 @@
+DefiLlama api.llama.fi/hacks, read 2026-10-22: {"date": 1791417600, "name": "BitBay", "classification": "Protocol Logic", "technique": "Withdrawal Logic Flaw", "amount": 14838.47, "chain": ["Polygon"], "bridgeHack": false, "targetType": "DeFi Protocol", "source": "", "returnedFunds": null, "defillamaId": null, "language": "Solidity"}
+Sourcify chain 137, 0x048e88311ca84876aea086125825492e2af2e5a0: match=exact_match name=UsdcDaiV4Vault compiler=0.8.30+commit.73712a01; StableVault.sol 42725 bytes, sha256 ef7141d0a03bb87c77b2bf2e7c8db19d3f0f59bbb657c3f5d2c7161c8e755c57
+Sourcify for the attacker's contract 0xc2c6f4f7e1425be1dcb996175cf7852bf53c23e2: 404 (not published).
+DefiLlama coins, DAI on Polygon at 1791512622 (the block time): price 0.9998817886946503 (read live by the script, H14).
+Search-result snippets and pages, read 2026-10-22 (pages NOT opened; none is used for any figure in the Index):
+- SlowMist alert of 2026-10-09 03:28 UTC as relayed by Crypto Times: BitBay vault on Polygon, about 14,838.47 DAI, `_withdraw()` pays the whole token balance when liquidity is zero, `reposition()` used to force liquidity to zero, one share unit redeemed; attacker address given as 0x59A..884B (full address in the entry confirmed by the chain, not taken from the press): https://www.cryptotimes.io/2026/10/09/slowmist-flags-bitbay-and-ethervista-hacks-as-attackers-drain-32600-from-defi-vault-pool/
+- Tokenpost: https://www.tokenpost.com/news/technology/28691 (about 14,838.47 DAI) and https://www.tokenpost.com/news/technology/28728 (about $14,000); Coinfomania: https://coinfomania.com/14k-bitbay-suffers-exploit-due-to-vault-vulnerability/
+- The same SlowMist listing also shows a $1,280,000 figure with `Price Manipulation` for the same event according to one search result; it conflicts with every other source and is not used.
+No statement from BitBay was found.

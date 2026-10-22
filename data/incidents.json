@@ -73,6 +73,20 @@
    "note": "Floor: 7.477952467865157795 WETH counted at DefiLlama's price of 2,490.83 at the block time, the pair's loss in WETH over the exploit transaction, re-derived live by `ethervista-pair-k-check-uint112-overflow/reconstruct_exploit.py`. The 43,855.902196275763910451 VISTA taken in the same transaction (35.0% of the pair's VISTA) are not valued; they would add about $17,900 at DefiLlama's price, and the attacker sent them to the dead address. DefiLlama lists $18,600."
   },
   {
+   "slug": "bitbay-usdc-dai-v4-vault-zero-liquidity-drain",
+   "protocol": "BitBay (UsdcDaiV4Vault)",
+   "date": "2026-10-09",
+   "loss_usd": 14837,
+   "floor": false,
+   "approximate": true,
+   "sourced": false,
+   "chain": "Polygon",
+   "category": "Rounding/Math-Bug",
+   "mechanism": "A Uniswap v4 vault's _withdraw sends its whole DAI and USDC balance to the recipient when liquidity is 0, whatever the share amount, and its reposition is public once the price is out of range: flash-loaned swaps pushed the price out, reposition removed the position and re-minted none, and one share of 1 wei took the whole balance",
+   "url": "https://github.com/RealSpap/onchain-postmortems/tree/main/bitbay-usdc-dai-v4-vault-zero-liquidity-drain/",
+   "note": "14,838.466608989135865711 DAI sent by the vault to the attacker's contract in the exploit transaction (Polygon block 95204942, 2026-10-09 02:23:42 UTC), priced at DefiLlama's DAI price of 0.99988 at the block time: about $14,837, re-derived live by `bitbay-usdc-dai-v4-vault-zero-liquidity-drain/reconstruct_exploit.py`. DefiLlama lists $14,838.47 (2026-10-08, \"Protocol Logic\"), the DAI count taken as dollars, 1.67 dollars above this figure. The vault's holders, BitBay's own statements, the attacker's contract and a second burst of ten transactions an hour later (4,156.374927 USDC from the PoolManager, not attributed to this vault) were not read; the vault is BitBay's according to the press only."
+  },
+  {
    "slug": "bitget-hot-wallet-spoofed-withdrawals",
    "protocol": "Bitget hot wallet drain (Ethereum leg)",
    "date": "2026-09-24",

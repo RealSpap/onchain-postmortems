@@ -1,0 +1,79 @@
+# Negative witness 1: python3 reconstruct_exploit.py --trace-file preuves/trace_calltracer_2026-10-22.json --tx 0xfc5f9c11f63198a4824edde31bccc75bafe45f9621a5f30be83816793cedcdba   (the EOA's USDC approve, a different Polygon transaction: the checks that read the exploit must FAIL)
+BitBay UsdcDaiV4Vault drain, Polygon: live reconstruction
+Polygon head block 95990964
+
+1. The exploit transaction
+tx 0xfc5f9c11f63198a4824edde31bccc75bafe45f9621a5f30be83816793cedcdba block 95204968 index 38 time 2026-10-09 02:24:21 status 0x1 from 0x59ae3c8dd50063429d86bdaebbc350fb64e9884b to 0x3c499c542cef5e3811e1192ce70d8cc03d5c3359 selector 0x095ea7b3
+CHECK FAIL H1 the exploit transaction succeeded in block 95204942 at index 77 and nonce 2, at 2026-10-09 02:23:42 UTC, sent by the EOA 0x59ae...884b to its contract 0xc2c6...23e2 with the selector 0xde463630 2026-10-09 02:24:21
+
+2. The attacker's contract and account
+CHECK FAIL H2 the contract 0xc2c6...23e2 was created by the EOA's transaction 0x7a33...e8616, its nonce 1 and index 95 of block 95204744, at 2026-10-09 02:18:45 UTC, 4 minutes 57 seconds before the exploit; its code is not published (no Sourcify match) code 9592 bytes
+CHECK PASS H3 the EOA's nonce is 2 at the block before the exploit, 3 at the exploit's block and 15 now: 15 transactions in all, the first at 02:15:12 UTC and the last at 03:43:51 UTC on 2026-10-09 nonces 2, 3, 15
+
+3. The vault: verified source and the two functions that matter
+CHECK PASS H4 the vault 0x048e...e5a0 is `UsdcDaiV4Vault` (StableVault.sol, solc 0.8.30), an exact Sourcify match; its `_withdraw` pays the caller-named recipient the vault's WHOLE DAI and USDC balance when `liquidity == 0`, whatever the share amount; its `reposition` can be called by any account when the position is out of range exact_match
+
+4. The vault the block before
+liquidity 98869777365041977456 ticks 276323 276326 current 276324 mintThis 0 minter 0xc70f0ec950c51bb4e410a94c21468247bfddf29c lastReposition 1790879709 timelock 129600
+CHECK PASS H5 one block before the exploit the vault held a Uniswap v4 position of liquidity 98,869,777,365,041,977,456 on ticks 276323 to 276326 and the pool's current tick was 276324 (inside); the vault had 8.390192804782497678 DAI and no USDC idle and 14,837.644859066499448843 total shares; `mintThis` was false, its `minter` was neither the EOA nor the attacker's contract, and the last reposition was more than the 129,600 s timelock before the exploit liquidity 98869777365041977456
+CHECK PASS H6 inside the exploit the attacker's contract calls the vault three times, in this order: `deposit` with an amount of 1 wei of DAI, `reposition`, then `withdraw` of 1 share (addDust false); each call succeeds 0xe2bbb158 0x7ff00809 0x33cfcd3b
+CHECK FAIL H7 the vault emits `Deposited`, `Repositioned` (new ticks 276324 and 276327, liquidity 0) and `Withdrawn` (recipient the attacker's contract, 1 share, 14,838.466608989135865711 DAI and 0 USDC), in this order; the DAI it sent is its whole balance payout 14838466608989135865711
+
+5. The vault at the exploit's block
+CHECK FAIL H8 at the exploit's block the vault's liquidity is 0, its ticks are 276324 and 276327, its last reposition is the exploit's own timestamp, it holds 0 DAI and 0 USDC, and total shares are unchanged at 14,837.644859066499448843 (the attacker's 1 share was added then removed): the other holders' shares now stand on an empty vault dai 0 usdc 0
+
+6. Money flows of the exploit transaction
+CHECK FAIL H9 the attacker's contract borrows 106,411.492456133328096283 DAI from a Uniswap v3 pool (`flash`) and 1,453.569001525582433698 DAI from the Balancer vault, and repays 106,422.133605378941429093 DAI (a fee of 10.641149245613332752 DAI, one basis point of the loan rounded up) and 1,453.569001525582433698 DAI in the same transaction fee None
+CHECK FAIL H10 the vault's position was removed through the PoolManager (14,838.464613705392149247 DAI back to the vault) and the vault then sent 14,838.466608989135865711 DAI to the attacker's contract, in one transfer; nothing left the vault in USDC 14,838.466608989136148011 DAI
+CHECK FAIL H11 the EOA receives 14,813.548248 USDC from the attacker's contract at the end of the exploit; 39 seconds later, in its transaction 0x397c...f821, it sends all 14,813.548248 USDC to 0xfb7c...b025, which splits it into 14,683.929701 and 129.618547 USDC to two other addresses (not traced further)
+CHECK PASS H12 transaction 0x397c...f821 at 2026-10-09 02:24:21 UTC (block 95204968) moves 14,813.548248 USDC from the EOA to 0xfb7c744da69aef11dfb54f31d9db12a3b086b025, then 129.618547 to 0xf2446da67fe63efcd0179275937800f0a3828616 and 14,683.929701 to 0xc1d13492285eb664951e201bf7c80c7c6318a1b5
+
+7. The attacker's second burst does not touch the vault
+CHECK PASS H13 the ten later transactions of the EOA (2026-10-09 03:36:48 to 03:43:51 UTC, blocks 95207866 to 95208148) emit no log from the vault; in them the PoolManager sends 4,156.374927 USDC to the EOA, which is not counted here and whose target is not identified 4,156.374927 USDC, vault logs 0
+
+8. Value and DefiLlama's record
+DAI price 0.9998817886946503 value 14,836.71 DefiLlama {'date': 1791417600, 'name': 'BitBay', 'classification': 'Protocol Logic', 'technique': 'Withdrawal Logic Flaw', 'amount': 14838.47, 'chain': ['Polygon'], 'bridgeHack': False, 'targetType': 'DeFi Protocol', 'source': '', 'returnedFunds': None, 'defillamaId': None, 'language': 'Solidity'}
+CHECK PASS H14 at DefiLlama's DAI price at the block time (0.99988...) the 14,838.466608989135865711 DAI are worth about $14,837 (rounded), which is the loss counted 14,836.71 at 0.9998817886946503
+CHECK PASS H15 DefiLlama lists BitBay on 2026-10-08, $14,838.47, Polygon, `Protocol Logic` / `Withdrawal Logic Flaw`, with no source; its figure is the DAI count, not priced (1.67 dollars above this entry's)
+
+8 of 15 checks passed
+
+# Negative witness 2: python3 reconstruct_exploit.py --trace-file preuves/trace_calltracer_2026-10-22.json --expect-payout 14838466608989135865712   (the expected payout is one wei higher: H7 and H10 must FAIL)
+BitBay UsdcDaiV4Vault drain, Polygon: live reconstruction
+Polygon head block 95990967
+
+1. The exploit transaction
+tx 0x5b795dc5c5e1665b712c7ccf478c1d8c59a162d698f4e0bfb40bd303e04a7ff2 block 95204942 index 77 time 2026-10-09 02:23:42 status 0x1 from 0x59ae3c8dd50063429d86bdaebbc350fb64e9884b to 0xc2c6f4f7e1425be1dcb996175cf7852bf53c23e2 selector 0xde463630
+CHECK PASS H1 the exploit transaction succeeded in block 95204942 at index 77 and nonce 2, at 2026-10-09 02:23:42 UTC, sent by the EOA 0x59ae...884b to its contract 0xc2c6...23e2 with the selector 0xde463630 2026-10-09 02:23:42
+
+2. The attacker's contract and account
+CHECK PASS H2 the contract 0xc2c6...23e2 was created by the EOA's transaction 0x7a33...e8616, its nonce 1 and index 95 of block 95204744, at 2026-10-09 02:18:45 UTC, 4 minutes 57 seconds before the exploit; its code is not published (no Sourcify match) code 9592 bytes
+CHECK PASS H3 the EOA's nonce is 2 at the block before the exploit, 3 at the exploit's block and 15 now: 15 transactions in all, the first at 02:15:12 UTC and the last at 03:43:51 UTC on 2026-10-09 nonces 2, 3, 15
+
+3. The vault: verified source and the two functions that matter
+CHECK PASS H4 the vault 0x048e...e5a0 is `UsdcDaiV4Vault` (StableVault.sol, solc 0.8.30), an exact Sourcify match; its `_withdraw` pays the caller-named recipient the vault's WHOLE DAI and USDC balance when `liquidity == 0`, whatever the share amount; its `reposition` can be called by any account when the position is out of range exact_match
+
+4. The vault the block before
+liquidity 98869777365041977456 ticks 276323 276326 current 276324 mintThis 0 minter 0xc70f0ec950c51bb4e410a94c21468247bfddf29c lastReposition 1790879709 timelock 129600
+CHECK PASS H5 one block before the exploit the vault held a Uniswap v4 position of liquidity 98,869,777,365,041,977,456 on ticks 276323 to 276326 and the pool's current tick was 276324 (inside); the vault had 8.390192804782497678 DAI and no USDC idle and 14,837.644859066499448843 total shares; `mintThis` was false, its `minter` was neither the EOA nor the attacker's contract, and the last reposition was more than the 129,600 s timelock before the exploit liquidity 98869777365041977456
+CHECK PASS H6 inside the exploit the attacker's contract calls the vault three times, in this order: `deposit` with an amount of 1 wei of DAI, `reposition`, then `withdraw` of 1 share (addDust false); each call succeeds 0xe2bbb158 0x7ff00809 0x33cfcd3b
+CHECK FAIL H7 the vault emits `Deposited`, `Repositioned` (new ticks 276324 and 276327, liquidity 0) and `Withdrawn` (recipient the attacker's contract, 1 share, 14,838.466608989135865711 DAI and 0 USDC), in this order; the DAI it sent is its whole balance payout 14838466608989135865712
+
+5. The vault at the exploit's block
+CHECK PASS H8 at the exploit's block the vault's liquidity is 0, its ticks are 276324 and 276327, its last reposition is the exploit's own timestamp, it holds 0 DAI and 0 USDC, and total shares are unchanged at 14,837.644859066499448843 (the attacker's 1 share was added then removed): the other holders' shares now stand on an empty vault dai 0 usdc 0
+
+6. Money flows of the exploit transaction
+CHECK PASS H9 the attacker's contract borrows 106,411.492456133328096283 DAI from a Uniswap v3 pool (`flash`) and 1,453.569001525582433698 DAI from the Balancer vault, and repays 106,422.133605378941429093 DAI (a fee of 10.641149245613332752 DAI, one basis point of the loan rounded up) and 1,453.569001525582433698 DAI in the same transaction fee 10.641149245613333
+CHECK FAIL H10 the vault's position was removed through the PoolManager (14,838.464613705392149247 DAI back to the vault) and the vault then sent 14,838.466608989135865711 DAI to the attacker's contract, in one transfer; nothing left the vault in USDC 14,838.466608989136148011 DAI
+CHECK PASS H11 the EOA receives 14,813.548248 USDC from the attacker's contract at the end of the exploit; 39 seconds later, in its transaction 0x397c...f821, it sends all 14,813.548248 USDC to 0xfb7c...b025, which splits it into 14,683.929701 and 129.618547 USDC to two other addresses (not traced further) 14,813.548248
+CHECK PASS H12 transaction 0x397c...f821 at 2026-10-09 02:24:21 UTC (block 95204968) moves 14,813.548248 USDC from the EOA to 0xfb7c744da69aef11dfb54f31d9db12a3b086b025, then 129.618547 to 0xf2446da67fe63efcd0179275937800f0a3828616 and 14,683.929701 to 0xc1d13492285eb664951e201bf7c80c7c6318a1b5
+
+7. The attacker's second burst does not touch the vault
+CHECK PASS H13 the ten later transactions of the EOA (2026-10-09 03:36:48 to 03:43:51 UTC, blocks 95207866 to 95208148) emit no log from the vault; in them the PoolManager sends 4,156.374927 USDC to the EOA, which is not counted here and whose target is not identified 4,156.374927 USDC, vault logs 0
+
+8. Value and DefiLlama's record
+DAI price 0.9998817886946503 value 14,836.71 DefiLlama {'date': 1791417600, 'name': 'BitBay', 'classification': 'Protocol Logic', 'technique': 'Withdrawal Logic Flaw', 'amount': 14838.47, 'chain': ['Polygon'], 'bridgeHack': False, 'targetType': 'DeFi Protocol', 'source': '', 'returnedFunds': None, 'defillamaId': None, 'language': 'Solidity'}
+CHECK PASS H14 at DefiLlama's DAI price at the block time (0.99988...) the 14,838.466608989135865711 DAI are worth about $14,837 (rounded), which is the loss counted 14,836.71 at 0.9998817886946503
+CHECK PASS H15 DefiLlama lists BitBay on 2026-10-08, $14,838.47, Polygon, `Protocol Logic` / `Withdrawal Logic Flaw`, with no source; its figure is the DAI count, not priced (1.67 dollars above this entry's)
+
+13 of 15 checks passed
