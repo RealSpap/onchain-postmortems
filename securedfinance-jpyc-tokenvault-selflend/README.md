@@ -79,10 +79,15 @@ window was pulled and decoded, not just the ones that turned out to
 matter.
 
 RPC endpoints used, all public, no key: `ethereum-rpc.publicnode.com`
-(receipts, `eth_call`, balances), `eth.drpc.org` (archive-depth
-`eth_getLogs` and historical `eth_call`, since this incident's blocks
-were already about 6 days old by the time this reconstruction ran and
-`publicnode` refuses non-recent log queries without a paid key),
+(receipts, `eth_call`, balances), `eth.drpc.org` and then
+`rpc.mevblocker.io` (archive-depth `eth_getLogs`, since this incident's
+blocks were already about 6 days old by the time this reconstruction ran
+and `publicnode` refuses non-recent log queries without a paid key;
+drpc's free plan has since started refusing the 2,000-block ranges the
+scan asks for, so the script walks its node list in order, halves a range a node
+says is too large, waits (one line on stderr for each wait) and asks again on a rate limit or a truncated answer,
+and stops with the reason if nothing answers; override with `ETH_RPC_URLS` and
+`ETH_ARCHIVE_RPC_URLS`),
 `raw.githubusercontent.com` (Secured Finance's own deployment JSON and
 Solidity source), `eth.blockscout.com` (used only to cross-check this
 project's own manually-computed event-topic hashes, and to enumerate the
