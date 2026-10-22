@@ -1,0 +1,7 @@
+DefiLlama api.llama.fi/hacks, record read 2026-10-22 (about 12:00 UTC):
+name=Enjin date=1787616000 (2026-08-25) amount=162000 chain=['Ethereum'] classification=Access Control technique=Ownership Takeover targetType=NFTfi source='' returnedFunds=None; records named Enjin: 1
+Search-result snippets, read 2026-10-22; the pages themselves were not opened, so none of this is used for any figure in the Index:
+- Crypto Times, citing Defimon: about $142K, 5.24M ENJ taken from Enjin; the figure matches the exploit transaction here (5,238,353 ENJ leaving the platform contract, 5,231,353 of them reaching the attacker; 5,231,353 ENJ is worth $140,799 at DefiLlama's price). The page returned HTTP 403 to the fetch.
+- SlowMist, as quoted in a search result: the attacker is described as having found storage slots that led to managerial control of the platform and then used a malicious adapter. Not checked against anything here.
+- Enjin's own incident report, dated 2026-08-27 according to the search results, was not readable (HTTP 403). No statement of Enjin is used here.
+Contracts: 0xfaaFDc07907ff5120a76b34b731b278c38d6043C (the legacy ERC-1155 contract) and 0x4e643a25a64952895f553f20252861258727174e (the platform contract that holds the ENJ) are not published on Sourcify (404) and Blockscout lists them as unverified (read 2026-10-22); the attacker's contract 0x7083...d321 is not published either. None of them was read.

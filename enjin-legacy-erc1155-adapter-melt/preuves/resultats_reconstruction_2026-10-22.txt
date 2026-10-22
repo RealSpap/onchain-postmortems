@@ -1,0 +1,36 @@
+tx 0xd4a382da03c99ce3084661b913b50b525a4b283f66f510bcf1040152830b2a7e
+from 0x5ec1ba7892d11059c39557b762a97dd695778ca5 to 0x7083ddece38216c7741fa76c75326bea744ed321
+block 25834071 index 1 nonce 1 time 2026-08-25 18:41:59 UTC status 1 logs 190 selector 0xfe2cdc13
+CHECK PASS H1 the exploit, 2026-08-25 18:41:59 UTC in block 25834071 (index 1, nonce 1), was sent by 0x5ec1...8ca5 to its contract 0x7083...d321 with selector 0xfe2cdc13 and succeeded
+deployment 0x2fd2c517b3456adccbcd57528c8ef04d382d49be1611a146aee6d9784043cc14
+from 0x5ec1ba7892d11059c39557b762a97dd695778ca5 block 25834071 index 0 nonce 0 created 0x7083ddece38216c7741fa76c75326bea744ed321 code 9786 bytes
+CHECK PASS H2 the contract 0x7083...d321 was created by the EOA's transaction 0x2fd2...cc14, its nonce 0 and index 0 of block 25834071, the transaction right before the exploit; its code is 9,786 bytes
+ENJ 0x4e643a25... -> 0x7083ddec... : 54 transfers, 5,231,353.000000
+ENJ 0x4e643a25... -> 0x862e4dc5... : 7 transfers, 7,000.000000
+ENJ 0x7083ddec... -> 0x5ec1ba78... : 1 transfers, 5,231,353.000000
+platform ENJ balance block 25834070: 9,852,235.680835; block 25834071: 4,613,882.680835; difference 5,238,353.000000
+CHECK PASS H3 in the exploit the ENJ platform contract 0x4e64...174e sent 5,231,353 ENJ in 54 transfers to the attacker's contract, which passed 5,231,353 ENJ on to the EOA in one transfer, and 7,000 ENJ in 7 transfers of 1,000 to 0x862e...466f; its ENJ balance fell by 5,238,353 over the block
+legacy ERC-1155 TransferSingle: 108; operators ['0x7083ddece38216c7741fa76c75326bea744ed321']; to the contract 54 from 47 wallets, 2149 units; burned 54, 2149 units from ['0x7083ddece38216c7741fa76c75326bea744ed321']; 12 item ids
+CHECK PASS H4 the legacy ERC-1155 contract 0xfaaf...038c logged 108 TransferSingle events, all with the attacker's contract as operator: 54 moving items from 47 wallets to it, 54 burning the same items from it, 2,149 units each way, 12 item ids
+isApprovedForAll(wallet, attacker's contract) for the 47 wallets: block 25834071: 0 true; block 25834072: 0 true
+CHECK PASS H5 at the end of block 25834071 and of the next block, isApprovedForAll(wallet, 0x7083...d321) on the legacy ERC-1155 contract returns false for all 47 wallets whose items were moved
+trace: 1980 calls; created by the attacker's contract 3, by the legacy contract 6; 0x33d332ab on legacy 6; 0x7b129b06 on platform 6; 0xf6089e12 on legacy 54; 0x7843e5dd on platform 61 (by the legacy contract 61); transfer on ENJ 62 (by the platform 61, by the attacker's contract 1)
+CHECK PASS H6 in the call trace the attacker's contract creates 3 contracts, calls selector 0x33d332ab on the legacy ERC-1155 contract 6 times (which creates 6 contracts, and each time the legacy contract calls 0x7b129b06 on the platform contract), calls 0xf6089e12 on the legacy contract 54 times, the legacy contract calls selector 0x7843e5dd on the platform contract 61 times and the platform calls the ENJ token's transfer 61 times, the attacker's contract once
+later transactions of the EOA: 597, selectors {'0xf7d9430e': 594, '0x35faa416': 3}, blocks 25834382 to 25834994; ENJ in 594 transfers 1,287,165.554553 (all from the platform: True); ENJ out 3 transfers 1,287,165.554553 to ['0x5ec1ba7892d11059c39557b762a97dd695778ca5']
+outgoing: [(25834383, '3,070.000000'), (25834623, '746,478.999100'), (25834994, '537,616.555453')]
+CHECK PASS H7 over the next 1,429 blocks, 594 more transactions from the EOA to its contract (selector 0xf7d9430e, blocks 25834382 to 25834993) each brought ENJ from the platform contract to it, 1,287,165.5545533333 ENJ in total, and 3 more (selector 0x35faa416) sent 1,287,165.554553 ENJ (1,287,165.5545533333 exactly, 1287165554553333333333300 wei) from the contract to the EOA, 3,070 then 746,478.9991 then 537,616.5554533333, leaving it with none
+EOA ENJ transfers out: 32 (32 to 0x8f10b468b06c6fd214b65f87778827f7d113f996) 6,518,518.554553, blocks 25834083 to 25837514; sink code 13529 bytes; EOA ENJ balance at 25838000: 0.000000
+CHECK PASS H8 the EOA sent all 6,518,518.554553 ENJ it received, 5,231,353 from the exploit and 1,287,165.5545533333 from the later transactions, in 32 transfers between blocks 25834083 and 25837514 to one contract, 0x8f10...f996 (code present, not read), and held no ENJ at block 25838000
+CHECK PASS H9 the recipient of the 7,000 ENJ, 0x862e...466f, has no code and is none of the 47 wallets whose items were moved; why the platform paid it is not established here
+
+ENJ price 0.026914465170053022; first transaction (5,231,353 ENJ) 140,799.07; all 6,518,518.554553 ENJ 175,442.44
+CHECK PASS H10 at DefiLlama's price of 0.02691447 dollars per ENJ at the exploit block time, the 5,231,353 ENJ of the exploit are worth 140,799 dollars and all 6,518,518.554553 ENJ the EOA took, 175,442 dollars 175,442.44
+CHECK PASS H11 DefiLlama lists Enjin on Ethereum at 162,000 dollars on 2026-08-25, classified Access Control / Ownership Takeover, with an empty source field {'date': 1787616000, 'name': 'Enjin', 'classification': 'Access Control', 'technique': 'Ownership Takeover', 'amount': 162000, 'chain': ['Ethereum'], 'bridgeHack': False, 'targetType': 'NFTfi', 'source': '', 'returnedFunds': None, 'defillamaId': None, 'language': 'Solidity'}
+
+sample of later transactions ['0xae322871b6', '0xf3e7606ec3', '0x8a90caef67', '0x119e2abc4f', '0xa50049ae66']: 126 distinct wallets had items moved to the contract with the contract as operator, 3 of them among the 47 of the exploit, the EOA among them: False; approved the contract at block 25834994: 0
+CHECK PASS H12 in five of the 594 later transactions (the 1st, 2nd, 101st, 301st and last, in block order), items of 126 distinct wallets were moved to the attacker's contract with the contract as operator, 3 of those wallets among the 47 of the exploit, the EOA not among them, and none of the 126 had approved the contract at block 25834994
+block 25834382 time 2026-08-25 19:44:23 UTC
+block 25834994 time 2026-08-25 21:46:47 UTC
+block 25837514 time 2026-08-26 06:12:23 UTC
+
+12 of 12 checks passed

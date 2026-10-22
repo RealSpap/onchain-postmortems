@@ -11,6 +11,7 @@ GitHub releases.
 - Added a replay block at the top of the README, `CONTRIBUTING.md`, and a new `SECURITY.md` and `CITATION.cff` (author name `RealSpap`).
 - Added GoldPesa GPXHooks (Base, 2026-10-02).
 - Added EtherVista (Ethereum, 2026-10-09).
+- Added Enjin (Ethereum, 2026-08-25).
 
 ## 2026-10-16
 

@@ -9,7 +9,7 @@ python3 sandbox-oft-delegate-hijack/reconstruct_exploit.py
 
 The historical figures should match `sandbox-oft-delegate-hijack/resultats_reconstruction_2026-09-09.txt`; balances and roles read today may have moved since. To check that the README totals add up from the Index, run `python3 check_readme_consistency.py`. A difference is useful: see [CONTRIBUTING.md](CONTRIBUTING.md).
 
-**$921.9M in DeFi and on-chain losses across 59 incidents, each reconstructed from raw chain data; $585.0M of it independently recomputed, the rest sourced from the protocol, press or DefiLlama.**
+**$922.1M in DeFi and on-chain losses across 60 incidents, each reconstructed from raw chain data; $585.1M of it independently recomputed, the rest sourced from the protocol, press or DefiLlama.**
 
 Forensic reconstructions done on-chain. Each entry rebuilds the exploit
 from raw chain data (`eth_getLogs`, decoded transaction receipts,
@@ -40,16 +40,16 @@ and raw proof files.
 
 | | |
 |---|---|
-| Incidents covered | 59, each reconstructed on-chain, see [the full index](INDEX.md) for detail |
-| Cumulative loss | About $921.9M across the 59 incidents ($921,941,719 exactly, sum of the figures in the index); $584,973,561 of it independently recomputed, the rest (marked † in the index) sourced from the protocol, press or DefiLlama. At least one entry is a known floor, so the real total is higher. |
+| Incidents covered | 60, each reconstructed on-chain, see [the full index](INDEX.md) for detail |
+| Cumulative loss | About $922.1M across the 60 incidents ($922,082,518 exactly, sum of the figures in the index); $585,114,360 of it independently recomputed, the rest (marked † in the index) sourced from the protocol, press or DefiLlama. At least one entry is a known floor, so the real total is higher. |
 | Corrections made | 34 entries correct, reconcile, or newly surface a press or DefiLlama figure, label, date, or classification (23 corrections, 8 reconciliations, 3 discoveries not previously priced by DefiLlama at all). See [Corrections to press and DefiLlama](CORRECTIONS.md). |
 | Machine-readable data | [`data/incidents.json`](data/incidents.json) and [`data/incidents.csv`](data/incidents.csv), one row per incident, regenerated from INDEX.md; cite via [`CITATION.cff`](CITATION.cff) |
 | Method | Each subfolder keeps its Python reconstruction script, its `registre_hypotheses.csv` falsification registry, and its script's raw output in `resultats_*.txt`, so each recomputed figure can be checked against the file that produced it |
-| License | MIT across all 59 entries, single author (Spap, 2026) |
+| License | MIT across all 60 entries, single author (Spap, 2026) |
 
 ## The 5 biggest losses
 
-Full history is 59 incidents across 7 months; these are the largest, by
+Full history is 60 incidents across 7 months; these are the largest, by
 loss. Full table, sortable by month: [INDEX.md](INDEX.md).
 
 | Protocol | Loss ($) | Chain | Mechanism | Link |
@@ -169,7 +169,7 @@ request a correction privately, see [SECURITY.md](SECURITY.md).
   from an old summary unchecked. Figures marked † come from the
   protocol's own post-mortem, press or DefiLlama and are not
   independently recomputed; each footnote names the source.
-- 16 entries report a dollar figure that is a known floor, not a complete
+- 17 entries report a dollar figure that is a known floor, not a complete
   total. Read the linked subfolder for the full accounting in native
   units.
 
@@ -191,6 +191,7 @@ request a correction privately, see [SECURITY.md](SECURITY.md).
 | Verus-Ethereum Bridge | 2nd exploit (2026-07-23, $7,530,000 per DefiLlama) not priced | [verus-ethereum-bridge-forged-proof/](verus-ethereum-bridge-forged-proof/) |
 | UNCX Vesting V2 (Ethereum leg) | Ethereum leg only; Base, BNB Chain and Robinhood Chain legs not reconstructed | [uncx-vesting-v2-share-accounting/](uncx-vesting-v2-share-accounting/) |
 | EtherVista | Only the WETH leg is valued; the 43,855.9 VISTA taken at the same time are not | [ethervista-pair-k-check-uint112-overflow/](ethervista-pair-k-check-uint112-overflow/) |
+| Enjin | Counted on the first transaction only; the ENJ taken by 594 later transactions ($34,643) is not counted; neither Enjin's contracts nor its report were read | [enjin-legacy-erc1155-adapter-melt/](enjin-legacy-erc1155-adapter-melt/) |
 
 - Counting rule: funds returned by the attacker or reversed on-chain are
   deducted, so Liquid Network, Tectonic, Oraichain, the Safe LP Module and UNCX

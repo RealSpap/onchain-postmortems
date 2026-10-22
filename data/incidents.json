@@ -605,6 +605,20 @@
    "note": "Relayers credited a self-transfer of the bridge's own already-issued wrapped-token IOU, carrying a forged bridge-deposit memo (decoded directly from the transaction's own raw bytes), as a real XRP deposit. A direct before/after ledger-snapshot comparison (independent of any transaction-list indexer) confirms the bridge's own reserve fell by exactly 199,916.334320 XRP; enumerating the 94 individual payouts behind that (every one carrying the contract's own 17-of-28 signer threshold) finds 199,916.300000 XRP delivered to 2 attacker addresses (107,397.5 and 92,518.8 XRP, matching press to the exact XRP), $207,699.83 at CoinGecko's 2026-08-09 price, about 3.8% above DefiLlama's tracked $200,000. See `coreum-xrpl-bridge-deposit-forgery/README.md`. External sources: https://www.coindesk.com/tech/2026/08/12/xrp-bridge-drained-for-usd200-000-after-software-mistook-fake-deposits-for-real-ones, https://decrypt.co/375441/xrp-drained-tx-bridge."
   },
   {
+   "slug": "enjin-legacy-erc1155-adapter-melt",
+   "protocol": "Enjin",
+   "date": "2026-08-25",
+   "loss_usd": 140799,
+   "floor": true,
+   "approximate": false,
+   "sourced": false,
+   "chain": "Ethereum",
+   "category": "Access-Control",
+   "mechanism": "A contract the item holders had not approved (isApprovedForAll is false for all 47) moved 2,149 legacy ERC-1155 items from 47 wallets to itself and burned them after having 6 adapters created and registered, releasing the ENJ behind them from Enjin's platform contract; 594 more transactions repeated it",
+   "url": "https://github.com/RealSpap/onchain-postmortems/tree/main/enjin-legacy-erc1155-adapter-melt/",
+   "note": "Floor: the 5,231,353 ENJ that left Enjin's platform contract in the first transaction ($140,799, at DefiLlama's price of 0.026914 at the block time of the first transaction, 2026-08-25 18:41:59 UTC), re-derived live by `enjin-legacy-erc1155-adapter-melt/reconstruct_exploit.py`; the 1,287,165.5545533333 ENJ of the 594 later transactions ($34,643) are not counted; 7,000 ENJ paid to a third address in the first transaction are not counted either. DefiLlama lists $162,000 and a search-result snippet citing Defimon says about $142K for 5.24M ENJ, which matches the first transaction alone; the 594 later transactions, which would bring it to $175,442, are left out because their holders were checked on a sample only. Neither Enjin's contracts nor the attacker's were read, why the transfers were permitted is not established, and Enjin's own report could not be read (HTTP 403)."
+  },
+  {
    "slug": "fullsail-switchboard-vault-drain",
    "protocol": "Full Sail (Sui Vaults)",
    "date": "2026-08-29",
