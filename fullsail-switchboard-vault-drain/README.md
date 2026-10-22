@@ -33,7 +33,7 @@ Block (PTB) commands and emitted events.
 | | |
 |---|---|
 | Incident | A compromised Switchboard oracle signing key let an attacker submit a forged price, inside a Full Sail transaction that also legitimately updates the same feed and calls `port::deposit`, pushing SUI/ETH/IKA to almost exactly 100x below their real price, depositing while the fake price is active (fooling the vault's `calculate_aum` price-gated capacity check), then restoring the real price and withdrawing the resulting oversized position across three vaults (Ports) |
-| Window | 2026-08-29, first attacker deposit 02:33:25 UTC, last withdraw 05:28:07 UTC (63 withdraw calls, 63 deposit calls, all by one address) |
+| Window | 2026-08-29, first attacker deposit 02:33:24 UTC (02:33:24.498, checkpoint 316174634, transaction `7so7R3S4PWVbNb2q5ZLtVCJwZdtXkWkuP3kdqcLhqPfs`), last withdraw 05:28:07 UTC (63 withdraw calls, 63 deposit calls, all by one address) |
 | Press figures | ~$91,000 total, "three vaults", no address, tx hash, or per-vault breakdown published (Yellow, CryptoTimes, Cointelegraph). DefiLlama tracks this as "Full Sail" / Sui / "Oracle Manipulation" / "Oracle Misconfiguration" with **no dollar amount at all** |
 | Verified independently | Attacker address, the 3 exact Port objects, the exact ~100x price ratio for each of SUI/ETH/IKA (all decoded from the attacker's own transactions), and a per-port net (withdrawn minus deposited) figure in native units, converted to USD at the chain's own restored (real) oracle price at the time: **$91,605.56 total** with the small IKA leg at the day's high (an upper bound; $91,149.73 at a matched real/fake pair price), 0.67% above the press estimate, computed independently of it |
 | What's still open | Whether Full Sail's `vault_config::GlobalConfig.max_price_deviation_bps` guard (currently 200 bps / 2%) existed and was wired into this code path at exploit time is not established here; the attack succeeded regardless. See Caveats |
@@ -66,8 +66,16 @@ GraphQL/gRPC (`sui_getObject` and friends now return
 `"Method not found... migrate to gRPC or GraphQL"` there); this
 third-party node still serves the same JSON-RPC surface this repo's other
 Move-chain entries use, confirmed live via `sui_getChainIdentifier`
-(`35834a8a`) before anything else runs. Also used: `registry.npmjs.org`
-(Full Sail's own SDK), `api.llama.fi/hacks` (DefiLlama's own record).
+(`35834a8a`) before anything else runs. It serves current state but no
+longer the history of an old event or transaction, so the three history
+reads (event pages, the sample transaction, the attacker's recent
+transactions) fall back to Mysten's public GraphQL
+(`graphql.mainnet.sui.io`) and are rebuilt in the JSON-RPC shape; both
+lists are overridable with `SUI_RPC_URLS` and `SUI_GRAPHQL_URL`. Run on
+2026-10-22, the script printed the same figures as the 2026-09-11 run
+(`resultats_reconstruction_2026-09-11.txt`), apart from live values. Also
+used: `registry.npmjs.org` (Full Sail's own SDK), `api.llama.fi/hacks`
+(DefiLlama's own record).
 
 ## What it found
 
