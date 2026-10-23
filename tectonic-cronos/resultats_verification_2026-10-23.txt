@@ -1,0 +1,45 @@
+=== Reading of the Cronos blocks this entry relies on, run 2026-10-23 ===
+=== Output of: python3 verifier_blocs.py                              ===
+
+Method: eth_getBlockByNumber against 3 public Cronos JSON-RPC endpoints, no key, no
+indexer. The hexadecimal form of each block number is computed by the script with
+hex(n); it is not typed by hand. The attack transactions cannot be re-derived this
+way (Cronos's report says the chain was rolled back and replaced them); this reads
+the two block numbers the report names and the blocks around them.
+
+--- block 90896188 (0x56af73c) - last block kept by the rollback, per Cronos's report
+  evm.cronos.org                   hash 0x53c11afca70a74758968bddab1377831070e79095f195e4251de2caab5a1b008  timestamp 1788093532 (2026-08-30 12:38:52 UTC)  transactions 0
+  cronos.drpc.org                  hash 0x53c11afca70a74758968bddab1377831070e79095f195e4251de2caab5a1b008  timestamp 1788093532 (2026-08-30 12:38:52 UTC)  transactions 0
+  cronos-evm-rpc.publicnode.com    hash 0x53c11afca70a74758968bddab1377831070e79095f195e4251de2caab5a1b008  timestamp 1788093532 (2026-08-30 12:38:52 UTC)  transactions 0
+--- block 90896189 (0x56af73d) - the next block
+  evm.cronos.org                   hash 0x1fdcf36ebc628b6de2e51d119ddf213816b7afeb5bfe9ce50510cc47936dc223  timestamp 1788093535 (2026-08-30 12:38:55 UTC)  transactions 0
+  cronos.drpc.org                  hash 0x1fdcf36ebc628b6de2e51d119ddf213816b7afeb5bfe9ce50510cc47936dc223  timestamp 1788093535 (2026-08-30 12:38:55 UTC)  transactions 0
+  cronos-evm-rpc.publicnode.com    hash 0x1fdcf36ebc628b6de2e51d119ddf213816b7afeb5bfe9ce50510cc47936dc223  timestamp 1788093535 (2026-08-30 12:38:55 UTC)  transactions 0
+--- block 90896190 (0x56af73e) - the block after that
+  evm.cronos.org                   hash 0x8ea00125a08956b1af662d3eed4a21b31b558d8ce4a171e07e17c5e51a20973b  timestamp 1788133741 (2026-08-30 23:49:01 UTC)  transactions 0
+  cronos.drpc.org                  hash 0x8ea00125a08956b1af662d3eed4a21b31b558d8ce4a171e07e17c5e51a20973b  timestamp 1788133741 (2026-08-30 23:49:01 UTC)  transactions 0
+  cronos-evm-rpc.publicnode.com    hash 0x8ea00125a08956b1af662d3eed4a21b31b558d8ce4a171e07e17c5e51a20973b  timestamp 1788133741 (2026-08-30 23:49:01 UTC)  transactions 0
+--- block 90896206 (0x56af74e) - where Dune's index dates the start of the TONIC price rise (12:39:10 UTC)
+  evm.cronos.org                   hash 0xd66851ce218783a4fee2fa476063d21e2e6332cf735165440db7010b5b41ffd0  timestamp 1788133775 (2026-08-30 23:49:35 UTC)  transactions 0
+  cronos.drpc.org                  hash 0xd66851ce218783a4fee2fa476063d21e2e6332cf735165440db7010b5b41ffd0  timestamp 1788133775 (2026-08-30 23:49:35 UTC)  transactions 0
+  cronos-evm-rpc.publicnode.com    hash 0xd66851ce218783a4fee2fa476063d21e2e6332cf735165440db7010b5b41ffd0  timestamp 1788133775 (2026-08-30 23:49:35 UTC)  transactions 0
+--- block 90897073 (0x56afab1) - where Dune's index dates the price peak (12:49:13 UTC)
+  evm.cronos.org                   hash 0x5134d899516857244db5ce849452f518d5ce6950b504b8cf51388b28c9f627af  timestamp 1788134891 (2026-08-31 00:08:11 UTC)  transactions 0
+  cronos.drpc.org                  hash 0x5134d899516857244db5ce849452f518d5ce6950b504b8cf51388b28c9f627af  timestamp 1788134891 (2026-08-31 00:08:11 UTC)  transactions 0
+  cronos-evm-rpc.publicnode.com    hash 0x5134d899516857244db5ce849452f518d5ce6950b504b8cf51388b28c9f627af  timestamp 1788134891 (2026-08-31 00:08:11 UTC)  transactions 0
+--- block 90907150 (0x56b220e) - the halt block, per Cronos's report
+  evm.cronos.org                   hash 0x6bd5dc6da240742509e98c3aedd17f3568825ddc5a4c6f60a6cbb032a2aeca63  timestamp 1788155967 (2026-08-31 05:59:27 UTC)  transactions 0
+  cronos.drpc.org                  hash 0x6bd5dc6da240742509e98c3aedd17f3568825ddc5a4c6f60a6cbb032a2aeca63  timestamp 1788155967 (2026-08-31 05:59:27 UTC)  transactions 0
+  cronos-evm-rpc.publicnode.com    hash 0x6bd5dc6da240742509e98c3aedd17f3568825ddc5a4c6f60a6cbb032a2aeca63  timestamp 1788155967 (2026-08-31 05:59:27 UTC)  transactions 0
+--- current height
+  evm.cronos.org                   101633306
+  cronos.drpc.org                  101633307
+  cronos-evm-rpc.publicnode.com    101633307
+
+Notes
+- Block 90896188 (0x56af73c) and block 90907150 (0x56b220e) exist on all three
+  endpoints with the same hash and the same timestamp.
+- 90907150 - 90896188 = 10962, against the report's "10,961 blocks discarded"
+  (one block of difference).
+- The Dune dates in the labels (12:39:10 and 12:49:13 UTC) are the index's; the
+  chain's own timestamps at those heights are the ones printed above.

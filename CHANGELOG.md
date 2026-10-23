@@ -5,6 +5,10 @@ incident's own README carries the full detail and supersedes any earlier
 wording; this file is a short log. New incidents are also announced as
 GitHub releases.
 
+## 2026-10-23
+
+- Tectonic: corrected the block readings. The results file of 2026-09-13 labelled two blocks "90896188 (0x56AB1FC)" and "90907150 (0x56ADCAE)"; the hexadecimal numbers were wrong (0x56AB1FC is block 90878460, 0x56ADCAE is block 90889390), so the hashes and timestamps published (10:07:02 and 11:38:53 UTC) belonged to two other blocks. Read again on three nodes with the hexadecimal computed by a script now in the entry: block 90896188 is timestamped 12:38:52 UTC, four seconds before the 12:38:56 UTC of Cronos's report, and block 90907150 is dated 2026-08-31 05:59:27 UTC, after the restart. The clock conflict with Dune's index that the README drew from the wrong reading is withdrawn, and "both boundary blocks independently re-confirmed live on 2026-09-13" is replaced by the new reading. Corrections table: one row added (37 rows, 25 corrections).
+
 ## 2026-10-22
 
 - Full Sail: the 63 deposit and 63 withdraw calls are now stated as successful calls, and the attacker address's failed transactions are listed: inside the attack window (02:33:24 to 05:28:07 UTC) 1 deposit and 2 withdrawals failed at their call; 6 more transactions containing a deposit failed, 4 before the window (from 01:52:14 UTC) and 2 after it; 1 swap ran out of gas. New script `verifier_appels_graphql.py` and its output. No figure changed.

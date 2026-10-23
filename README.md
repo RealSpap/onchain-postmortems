@@ -20,7 +20,7 @@ says so and marks it †.
 
 Example: press reported only the Ethereum leg of the Sandbox bridge
 exploit; the reconstruction finds 405.83 WETH gross across Base and
-Ethereum, about 5.2 times the press figure, one of 36 cases
+Ethereum, about 5.2 times the press figure, one of 37 cases
 in [Corrections to press and DefiLlama](CORRECTIONS.md).
 
 Same author: [@RealSpap on X](https://x.com/RealSpap),
@@ -42,7 +42,7 @@ and raw proof files.
 |---|---|
 | Incidents covered | 64, each reconstructed on-chain, see [the full index](INDEX.md) for detail |
 | Cumulative loss | About $926.0M across the 64 incidents ($926,045,217 exactly, sum of the figures in the index); $589,077,059 of it independently recomputed, the rest (marked † in the index) sourced from the protocol, press or DefiLlama. At least one entry is a known floor, so the real total is higher. |
-| Corrections made | 36 entries correct, reconcile, or newly surface a press or DefiLlama figure, label, date, or classification (24 corrections, 9 reconciliations, 3 discoveries not previously priced by DefiLlama at all). See [Corrections to press and DefiLlama](CORRECTIONS.md). |
+| Corrections made | 37 entries correct, reconcile, or newly surface a press or DefiLlama figure, label, date, or classification (25 corrections, 9 reconciliations, 3 discoveries not previously priced by DefiLlama at all). See [Corrections to press and DefiLlama](CORRECTIONS.md). |
 | Machine-readable data | [`data/incidents.json`](data/incidents.json) and [`data/incidents.csv`](data/incidents.csv), one row per incident, regenerated from INDEX.md; cite via [`CITATION.cff`](CITATION.cff) |
 | Method | Each subfolder keeps its Python reconstruction script, its `registre_hypotheses.csv` falsification registry, and its script's raw output in `resultats_*.txt`, so each recomputed figure can be checked against the file that produced it |
 | License | MIT across all 64 entries, single author (Spap, 2026) |
