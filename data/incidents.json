@@ -460,9 +460,9 @@
    "sourced": true,
    "chain": "Cronos",
    "category": "Donation-Attack",
-   "mechanism": "Donation attack (recursive collateral minting then direct donations to the market contract) inflating an exchange rate, massive borrowing against the inflated collateral, followed by a chain rollback",
+   "mechanism": "TONIC's price pushed up against thin DEX liquidity (Cronos); per Certora, direct TONIC transfers to the tTONIC market, which raise its exchange rate, were part of the attack, and the main transaction contained 98 iterations of a borrowing and collateral inflation loop; massive borrowing against the inflated collateral, then a chain rollback",
    "url": "https://github.com/RealSpap/onchain-postmortems/tree/main/tectonic-cronos/",
-   "note": "Sourced from Cronos's official post-mortem (2026-09-08), not recomputed: $120.4M was borrowed against the inflated collateral, $111.2M was reversed by the rollback of 10,961 blocks, and $9.19M had already left Cronos before the halt. See `tectonic-cronos/README.md`."
+   "note": "Sourced from Cronos's report (2026-09-08), not recomputed: $120.4M was borrowed against the inflated collateral, $111.2M was reversed by the rollback of 10,961 blocks, and $9.19M had already left Cronos before the halt. The mechanism is Cronos's (\"pushing TONIC's price up against thin DEX liquidity\") and Certora's analysis of 2026-09-22 (its Prover found that a direct transfer of TONIC raises the tTONIC exchange rate, its text says such transfers were part of the attack, and its timeline says the main transaction contained 98 iterations of the loop); Cronos's report does not mention a donation. DefiLlama lists $124,470,000 as a \"Donation Attack\", and the Index category is DefiLlama's label. See `tectonic-cronos/README.md`."
   },
   {
    "slug": "moonwell-mamo-oracle",
