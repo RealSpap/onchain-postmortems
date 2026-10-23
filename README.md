@@ -1,6 +1,6 @@
 # On-Chain Postmortems
 
-**Don't trust us. Redo it.** Every entry rebuilds one incident from public chain data, and its script reads the chain live. Try one against a public RPC:
+**Don't trust us. Redo it.** Every entry but one rebuilds one incident from public chain data, and its script reads the chain live. The exception is tectonic-cronos: the chain was rolled back past that attack, so its attack sequence cannot be rebuilt from the chain (its only script, `tectonic_risk_snapshot.py`, reads Tectonic's current state), and its README says which parts rest on Cronos's report and Certora's analysis. Try one against a public RPC:
 
 ```bash
 pip install web3
@@ -215,7 +215,9 @@ request a correction privately, see [SECURITY.md](SECURITY.md).
 
 Every entry in this repo is an independent, factual reconstruction of
 publicly available on-chain data (transaction receipts, decoded logs,
-contract reads) as of the date noted per entry, not a security audit,
+contract reads) as of the date noted per entry (for tectonic-cronos, part of
+the attack sequence rests on Cronos's report and Certora's analysis, as its
+README says), not a security audit,
 and not affiliated with, commissioned by, or endorsed by any protocol,
 auditor, or outlet named in a subfolder.
 
