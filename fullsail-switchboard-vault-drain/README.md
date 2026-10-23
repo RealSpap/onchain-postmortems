@@ -33,7 +33,7 @@ Block (PTB) commands and emitted events.
 | | |
 |---|---|
 | Incident | A compromised Switchboard oracle signing key let an attacker submit a forged price, inside a Full Sail transaction that also legitimately updates the same feed and calls `port::deposit`, pushing SUI/ETH/IKA to almost exactly 100x below their real price, depositing while the fake price is active (fooling the vault's `calculate_aum` price-gated capacity check), then restoring the real price and withdrawing the resulting oversized position across three vaults (Ports) |
-| Window | 2026-08-29, first attacker deposit 02:33:24 UTC (02:33:24.498, checkpoint 316174634, transaction `7so7R3S4PWVbNb2q5ZLtVCJwZdtXkWkuP3kdqcLhqPfs`), last withdraw 05:28:07 UTC (63 withdraw calls, 63 deposit calls, all by one address) |
+| Window | 2026-08-29, first successful attacker deposit 02:33:24 UTC (02:33:24.498; its first failed deposit attempt is at 01:52:14 UTC, see Caveats; checkpoint 316174634, transaction `7so7R3S4PWVbNb2q5ZLtVCJwZdtXkWkuP3kdqcLhqPfs`), last withdraw 05:28:07 UTC (63 successful `withdraw_v2` calls and 63 successful `deposit` calls, all by one address; its failed attempts are listed in Caveats) |
 | Press figures | ~$91,000 total, "three vaults", no address, tx hash, or per-vault breakdown published (Yellow, CryptoTimes, Cointelegraph). DefiLlama tracks this as "Full Sail" / Sui / "Oracle Manipulation" / "Oracle Misconfiguration" with **no dollar amount at all** |
 | Verified independently | Attacker address, the 3 exact Port objects, the exact ~100x price ratio for each of SUI/ETH/IKA (all decoded from the attacker's own transactions), and a per-port net (withdrawn minus deposited) figure in native units, converted to USD at the chain's own restored (real) oracle price at the time: **$91,605.56 total** with the small IKA leg at the day's high (an upper bound; $91,149.73 at a matched real/fake pair price), 0.67% above the press estimate, computed independently of it |
 | What's still open | Whether Full Sail's `vault_config::GlobalConfig.max_price_deviation_bps` guard (currently 200 bps / 2%) existed and was wired into this code path at exploit time is not established here; the attack succeeded regardless. See Caveats |
@@ -84,7 +84,7 @@ used: `registry.npmjs.org` (Full Sail's own SDK), `api.llama.fi/hacks`
 Paginating the vault package's own `port::WithdrawEvent` log (150 events,
 back through 2026-07-27) and filtering to 2026-08-29 shows one sender,
 **`0x9104d073e1fdfd76a6b756f61c5684e4affa0b3d124d383afc64aabbd87934cc`**,
-responsible for 63 of the day's withdraw calls across exactly 3 distinct
+responsible for 63 of the day's withdraw events (events exist only for successful calls) across exactly 3 distinct
 Port objects; the next most active sender that day made only 3 calls
 across 3 Ports (routine user activity, not a drain). Reading each of the
 3 Ports' own `vault.coin_a`/`vault.coin_b` fields live gives:
@@ -217,6 +217,23 @@ open questions, not asserted either way; see Caveats.
 
 - This is independent research, not a security audit, and is not
   affiliated with Full Sail, Switchboard, Sui, or any outlet cited above.
+- The 63 deposits and 63 withdrawals are successful calls. Counted from the
+  attacker's own transactions through Sui's public GraphQL endpoint
+  (`verifier_appels_graphql.py`, run on 2026-10-23), the address sent 165
+  transactions, 162 of them on 2026-08-29, and 10 of those failed. A failed
+  transaction is reverted whole, so none emitted an event or moved funds, and
+  none is in any total here. Inside the attack window (02:33:24 to 05:28:07
+  UTC) the failures at a deposit or withdrawal call are 1 deposit (03:23:15,
+  `hard_cap_reached`) and 2 withdrawals (02:33:38, `high_price_difference`;
+  02:55:40, `not_updated_osail_growth_time`). Outside it: four attempts before
+  the window (01:52:14 to 02:26 UTC; two aborted in `calculate_aum`, two in the
+  deposit call itself) and two after it (05:36 and 05:41 UTC) that stopped in
+  `update_pool_reward_v2` with `port_is_pause`, before their deposit call. One
+  more failed transaction, at 05:12 UTC, was a swap that ran out of gas. The
+  command number in an error text is read as 1-based; the named aborts land on
+  a deposit or withdrawal call, which supports that reading. One successful
+  transaction (01:38 UTC, before the first deposit) has more than 50 commands
+  and only its first 50 were read.
 - The IKA "100x" figure in the table above is a day-wide high/low across
   all of the attacker's IKA submissions, not one matched real/fake pair
   (unlike SUI and ETH, where the highest real value and lowest fake value
