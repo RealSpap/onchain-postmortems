@@ -1,6 +1,6 @@
 # On-Chain Postmortems
 
-**Don't trust us. Redo it.** Every entry but one rebuilds one incident from public chain data, and its script reads the chain live. The exception is tectonic-cronos: the chain was rolled back past that attack, so its attack sequence cannot be rebuilt from the chain (its only script, `tectonic_risk_snapshot.py`, reads Tectonic's current state), and its README says which parts rest on Cronos's report and Certora's analysis. Try one against a public RPC:
+**Don't trust us. Redo it.** Every entry but one rebuilds one incident from public chain data, and its script reads the chain live. The exception is tectonic-cronos: per Cronos's report the chain was rolled back past that attack, so its attack sequence cannot be rebuilt from the chain (its scripts read Tectonic's current state and the two block numbers Cronos's report names), and its README says which parts rest on Cronos's report and Certora's analysis. Try one against a public RPC:
 
 ```bash
 pip install web3
@@ -9,7 +9,7 @@ python3 sandbox-oft-delegate-hijack/reconstruct_exploit.py
 
 The historical figures should match `sandbox-oft-delegate-hijack/resultats_reconstruction_2026-09-09.txt`; balances and roles read today may have moved since. To check that the README totals add up from the Index, run `python3 check_readme_consistency.py`. A difference is useful: see [CONTRIBUTING.md](CONTRIBUTING.md).
 
-**$926.0M in DeFi and on-chain losses across 64 incidents, 63 of them reconstructed from raw chain data (the exception, tectonic-cronos, is not: the chain was rolled back past it); $589.1M of it independently recomputed, the rest sourced from the protocol, press or DefiLlama.**
+**$926.0M in DeFi and on-chain losses across 64 incidents, 63 of them reconstructed from raw chain data (the exception, tectonic-cronos, is not: per Cronos's report the chain was rolled back past it); $589.1M of it independently recomputed, the rest sourced from the protocol, press or DefiLlama.**
 
 Forensic reconstructions done on-chain. Each entry rebuilds the exploit
 from raw chain data (`eth_getLogs`, decoded transaction receipts,
@@ -40,9 +40,9 @@ and raw proof files.
 
 | | |
 |---|---|
-| Incidents covered | 64, 63 of them reconstructed on-chain (tectonic-cronos is the exception: the chain was rolled back past the attack), see [the full index](INDEX.md) for detail |
+| Incidents covered | 64, 63 of them reconstructed on-chain (tectonic-cronos is the exception: per Cronos's report the chain was rolled back past the attack), see [the full index](INDEX.md) for detail |
 | Cumulative loss | About $926.0M across the 64 incidents ($926,045,217 exactly, sum of the figures in the index); $589,077,059 of it independently recomputed, the rest (marked † in the index) sourced from the protocol, press or DefiLlama. At least one entry is a known floor, so the real total is higher. |
-| Corrections made | 38 entries correct, reconcile, or newly surface a press or DefiLlama figure, label, date, or classification (26 corrections, 9 reconciliations, 3 discoveries not previously priced by DefiLlama at all). See [Corrections to press and DefiLlama](CORRECTIONS.md). |
+| Corrections made | 38 rows for 36 entries correct, reconcile, or newly surface a press or DefiLlama figure, label, date, or classification (26 corrections, 9 reconciliations, 3 discoveries not previously priced by DefiLlama at all); 3 of the 26 correction rows correct this repository's own earlier text, not the press or DefiLlama. See [Corrections to press and DefiLlama](CORRECTIONS.md). |
 | Machine-readable data | [`data/incidents.json`](data/incidents.json) and [`data/incidents.csv`](data/incidents.csv), one row per incident, regenerated from INDEX.md; cite via [`CITATION.cff`](CITATION.cff) |
 | Method | Each subfolder keeps its Python reconstruction script, its `registre_hypotheses.csv` falsification registry, and its script's raw output in `resultats_*.txt`, so each recomputed figure can be checked against the file that produced it |
 | License | MIT across all 64 entries, single author (Spap, 2026) |

@@ -531,10 +531,10 @@ def main():
     # overall_total/overall_count just derived from INDEX.md -- kept as two
     # separate writes to two separate files, never both baked into one.
     readme_lines = read_readme().splitlines()
-    NOT_REBUILT = 1  # tectonic-cronos: the chain was rolled back past the attack, so its sequence is not rebuilt from the chain
+    NOT_REBUILT = 1  # tectonic-cronos: per Cronos's report the chain was rolled back past the attack, so its sequence is not rebuilt from the chain
     new_incidents_line = (
         f"| Incidents covered | {overall_count}, {overall_count - NOT_REBUILT} of them reconstructed on-chain "
-        f"(tectonic-cronos is the exception: the chain was rolled back past the attack), see [the full index](INDEX.md) for detail |"
+        f"(tectonic-cronos is the exception: per Cronos's report the chain was rolled back past the attack), see [the full index](INDEX.md) for detail |"
     )
     new_loss_line = (
         f"| Cumulative loss | About ${total_m:.1f}M across the {overall_count} "
@@ -545,7 +545,7 @@ def main():
     new_headline = (
         f"**${total_m:.1f}M in DeFi and on-chain losses across {overall_count} incidents, "
         f"{overall_count - NOT_REBUILT} of them reconstructed from raw chain data "
-        f"(the exception, tectonic-cronos, is not: the chain was rolled back past it); ${recomputed_m:.1f}M of it independently "
+        f"(the exception, tectonic-cronos, is not: per Cronos's report the chain was rolled back past it); ${recomputed_m:.1f}M of it independently "
         f"recomputed, the rest sourced from the protocol, press or DefiLlama.**"
     )
     for idx, line in enumerate(readme_lines):

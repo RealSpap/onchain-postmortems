@@ -472,7 +472,7 @@ def check_headline(full_text: str, years: dict, all_rows: list) -> None:
 
 CORRECTIONS_INLINE_RE = re.compile(r"one of (\d+) cases\s+in \[Corrections")
 CORRECTIONS_GLANCE_RE = re.compile(
-    r"^(\d+) entries correct, reconcile.*?\((\d+) corrections, (\d+) reconciliations, (\d+) discoveries"
+    r"^(\d+) (?:entries|rows)(?: for \d+ entries)? correct, reconcile.*?\((\d+) corrections, (\d+) reconciliations, (\d+) discoveries"
 )
 CORRECTIONS_SECTION_ROWS_RE = re.compile(r"The (\d+) rows below\s+are (?:the cases|where)")
 

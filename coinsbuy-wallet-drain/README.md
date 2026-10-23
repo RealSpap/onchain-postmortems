@@ -180,9 +180,10 @@ rekt.news's own total is $8.07 million (a reconstruction it attributes to
 BlockWatchdog); DefiLlama tracks $7,900,000 (rekt.news gives "more than
 $7.9 million" as Specter's first estimate). This project cannot close the
 gap to either, and the article gives no breakdown that adds up to its
-total. Its own figures are 6,037,005 USDT collected on Tron, about $6.34M
-through FixedFloat (5,936,900 USDT plus 210.8 ETH) and 150 ETH (roughly
-$288,000) through ChangeNOW, which add up to about $6.63M. This project's
+total. Its own figures are 6,037,005 USDT collected on Tron and, as outflows,
+about $6.34M through FixedFloat (5,936,900 USDT plus 210.8 ETH) and 150 ETH
+(roughly $288,000) through ChangeNOW; the last two add up to about $6.63M,
+and the Tron figure is not added to them. This project's
 own sum, the Tron total plus 360.8 ETH (210.8 plus 150) at about $1,920
 per ETH, the price implied by the article's 150 ETH figure, is about
 $6.73M. The article also reports 282.2 ETH unmoved on five addresses as of
@@ -190,7 +191,7 @@ BlockWatchdog's last check on August 9th (about $0.54M at that price; at
 the article's own later check about 110.2 ETH were still unmoved); counting
 the 282.2 ETH gives about $7.2M to $7.3M, still under $8.07M. The address `0x66790b54...4b17`
 described above, which rekt.news lists as an attacker-side swap address,
-received 551 ETH that day (about $1.06M), which would not close the gap
+sent 551 ETH that day to the attacker's Ethereum collector (about $1.06M), which would not close the gap
 either, and this project could not attribute it to Coinsbuy. The laundering
 flows this project could read are partial against the article's $8.07M: the
 Tron collector's 6,037,005 USDT, the 77 ETH confirmed from a Coinsbuy-tagged
