@@ -23,7 +23,7 @@ The earlier version of this entry described the 231-byte contract the attack was
 
 | | |
 |---|---|
-| Incident | A compromised off-chain credential belonging to Ostium's own price-oracle signer let an attacker submit self-authored, validly-signed BTC/USD price reports through a registered `PrivatePriceUpKeep` forwarder, a component Ostium's own bug-bounty terms declare "assumed to be trusted and operating correctly". The forged reports opened and instantly closed large leveraged positions against the OLP vault at fabricated prices, extracting real USDC as fake trading profit |
+| Incident | Ostium said on 2026-07-18, as rekt.news quotes it, that the attacker compromised off-chain infrastructure related to the system that feeds prices into the protocol, and its post-mortem, as The Block reports it (2026-07-30), speaks of unauthorized access to its off-chain infrastructure; Halborn (2026-07-31) writes that the attack reportedly involved a compromised private key of a price oracle, with no source named. Whichever access it was, an attacker submitted self-authored BTC/USD price reports that Ostium's verifier accepted, through a registered `PrivatePriceUpKeep` forwarder, a component Ostium's own bug-bounty terms declare "assumed to be trusted and operating correctly". The forged reports opened and instantly closed large leveraged positions against the OLP vault at fabricated prices, extracting real USDC as fake trading profit. rekt.news writes that how the attacker obtained the ability to submit those prices is unconfirmed; no source read names the credential used, and Ostium's own posts were not read, only their quotation by rekt.news and The Block |
 | Window | 2026-07-15, 14:18:23-14:23:52 UTC, 329 seconds across 8 transactions (live-timestamped, matching press's separately-stated "5 minutes 29 seconds" and "14:18-14:24 UTC" windows) |
 | Press figures | Blockaid's first estimate "$18M"; CertiK "~$22M"; PeckShield "~$24M"; Ostium's own final figure (per press paraphrase of its X statement) $23,752,746 |
 | Verified independently | 8 transactions, decoded directly from the Vault contract's own USDC `Transfer` log: 7 of them (excluding a small 897.8008 USDC "test" cycle 25 seconds before the main attack) total **$23,752,641.6764**, within **$104.32 (0.0004%)** of Ostium's own $23,752,746; DefiLlama's own tracked figure, $23,750,000, sits within 0.012% of the same number |
@@ -31,7 +31,7 @@ The earlier version of this entry described the 231-byte contract the attack was
 
 ```mermaid
 flowchart LR
-    A["Compromised off-chain credential<br/>(Ostium's own price-oracle signer)"] -->|"submits self-authored,<br/>validly-signed BTC/USD price reports"| B["PrivatePriceUpKeep forwarder<br/>0xB71e...3d36<br/>('assumed to be trusted<br/>and operating correctly')"]
+    A["Unauthorized access to off-chain price infrastructure<br/>(reportedly a compromised oracle key)"] -->|"submits self-authored BTC/USD<br/>price reports the verifier accepts"| B["PrivatePriceUpKeep forwarder<br/>0xB71e...3d36<br/>('assumed to be trusted<br/>and operating correctly')"]
     B -->|"forged reports open & instantly close<br/>large leveraged positions at fabricated prices"| C["Ostium OLP Vault<br/>0x20D4...7F98"]
     C -->|"8 USDC outflow transactions;<br/>headline $23,752,641.6764<br/>(7 tx, excl. test cycle)"| D["Attacker wallet<br/>0x321df194...bfd9"]
     D -.->|"press-reported (rekt.news), not<br/>independently retraced: swap via Kyber"| E["~12,084 ETH"]
@@ -84,8 +84,7 @@ own GitHub repo, `0xOstium/smart-contracts-public`, last pushed
 directly; its `performUpkeep()` function trusts any report the
 registered `OstiumVerifier` accepts as validly signed, with no further
 price-sanity bound inside the contract itself). This matters because it
-independently confirms, from the protocol's own architecture, why a
-compromised signer, not a smart-contract bug, was sufficient: the same
+independently confirms, from the protocol's own architecture, why a validly signed report was sufficient, whichever way the signature was obtained (Ostium says, as The Block reports it, that it has no evidence of a vulnerability in its smart-contract code, and Halborn writes that a price-oracle private key was reportedly compromised): the same
 page's own scope text states verbatim, "All registered keepers
 (PriceUpKeep, PrivatePriceUpKeep, TradesUpKeep) and their forwarders are
 assumed to be trusted and operating correctly. Issues requiring a
@@ -159,13 +158,7 @@ DefiLlama's own hacks feed (`api.llama.fi/hacks`, queried live) tracks
 exactly one Ostium entry: name `"Ostium"`, chain `Arbitrum`, dated
 2026-07-15, amount **$23,750,000**, classification "Key Compromise" /
 "Private Key Compromised", within 0.012% of this reconstruction's own
-figure. That classification is directionally accurate (a signing key was
-compromised) but does not distinguish an off-chain oracle-signer key,
-which is what actually happened here, from an on-chain validator or
-multisig key, the more common "Key Compromise" case in this repo's other
-entries; this reconstruction's own contract-source review (the
-`PrivatePriceUpKeep` architecture, above) independently confirms it was
-the former.
+figure. That classification says a key was compromised. Ostium's statement of 2026-07-18, as rekt.news quotes it, says compromised off-chain infrastructure; its post-mortem, as The Block reports it, says unauthorized access to its off-chain infrastructure; Halborn says the attack reportedly involved a compromised oracle private key, a type of credential with no source named. None of them says which credential was used, so this reconstruction does not decide between an off-chain oracle-signer key and another access. Its contract-source review (the `PrivatePriceUpKeep` architecture, above) shows only that the contract accepts any report the verifier takes as validly signed.
 
 ### Current state of the exploiter's addresses
 
@@ -200,8 +193,11 @@ reconstruction, see Caveats.
 - Ostium's own fuller statement of the incident was published to X, which
   this project could not fetch directly (X returns 402 to automated
   fetches); its $23,752,746 figure and narrative description are
-  reported here via press paraphrase (The Block, cryptotimes.io), not
-  read from the primary post itself. The independent, transaction-level
+  reported here via press paraphrase (cryptotimes.io in an earlier
+  version of this entry, not re-read: it answers 403 to automated reads;
+  The Block, read on 2026-10-23, gives 23.75 million USDC; rekt.news
+  quotes Ostium's statement of 2026-07-18), not read from the primary
+  post itself. The independent, transaction-level
   reconstruction above does not depend on that figure being accurate; it
   is offered as a cross-check, and lands within 0.0004% of it.
 - [rekt.news's writeup](https://rekt.news/ostium-rekt) is a third-party
