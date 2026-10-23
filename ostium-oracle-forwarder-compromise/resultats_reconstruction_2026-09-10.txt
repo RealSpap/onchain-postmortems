@@ -49,11 +49,11 @@ Total EXCLUDING that one transaction: 23,752,641.6764 USDC
 exploiter (0x321df194646029e7a6193ea05573d4b9c398bfd9) current USDC balance: 0.000160
 exploiter (0x321df194646029e7a6193ea05573d4b9c398bfd9) current native ETH balance: 0.000589
 
-=== Step 6: USD total vs DefiLlama's own tracked figure and Ostium's own stated figure ===
+=== Step 6: USD total vs DefiLlama's own tracked figure and the Ostium figure Odaily reports ===
 api.llama.fi/hacks entries matching name=Ostium: 1
   date=2026-07-15 chain=['Arbitrum'] amount=$23,750,000 classification=Key Compromise technique=Private Key Compromised
 
-Ostium's own stated figure (per press paraphrase of its X post, X itself not independently fetchable): $23,752,746
+The figure Odaily reports from an Ostium update (2026-07-19; Ostium's own post not read): $23,752,746
 This reconstruction, ALL exploiter-directed Vault payouts in the window: $23,753,539.4772  (diff +793.4772, +0.0033%)
 This reconstruction, EXCLUDING the smallest transaction: $23,752,641.6764  (diff -104.3236, -0.0004%)
 

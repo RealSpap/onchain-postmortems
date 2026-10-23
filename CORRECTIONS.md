@@ -3,8 +3,8 @@
 Back to [README](README.md#at-a-glance).
 
 Every figure in [the Index](INDEX.md) comes from each subfolder's own
-source files and is checked against press and DefiLlama. The 37 rows below
-are where that check found a real gap: 25 corrections, where the chain
+source files and is checked against press and DefiLlama. The 38 rows below
+are where that check found a real gap: 26 corrections, where the chain
 shows a wrong number, scope, label, date, or classification; 9
 reconciliations, where the published figure measures something different
 and neither side is shown to be wrong (Aquifer, Maya Protocol, Virtue
@@ -38,6 +38,7 @@ the headline gap only.
 | MORE Markets (Ankr ankrFLOW E-Mode) | Blockaid's initial "$9.3M" estimate spread widely. Found: in the WFLOW reserve, one transaction, $415,398.47, matching DefiLlama's separately-tracked $410,000 (under "Ankr") within 1.32%; other reserves not scanned (reconciliation) | [more-markets-ankrflow-emode/](more-markets-ankrflow-emode/) |
 | Verus-Ethereum Bridge | Press (Blockaid/cryptotimes.io) implied one reused bug via the same import route across 2 exploits. Found: VerusCoin's own writeup says they share only a general bug category | [verus-ethereum-bridge-forged-proof/](verus-ethereum-bridge-forged-proof/) |
 | Ostium (PrivatePriceUpKeep Compromise) | Press: 3 conflicting estimates ($18M, ~$22M, ~$24M) before Ostium settled on $23,752,746. Found: independent scan lands on $23,752,641.68, within 0.0004% | [ostium-oracle-forwarder-compromise/](ostium-oracle-forwarder-compromise/) |
+| Ostium (figure attribution) | The row above says the press estimates came "before Ostium settled on $23,752,746". Found: among the pages read only Odaily (2026-07-19) gives that exact figure, as the loss in an Ostium update; The Block and rekt.news give 23.75 million and nothing read calls it Ostium's final figure, so "settled on" and "final" are withdrawn. The independent 23,752,641.68 is unchanged | [ostium-oracle-forwarder-compromise/](ostium-oracle-forwarder-compromise/) |
 | Nomic (nBTC / Osmosis allBTC) | DefiLlama dates this 2026-09-09 (disclosure date). Found: mint happened 2026-06-25T21:49:59 UTC, 76 days earlier; DefiLlama's $3,150,000 also uses a current, not theft-day, BTC rate | [nomic-nbtc-ibc-selfmint/](nomic-nbtc-ibc-selfmint/) |
 | XRP Healthcare (XRPH Wallet) | Not tracked in DefiLlama's hacks feed at all. Found: independent totals (267,679.863641 XRP; 445,197.999216 DAI) land within 0.006% and 1.5% of the source article's own figures (a discovery, not a correction) | [xrph-wallet-key-compromise/](xrph-wallet-key-compromise/) |
 | Lazy Summer Protocol | DefiLlama dates this 2026-07-05T00:00:00Z. Found: exploit's own block timestamp is 2026-07-06T05:17:59Z, 29.3 hours later; amount and classification check out | [lazy-summer-stale-ark-donation/](lazy-summer-stale-ark-donation/) |
