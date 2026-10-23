@@ -7,6 +7,7 @@ GitHub releases.
 
 ## 2026-10-22
 
+- Coinsbuy: corrected the sentence that explained the gap to the press totals. The unattributed Ethereum-side flow (about $1.06M) cannot close a gap of $1.7M to $1.9M, and the figures in rekt.news's article add up to about $6.6M to $7.3M depending on what is counted, not to its $8.07M. Also: "to the cent" became "a whole number" (rekt.news writes 6,037,005), and the press quote is now the article's own wording. The address 0x66790b54...4b17 is no longer called unlabeled: rekt.news lists it as an attacker-side swap address; what this project could not do is attribute it to Coinsbuy. Corrections table: Coinsbuy added as a reconciliation (35 rows, 9 reconciliations). No figure of the entry changed.
 - `check_readme_consistency.py` now also compares the incident count written in the License row and in the line above the largest losses with the Index, so a stale count fails the check.
 - Added a replay block at the top of the README, `CONTRIBUTING.md`, and a new `SECURITY.md` and `CITATION.cff` (author name `RealSpap`).
 - Added GoldPesa GPXHooks (Base, 2026-10-02).

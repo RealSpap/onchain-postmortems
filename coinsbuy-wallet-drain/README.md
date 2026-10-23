@@ -13,13 +13,14 @@ re-verifies the fund flow itself, live, against both chains.
 The Tron leg is confirmed in full: this project's own independent sum of
 every TRC20-USDT transfer landing on the attacker's Tron collector
 address on 9 August 2026 totals exactly 6,037,005.00 USDT, matching
-rekt.news's own figure to the cent. The Ethereum leg is confirmed only in
+rekt.news's own figure (6,037,005, a whole number). The Ethereum leg is confirmed only in
 part: one direct 77 ETH transfer from a Coinsbuy-tagged hot wallet to the
 attacker's Ethereum collector is confirmed via raw JSON-RPC, but
 rekt.news's fuller claim (210.8 ETH cashed out through FixedFloat, 150
-ETH through ChangeNOW) routes through an unlabeled intermediary address
-this project could not independently tie back to a named Coinsbuy wallet
-(see Caveats). The loss figure below is therefore reported as a floor,
+ETH through ChangeNOW) is not traced here to a named Coinsbuy wallet: the
+attacker's Ethereum collector received 551 ETH from `0x66790b54...4b17`,
+which rekt.news lists as an attacker-side swap address (a label the article credits to Specter and BlockWatchdog and says is on Etherscan; Coinsbuy has not confirmed it), and this project could not attribute that
+address to Coinsbuy (see Caveats). The loss figure below is therefore reported as a floor,
 not a complete total.
 
 This project first found this candidate via rekt.news's own published
@@ -36,9 +37,9 @@ not copied from the article's count.
 |---|---|
 | Incident | Unauthorized withdrawals drained named Coinsbuy hot wallets on Ethereum and Tron within under an hour; Coinsbuy's own statement confirms the incident and reimburses users from its own reserves, but withholds the root-cause mechanism |
 | Window | 2026-08-09, roughly 12:43-18:09 UTC on the Tron leg (first inbound sweep to last outbound forward); the one independently-confirmed Ethereum transfer lands at 13:19:23 UTC |
-| Press figure | rekt.news: "$8.07 million across two blockchains", 6,037,005 USDT (Tron) + 210.8 ETH via FixedFloat + 150 ETH via ChangeNOW; DefiLlama tracks this incident as "Coinsbuy", $7,900,000, "Access Control" / "Improper Access Control", dated 2026-08-09 |
+| Press figure | rekt.news (relaying BlockWatchdog's reconstruction): "$8.07 million gone in under an hour on August 9th, spread across two blockchains", 6,037,005 USDT (Tron) + 210.8 ETH via FixedFloat + 150 ETH via ChangeNOW; DefiLlama tracks this incident as "Coinsbuy", $7,900,000, "Access Control" / "Improper Access Control", dated 2026-08-09 |
 | Verified independently | The full Tron leg, live-summed to the cent (6,037,005.00 USDT); one direct 77 ETH Ethereum transfer, confirmed via raw JSON-RPC on 2 independent endpoints, plus its receipt status and block timestamp; a representative Tron transaction, cross-checked via TronGrid's raw transaction-info endpoint independently of the transfer-list endpoint used for the sum; Coinsbuy's own official statement, fetched live, confirms the date, the reimbursement, and that no technical detail was disclosed |
-| Not independently confirmed | The root-cause mechanism (Coinsbuy discloses none); the remaining ~283.8 ETH of rekt.news's claimed Ethereum-side total, which this project traced only as far as an unlabeled intermediary address, not back to a specific named Coinsbuy wallet; whether the 7 additional Tron source addresses feeding the attacker's collector (beyond the one address rekt.news itself names) are Coinsbuy-controlled or victim/counterparty wallets |
+| Not independently confirmed | The root-cause mechanism (Coinsbuy discloses none); the remaining ~283.8 ETH of the 360.8 ETH that is the sum of the article's 210.8 and 150 ETH, which this project did not trace back to a named Coinsbuy wallet (the address `0x66790b54...4b17`, which rekt.news lists as an attacker-side swap address, could not be attributed to Coinsbuy); whether the 7 additional Tron source addresses feeding the attacker's collector (beyond the one address rekt.news itself names) are Coinsbuy-controlled or victim/counterparty wallets |
 
 ## The method
 
@@ -114,16 +115,16 @@ transfer from the 2 wallets other than the one already confirmed above by
 raw RPC. This entry therefore relies solely on the one transaction
 confirmed in Step 3, not on a completed scan. The attacker's collector
 address separately received 551 ETH that same day across 4 transfers
-from an unlabeled address
-(`0x66790b54b891e2ebdef58a15b969ff6fb4374b17`), which itself cycles
+from the address
+`0x66790b54b891e2ebdef58a15b969ff6fb4374b17`, which rekt.news lists as an attacker-side swap address (a label the article credits to Specter and BlockWatchdog and says is on Etherscan; Coinsbuy has not confirmed it), and which itself cycles
 through 1inch's router and dozens of single-use-looking destination
 addresses, a pattern consistent with active cash-out laundering, and
 plausibly the path rekt.news's FixedFloat/ChangeNOW figures describe, but
-this project could not independently tie that intermediary address back
+this project could not attribute that address to Coinsbuy or tie it back
 to a specific named Coinsbuy wallet, so it is not counted in the total
 below.
 
-### The Tron leg: summed in full, matching rekt.news to the cent
+### The Tron leg: summed in full, matching rekt.news's figure
 
 Every TRC20-USDT transfer landing on the attacker's Tron collector
 (`TVpX9xCzrj6KHeNhhDJoqjzEqFMxdgubGR`) on 2026-08-09, pulled live from
@@ -175,11 +176,26 @@ attacker collector's live balance is checked the same way in
 - **Combined floor: $6,184,494.48**, reported in `INDEX.md` as
   `≥ 6,184,494`.
 
-rekt.news's own total is $8.07 million; DefiLlama tracks $7,900,000. The
-gap to both is the unattributed Ethereum-side laundering flow through
-`0x66790b54...4b17` described above, which this project observed but
-could not independently price or attribute to a specific Coinsbuy source
-wallet.
+rekt.news's own total is $8.07 million (a reconstruction it attributes to
+BlockWatchdog); DefiLlama tracks $7,900,000 (rekt.news gives "more than
+$7.9 million" as Specter's first estimate). This project cannot close the
+gap to either, and the article gives no breakdown that adds up to its
+total. Its own figures are 6,037,005 USDT collected on Tron, about $6.34M
+through FixedFloat (5,936,900 USDT plus 210.8 ETH) and 150 ETH (roughly
+$288,000) through ChangeNOW, which add up to about $6.63M. This project's
+own sum, the Tron total plus 360.8 ETH (210.8 plus 150) at about $1,920
+per ETH, the price implied by the article's 150 ETH figure, is about
+$6.73M. The article also reports 282.2 ETH unmoved on five addresses as of
+BlockWatchdog's last check on August 9th (about $0.54M at that price; at
+the article's own later check about 110.2 ETH were still unmoved); counting
+the 282.2 ETH gives about $7.2M to $7.3M, still under $8.07M. The address `0x66790b54...4b17`
+described above, which rekt.news lists as an attacker-side swap address,
+received 551 ETH that day (about $1.06M), which would not close the gap
+either, and this project could not attribute it to Coinsbuy. The laundering
+flows this project could read are partial against the article's $8.07M: the
+Tron collector's 6,037,005 USDT, the 77 ETH confirmed from a Coinsbuy-tagged
+wallet and the 551 ETH above; the article's FixedFloat and ChangeNOW
+amounts were not traced to their destinations here.
 
 ## Caveats
 
@@ -202,13 +218,14 @@ wallet.
   one.** Only 77 of the roughly 360.8 ETH rekt.news's own account
   describes (210.8 ETH via FixedFloat, 150 ETH via ChangeNOW) is directly,
   independently traced back to a named Coinsbuy hot wallet. The remainder
-  plausibly routes through the unlabeled intermediary address noted above,
-  which received 551 ETH from elsewhere that same day and forwarded
-  comparable amounts onward through what looks like an automated,
-  1inch-integrated cash-out flow, but this project could not
-  independently confirm that intermediary is Coinsbuy-attributable rather
-  than a general-purpose swap bot the attacker merely used, so none of
-  that 551 ETH is counted in this entry's loss figure.
+  plausibly routes through the address `0x66790b54...4b17` noted above,
+  which rekt.news lists as an attacker-side swap address (a label the
+  article credits to Specter and BlockWatchdog; Coinsbuy has not
+  confirmed it) and which received 551 ETH from elsewhere that same day and
+  forwarded comparable amounts onward through what looks like an automated,
+  1inch-integrated cash-out flow. This project could not attribute that
+  address to Coinsbuy, so none of that 551 ETH is counted in this entry's
+  loss figure.
 - **The Blockscout indexer scan for additional direct transfers (method
   step 6) is best-effort, not exhaustive, and did not complete on the run
   that produced this entry.** Blockscout's free public API rate-limited
@@ -236,7 +253,7 @@ wallet.
   entry relies on rekt.news's own account of what Coinsbuy and named
   investigators found, not on independently fetching Coinsbuy's X posts.
 - Whether any of the 7 unattributed Tron source addresses, or the
-  unlabeled Ethereum intermediary, will ever be identified is outside
+  Ethereum swap address `0x66790b54...4b17`, will ever be attributed is outside
   this project's scope.
 
 ## License

@@ -3,13 +3,13 @@
 Back to [README](README.md#at-a-glance).
 
 Every figure in [the Index](INDEX.md) comes from each subfolder's own
-source files and is checked against press and DefiLlama. The 34 rows below
+source files and is checked against press and DefiLlama. The 35 rows below
 are where that check found a real gap: 23 corrections, where the chain
-shows a wrong number, scope, label, date, or classification; 8
+shows a wrong number, scope, label, date, or classification; 9
 reconciliations, where the published figure measures something different
 and neither side is shown to be wrong (Aquifer, Maya Protocol, Virtue
 Protocol, Float Protocol, Fetch.ai/NuNet, Allbridge, Liquid Network, MORE
-Markets); and 3 discoveries, incidents DefiLlama doesn't price at all (XRP
+Markets, Coinsbuy); and 3 discoveries, incidents DefiLlama doesn't price at all (XRP
 Healthcare and the Safe LP Module, not tracked; Full Sail, tracked with no
 dollar figure). Full detail, including the exact transactions and event
 logs behind each figure, lives in the linked subfolder; this table gives
@@ -27,6 +27,7 @@ the headline gap only.
 | Cozy V2 | Cozy: $170,186. DefiLlama: $163,326 (one of two claim txns). Found: verified on-chain total $174,311.01, two independent ways | [cozy-v2-optimism/](cozy-v2-optimism/) |
 | Cosmos EVM (MANTRA / TAC / KiiChain) | Cosmos Labs' own post-mortem cites tx 0xf45c… as the KiiChain exploit at block 9355102. Found: that hash is a zero-log sweep at block 9355107; the real underflow tx at 9355102 is 0xaf0ac52b…, on two RPC endpoints | [cosmos-evm-vesting-underflow/](cosmos-evm-vesting-underflow/) |
 | Allbridge (CCTP Forged Message) | DefiLlama's $191,000 sits between 3 figures. Found: loss $190,156, profit $189,752, Router's gross pre-attack balance ~$191,156; SlowMist's July 26 date for the setup call matches the chain in UTC+8 (reconciliation) | [allbridge-cctp-forged-message/](allbridge-cctp-forged-message/) |
+| Coinsbuy (Hot Wallet Drain) | rekt.news: "$8.07 million" across two blockchains; DefiLlama: $7,900,000 (rekt.news gives "more than $7.9 million" as Specter's first estimate). Found: an attributable floor of $6,184,494.48, the Tron collector's 6,037,005.00 USDT (rekt.news gives the same 6,037,005) plus one 77 ETH transfer ($147,489.48); the article's own figures add up to about $6.6M to $6.7M (its FixedFloat $6.34M plus ChangeNOW $288,000; or its Tron 6,037,005 USDT plus 360.8 ETH, our sum of its 210.8 and 150 ETH, at the $1,920 per ETH implied by its 150 ETH) and to about $7.2M to $7.3M with the 282.2 ETH it reports unmoved as of 9 August (about 110.2 ETH at its own later check), and it gives no breakdown that adds up to $8.07M | [coinsbuy-wallet-drain/](coinsbuy-wallet-drain/) |
 | Liquid Network | Own report, as indexed by search engines (not fetched directly), cites 15:53:10 UTC for the exploit block. Found: chain timestamp 13:53:10 UTC, two hours earlier (possibly a time-zone conversion); 598.50 BTC still missing, against DefiLlama's gross pre-return figure (reconciliation) | [liquid-rangeproof-cache/](liquid-rangeproof-cache/) |
 | BarnBridge SMART Yield | BlockSec and DefiLlama: ~$776,000 from one transaction (Blockaid later: ~$777,000 across two). Found: 17 extraction transactions, $1,931,365.22 (2.49x); the two published transactions are 40.2% of the total | [barnbridge-dormant-dao-controller-swap/](barnbridge-dormant-dao-controller-swap/) |
 | Aquifer | DefiLlama's $2,469,729 sits ~2% above the theft-day figure. Found: pricing it one day later, when funds moved, lands within 0.05% (reconciliation, not error) | [aquifer-sweeper-arbitrary-call/](aquifer-sweeper-arbitrary-call/) |

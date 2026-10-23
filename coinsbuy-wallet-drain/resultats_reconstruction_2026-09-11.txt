@@ -28,7 +28,7 @@
   Wallets successfully scanned this run: []
   Total additional direct ETH found (beyond the confirmed 77 ETH, Step 3): 0 ETH
   (The attacker collector also received far more ETH that day -- 551 ETH across 4 transfers --
-   from the unlabeled address 0x66790b54...4b17, an intermediary this project could not
+   from the address 0x66790b54...4b17 (rekt.news lists it as an attacker-side swap address), one this project could not
    independently attribute to a specific Coinsbuy source wallet; see Caveats.)
 
 === Step 6: the TRON leg, full day, summed independently from TronGrid's trc20-transfer list ===
