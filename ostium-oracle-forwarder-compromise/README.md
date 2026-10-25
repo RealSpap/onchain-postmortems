@@ -24,7 +24,7 @@ The earlier version of this entry described the 231-byte contract the attack was
 | | |
 |---|---|
 | Incident | Ostium said on 2026-07-18, as rekt.news quotes it, that the attacker compromised off-chain infrastructure related to the system that feeds prices into the protocol, and its post-mortem, as The Block reports it (2026-07-30), speaks of unauthorized access to its off-chain infrastructure; Halborn (2026-07-31) writes that the attack reportedly involved a compromised private key of a price oracle, with no source named. Whichever access it was, an attacker submitted self-authored BTC/USD price reports that Ostium's verifier accepted, through a registered `PrivatePriceUpKeep` forwarder, a component Ostium's own bug-bounty terms declare "assumed to be trusted and operating correctly". The forged reports opened and instantly closed large leveraged positions against the OLP vault at fabricated prices, extracting real USDC as fake trading profit. rekt.news writes that how the attacker obtained the ability to submit those prices is unconfirmed; no source read names the credential used, and Ostium's own posts were not read, only their quotation by rekt.news and The Block |
-| Window | 2026-07-15, 14:18:23-14:23:52 UTC, 329 seconds across 8 transactions (live-timestamped, matching press's separately-stated "5 minutes 29 seconds" and "14:18-14:24 UTC" windows) |
+| Window | 2026-07-15, 14:18:23-14:23:52 UTC, 329 seconds across 8 transactions (live-timestamped, matching the "Five minutes and twenty-nine seconds" that rekt.news states and the "14:18-14:23 UTC" window it quotes from Ostium's founder) |
 | Press figures | Blockaid's first estimate "$18M"; CertiK "~$22M"; PeckShield "~$24M"; $23,752,746 USDC, the loss Odaily (2026-07-19) reports from an Ostium update; The Block, rekt.news and other outlets read round it to 23.75 million, and Ostium's own post was not read |
 | Verified independently | 8 transactions, decoded directly from the Vault contract's own USDC `Transfer` log: 7 of them (excluding a small 897.8008 USDC "test" cycle 25 seconds before the main attack) total **$23,752,641.6764**, within **$104.32 (0.0004%)** of the $23,752,746 Odaily reports from an Ostium update; DefiLlama's own tracked figure, $23,750,000, sits within 0.012% of the same number |
 | What's still open | The exact fixed-point price values inside the attacker's signed reports are not independently decoded (Ostium's `OstiumVerifier` report ABI is not public); the downstream Kyber-swap/Tornado-Cash laundering route press describes is not independently retraced. See Caveats |
@@ -138,9 +138,10 @@ because it had been registered as a forwarder 46 days earlier (see Correction, 2
 The first and last of these 8 transactions' own block timestamps, both
 live-read rather than copied from any article, are **14:18:23 UTC** and
 **14:23:52 UTC**, a span of exactly **329 seconds**, independently
-matching rekt.news's separately-published "5 minutes 29 seconds" duration
-to the second, and sitting inside Ostium's own separately-stated
-"14:18-14:24 UTC" window.
+matching the "Five minutes and twenty-nine seconds" that rekt.news states
+to the second, and sitting inside the "14:18-14:23 UTC" window that rekt.news
+quotes from Ostium's founder (a window given to the minute: the last payout is
+at 14:23:52).
 
 ### USD total: two readings, one much closer to the reported Ostium figure
 
