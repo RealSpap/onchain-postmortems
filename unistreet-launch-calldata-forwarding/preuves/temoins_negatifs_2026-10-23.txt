@@ -1,0 +1,14 @@
+Negative witnesses, 2026-10-23. Each run changes one input of reconstruct_exploit.py; the checks that read it must fail.
+
+### 1. --expect-usdc 17743907230 (one unit too many)
+CHECK FAIL H7 the burns paid the attack contract 17,743.907229 USDC and 0.007209570881911319 WETH plus seven other tokens, and it forwarded all of them, to the unit, to the attacker's EOA, together with the thr
+11/12 checks passed
+
+### 2. --tx 0x5f58...8143, the attacker's first transaction (a Relay deposit, another transaction of the same EOA)
+CHECK FAIL H1 the transaction is a contract creation that succeeded in block 25692311 (index 0), sent by the attacker's EOA (its 7th transaction, nonce 6) and created 0xc7d8...7b77: the whole attack runs in the
+CHECK FAIL H2 it was mined on 2026-08-06 between 00:00 and 01:00 UTC (2026-07-12 02:26:47 UTC)
+CHECK FAIL H5 the PositionManager emitted ApprovalForAll(owner = the factory, operator = the attack contract, approved = true), granted by the factory without its owners signing anything (0 event)
+CHECK FAIL H6 seven Uniswap V4 position NFTs, ids 360162, 364347, 360385, 363137, 363145, 363678 and 364293, were burned from the factory's ownership in this transaction, after the approval, each with one Modif
+CHECK FAIL H7 the burns paid the attack contract 17,743.907229 USDC and 0.007209570881911319 WETH plus seven other tokens, and it forwarded all of them, to the unit, to the attacker's EOA, together with the thr
+CHECK FAIL H8 one block before, the factory owned all seven positions and had approved nobody for them; after the transaction it had approved the attack contract for all (the state of this transaction does not 
+6/12 checks passed

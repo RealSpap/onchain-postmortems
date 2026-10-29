@@ -1,0 +1,33 @@
+=== 1. The exploit transaction
+tx 0x9583e95d5c88c7966e269197f4b09022f26b7a27ad2c13660dda6774e3136d14
+block 25692311, 2026-08-06 00:27:47 UTC, index 0, from 0xc94e23c58b9b2998edb7abc8f99393fead985076, to None, created 0xc7d8c70f4349acc55409800c8768e801b7556b77, status 0x1, 42 logs
+CHECK PASS H1 the transaction is a contract creation that succeeded in block 25692311 (index 0), sent by the attacker's EOA (its 7th transaction, nonce 6) and created 0xc7d8...7b77: the whole attack runs in the constructor (block 25692311)
+CHECK PASS H2 it was mined on 2026-08-06 between 00:00 and 01:00 UTC (2026-08-06 00:27:47 UTC)
+
+=== 2. The factory, its verified source, and what launch() forwards
+Sourcify: {'factory': ('exact_match', 'LaunchpadFactoryAuto', '0.8.24+commit.e11b9ed9'), 'PositionManager': ('match', 'PositionManager', '0.8.26+commit.8a97fa7a'), 'PoolManager': ('match', 'PoolManager', '0.8.26+commit.8a97fa7a'), 'attack contract': (None, None, None)}
+CHECK PASS H3 the factory is verified on Sourcify (exact match, LaunchpadFactoryAuto, solc 0.8.24), and so are Uniswap V4's PositionManager and PoolManager; the attack contract is not
+CHECK PASS H4 in the verified source, launch() is `external payable` with no access control, and passes the caller's initCalldata and modifyCalldata, unchecked, as the two calls of the PositionManager's multicall, which the factory itself makes
+
+=== 3. The receipt's logs: an approval granted by the factory, seven positions burned
+CHECK PASS H5 the PositionManager emitted ApprovalForAll(owner = the factory, operator = the attack contract, approved = true), granted by the factory without its owners signing anything (1 event)
+CHECK PASS H6 seven Uniswap V4 position NFTs, ids 360162, 364347, 360385, 363137, 363145, 363678 and 364293, were burned from the factory's ownership in this transaction, after the approval, each with one ModifyLiquidity on the PoolManager (7 burns, 7 liquidity removals)
+to the attack contract from the PoolManager: 17,743.907229 USDC, 0.007209570881911319 WETH and 7 other tokens; forwarded to the EOA: 17,743.907229 USDC, 0.007209570881911319 WETH and 8 other tokens
+CHECK PASS H7 the burns paid the attack contract 17,743.907229 USDC and 0.007209570881911319 WETH plus seven other tokens, and it forwarded all of them, to the unit, to the attacker's EOA, together with the throwaway token it had launched (17743907229 USDC units, 7209570881911319 wei)
+
+=== 4. The state one block before and after
+CHECK PASS H8 one block before, the factory owned all seven positions and had approved nobody for them; after the transaction it had approved the attack contract for all (approval before 0, after 1)
+the factory held 15 positions one block before
+
+=== 5. The attacker's other transactions
+27 transactions read; nonce now 27
+CHECK PASS H9 the EOA has sent 27 transactions, every one read: the first, on 2026-07-12, paid 0.497 ETH to a contract verified on Sourcify as RelayDepository; two contract creations on 2026-08-05 reverted; the exploit was its nonce 6, on 2026-08-06 (27/27, RelayDepository)
+CHECK PASS H10 after the exploit the EOA made seven 1 ETH deposits into the Tornado Cash router (nonces 12, 16, 20, 23, 24, 25 and 26, between 2026-08-06 07:25 and 2026-08-07 07:39 UTC), verified on Sourcify as TornadoRouter, and has sent nothing since (7 deposits)
+
+=== 6. Value, and DefiLlama's record
+17,743.907229 USDC at face value + 0.007209570881911319 WETH x 1910.73 (DefiLlama coins at the block time) = $17,757.68
+DefiLlama: {'name': 'Unistreets', 'date': 1785888000, 'amount': 17750, 'chain': ['Ethereum'], 'classification': 'Access Control', 'technique': 'Arbitrary External Call', 'source': ''}
+CHECK PASS H11 DefiLlama lists Unistreets, Ethereum, $17,750, 2026-08-05, Access Control / Arbitrary External Call, source empty ([(17750, 'Arbitrary External Call')])
+CHECK PASS H12 the USDC and WETH taken, at the block-time ETH price, are worth within 1% of DefiLlama's $17,750 ($17,757.68, +0.04%)
+
+12/12 checks passed

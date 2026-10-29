@@ -759,6 +759,20 @@
    "note": "19,999.018106552928530404 USDT counted at face value, the FH/USDT pair's USDT reserve the block before the exploit transaction (BNB Chain block 117979401) minus the block of it (117979402, 2026-08-25 09:54:52 UTC), which is also what the attacker's contract received from the pair in 25 sales minus what it paid into it in 25 purchases and what went to the attacker's EOA after the 25,999.35 USDT flash loan was repaid, re-derived live by `fhtoken-sell-sync-before-credit-pair-drain/reconstruct_exploit.py` from the receipt and from the token's verified source. DefiLlama lists $20,000 (\"FH Token\", \"Protocol Logic\" / \"Swap Logic Flaw\", 2026-08-25), 0.01% higher; the DeFiHackLabs proof of concept says 19,999.018106552928530404 USDT. The USDT went to the attacker's EOA, which sent it on to one address five days later; the trail stops there. See `fhtoken-sell-sync-before-credit-pair-drain/README.md`. External sources: https://github.com/SunWeb3Sec/DeFiHackLabs (src/test/2026-08/FHToken_exp.sol), https://api.llama.fi/hacks."
   },
   {
+   "slug": "unistreet-launch-calldata-forwarding",
+   "protocol": "Unistreet (LaunchpadFactoryAuto)",
+   "date": "2026-08-06",
+   "loss_usd": 17758,
+   "floor": false,
+   "approximate": true,
+   "sourced": false,
+   "chain": "Ethereum",
+   "category": "Access-Control",
+   "mechanism": "The launchpad factory's public launch() forwards the caller's two byte strings, unchecked, as calls the factory itself makes to Uniswap V4's PositionManager: one call made the factory approve the attacker's contract for all its liquidity positions, and seven were burned and swept in the constructor of that contract",
+   "url": "https://github.com/RealSpap/onchain-postmortems/tree/main/unistreet-launch-calldata-forwarding/",
+   "note": "17,743.907229 USDC at face value plus 0.007209570881911319 WETH, the two tokens the burns of seven of the Unistreet factory's Uniswap V4 positions paid the attack contract in the exploit transaction (Ethereum block 25692311, 2026-08-06 00:27:47 UTC) and which it forwarded to the attacker's EOA, WETH priced at DefiLlama's ETH price of 1,910.73 at the block time: about $17,758, re-derived live by `unistreet-launch-calldata-forwarding/reconstruct_exploit.py` from the receipt and from the factory's verified source. DefiLlama lists $17,750 (\"Unistreets\", \"Access Control\" / \"Arbitrary External Call\", 2026-08-05), 0.04% lower; the DeFiHackLabs proof of concept says about $17.75K. Seven launch tokens swept in the same transaction were not priced. See `unistreet-launch-calldata-forwarding/README.md`. External sources: https://github.com/SunWeb3Sec/DeFiHackLabs (src/test/2026-08/UnistreetLaunchpad_exp.sol), https://api.llama.fi/hacks."
+  },
+  {
    "slug": "arrakis-v1-guni-slot0-mint-burn",
    "protocol": "Arrakis V1 (G-UNI ENS/WETH)",
    "date": "2026-08-23",

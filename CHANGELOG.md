@@ -13,6 +13,7 @@ GitHub releases.
 - Added FH Token (BSC, 2026-08-25).
 - Added Arrakis V1 G-UNI ENS/WETH vault (Ethereum, 2026-08-23).
 - Added USM (Ethereum, 2026-08-09).
+- Added Unistreet LaunchpadFactoryAuto (Ethereum, 2026-08-06).
 
 ## 2026-10-23
 
