@@ -1,0 +1,59 @@
+=== 1. The exploit transaction
+tx 0x7a3cadc2f33e000b0091307df62db2f5cc79ab8e0b022fd84de9e1c2c0745bd2
+block 117979402, 2026-08-25 09:54:52 UTC, index 62, from 0x7fa3bc0d5667ffd14d7acd6ce5f2432ac13a6fda, to 0x727fb666e3f2531e807e987532c6e2c22adc45ad, value 10000000000000 wei, status 0x1, 508 logs
+CHECK PASS H1 the transaction succeeded in block 117979402, sent by the attacker's EOA (its 5th transaction, nonce 4) to its attack contract, call 0x65ac0565 with 0.00001 BNB (block 117979402, nonce 4)
+CHECK PASS H2 it was mined on 2026-08-25 between 09:00 and 10:00 UTC (2026-08-25 09:54:52 UTC)
+
+=== 2. The contracts, and what is verified
+FHToken: exact_match FHToken 0.8.34+commit.80d5c536 | router: match SwapRouter | others: {'pair': None, 'attack contract': None, 'Moolah': 'exact_match'}
+CHECK PASS H3 the FH token is verified on Sourcify (exact match, FHToken); so is the router the attacker used (SwapRouter) and the lending pool Moolah; the pair and the attack contract are not (exact_match, match, {'pair': None, 'attack contract': None, 'Moolah': 'exact_match'})
+positions in the sell branch of _transfer: [633, 865, 967, 1042]
+CHECK PASS H4 in the verified source, a transfer into the pair is a sale that burns 80% of the net amount out of the pair, sends the other 20% from the pair to the treasury and calls sync() on the pair, all before crediting the seller's tokens to the pair, with no check on who the seller is (order [633, 865, 967, 1042])
+CHECK PASS H5 the buy side is gated: a transfer out of the pair needs the sender and the recipient on a whitelist, and the constructor whitelists 0x1b81D678...eB14, the router the attacker used
+CHECK PASS H6 one block before the exploit the router is on the whitelist on chain and the attack contract is not (router 1, attack contract 0)
+function sweepToken(
+        address token,
+        uint256 amountMinimum,
+        address recipient
+    ) public payable override {
+        uint256 balanceToken = IERC20(token).balanceOf(address(this));
+        require(balanceToken >= amountMinimum, 'Insufficient token');
+
+        if (balanceToken > 0) {
+            TransferHelper.safeTransfer(token, recipient, balanceToken);
+        }
+
+CHECK PASS H7 that router's sweepToken(token, amountMinimum, recipient) is public and sends its whole balance of any token to any recipient the caller names, with no check on the caller
+
+=== 3. The pair before and after
+reserves one block before: 19,999.5 USDT, 200,000 FH; after the transaction: 0.481893447071469596 USDT, 0.006969714567965646 FH
+CHECK PASS H8 the pair is the USDT/FH pair (token0 USDT, token1 FH); one block before it held 19,999.5 USDT and 200,000 FH, after the transaction 0.481893447071469596 USDT and 0.006969714567965646 FH ((19999500000000000000000, 200000000000000000000000), (481893447071469596, 6969714567965646))
+CHECK PASS H9 the pair's USDT fell by exactly the expected amount, 19,999.018106552928530404 (19999018106552928530404)
+
+=== 4. The receipt's logs: loan, 25 buy and sell cycles, repayment
+CHECK PASS H10 the attack contract borrowed 25,999.35 USDT from Moolah and returned exactly that amount in the same transaction (25,999.35)
+CHECK PASS H11 the pair emitted 50 Swap events and the token 25 TokensBurned events; the 25 USDT amounts the attack contract paid into the pair are, in order, the 25 buy sizes of the public proof of concept (50 swaps, 25 burns, 25 buys)
+CHECK PASS H12 in each of the 25 sales the logs show, in this order, 80% of the net amount burned out of the pair, the other 20% moved from the pair to the treasury, a Sync of the pair, and only then the seller's net FH credited to the pair: 25 of 25 cycles (25/25)
+USDT paid into the pair 33,401.193110175201444095, paid out of it 53,400.211216728129974499, difference 19,999.018106552928530404
+CHECK PASS H13 the attack contract paid 33,401.193110175201444095 USDT into the pair in its 25 purchases and received 53,400.211216728129974499 USDT from it in its 25 sales: the difference is exactly the pair's USDT fall, 19,999.018106552928530404 (19999018106552928530404)
+CHECK PASS H14 the last log moves 19,999.018106552928530404 USDT from the attack contract to the attacker's EOA, after the loan was repaid (19,999.018106552928530404)
+
+=== 5. The attacker's other transactions
+transaction nonce 0: block 115092694, 2026-08-10 08:57:26 UTC, to None, created 0x3f10caaa795681a40501950e91f8b73a43fa7f84, input 0x60808060
+transaction nonce 1: block 115097918, 2026-08-10 09:36:38 UTC, to 0x3f10caaa795681a40501950e91f8b73a43fa7f84, created None, input 0xfddf6520
+transaction nonce 2: block 116440353, 2026-08-17 09:28:17 UTC, to None, created 0x2e52526d58defb64ae756796bc7a7ad2dee3eccb, input 0x60808060
+transaction nonce 3: block 116599046, 2026-08-18 05:18:51 UTC, to None, created 0x727fb666e3f2531e807e987532c6e2c22adc45ad, input 0x60808060
+transaction nonce 4: block 117979402, 2026-08-25 09:54:52 UTC, to 0x727fb666e3f2531e807e987532c6e2c22adc45ad, created None, input 0x65ac0565
+transaction nonce 5: block 118931859, 2026-08-30 09:00:58 UTC, to 0x55d398326f99059ff775485246999027b3197955, created None, input 0xa9059cbb
+transaction nonce 6: block 118931916, 2026-08-30 09:01:23 UTC, to 0xb4e283f6f20e68bac259fe7a84154363b63b05db, created None, input 0x
+transaction nonce 7: block 118932065, 2026-08-30 09:02:30 UTC, to 0x55d398326f99059ff775485246999027b3197955, created None, input 0xa9059cbb
+CHECK PASS H15 the EOA has sent eight transactions in all: it created a first contract and called it once (2026-08-10), created a second (2026-08-17) and then the attack contract (its nonce 3, 2026-08-18 05:18 UTC, seven days before the exploit), which holds 3,577 bytes of code one block before the exploit (8/8, nonce now 8)
+USDT sent to 0xb4e283f6f20e68bac259fe7a84154363b63b05db: 100 + 19,899.018126552928530404 = 19,999.018126552928530404; the EOA holds 0.000249909018126552 USDT now
+CHECK PASS H16 five days later (2026-08-30) the EOA sent 100 USDT and 19,899.018126552928530404 USDT, 19,999.018126552928530404 in all, to one address, 0xb4e2...05Db, and 0.024514079162607298 BNB to it; it holds 0.000249909018126552 USDT now (sent 19999018126552928530404)
+
+=== 6. Value, and DefiLlama's record
+DefiLlama: {'name': 'FH Token', 'date': 1787616000, 'amount': 20000, 'chain': ['BSC'], 'classification': 'Protocol Logic', 'technique': 'Swap Logic Flaw', 'source': '', 'targetType': 'Token'}
+CHECK PASS H17 DefiLlama lists FH Token, BSC, $20,000, 2026-08-25, Protocol Logic / Swap Logic Flaw, a token, source empty ([(20000, ['BSC'], 'Swap Logic Flaw')])
+CHECK PASS H18 the USDT taken, counted at face value, is within 0.01% of DefiLlama's $20,000 ($19,999.02)
+
+18/18 checks passed

@@ -731,6 +731,20 @@
    "note": "A flash-loan-funded Uniswap V3 `slot0` manipulation, confirmed via the WETH contract's own `Withdrawal` event and independently cross-checked against the attacker EOA's own balance delta (two archive RPC providers agree), nets 10.706591043821 ETH (to 12 decimals), matching SlowMist's own reported \"10.71 ETH\" to the stated precision. At CoinGecko's 2026-08-31 daily price that is $25,869.71, about 7.6% below DefiLlama's tracked $28,000 (same defillamaId as Float Protocol's unrelated Jan-2022 exploit); an intraday-interpolated price gives $26,189.43 instead, about 6.5% below. See `float-protocol-hypervisor-spot-manipulation/README.md`. External source: https://crypto.news/float-protocol-hit-by-28k-flash-loan-attack-through-uniswap-v3-manipulation/."
   },
   {
+   "slug": "fhtoken-sell-sync-before-credit-pair-drain",
+   "protocol": "FH Token (Falcon Heavy)",
+   "date": "2026-08-25",
+   "loss_usd": 19999,
+   "floor": false,
+   "approximate": true,
+   "sourced": false,
+   "chain": "BSC",
+   "category": "Rounding/Math-Bug",
+   "mechanism": "The token's transfer code burns 80% of a sale out of the pair, moves 20% to the treasury and syncs the pair before crediting the seller's tokens, so each sale is paid against a cut reserve: 25 flash-loaned buy and sell cycles through a whitelisted public router took 19,999 USDT, 99.998% of the pair's USDT",
+   "url": "https://github.com/RealSpap/onchain-postmortems/tree/main/fhtoken-sell-sync-before-credit-pair-drain/",
+   "note": "19,999.018106552928530404 USDT counted at face value, the FH/USDT pair's USDT reserve the block before the exploit transaction (BNB Chain block 117979401) minus the block of it (117979402, 2026-08-25 09:54:52 UTC), which is also what the attacker's contract received from the pair in 25 sales minus what it paid into it in 25 purchases and what went to the attacker's EOA after the 25,999.35 USDT flash loan was repaid, re-derived live by `fhtoken-sell-sync-before-credit-pair-drain/reconstruct_exploit.py` from the receipt and from the token's verified source. DefiLlama lists $20,000 (\"FH Token\", \"Protocol Logic\" / \"Swap Logic Flaw\", 2026-08-25), 0.01% higher; the DeFiHackLabs proof of concept says 19,999.018106552928530404 USDT. The USDT went to the attacker's EOA, which sent it on to one address five days later; the trail stops there. See `fhtoken-sell-sync-before-credit-pair-drain/README.md`. External sources: https://github.com/SunWeb3Sec/DeFiHackLabs (src/test/2026-08/FHToken_exp.sol), https://api.llama.fi/hacks."
+  },
+  {
    "slug": "oraichain-ics20-precompile-selfmint",
    "protocol": "Oraichain (ICS-20 EVM Precompile)",
    "date": "2026-08-08/08-09",

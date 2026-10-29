@@ -10,6 +10,7 @@ GitHub releases.
 - Chainflip: the script now reads the vault's USDT transfers by account from TronGrid, not by windows of logs from a public node that no longer serves the vault's history. The new run is in `preuves/`, and its README says what was and was not compared with the old logs. The Index and the dataset are unchanged.
 - research/erc-8107-coordinator-tests: a new folder that is not an incident entry (no row in the Index, no change to any count). Executable tests of a coordinator for ERC-8107 on a fork of Ethereum mainnet, with the raw output of the run: two ENS names that resolve to the same address, and one complete coordinator whose every step is switched off in turn. The folder is CC0-1.0 with its own LICENSE; the rest of the repository stays MIT.
 - Added CashCowCoin (BSC, 2026-08-27).
+- Added FH Token (BSC, 2026-08-25).
 
 ## 2026-10-23
 

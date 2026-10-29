@@ -1,0 +1,17 @@
+Negative witnesses, 2026-10-23. Each run changes one input of reconstruct_exploit.py; the checks that read it must fail.
+
+### 1. --expect-usdt 19999018106552928530405 (one wei too many)
+CHECK FAIL H9 the pair's USDT fell by exactly the expected amount, 19,999.018106552928530404 (19999018106552928530404)
+CHECK FAIL H13 the attack contract paid 33,401.193110175201444095 USDT into the pair in its 25 purchases and received 53,400.211216728129974499 USDT from it in its 25 sales: the difference is exactly the pair's
+CHECK FAIL H14 the last log moves 19,999.018106552928530404 USDT from the attack contract to the attacker's EOA, after the loan was repaid (19,999.018106552928530404)
+15/18 checks passed
+
+### 2. --tx 0x935c...4166, the attacker's creation of the attack contract (another transaction of the same EOA)
+CHECK FAIL H1 the transaction succeeded in block 117979402, sent by the attacker's EOA (its 5th transaction, nonce 4) to its attack contract, call 0x65ac0565 with 0.00001 BNB (block 116599046, nonce 3)
+CHECK FAIL H2 it was mined on 2026-08-25 between 09:00 and 10:00 UTC (2026-08-18 05:18:51 UTC)
+CHECK FAIL H6 one block before the exploit the router is on the whitelist on chain and the attack contract is not (router -1, attack contract -1)
+CHECK FAIL H8 the pair is the USDT/FH pair (token0 USDT, token1 FH); one block before it held 19,999.5 USDT and 200,000 FH, after the transaction 0.481893447071469596 USDT and 0.006969714567965646 FH ((-1, -1),
+CHECK FAIL H9 the pair's USDT fell by exactly the expected amount, 19,999.018106552928530404 (0)
+CHECK FAIL H10 to H14 the receipt holds the loan, the 25 cycles and the proceeds (the receipt of this transaction does not have them)
+CHECK FAIL H15 the EOA has sent eight transactions in all: it created a first contract and called it once (2026-08-10), created a second (2026-08-17) and then the attack contract (its nonce 3, 2026-08-18 05:18 
+7/14 checks passed
