@@ -1,0 +1,74 @@
+=== 1. The exploit transaction
+tx 0xcd4755645595094a8ab984d0db7e3b4aabde72a5c87c4f176a030629c47fb014
+block 24191019, 2026-01-08 16:02:35 UTC, index 3, from 0x6c8ec8f14be7c01672d31cfa5f2cefeab2562b50, to 0x1de399967b206e446b4e9aeeb3cb0a0991bf11b8, value 0.01 ETH, status 0x1, 32 logs
+CHECK PASS H1 the transaction succeeded in block 24191019, sent by the attacker's EOA (its 11th transaction, nonce 10) to the attack contract with 0.01 ETH (block 24191019, nonce 10)
+CHECK PASS H2 it was mined on 2026-01-08 between 16:00 and 17:00 UTC (2026-01-08 16:02:35 UTC)
+CHECK PASS H3 the attack contract was created by the same EOA in the transaction just before, in the same block, and had no code one block earlier (created by nonce 9, index 2; code 3914 bytes at block 24191019)
+
+=== 2. The contracts, and what is verified
+Sourcify match: {'purchase proxy': 'match', 'implementation': None, 'TRU token': 'match', 'attack contract': None}
+CHECK PASS H4 the purchase contract is an upgradeable proxy whose EIP-1967 implementation, one block before, is 0xc186e6f0...14d3 (slot holds 0xc186e6f0163e21be057e95aa135edd52508d14d3)
+CHECK PASS H5 the implementation and the attack contract are not verified on Sourcify; the proxy and the TRU token are ({'purchase proxy': 'match', 'implementation': None, 'TRU token': 'match', 'attack contract': None})
+
+=== 3. The state one block before
+TRU totalSupply 161,753,242.367424992669183203, ETH balance of the purchase contract 8,539.452648748044247863
+CHECK PASS H6 one block before, the purchase contract held 8,539.452648748044247863 ETH and the TRU supply was 161,753,242.367424992669183203 (8,539.452648748044247863 ETH, 161,753,242.367424992669183203 TRU)
+
+=== 4. The transaction's logs: free mints, sales, the amount taken
+rounds (number, paid, received):
+  round 1: paid 0 wei, received 5,105.06862519801295139 ETH
+  round 2: paid 6 wei, received 2,512.725519441713511752 ETH
+  round 3: paid 319134474904345 wei, received 789.982659124501396402 ETH
+  round 4: paid 15168571520541215 wei, received 124.467568270275031182 ETH
+  round 5: paid 5114995545275641043 wei, received 8.339687736500985242 ETH
+CHECK PASS H7 the transaction minted TRU to the attack contract five times, each time moved the same amount to the purchase contract, which burned it; the TRU supply is the same one block before and after (supply 161753242367424992669183203 then 161753242367424992669183203)
+CHECK PASS H8 the five prices paid were 0, 6, 319134474904345, 15168571520541215 and 5114995545275641043 wei, against sales of 5,105.07, 2,512.73, 789.98, 124.47 and 8.34 ETH (paid [0, 6, 319134474904345, 15168571520541215, 5114995545275641043])
+sales 8,540.584059771003875968 ETH - prices paid 5.130483251271086609 ETH = 8,535.453576519732789359 ETH; purchase contract balance 8,539.452648748044247863 -> 3.999072228311458504 ETH
+CHECK PASS H9 the contract lost exactly the sales minus the prices paid: 8,535.453576519732789359 ETH, its balance falling to 3.999072228311458504 ETH, as the attack contract's last event also states (8535453576519732789359)
+
+=== 5. Who got the ETH
+EOA balance 0.466373943155697724 -> 8,535.814871779547324297 ETH; fees 0.005078683341162786 ETH; sent 0.01 ETH; so it received 8,535.363576519732789359 ETH from the attack contract; remainder 0.1 ETH
+CHECK PASS H10 the EOA received 8,535.363576519732 ETH from the attack contract, and the remaining 0.1 ETH of what the contract took (plus the 0.01 ETH it was sent) went elsewhere, 0.1 ETH being the amount passed as argument to the attack contract (received 8535363576519732789359 wei, remainder 100000000000000000 wei, argument 100000000000000000)
+CHECK PASS H11 that remainder is 0.1 ETH, the argument of the call (100000000000000000)
+calls from the attack contract with value, to the block builder or the EOA: [('0x4838b106fce9647bdf1e7877bf73ce8b0bad5f97', '0.1'), ('0x6c8ec8f14be7c01672d31cfa5f2cefeab2562b50', '8,535.363576519732789359')]
+CHECK PASS H12 (trace) the attack contract sent 0.1 ETH to the block's fee recipient and 8,535.363576519732 ETH to the EOA, last (2 transfers)
+CHECK PASS H13 (trace) the fee recipient of the block is that address (0x4838b106fce9647bdf1e7877bf73ce8b0bad5f97)
+earlier transaction nonce 0: block 23950919, to 0xff9b21c3bfa4bce9b20b55fed56d102ced48b0f6, value 0.50015 ETH, created None
+earlier transaction nonce 1: block 23960975, to 0xff9b21c3bfa4bce9b20b55fed56d102ced48b0f6, value 0.50015 ETH, created None
+earlier transaction nonce 2: block 24101439, to None, value 0 ETH, created 0xf0c8d5c861161bdffb5e83e14ff573bdc9275960
+earlier transaction nonce 3: block 24101439, to 0xf0c8d5c861161bdffb5e83e14ff573bdc9275960, value 0 ETH, created None
+earlier transaction nonce 4: block 24101518, to 0xd90e2f925da726b50c4ed8d0fb90ad053324f31b, value 1 ETH, created None
+earlier transaction nonce 5: block 24101524, to 0xd90e2f925da726b50c4ed8d0fb90ad053324f31b, value 1 ETH, created None
+earlier transaction nonce 6: block 24101527, to 0xd90e2f925da726b50c4ed8d0fb90ad053324f31b, value 1 ETH, created None
+earlier transaction nonce 7: block 24101530, to 0xd90e2f925da726b50c4ed8d0fb90ad053324f31b, value 1 ETH, created None
+earlier transaction nonce 8: block 24101532, to 0xd90e2f925da726b50c4ed8d0fb90ad053324f31b, value 1 ETH, created None
+CHECK PASS H14 before this attack the EOA had sent nine transactions, the first on 2025-12-06: two 0.50015 ETH calls to an OnchainSwapV3 contract, a contract creation and a call to it, and five 1 ETH deposits through the Tornado Cash router on 2025-12-27 (9/9)
+CHECK PASS H15 the contract those five deposits went to is verified on Sourcify as TornadoRouter, and they all call selector 0x13d98d13 (deposit(address,bytes32,bytes)) (TornadoRouter)
+
+=== 6. After the attack
+later transaction nonce 11: block 24191053, 2026-01-08 16:09:23 UTC, to 0x3b58192943ee6f9ae92d54dd1ef378cfd519862a, 0.1 ETH
+later transaction nonce 12: block 24191062, 2026-01-08 16:11:11 UTC, to 0x3b58192943ee6f9ae92d54dd1ef378cfd519862a, 4,267 ETH
+later transaction nonce 13: block 24191752, 2026-01-08 18:29:35 UTC, to 0x273589ca3713e7becf42069f9fb3f0c164ce850a, 4,001 ETH
+later transaction nonce 14: block 24206511, 2026-01-10 19:52:59 UTC, to 0xd841c52b68c5db133078aba039bd9eaf19b0b135, 267.714966732018310674 ETH
+CHECK PASS H16 the EOA then sent four plain transfers (nonces 11 to 14) of 0.1, 4,267, 4,001 and 267.714966732018310674 ETH to three addresses, between 2026-01-08 and 2026-01-10, and has sent nothing since (nonce now 15)
+CHECK PASS H17 those four transfers and their fees take out the EOA's whole balance after the attack, to within 0.001 ETH (the balance is 0.000237 ETH short of what it then sent, so it received that much in between), and it holds 1.000000001e-9 ETH now (balance 8535814871779547324297, transfers 8535814966732018310674, fees 142186868838000, now 1000000001, unexplained 237140339824378 wei)
+CHECK PASS H18 the three receiving addresses are plain accounts (no code), two of them with exactly two transactions sent and the third with more (nonces [2, 2, 61])
+CHECK PASS H19 the address that received 267.7 ETH and 4,000.9 ETH made its first four transactions 100 ETH deposits through the Tornado Cash router (the same router the EOA tested with five 1 ETH deposits) (4/4)
+
+=== 7. Value, and DefiLlama's record
+8,535.453576519732789359 ETH x 3103.56 (DefiLlama coins at the block time) = $26,490,309.39
+DefiLlama: {'name': 'Truebit', 'date': 1767830400, 'amount': 26400000, 'chain': ['Ethereum'], 'classification': 'Token & Share Accounting', 'technique': 'Arithmetic Error', 'source': ''}
+CHECK PASS H20 DefiLlama lists Truebit, Ethereum, $26,400,000, 2026-01-08, Token & Share Accounting / Arithmetic Error, source empty ([(26400000, ['Ethereum'], 'Token & Share Accounting')])
+CHECK PASS H21 the ETH taken is worth within 1% of DefiLlama's $26,400,000 at the block-time ETH price ($26,490,309.39, +0.34%)
+
+=== 8. The hours after the first transaction
+after block 24191019: 6711 TRU mints to 21 addresses (blocks 24191080 to 24192373), 105 transfers into the purchase contract from 6 addresses (last in block 24192339), 0 of either kind from block 24195001 to 24300000
+CHECK PASS H22 after the first transaction the same purchase contract kept being used until block 24192373: 6,711 TRU mints to 21 addresses (first in block 24191080) and 105 transfers of TRU into the contract from 6 addresses (last in block 24192339), and none of either kind from block 24195001 to 24300000 (6711 mints, 105 sales)
+ETH balance of the purchase contract: 3.999072228311458504 after the first transaction, 16.441259438635460491 at block 24192400, 16.441259438635460491 at block 24195000
+CHECK PASS H23 the contract's ETH balance was 3.999072228311458504 right after the first transaction and 16.441259438635460491 at blocks 24192400 and 24195000: higher, not lower
+
+=== 9. The contract today
+implementation slot 0xc186e6f0163e21be057e95aa135edd52508d14d3, reserve() 0.091011059533144807 ETH, ETH balance 16.451259438635460491
+CHECK PASS H24 today the purchase contract still uses the same implementation, its reserve() is below 1 ETH and its ETH balance is below 100 ETH
+
+24/24 checks passed

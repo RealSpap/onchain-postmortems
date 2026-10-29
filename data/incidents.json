@@ -995,6 +995,20 @@
    "mechanism": "Compromised LayerZero RPC nodes plus a DDoS-forced DVN failover let a forged cross-chain message pass a 1-of-1 verifier, minting real rsETH against a burn that never happened on the claimed source chain (Unichain)",
    "url": "https://github.com/RealSpap/onchain-postmortems/tree/main/kelpdao-rseth-layerzero-rpc-spoofing/",
    "note": "Compromised LayerZero DVN RPC nodes plus a DDoS-forced failover let a forged cross-chain message pass a 1-of-1 verifier; the exploit transaction moved exactly 116,500 rsETH. At theft-day price that is $273,377,225, about 6.7% below DefiLlama's tracked $293,000,000; a second, independently-derived cross-check via Kelp's own on-chain oracle backing rate instead gives $301,716,067, bracketing both figures from the other side. See `kelpdao-rseth-layerzero-rpc-spoofing/README.md`. External sources: https://layerzero.network/blog/kelpdao-incident-statement, https://api.llama.fi/hacks."
+  },
+  {
+   "slug": "truebit-purchase-price-integer-overflow",
+   "protocol": "Truebit (TRU purchase contract)",
+   "date": "2026-01-08",
+   "loss_usd": 26490309,
+   "floor": false,
+   "approximate": true,
+   "sourced": false,
+   "chain": "Ethereum",
+   "category": "Rounding/Math-Bug",
+   "mechanism": "The purchase price function adds two 256-bit terms without an overflow check (per BlockSec); in one transaction the attack contract bought TRU from the contract at prices from 0 to 5.11 ETH and sold it back for 8,535.45 ETH, which the attacker then forwarded and partly sent into the Tornado Cash router. The contract is unchanged and possibly still exploitable, not tested",
+   "url": "https://github.com/RealSpap/onchain-postmortems/tree/main/truebit-purchase-price-integer-overflow/",
+   "note": "8,535.453576519732789359 ETH, the whole of what the Truebit purchase contract lost in the exploit transaction (Ethereum block 24191019, 2026-01-08 16:02:35 UTC): five sales of TRU that the attack contract had bought from it, minus the prices paid, its balance falling from 8,539.452648748044247863 to 3.999072228311458504 ETH, priced at DefiLlama's ETH price of 3,103.56 at the block time: about $26,490,309, re-derived live by `truebit-purchase-price-integer-overflow/reconstruct_exploit.py`. DefiLlama lists $26,400,000 (\"Truebit\", \"Token & Share Accounting\" / \"Arithmetic Error\", 2026-01-08), 0.34% lower. The 8,535.36 ETH the attacker's EOA received went on within two days to three addresses, one of which started making 100 ETH deposits into the Tornado Cash router. The contract has not been fixed and may still be exploitable, which was not tested; the entry gives no price formula or amounts. See `truebit-purchase-price-integer-overflow/README.md`. External sources: https://blocksec.com/blog/in-depth-analysis-the-truebit-incident, https://api.llama.fi/hacks."
   }
  ]
 }

@@ -16,6 +16,7 @@ GitHub releases.
 - Added Unistreet LaunchpadFactoryAuto (Ethereum, 2026-08-06).
 - Added MOKE MokeRelease (BSC, 2026-08-02).
 - Added LULA (BSC, 2026-07-28).
+- Added Truebit purchase contract (Ethereum, 2026-01-08).
 
 ## 2026-10-23
 
