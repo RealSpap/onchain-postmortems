@@ -675,6 +675,20 @@
    "note": "Floor: the 5,231,353 ENJ that left Enjin's platform contract in the first transaction ($140,799, at DefiLlama's price of 0.026914 at the block time of the first transaction, 2026-08-25 18:41:59 UTC), re-derived live by `enjin-legacy-erc1155-adapter-melt/reconstruct_exploit.py`; the 1,287,165.5545533333 ENJ of the 594 later transactions ($34,643) are not counted; 7,000 ENJ paid to a third address in the first transaction are not counted either. DefiLlama lists $162,000 and a search-result snippet citing Defimon says about $142K for 5.24M ENJ, which matches the first transaction alone; the 594 later transactions, which would bring it to $175,442, are left out because their holders were checked on a sample only. Neither Enjin's contracts nor the attacker's were read, why the transfers were permitted is not established, and Enjin's own report could not be read (HTTP 403)."
   },
   {
+   "slug": "cashcowcoin-sell-burns-from-pair-premature-sync",
+   "protocol": "CashCowCoin (CCC)",
+   "date": "2026-08-27",
+   "loss_usd": 117005,
+   "floor": false,
+   "approximate": true,
+   "sourced": false,
+   "chain": "BSC",
+   "category": "Rounding/Math-Bug",
+   "mechanism": "The token's trading proxy let any caller sell CCC through the pair and, after each swap, the pair burned the very CCC it had just received and synced: a flash-loaned purchase followed by 80 sales in one transaction left the pair a WBNB reserve of 0.0179 and took 165.47 WBNB",
+   "url": "https://github.com/RealSpap/onchain-postmortems/tree/main/cashcowcoin-sell-burns-from-pair-premature-sync/",
+   "note": "165.471928251512413319 WBNB, the CCC/WBNB pair's WBNB reserve one block before the exploit transaction (BNB Chain block 118384060) minus the block of it (118384061, 2026-08-27 12:31:31 UTC), which is also the 416,996.958939555830659836 WBNB the attacker's contract wrapped after 80 sales minus the 416,831.487011304318246517 WBNB flash loan repaid in the same transaction, priced at DefiLlama's BNB price of 707.10 at the block time: about $117,005, re-derived live by `cashcowcoin-sell-burns-from-pair-premature-sync/reconstruct_exploit.py`. DefiLlama lists $117,000 (\"CCC\", \"Protocol Logic\" / \"Swap Logic Flaw\", 2026-08-27), 0.00% lower; the DeFiHackLabs proof of concept says about 165.47 WBNB (about $117.4K). The 165.47 WBNB stayed with a contract that holds nothing now; where it went was not traced. See `cashcowcoin-sell-burns-from-pair-premature-sync/README.md`. External sources: https://github.com/SunWeb3Sec/DeFiHackLabs (src/test/2026-08/CashCowCoin_exp.sol), https://api.llama.fi/hacks."
+  },
+  {
    "slug": "fullsail-switchboard-vault-drain",
    "protocol": "Full Sail (Sui Vaults)",
    "date": "2026-08-29",

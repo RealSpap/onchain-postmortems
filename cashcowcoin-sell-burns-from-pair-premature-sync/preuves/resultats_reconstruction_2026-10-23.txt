@@ -1,0 +1,51 @@
+=== 1. The exploit transaction
+tx 0x89d8050641019a5a75fa3dafb4f64fb153e4dd30c0f1f51d06a6cc206d3ead43
+block 118384061, 2026-08-27 12:31:31 UTC, index 86, from 0x7977bdeee3a79dc85cc18739692e796b5d2513c4, to 0x7738b4d7c25e9a7092ae1ab402343b20340daeaf, status 0x1, 1572 logs, gas used 11824820
+CHECK PASS H1 the transaction succeeded in block 118384061, sent by the attacker's EOA (its 9th transaction, nonce 8) to its helper contract, which it ran as call 0x36b3d4df with no BNB (block 118384061, nonce 8)
+CHECK PASS H2 it was mined on 2026-08-27 between 12:00 and 13:00 UTC (2026-08-27 12:31:31 UTC)
+CHECK PASS H3 the helper contract was created by the same EOA 135 blocks before (its nonce 6) and holds 7,182 bytes of code one block before the exploit (created in block 118383926)
+
+=== 2. The contracts, and what is verified
+Sourcify match: {'CCC token': None, 'trading proxy': None, 'implementation': None, 'pair': None, 'helper': None, 'Moolah': 'exact_match'}
+CHECK PASS H4 the CCC token, the trading proxy, its implementation, the pair and the helper are not verified on Sourcify; the flash-loan pool (Moolah) is ({'CCC token': None, 'trading proxy': None, 'implementation': None, 'pair': None, 'helper': None, 'Moolah': 'exact_match'})
+CHECK PASS H5 the pair is the CCC/WBNB pair: token0 is CCC, token1 is WBNB
+CHECK PASS H6 the trading contract is an EIP-1967 proxy whose implementation one block before is 0x4287...a9ac, and that implementation holds the selectors of buy(uint256,uint256,uint256), sell(uint256,uint256,uint256) and 0xb20a0b6f, which the CCC token also holds (slot 0x4287742e50fad6d3351000fd31632412ab29a9ac)
+
+=== 3. The pair before and after
+reserves one block before: 9,596,072.668666131466478257 CCC, 165.489861516856566016 WBNB; after the transaction: 326,767.607907075184883477 CCC, 0.017933265344152697 WBNB
+CHECK PASS H7 one block before, the pair held 9,596,072.668666131466478257 CCC and 165.489861516856566016 WBNB; after the transaction 326,767.607907075184883477 CCC and 0.017933265344152697 WBNB
+CHECK PASS H8 the pair's WBNB fell by exactly the expected amount, 165.471928251512413319 (165471928251512413319)
+
+=== 4. The receipt's logs: loan, donation, buy, 80 sell cycles, repayment
+CHECK PASS H9 the helper borrowed 416,831.487011304318246517 WBNB from Moolah and returned exactly that amount in the same transaction (first and last WBNB transfers: 416,831.487011304318246517, 416,831.487011304318246517)
+CHECK PASS H10 it then sent 13,999.890970633457505314 WBNB straight to the pair, and the pair's first Sync shows its WBNB reserve raised by exactly that amount (WBNB reserve 14,165.38083215031407133)
+CHECK PASS H11 the pair emitted 81 Swap events, the first being one buy of 8,805,839.807721103467515041 CCC (sent to the proxy) for 402,831.596040670860741203 WBNB, which WBNB first unwrapped from the helper's loan (81 swaps)
+cycles where the CCC the proxy sends into the pair is the CCC the pair sends to 0x...dEaD right after the swap: 80; burned in total 6,209,331.84177536332138734 CCC; CCC reserve after each cycle's last Sync: 326,767.607907075184883477 to 431,336.955623763288560219
+CHECK PASS H12 in each of the 80 sell cycles the proxy sends CCC into the pair, the pair swaps it for WBNB, and the pair then sends that same amount of CCC to the dead address and syncs: 80 of 80 cycles, 6,209,331.841775362 CCC burned in all (80/80, 6,209,331.84177536332138734 CCC)
+CHECK PASS H13 the pair's WBNB reserve, at the last Sync of each of the 80 cycles, never rises, and ends at 0.017933265344152697 (162 Sync events)
+CHECK PASS H14 the 80 sales unwrapped 416,996.95893955583065984 BNB, which the helper wrapped again in one deposit; minus the loan, 165.471928251512413319 WBNB is left, the exact fall of the pair's WBNB (proceeds 416996958939555830659836)
+CHECK PASS H15 the wrapped proceeds went from the helper to 0xbabf...7a9f, which sent back the loan to the helper and kept the 165.47 WBNB (416,996.958939555830659836 to 0xbabf70...)
+0xbabf...7a9f now: 1424 bytes of code, nonce 1, 0 BNB, 0 WBNB
+CHECK PASS H16 that address is a contract of 1,424 bytes, and holds no BNB and no WBNB now: the 165.47 WBNB left it, to somewhere not traced here
+
+=== 5. The attacker's other transactions
+transaction nonce 0: block 117800020, to 0x55d398326f99059ff775485246999027b3197955, created None, status 0x1, input 0x095ea7b3 (68 bytes)
+transaction nonce 1: block 117800020, to 0x1a1ec25dc08e98e5e93f1104b5e5cdd298707d31, created None, status 0x1, input 0x5f575529 (1861 bytes)
+transaction nonce 2: block 118381838, to None, created 0x4641c71834cf63dd23bb34a40202b612e7f14c8f, status 0x1, input 0x60806040 (7716 bytes)
+transaction nonce 3: block 118382336, to 0x4641c71834cf63dd23bb34a40202b612e7f14c8f, created None, status 0x1, input 0x18cb85bd (68 bytes)
+transaction nonce 4: block 118382496, to 0x4641c71834cf63dd23bb34a40202b612e7f14c8f, created None, status 0x1, input 0x18cb85bd (68 bytes)
+transaction nonce 5: block 118383725, to 0x4641c71834cf63dd23bb34a40202b612e7f14c8f, created None, status 0x0, input 0x36b3d4df (36 bytes)
+transaction nonce 6: block 118383926, to None, created 0x7738b4d7c25e9a7092ae1ab402343b20340daeaf, status 0x1, input 0x60806040 (7716 bytes)
+transaction nonce 7: block 118383994, to 0x7738b4d7c25e9a7092ae1ab402343b20340daeaf, created None, status 0x1, input 0x18cb85bd (68 bytes)
+transaction nonce 8: block 118384061, to 0x7738b4d7c25e9a7092ae1ab402343b20340daeaf, created None, status 0x1, input 0x36b3d4df (36 bytes)
+CHECK PASS H17 before the exploit the EOA had sent eight transactions: an approve of USDT and a call (block 117800020), the creation of a first contract and three calls to it (nonces 2 to 5, the last, 0x36b3d4df, reverted, 151 s before), then the creation of the helper, one call to it and the exploit (9/9)
+later transaction nonce 9: block 119118798, 2026-08-31 08:23:22 UTC, to 0x4cd00e387622c35bddb9b4c962c136462338bc31, 0.162901688552397264 BNB, input 0x49290c1c
+CHECK PASS H18 the EOA's only later transaction (nonce 9, 2026-08-31 08:23 UTC) sent 0.162901688552397264 BNB to a contract verified on Sourcify as RelayDepository, calling depositNative(address,bytes32) (0x49290c1c); it has sent nothing since (nonce now 10, RelayDepository)
+
+=== 6. Value, and DefiLlama's record
+165.471928251512413319 WBNB x 707.10 (DefiLlama coins at the block time) = $117,005.00
+DefiLlama: {'name': 'CCC', 'date': 1787788800, 'amount': 117000, 'chain': ['BSC'], 'classification': 'Protocol Logic', 'technique': 'Swap Logic Flaw', 'source': '', 'targetType': 'Token'}
+CHECK PASS H19 DefiLlama lists CCC, BSC, $117,000, 2026-08-27, Protocol Logic / Swap Logic Flaw, a token, source empty ([(117000, ['BSC'], 'Swap Logic Flaw')])
+CHECK PASS H20 the WBNB taken is worth between $116,500 and $117,500 at the block-time BNB price, within 1% of DefiLlama's $117,000 ($117,005.00, +0.00%)
+
+20/20 checks passed

@@ -1,0 +1,15 @@
+Negative witnesses, 2026-10-23. Each run changes one input of reconstruct_exploit.py; the checks that read it must fail.
+
+### 1. --expect-wbnb 165471928251512413320 (one wei too many)
+CHECK FAIL H8 the pair's WBNB fell by exactly the expected amount, 165.471928251512413319 (165471928251512413319)
+CHECK FAIL H14 the 80 sales unwrapped 416,996.95893955583065984 BNB, which the helper wrapped again in one deposit; minus the loan, 165.471928251512413319 WBNB is left, the exact fall of the pair's WBNB (procee
+18/20 checks passed
+
+### 2. --tx 0x05dc...ae53, the attacker's first contract creation (another transaction of the same EOA)
+CHECK FAIL H1 the transaction succeeded in block 118384061, sent by the attacker's EOA (its 9th transaction, nonce 8) to its helper contract, which it ran as call 0x36b3d4df with no BNB (block 118381838, nonce 
+CHECK FAIL H3 the helper contract was created by the same EOA 135 blocks before (its nonce 6) and holds 7,182 bytes of code one block before the exploit (created in block 118383926)
+CHECK FAIL H7 one block before, the pair held 9,596,072.668666131466478257 CCC and 165.489861516856566016 WBNB; after the transaction 326,767.607907075184883477 CCC and 0.017933265344152697 WBNB
+CHECK FAIL H8 the pair's WBNB fell by exactly the expected amount, 165.471928251512413319 (0)
+CHECK FAIL H9 to H16 the receipt holds the loan, the donation, the purchase, the 80 cycles and the proceeds (the receipt of this transaction does not have them)
+CHECK FAIL H17 before the exploit the EOA had sent eight transactions: an approve of USDT and a call (block 117800020), the creation of a first contract and three calls to it (nonces 2 to 5, the last, 0x36b3d4d
+7/13 checks passed
