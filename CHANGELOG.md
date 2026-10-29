@@ -5,6 +5,11 @@ incident's own README carries the full detail and supersedes any earlier
 wording; this file is a short log. New incidents are also announced as
 GitHub releases.
 
+## 2026-10-29
+
+- Chainflip: the script now reads the vault's USDT transfers by account from TronGrid, not by windows of logs from a public node that no longer serves the vault's history. The new run is in `preuves/`, and its README says what was and was not compared with the old logs. The Index and the dataset are unchanged.
+- research/erc-8107-coordinator-tests: a new folder that is not an incident entry (no row in the Index, no change to any count). Executable tests of a coordinator for ERC-8107 on a fork of Ethereum mainnet, with the raw output of the run: two ENS names that resolve to the same address, and one complete coordinator whose every step is switched off in turn. The folder is CC0-1.0 with its own LICENSE; the rest of the repository stays MIT.
+
 ## 2026-10-23
 
 - Text fixes after review: the opening line of the README no longer calls `tectonic_risk_snapshot.py` the only script of tectonic-cronos (`verifier_blocs.py` was added the same day), and with the headline, the At a glance row and the August digest it now says that the rollback is per Cronos's report. The Corrections count now says 38 rows for 36 entries (Tectonic and Ostium have two rows each) and that 3 of the rows correct this repository's own earlier text, where it said 38 entries; the Ostium row no longer says Ostium settled on $23,752,746. In the Coinsbuy README the swap address is said to have sent 551 ETH to the collector, not to have received them, and the three figures of the article are no longer written as one sum; its registry no longer says "to the cent" of a whole-number press figure. Printed lines were edited by hand, without replaying the script, in the recorded outputs dated 2026-09-11 (Coinsbuy, one line) and 2026-09-10 (Ostium, two lines), to match the changed print statements of those scripts. No figure changed.

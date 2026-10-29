@@ -240,7 +240,7 @@ and figures before relying on them.
 
 ## License
 
-MIT. See `LICENSE`. Deliberately open, including every reconstruction
+MIT. See `LICENSE`, except `research/erc-8107-coordinator-tests/`, which is CC0-1.0 with its own `LICENSE`. Deliberately open, including every reconstruction
 script: each is wired to one already-public historical incident, so
 anyone can rerun the same query against the same public chain data and
 get the same number, which is what makes the corrections to press and
