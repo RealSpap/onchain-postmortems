@@ -1,0 +1,15 @@
+Negative witnesses, 2026-10-23. Each run changes one input of reconstruct_exploit.py; the checks that read it must fail.
+
+### 1. --expect-moke 41684057233944649146143064 (one wei too many)
+CHECK FAIL H14 four claim() calls follow in the same transaction, by the EOA and by three helper accounts, paying 24,766.2, 660, 600 and 33 USDT of pending release; each mints exactly pendingUsdt * 10^18 // 594140821297791 MOKE: 4
+24/25 checks passed
+
+### 2. --tx 0x7a3c...5bd2, the FH Token exploit transaction (another BNB Chain transaction)
+CHECK FAIL H1 the transaction succeeded in block 113652609, sent by the EOA 0xE454...CF8a to itself (its 164th transaction, nonce 163), call 0x20402f14 with no value, 256 logs (block 117979402, nonce 4, 508 logs)
+CHECK FAIL H2 it was mined on 2026-08-02 between 20:00 and 21:00 UTC (2026-08-25 09:54:52 UTC)
+CHECK FAIL H3 one block before and at the exploit block the EOA's code is an EIP-7702 delegation designator, 0xef0100 followed by the address 0xc7fdea02...6ff7: the EOA ran delegated code, so inside its own transaction msg.sender 
+CHECK FAIL H8 one block before, maxPriceDeviation is 2000 (20%), the settle cooldown is 600 seconds, the last settle was 11 days earlier (2026-07-22), the EOA is not a settler and not the owner: the only thing that let it call set
+CHECK FAIL H10 the BNB/USDT pair is token0 USDT, token1 WBNB with 18,680,401.84 USDT against 31,681.99 WBNB (589.6 USDT per WBNB); the price MokeRelease reads from the two pairs' reserves, recomputed here by its own formula, equal
+CHECK FAIL H11 to H23 the receipt holds the loans, the crash, settle(), the four claims, the sale, the dividends and the repayments (the receipt of this transaction does not have them)
+CHECK FAIL H25 the gain, 1,546.443215651997 BNB at DefiLlama's BNB price of 588.28 at the block time, is about $909,743, within 0.5% of DefiLlama's $907,000 ($0 at 698.95)
+6/13 checks passed

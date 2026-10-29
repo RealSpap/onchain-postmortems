@@ -14,6 +14,7 @@ GitHub releases.
 - Added Arrakis V1 G-UNI ENS/WETH vault (Ethereum, 2026-08-23).
 - Added USM (Ethereum, 2026-08-09).
 - Added Unistreet LaunchpadFactoryAuto (Ethereum, 2026-08-06).
+- Added MOKE MokeRelease (BSC, 2026-08-02).
 
 ## 2026-10-23
 

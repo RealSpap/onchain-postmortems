@@ -1,0 +1,63 @@
+=== 1. The exploit transaction
+tx 0x0776048b1b58064fb31b6513721811e7b44d6bdbe7bf5833158b241ca6756a8f
+block 113652609, 2026-08-02 20:50:11 UTC, index 26, from 0xe454a9bac1a44868e4a9cbe1a4b5ac231d0dcf8a, to 0xe454a9bac1a44868e4a9cbe1a4b5ac231d0dcf8a, value 0 wei, status 0x1, 256 logs, gas used 6675248
+CHECK PASS H1 the transaction succeeded in block 113652609, sent by the EOA 0xE454...CF8a to itself (its 164th transaction, nonce 163), call 0x20402f14 with no value, 256 logs (block 113652609, nonce 163, 256 logs)
+CHECK PASS H2 it was mined on 2026-08-02 between 20:00 and 21:00 UTC (2026-08-02 20:50:11 UTC)
+CHECK PASS H3 one block before and at the exploit block the EOA's code is an EIP-7702 delegation designator, 0xef0100 followed by the address 0xc7fdea02...6ff7: the EOA ran delegated code, so inside its own transaction msg.sender and tx.origin were both the EOA (0xef0100c7fdea027feb41c8f3a45ec284280ce68f4e6ff7)
+
+=== 2. The contracts, and what is verified
+MokeRelease: exact_match MokeRelease 0.8.28+commit.7893614a | MokeToken: exact_match MokeToken | others: {'LPDividend': 'exact_match', 'TokenX': 'exact_match', 'LPManager': 'exact_match', 'BNB/USDT pair': 'match', 'delegate': None, 'EOA': None}
+CHECK PASS H4 MokeRelease and MokeToken are verified on Sourcify (exact match, solc 0.8.28), and so are MokeLPDividend, TokenX and MokeLPManager; the BNB/USDT pair has a (partial) PancakePair match, the EOA none ({'LPDividend': 'exact_match', 'TokenX': 'exact_match', 'LPManager': 'exact_match', 'BNB/USDT pair': 'match', 'delegate': None, 'EOA': None})
+function settle() external override {
+        require(
+            isSettler[msg.sender] || msg.sender == owner() || msg.sender == tx.origin,
+            "Only authorized or EOA"
+        );
+        require(
+            block.timestamp >= lastSettleTime + settleMinInterval,
+            "Settle cooldown"
+        );
+        _trySettle();
+        uint256 price = getMokeUsdtPrice();
+        if (price > 0) {
+            settledMokePrice = price;
+            lastSettleTime = block.timestamp;
+            emit PriceSettled(price);
+        }
+    }
+
+    
+CHECK PASS H5 in the verified source, settle() accepts any caller that is an authorized settler, the owner, or msg.sender == tx.origin (any externally owned account), enforces only a cooldown, and stores settledMokePrice = getMokeUsdtPrice()
+CHECK PASS H6 getMokeUsdtPrice() is the product of two ratios of the instantaneous reserves of two PancakeSwap pairs (MOKE/BNB and BNB/USDT), with no time-weighted price, no oracle and no bound
+CHECK PASS H7 claim() mints MOKE as pendingUsdt * PRECISION / settledMokePrice out of the reserve pool, and its only price check compares the LIVE price with the settled one against maxPriceDeviation, so a price latched in the same block as the manipulation passes
+
+=== 3. The state one block before
+maxPriceDeviation 2000, settleMinInterval 600, claimInterval 86400, lastSettleTime 1784701351 (2026-07-22 06:22:31), settledMokePrice 0.219155995135458644, live price 0.261159872237343465, owner 0xf5aa24b07be11b53498bd4cf311e68f15ac3653e, isSettler(EOA) 0, pairs ['0xba6a49a97cc725b3c39d6c5ea6deffddb64fe6b8', '0x16b9a82891338f9ba80e2d6970fdda79d1eb0dae', '0x89715a0768e95942071ed52b37a90c6d53019b5a'], userRelease(EOA) [45000000000000000000000, 36000000000000000000, 0, 0, 0, 36000000000000000000]
+CHECK PASS H8 one block before, maxPriceDeviation is 2000 (20%), the settle cooldown is 600 seconds, the last settle was 11 days earlier (2026-07-22), the EOA is not a settler and not the owner: the only thing that let it call settle() is tx.origin (last settle 2026-07-22 06:22:31, owner 0xf5aa24b07be11b53498bd4cf311e68f15ac3653e)
+CHECK PASS H9 the three pairs MokeRelease reads and drains are the MOKE/BNB pair 0xba6a...b6, the BNB/USDT pair 0x16b9...b0dae and the X/MOKE reserve pool 0x8971...b5a; the EOA has a release quota of 45,000 USDT (['0xba6a49a97cc725b3c39d6c5ea6deffddb64fe6b8', '0x16b9a82891338f9ba80e2d6970fdda79d1eb0dae', '0x89715a0768e95942071ed52b37a90c6d53019b5a'], quota 45,000)
+BNB/USDT pair: 18,680,401.844721205037641877 USDT, 31,681.992891083765151057 WBNB (token0 0x55d398326f99059ff775485246999027b3197955); MOKE/BNB pair: 4,174,890.974847662710210956 MOKE, 1,849.174363661815743493 WBNB (token0 0x1a35c16ce21903bc17fd020c4ed73fedc70c1b2a)
+CHECK PASS H10 the BNB/USDT pair is token0 USDT, token1 WBNB with 18,680,401.84 USDT against 31,681.99 WBNB (589.6 USDT per WBNB); the price MokeRelease reads from the two pairs' reserves, recomputed here by its own formula, equals what its getMokeUsdtPrice() returned (0.261159872237343465 USDT per MOKE) (recomputed 261159872237343465)
+
+=== 4. The receipt's logs
+CHECK PASS H11 Moolah lent the EOA 403,344.033277139890380685 WBNB and 3,169.548892541186802722 BTCB; the BTCB was posted as collateral on Venus and 230,000 BNB borrowed against it (vBNB Borrow), so 633,344.033277139890380685 WBNB, all borrowed, were in the EOA's hands (403,344.033277139890380685 WBNB, 3,169.548892541186802722 BTCB)
+CHECK PASS H12 the EOA sold the whole 633,344.033277139890380685 WBNB into the BNB/USDT pair for 17,788,339.291766263678994131 USDT; the pair ended with 892,062.552954941358647746 USDT against 665,026.026168223655531742 WBNB, 1.34 USDT per WBNB instead of 589.6 (pair after: 892,062.552954941358647746 USDT, 665,026.026168223655531742 WBNB)
+CHECK PASS H13 right after the swap, settle() emitted PriceSettled(594140821297791), 0.000594 USDT per MOKE against 0.261159872237343465 a block earlier (a fall by a factor of 440); recomputed from the two pairs' reserves as they stood in the logs (the MOKE/BNB pair after the EOA's liquidity removal, the BNB/USDT pair after the swap) with MokeRelease's own formula it is exactly that number (settled 594140821297791, recomputed 594140821297791, factor 439.6)
+Claimed events: [('0xe454a9bac1a44868e4a9cbe1a4b5ac231d0dcf8a', '41,684,057.233944649146143063', '24,766.2'), ('0x8c8bd7018dba1c4c23a999a0dba74a72a117f5fa', '1,110,847.759220367615397373', '660'), ('0xd2d29da97ec789bf8ae3acdd3a993956883822f2', '1,009,861.599291243286724884', '600'), ('0xec6b16576ecac384d40df8af4522fc9614f67ea2', '55,542.387961018380769868', '33')]
+CHECK PASS H14 four claim() calls follow in the same transaction, by the EOA and by three helper accounts, paying 24,766.2, 660, 600 and 33 USDT of pending release; each mints exactly pendingUsdt * 10^18 // 594140821297791 MOKE: 41,684,057.233944649146143063 for the EOA, 1,110,847.759220367615397373, 1,009,861.599291243286724884 and 55,542.387961018380769868 for the helpers (EOA claim 41,684,057.233944649146143063)
+CHECK PASS H15 at the price of the block before the same 24,766.2 USDT would have bought about 94,832 MOKE (24,766.2 / 0.261159872237343465): the EOA's claim minted 439.6 times that, and the four claims together 43,860,308.980417278429035188 MOKE out of the X/MOKE reserve pool (honest 94,831.567299482928318176, ratio 439.6, total 43,860,308.980417278429035188)
+CHECK PASS H16 the 43,860,308.980417278429035188 MOKE the four claims released were moved to the MokeLPDividend vault and sold in one swap into the MOKE/BNB pair for 1,664.616180024096154954 WBNB, which was unwrapped and distributed as a dividend (sold 43,860,308.980417278429035188 MOKE for 1,664.616180024096154954 WBNB)
+CHECK PASS H17 65 DividendClaimed events, 65 distinct accounts, one of them the EOA, totalling 1,664.616180024096093973 BNB, 60,981 wei (rounding dust) less than the 1,664.616180024096154954 BNB distributed (65 claims, total 1,664.616180024096093973)
+CHECK PASS H18 every one of those 65 accounts, and the three claiming helpers, carried an EIP-7702 delegation designator one block before (65/65 delegated)
+CHECK PASS H19 the EOA then sent 17,791,328.590270968124537043 USDT back to the BNB/USDT pair and took out 633,197.731226426812570174 WBNB, 146.302050713077810511 WBNB less than it had put in: the cost of undoing the price crash, with the pair back at 18,683,391.14 USDT against 31,828.29 WBNB (deficit 146.302050713077810511 WBNB)
+CHECK PASS H20 at the start of the transaction the EOA removed a liquidity position of its own (1,334.183807563777105758 MOKE/BNB LP tokens) through MokeLPManager, receiving 28.129086340978628606 BNB and 63,507.190562122389710491 MOKE, which went to the dead address; this is the MOKE/BNB reserve the settled price was computed from (1,334.183807563777105758 LP, 28.129086340978628606 BNB)
+CHECK PASS H21 everything borrowed was repaid inside the transaction: 403,344.033277139890380685 WBNB and 3,169.548892541186802722 BTCB back to Moolah, 230,000 BNB repaid to Venus (RepayBorrow) and the BTCB collateral redeemed (Moolah 403,344.033277139890380685 WBNB, 3,169.548892541186802722 BTCB)
+CHECK PASS H22 the last log is the EOA unwrapping 1,546.536756665233062068 WBNB (1,546.536756665233062068)
+gain from the logs (dividends + liquidity removed - cost of undoing the crash) 1,546.443215651996973049 BNB; EOA balance 0.09427338903615 -> 1,546.537261763633062068, change 1,546.442988374596912068, gas 0.0003337624
+CHECK PASS H23 the EOA's BNB balance rose from 0.09427338903615 to 1,546.537261763633062068 BNB across the block, +1,546.442988374596 BNB after paying 0.0003337624 BNB of gas; the gain computed from the logs (the 1,664.616180024096154954 BNB of dividends plus the 28.129086340978628606 BNB of liquidity removed, minus the 146.302050713077810511 WBNB cost of undoing the crash) is 1,546.443215651996973049 BNB, within 0.0002 BNB (the difference, about 0.0001 BNB, is not explained) of the balance change plus gas; the 0.0935 BNB between that and the last log's 1,546.54 is the EOA's own opening balance, wrapped in the same transaction (gain 1,546.443215651996973049, balance change + gas 1,546.443322136996912068)
+
+=== 5. Value, and DefiLlama's record
+DefiLlama: {'name': 'MOKE', 'date': 1785628800, 'amount': 907000, 'chain': ['BSC'], 'classification': 'Oracle Manipulation', 'technique': 'Spot Price Manipulation', 'source': '', 'targetType': 'Liquidity Pool'}
+CHECK PASS H24 DefiLlama lists MOKE, BSC, $907,000, 2026-08-02, Oracle Manipulation / Spot Price Manipulation, a liquidity pool, source empty ([(907000, ['BSC'], 'Spot Price Manipulation')])
+CHECK PASS H25 the gain, 1,546.443215651997 BNB at DefiLlama's BNB price of 588.28 at the block time, is about $909,743, within 0.5% of DefiLlama's $907,000 ($909,743 at 588.28)
+
+25/25 checks passed

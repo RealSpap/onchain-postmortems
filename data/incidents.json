@@ -563,6 +563,20 @@
    "note": "A missing owner check on direct vault references in the Radix Engine kernel let a published blueprint call `take`/`lock_fee` on 59 victim vaults across 6 Hyperlane-bridged assets (hUSDC, hUSDT, hETH, hWBTC, hSOL, hBNB) with no badge or proof; independently measuring each asset's own `total_supply` before/after the sweep (not assumed from any report) and pricing the 4 non-stablecoin drops at CoinGecko's 2026-08-31 historical close gives $1,251,368.54, within 0.11% of DefiLlama's tracked $1,249,946 for the chain-level \"Radix\" row. Radix validators halted mainnet consensus the same evening; it was still halted on 2026-09-11. See `radix-hyperlane-vault-access-drain/README.md`. External sources: https://github.com/radixdlt/radixdlt-scrypto/releases/tag/v1.4.0, https://api.llama.fi/hacks."
   },
   {
+   "slug": "moke-settle-tx-origin-spot-price-claim-overmint",
+   "protocol": "MOKE (MokeRelease)",
+   "date": "2026-08-02",
+   "loss_usd": 909743,
+   "floor": false,
+   "approximate": true,
+   "sourced": false,
+   "chain": "BSC",
+   "category": "Oracle",
+   "mechanism": "settle() is callable by any externally owned account and latches a MOKE price built from two PancakeSwap pairs' instantaneous reserves: 633,344 flash-borrowed WBNB sold into the BNB/USDT pair crashed that price by a factor of 440, and four claim() calls minted 43.86M MOKE where about 0.1M were due, sold through the project's dividend vault for 1,664 BNB",
+   "url": "https://github.com/RealSpap/onchain-postmortems/tree/main/moke-settle-tx-origin-spot-price-claim-overmint/",
+   "note": "1,546.443215651996973049 BNB, the attacker's net gain in the exploit transaction (BNB Chain block 113652609, 2026-08-02 20:50:11 UTC): the 1,664.616180024096154954 BNB of dividends paid out of the sale of the minted MOKE through the project's dividend vault, plus the 28.129086340978628606 BNB of the attacker's own liquidity removed in the same transaction, minus the 146.302050713077810511 WBNB it lost undoing the price crash, priced at DefiLlama's BNB price of 588.28 at the block time: about $909,743, re-derived live by `moke-settle-tx-origin-spot-price-claim-overmint/reconstruct_exploit.py` from the receipt and from the verified contracts. The account's balance rose by 1,546.442988374596912068 BNB across the block, within 0.0002 BNB of that gain once gas is added. DefiLlama lists $907,000 (\"MOKE\", \"Oracle Manipulation\" / \"Spot Price Manipulation\", 2026-08-02), 0.3% lower; the DeFiHackLabs proof of concept says about 1,546.54 BNB, which is the receipt's last log and includes 0.0935 BNB of the account's own opening balance. The gain includes the 28.129 BNB of the attacker's own liquidity; without it it is 1,518.314 BNB. See `moke-settle-tx-origin-spot-price-claim-overmint/README.md`. External sources: https://github.com/SunWeb3Sec/DeFiHackLabs (src/test/2026-10/MOKE_exp.sol), https://api.llama.fi/hacks, https://coins.llama.fi."
+  },
+  {
    "slug": "virtue-iota-switchboard-oracle",
    "protocol": "Virtue Protocol (VUSD CDP)",
    "date": "2026-08-28",
