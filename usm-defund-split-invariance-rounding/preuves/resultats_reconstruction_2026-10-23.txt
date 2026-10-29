@@ -1,0 +1,34 @@
+=== 1. The exploit transaction
+tx 0xfae5e751b8ce01457cbb6b529839f24a0cff50faaabcbd0fd02ca0cf559b050e
+block 25716150, 2026-08-09 08:12:47 UTC, index 1193, from 0xb92b2e47680c89da8f951b8963ef469f461a50fc, to 0x5a5e29ba89663a3558273354e990426f3cac7de7, status 0x1, 201 logs
+CHECK PASS H1 the transaction succeeded in block 25716150, index 1193, sent by the attacker's EOA (its nonce 43) to its attack contract, call 0x8a10de9a, no ETH (block 25716150)
+CHECK PASS H2 it was mined on 2026-08-09 between 08:00 and 09:00 UTC (2026-08-09 08:12:47 UTC)
+
+=== 2. The contracts
+Sourcify: {'USM': ('exact_match', 'USM', '0.8.9+commit.e5eed63a'), 'FUM': ('exact_match', 'FUM', '0.8.9+commit.e5eed63a'), 'Morpho': ('exact_match', 'Morpho', '0.8.19+commit.7dd6d404'), 'attack contract': (None, None, None)}
+CHECK PASS H3 USM and FUM are verified on Sourcify (exact match, solc 0.8.9), so is Morpho; the attack contract is not
+CHECK PASS H4 in the verified source, USM.defund(to, fumToBurn, minEthOut) is a public function with no role check of its own (only the pre-fund guard), and so is fund(to, minFumOut)
+
+=== 3. The receipt's logs: loan, one fund, 64 defund slices, repayment
+CHECK PASS H5 the attack contract borrowed 11,579.978354608392803524 WETH from Morpho, unwrapped it, wrapped the same amount again at the end and returned it to Morpho in the same transaction (11,579.978354608392803524)
+CHECK PASS H6 USM minted 62,184,299.031602985197125048 FUM to the attack contract in exchange for the loan, in one fund, and the attack contract then burned all of it in 64 defund slices (8 of 971,629.672368796643705078 FUM and 56 of 971,629.672368796643705079) (64 burns, sum 62184299031602985197125048)
+CHECK PASS H7 USM emitted 130 events in the transaction, two for each of the 65 calls (one fund and 64 defunds) (130)
+
+=== 4. The pool one block before, and the trace
+one block before: ETH pool 132.588942983107019337, FUM supply 329,463.502710697641576863
+CHECK PASS H8 one block before the transaction the pool held 132.588942983107019337 ETH against 329,463.502710697641576863 FUM (132588942983107019337, 329463502710697641576863)
+ETH sent by USM to the attack contract: 64 calls, 11,650.809331976090511896; by the attack contract to USM: ['11,579.978354608392803524']; to others: [('0xe3c6346b', '70.830977367697708372')]
+CHECK PASS H9 (trace) USM paid the attack contract 11,650.809331976090511896 ETH in 64 calls for the one fund of 11,579.978354608392803524 ETH, and the attack contract sent the 70.830977367697708372 ETH left to one address, 0xe3c6... (64 calls)
+
+=== 5. Fork replay: one redemption against 64 slices, same block, same contracts
+fork at block 25716149: pool 132.588942983107019337 ETH, FUM supply 329,463.502710697641576863; fund of the loan gives 62,184,299.031602985197125048 FUM; ONE defund of all of it pays 5,825.405636077073924807 ETH; 64 slices pay 11,650.809331976090511896 ETH
+CHECK PASS H10 on a fork of the block before, funding the pool with the loan gives exactly the FUM minted in the real transaction, and redeeming all of it in ONE defund pays 5,825.405636077073924807 ETH, 50.3% of what was paid in (one call: 5,825.405636077073924807 ETH)
+CHECK PASS H11 on the same fork and the same block, redeeming it in the attacker's 64 slices pays 11,650.809331976090511896 ETH, to the wei what the real transaction was paid, 70.830977367697708372 ETH more than the loan (64 slices: 11,650.809331976090511896 ETH)
+
+=== 6. Value, and DefiLlama's record
+70.830977367697708372 ETH x 1921.31 (DefiLlama coins at the block time) = $136,088.18
+DefiLlama: {'name': 'USM', 'date': 1786233600, 'amount': 136000, 'chain': ['Ethereum'], 'classification': 'Token & Share Accounting', 'technique': 'Arithmetic Error', 'source': ''}
+CHECK PASS H12 DefiLlama lists USM, Ethereum, $136,000, 2026-08-09, Token & Share Accounting / Arithmetic Error, source empty ([(136000, 'Arithmetic Error')])
+CHECK PASS H13 the profit is worth within 1% of DefiLlama's $136,000 at the block-time ETH price ($136,088.18, +0.06%)
+
+13/13 checks passed

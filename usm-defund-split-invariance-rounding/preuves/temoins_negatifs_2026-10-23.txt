@@ -1,0 +1,16 @@
+Negative witnesses, 2026-10-23. Each run changes one input of reconstruct_exploit.py; the checks that read it must fail.
+
+### 1. --expect-eth 70830977367697708373 (one wei too many)
+CHECK FAIL H9 (trace) USM paid the attack contract 11,650.809331976090511896 ETH in 64 calls for the one fund of 11,579.978354608392803524 ETH, and the attack contract sent the 70.830977367697708372 ETH left to
+CHECK FAIL H11 on the same fork and the same block, redeeming it in the attacker's 64 slices pays 11,650.809331976090511896 ETH, to the wei what the real transaction was paid, 70.830977367697708372 ETH more tha
+11/13 checks passed
+
+### 2. --tx 0x254d...2780, an unrelated Ethereum transaction (the Arrakis attacker's first creation)
+CHECK FAIL H1 the transaction succeeded in block 25716150, index 1193, sent by the attacker's EOA (its nonce 43) to its attack contract, call 0x8a10de9a, no ETH (block 25817963)
+CHECK FAIL H2 it was mined on 2026-08-09 between 08:00 and 09:00 UTC (2026-08-23 12:49:35 UTC)
+CHECK FAIL H5 to H7 the receipt holds the loan, the fund and the 64 defund slices (the receipt of this transaction does not have them)
+CHECK FAIL H8 one block before the transaction the pool held 132.588942983107019337 ETH against 329,463.502710697641576863 FUM (11921976435420533, 329463502710697641576863)
+CHECK FAIL H9 (trace) USM paid the attack contract 11,650.809331976090511896 ETH in 64 calls for the one fund of 11,579.978354608392803524 ETH, and the attack contract sent the 70.830977367697708372 ETH left to
+CHECK FAIL H10 on a fork of the block before, funding the pool with the loan gives exactly the FUM minted in the real transaction, and redeeming all of it in ONE defund pays 5,825.405636077073924807 ETH, 50.3% 
+CHECK FAIL H13 the profit is worth within 1% of DefiLlama's $136,000 at the block-time ETH price ($171,780.04, +26.31%)
+4/11 checks passed
