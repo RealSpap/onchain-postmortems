@@ -745,6 +745,20 @@
    "note": "19,999.018106552928530404 USDT counted at face value, the FH/USDT pair's USDT reserve the block before the exploit transaction (BNB Chain block 117979401) minus the block of it (117979402, 2026-08-25 09:54:52 UTC), which is also what the attacker's contract received from the pair in 25 sales minus what it paid into it in 25 purchases and what went to the attacker's EOA after the 25,999.35 USDT flash loan was repaid, re-derived live by `fhtoken-sell-sync-before-credit-pair-drain/reconstruct_exploit.py` from the receipt and from the token's verified source. DefiLlama lists $20,000 (\"FH Token\", \"Protocol Logic\" / \"Swap Logic Flaw\", 2026-08-25), 0.01% higher; the DeFiHackLabs proof of concept says 19,999.018106552928530404 USDT. The USDT went to the attacker's EOA, which sent it on to one address five days later; the trail stops there. See `fhtoken-sell-sync-before-credit-pair-drain/README.md`. External sources: https://github.com/SunWeb3Sec/DeFiHackLabs (src/test/2026-08/FHToken_exp.sol), https://api.llama.fi/hacks."
   },
   {
+   "slug": "arrakis-v1-guni-slot0-mint-burn",
+   "protocol": "Arrakis V1 (G-UNI ENS/WETH)",
+   "date": "2026-08-23",
+   "loss_usd": 7133,
+   "floor": false,
+   "approximate": true,
+   "sourced": false,
+   "chain": "Ethereum",
+   "category": "Oracle",
+   "mechanism": "The vault prices mint() from the Uniswap V3 pool's instantaneous slot0 price and only its manager's rebalance() checks the time-weighted price: a flash-loaned swap, a mint at the moved price, a partial swap back, a burn for a richer token mix and a final swap netted 2.94 WETH",
+   "url": "https://github.com/RealSpap/onchain-postmortems/tree/main/arrakis-v1-guni-slot0-mint-burn/",
+   "note": "2.94135035290003714 WETH, the attack contract's net WETH in the exploit transaction (Ethereum block 25817966, 2026-08-23 12:50:11 UTC) after repaying its 1,800 WETH flash loan, which is also what it unwrapped in the last log, priced at DefiLlama's ETH price of 2,425.21 at the block time: about $7,133, re-derived live by `arrakis-v1-guni-slot0-mint-burn/reconstruct_exploit.py` from the receipt and from the vault's verified source. DefiLlama lists $7,100 (\"Arrakis V1\", \"Oracle Manipulation\" / \"Spot Price Manipulation\", 2026-08-23), 0.47% lower; the DeFiHackLabs proof of concept says about 2.9414 WETH. This is the attacker's gain: the vault's own loss between the blocks before and after (3.99 WETH of underlying value at the pre-attack price) is larger and includes the rest of the block, so it is not what the figure counts. See `arrakis-v1-guni-slot0-mint-burn/README.md`. External sources: https://github.com/SunWeb3Sec/DeFiHackLabs (src/test/2026-08/ArrakisGUNI_exp.sol), https://api.llama.fi/hacks."
+  },
+  {
    "slug": "oraichain-ics20-precompile-selfmint",
    "protocol": "Oraichain (ICS-20 EVM Precompile)",
    "date": "2026-08-08/08-09",

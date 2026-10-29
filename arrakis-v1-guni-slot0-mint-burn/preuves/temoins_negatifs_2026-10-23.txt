@@ -1,0 +1,13 @@
+Negative witnesses, 2026-10-23. Each run changes one input of reconstruct_exploit.py; the checks that read it must fail.
+
+### 1. --expect-weth 2941350352900037141 (one wei too many)
+CHECK FAIL H12 the attack contract's net WETH is the profit, 2.94135035290003714 WETH, which it unwraps in the last Withdrawal log (2941350352900037140)
+16/17 checks passed
+
+### 2. --tx 0xc78c...a141, the attacker's creation of the attack contract (another transaction of the same EOA)
+CHECK FAIL H1 the transaction succeeded in block 25817966, sent by the attacker's EOA (its 3rd transaction, nonce 2) to its attack contract, call 0xb03ee932, no ETH (block 25817966, index 0)
+CHECK FAIL H8 to H13 the receipt holds the loan, the swaps, the mint, the burn and the profit (the receipt of this transaction does not have them)
+CHECK FAIL H14 (trace) the attack contract then sent 0.05 ETH to the block's fee recipient (0xdadb...3711) and the rest of the profit, 2.89135035290003714 ETH, to the attacker's EOA (0 transfers)
+CHECK FAIL H15 the EOA has sent five transactions in all: it created two contracts (3 blocks apart, the second being the attack contract), ran the attack in the same block as the second, sent 2.98 ETH to one ad
+CHECK FAIL H17 the WETH profit is worth within 1% of DefiLlama's $7,100 at the block-time ETH price ($0.00, -100.00%)
+7/12 checks passed

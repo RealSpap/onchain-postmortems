@@ -1,0 +1,43 @@
+=== 1. The exploit transaction
+tx 0x6ae3af4b2f25a56594de99cfb31369150dd9ac059c49efe04b9e3e0163dbc672
+block 25817966, 2026-08-23 12:50:11 UTC, index 1, from 0xa3b096e4df1247794599a37af8f5b8cb05d5eb44, to 0x028d9c17b1a097e7e115a6400203df86339baf4a, status 0x1, 33 logs
+CHECK PASS H1 the transaction succeeded in block 25817966, sent by the attacker's EOA (its 3rd transaction, nonce 2) to its attack contract, call 0xb03ee932, no ETH (block 25817966, index 1)
+CHECK PASS H2 it was mined on 2026-08-23 between 12:00 and 13:00 UTC (2026-08-23 12:50:11 UTC)
+
+=== 2. The vault, its verified source, and what guards what
+Sourcify: {'vault': ('exact_match', 'EIP173Proxy'), 'implementation': ('exact_match', 'ArrakisVaultV1'), 'pool': ('match', 'UniswapV3Pool'), 'ENS': ('exact_match', 'ENSToken'), 'Morpho': ('exact_match', 'Morpho'), 'attack contract': (None, None)}
+CHECK PASS H3 the vault proxy (EIP173Proxy), its implementation (ArrakisVaultV1, solc 0.8.4), the pool (UniswapV3Pool), the ENS token and Morpho are verified on Sourcify; the attack contract is not
+CHECK PASS H4 in the verified source, mint() prices the deposit from pool.slot0() through getUnderlyingBalances(), which itself reads slot0, and mint() has no TWAP check; burn() has none either
+CHECK PASS H5 the only code that reads the pool's time-weighted price is _checkSlippage (pool.observe), and it is called from rebalance(), nowhere else (2 occurrences: one definition, one call)
+CHECK PASS H6 one block before, minting was open to any caller (restrictedMintToggle() was 100, and mint() only restricts it at 11111) (toggle 100)
+
+=== 3. The pool's price before and after
+pool tick one block before 60333, after the transaction 59789
+CHECK PASS H7 the pool is the WETH/ENS pool (token0 WETH, token1 ENS) the vault holds; its tick was 60333 one block before and 59789 after the transaction (60333, 59789)
+
+=== 4. The receipt's logs: loan, three swaps, one mint, one burn, repayment
+CHECK PASS H8 the attack contract borrowed 1,800 WETH from Morpho and returned exactly that amount in the same transaction (1,800)
+CHECK PASS H9 the pool emitted three Swap events: 145.4169635040833 WETH in for 13,292.512773372131 ENS out; 132.92512773372133 ENS in for 7.433166160431043 WETH out; 13,283.29850731389 ENS in for 145.91255291421106 WETH out (3 swaps)
+CHECK PASS H10 the attack contract then minted vault shares: it paid 1,253.3946838382715 WETH and 13,159.58764563841 ENS into the vault for 4,486.619135659965 shares, at the price the first swap had moved
+CHECK PASS H11 after the second swap it burned the same 4,486.619135659965 shares and received 1,248.407278620613 WETH and 13,283.29850731389 ENS from the vault
+WETH received by the attack contract 3,201.752997695255027699, paid 3,198.811647342354990559, net 2.94135035290003714; unwrapped at the end 2.94135035290003714
+CHECK PASS H12 the attack contract's net WETH is the profit, 2.94135035290003714 WETH, which it unwraps in the last Withdrawal log (2941350352900037140)
+CHECK PASS H13 the vault received 1,253.3946838382715 WETH and 13,159.58764563841 ENS and paid out 1,248.407278620613 WETH and 13,283.29850731389 ENS: it ended 4.987405217658776899 WETH richer and 123.710861675477149658 ENS poorer
+calls from the attack contract carrying ETH: [('0xdadb0d80', '0.05'), ('0xa3b096e4', '2.89135035290003714')]
+CHECK PASS H14 (trace) the attack contract then sent 0.05 ETH to the block's fee recipient (0xdadb...3711) and the rest of the profit, 2.89135035290003714 ETH, to the attacker's EOA (2 transfers)
+
+=== 5. The attacker's other transactions
+transaction nonce 0: block 25817963, 2026-08-23 12:49:35 UTC, to None, value 0 ETH, created 0x5e3eaf56dbb1ef59105f312d57f22c04a4eeb24c
+transaction nonce 1: block 25817966, 2026-08-23 12:50:11 UTC, to None, value 0 ETH, created 0x028d9c17b1a097e7e115a6400203df86339baf4a
+transaction nonce 2: block 25817966, 2026-08-23 12:50:11 UTC, to 0x028d9c17b1a097e7e115a6400203df86339baf4a, value 0 ETH, created None
+transaction nonce 3: block 25817982, 2026-08-23 12:53:23 UTC, to 0x01e38ad959da0ddc5e028d4b709bc0116087f37b, value 2.98 ETH, created None
+transaction nonce 4: block 26102818, 2026-10-02 06:22:23 UTC, to 0xb8abc9727aae7a971a73363df9b0603b38d802b2, value 0.005 ETH, created None
+CHECK PASS H15 the EOA has sent five transactions in all: it created two contracts (3 blocks apart, the second being the attack contract), ran the attack in the same block as the second, sent 2.98 ETH to one address 16 blocks later and 0.005 ETH to another on 2026-10-02 (5/5, nonce now 5)
+
+=== 6. Value, and DefiLlama's record
+2.94135035290003714 ETH x 2425.21 (DefiLlama coins at the block time) = $7,133.39
+DefiLlama: {'name': 'Arrakis V1', 'date': 1787443200, 'amount': 7100, 'chain': ['Ethereum'], 'classification': 'Oracle Manipulation', 'technique': 'Spot Price Manipulation', 'source': ''}
+CHECK PASS H16 DefiLlama lists Arrakis V1, Ethereum, $7,100, 2026-08-23, Oracle Manipulation / Spot Price Manipulation, source empty ([(7100, 'Spot Price Manipulation')])
+CHECK PASS H17 the WETH profit is worth within 1% of DefiLlama's $7,100 at the block-time ETH price ($7,133.39, +0.47%)
+
+17/17 checks passed

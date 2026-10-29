@@ -11,6 +11,7 @@ GitHub releases.
 - research/erc-8107-coordinator-tests: a new folder that is not an incident entry (no row in the Index, no change to any count). Executable tests of a coordinator for ERC-8107 on a fork of Ethereum mainnet, with the raw output of the run: two ENS names that resolve to the same address, and one complete coordinator whose every step is switched off in turn. The folder is CC0-1.0 with its own LICENSE; the rest of the repository stays MIT.
 - Added CashCowCoin (BSC, 2026-08-27).
 - Added FH Token (BSC, 2026-08-25).
+- Added Arrakis V1 G-UNI ENS/WETH vault (Ethereum, 2026-08-23).
 
 ## 2026-10-23
 
