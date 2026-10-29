@@ -1,0 +1,49 @@
+=== 1. The exploit transaction
+tx 0xa219ab9d57e520e5235b15a8801f4ebac8cc45551be0430ce4e49caea0411d7c
+block 112655390, 2026-07-28 16:08:29 UTC, index 49, from 0x2677806d48325ced7533c54b86ed5e99b129a4ed, to 0x5e506ba06fa6c61d1069b0e68d7013de35afa816, value 10000000000 wei, status 0x1, 243 logs, gas used 3810877
+CHECK PASS H1 the transaction succeeded in block 112655390, sent by the EOA 0x2677...a4ED (its 551st transaction, nonce 550) to the contract 0x5E50...A816, call 0x763a0e5b with 10^10 wei, 243 logs (block 112655390, nonce 550, 243 logs)
+CHECK PASS H2 it was mined on 2026-07-28 between 16:00 and 17:00 UTC (2026-07-28 16:08:29 UTC)
+EOA code now: 0xef010063c0c19a282a1b52b07dd5a65b58948a07dae32b
+CHECK PASS H3 one block before and at the exploit block the EOA had no code (it was a plain account then), its nonce one block before was 550, and the contract it called held 20,864 bytes of code (EOA code ['0x', '0x'], nonce 550, contract 20864 bytes)
+
+=== 2. The token, and what is verified
+LULA: exact_match LULA 0.8.28+commit.7893614a | others: {'Rental': None, 'owner': None, 'attack contract': None, 'pair': None}
+CHECK PASS H4 the LULA token is verified on Sourcify (exact match, LULA, solc 0.8.28); the Rental contract, the token's owner, the attack contract and the pair are not ({'Rental': None, 'owner': None, 'attack contract': None, 'pair': None})
+function recycle(uint256 amount) external {
+        require(msg.sender == rentalContract, "Only Rental");
+        uint256 pairBalance = balanceOf[uniswapV2Pair];
+        uint256 maxTake = pairBalance / 3;
+        uint256 actual = amount >= maxTake ? maxTake : amount;
+        if (actual == 0) return;
+        _basicTransfer(uniswapV2Pair, rentalContract, actual);
+        IUniswapV2Pair(uniswapV2Pair).sync();
+    }
+
+    
+CHECK PASS H5 in the verified source, recycle(amount) can only be called by the Rental contract; it moves min(amount, one third of the pair's LULA balance) from the pair to Rental with a plain balance transfer and then calls sync() on the pair, with no payment of USDT or anything else to the pair
+CHECK PASS H6 _transfer runs a plain transfer, before any other check, when the sender or the recipient is excluded from fees, and only afterwards requires buyEnabled for a transfer out of the pair: a buy whose recipient is a fee-excluded address skips the buyEnabled gate
+
+=== 3. The state one block before, and at the block
+{'buyEnabled': 0, 'rentalContract': '0x377a015f44c3fdf71060e94648edc9e0316c7f1a', 'owner': '0x43721abc1d19378c6160abfda6f1dd488ebbb5c9', 'pair': '0xf0b36389a12a28be1280c0ec2a4bbc76889d6a96'} {'owner': 1, 'rental': 1, 'attack contract': 0, 'EOA': 0, 'pair': 0}
+CHECK PASS H7 one block before, buyEnabled is false; the Rental contract and the token's owner 0x4372...B5c9 are excluded from fees and the attack contract, the EOA and the pair are not ({'buyEnabled': 0, 'rentalContract': '0x377a015f44c3fdf71060e94648edc9e0316c7f1a', 'owner': '0x43721abc1d19378c6160abfda6f1dd488ebbb5c9', 'pair': '0xf0b36389a12a28be1280c0ec2a4bbc76889d6a96'}, {'owner': 1, 'rental': 1, 'attack contract': 0, 'EOA': 0, 'pair': 0})
+pair one block before: 591,841.327760739761309679 USDT, 8,001,957.949148046884894543 LULA (token0 0x55d398326f99059ff775485246999027b3197955); at the block: 181.576724119654205222 USDT, 4,749.054352115435255586 LULA
+CHECK PASS H8 the pair is the USDT/LULA pair (token0 USDT); one block before it held 591,841.327760739761309679 USDT and 8,001,957.949148046884894543 LULA, at the block 181.576724119654205222 USDT and 4,749.054352115435255586 LULA ([591841327760739761309679, 8001957949148046884894543], [181576724119654205222, 4749054352115435255586])
+
+=== 4. The receipt's logs
+CHECK PASS H9 before touching the pair the attack contract received 197,050,420.777952874631318192 USDT in 15 transfers from 15 different sources (Moolah and 14 others), borrowed (15 loans, total 197,050,420.777952874631318192)
+CHECK PASS H10 it first sold 4,750.0 LULA into the pair (the 5,000 LULA the EOA sent it, less taxes) for 350.229755921978746603 USDT, so the USDT it then paid into the pair, 197,050,771.007708796610064795, is exactly its loans plus that (paid in 197,050,771.007708796610064795)
+CHECK PASS H11 it then swapped all of it for LULA with the output sent to the token's fee-excluded owner, not to itself: 7,982,785.687430003159481810 LULA from the pair to 0x4372...B5c9, which skips the buyEnabled gate; the pair then held 197,642,262.105713614392627871 USDT against 24,022.137 LULA (owner received 7,982,785.68743000315948181 LULA, pair after: 197,642,262.105713614392627871 USDT, 24,022.137029686202897313 LULA)
+CHECK PASS H12 41 transfers of LULA from the pair to Rental follow, each at most one third of the pair's LULA balance and each followed by a Sync that records the smaller LULA reserve and the SAME USDT reserve, 197,642,262.105713614392627871: the pair's LULA fell from 24,022.137 to 0.004 without a unit of USDT leaving it (41 transfers, 34 at exactly one third, last reserve 0.004352115435255586 LULA)
+CHECK PASS H13 between those transfers Rental paid nine rewards of LULA, 23,607.995266800130898984 LULA in all, to five helper accounts, each of which forwarded the same amount to the attack contract in the next log; the five helpers carried an EIP-7702 delegation designator (23 bytes of code) one block before (9 payouts to 5 helpers, total 23,607.995266800130898984 LULA)
+CHECK PASS H14a during the payouts the attack contract itself sent Rental LULA twice, 392.634225895698522739 and 285.754430007355834460 (['392.634225895698522739', '285.75443000735583446'])
+CHECK PASS H14b the attack contract received 28,607.995266800130898984 LULA in all (5,000 from the EOA and the helpers' 23,607.995266800130898984), sold 4,999 of it and was left holding, at the end of the block, exactly the balance the logs give, 17,930.6066... LULA, which it did not sell (in 28,607.995266800130898984, out 10,677.388655903054357199, balance 17,930.606610897076541785)
+CHECK PASS H14 the attack contract then sold 4,749.05 LULA into the pair and took out 197,642,080.528989494738422649 USDT, all but 181.576724119654205222 of the pair's USDT; the pair ended with 4,749.054352115435255586 LULA (took out 197,642,080.528989494738422649 USDT)
+CHECK PASS H15 every one of the 15 sources was repaid in the same transaction at least what it lent; the total repaid exceeds the total borrowed by 13,363.843448559106577679 USDT of fees (fees 13,363.843448559106577679)
+CHECK PASS H16 the last USDT log is the attack contract sending 578,295.907588061000526778 USDT to the EOA; it equals what the pair paid it (197,642,430.758745416717169252) minus what it paid the pair (197,050,771.007708796610064795) minus the fees (578,295.907588061000526778 USDT; pair out - in - fees = 578,295.907588061000526778)
+
+=== 5. Value, and DefiLlama's record
+DefiLlama: {'name': 'LULA', 'date': 1785196800, 'amount': 578000, 'chain': ['BSC'], 'classification': 'Access Control', 'technique': 'Improper Access Control', 'source': '', 'targetType': 'Token'}
+CHECK PASS H17 DefiLlama lists LULA, BSC, $578,000, 2026-07-28, Access Control / Improper Access Control, a token, source empty ([(578000, ['BSC'], 'Improper Access Control')])
+CHECK PASS H18 the USDT proceeds, counted at face value, are within 0.1% of DefiLlama's $578,000 ($578,295.91)
+
+20/20 checks passed

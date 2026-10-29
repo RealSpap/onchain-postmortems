@@ -899,6 +899,20 @@
    "note": "1,877,869.183182 USDC + 51,759.121322 USDT + 1,736.920247 DAI = $1,931,365.22 across 17 extraction transactions from 10 SMART Yield pools, decoded directly from the Governance contract's own proposal-execution receipts, 2.49x BlockSec's and DefiLlama's reported $776,000 (one of the seventeen transactions, correctly identified but not the total). A separate $3,001,678.69 in unattributed flows through a third, unrelated Controller from 2026-08-22 is excluded from this figure. See `barnbridge-dormant-dao-controller-swap/README.md`."
   },
   {
+   "slug": "lula-recycle-pair-lula-drain-rental-claims",
+   "protocol": "LULA",
+   "date": "2026-07-28",
+   "loss_usd": 578296,
+   "floor": false,
+   "approximate": true,
+   "sourced": false,
+   "chain": "BSC",
+   "category": "Rounding/Math-Bug",
+   "mechanism": "The token's recycle() lets its Rental contract move up to a third of the pair's LULA to itself and sync the pair, so the LULA reserve shrinks while no USDT leaves: 197 million flash-borrowed USDT were pushed into the pair through a buy routed to the fee-excluded owner, 41 recycle transfers during nine reward payouts cut the LULA reserve from 24,022 to 0.004, and 4,999 LULA sold back took 197.64 million USDT",
+   "url": "https://github.com/RealSpap/onchain-postmortems/tree/main/lula-recycle-pair-lula-drain-rental-claims/",
+   "note": "578,295.907588061000526778 USDT at face value, what the attack contract sent the attacker's EOA in the exploit transaction (BNB Chain block 112655390, 2026-07-28 16:08:29 UTC) after repaying its 15 USDT flash loans with 13,363.843448559106577679 USDT of fees; it equals what the LULA/USDT pair paid the attack contract (197,642,430.758745416717169252) minus what it paid the pair (197,050,771.007708796610064795) minus those fees, re-derived live by `lula-recycle-pair-lula-drain-rental-claims/reconstruct_exploit.py` from the receipt and from the token's verified source. The pair's USDT reserve fell from 591,841.33 to 181.58. DefiLlama lists $578,000 (\"LULA\", \"Access Control\" / \"Improper Access Control\", 2026-07-28), 0.05% lower; the DeFiHackLabs proof of concept says 578,295.907588061000526778 USDT net. About 17,930.61 LULA stayed in the attack contract and are not priced. See `lula-recycle-pair-lula-drain-rental-claims/README.md`. External sources: https://github.com/SunWeb3Sec/DeFiHackLabs (src/test/2026-07/LULA_exp.sol), https://api.llama.fi/hacks."
+  },
+  {
    "slug": "allbridge-cctp-forged-message",
    "protocol": "Allbridge (CCTP Forged Message)",
    "date": "2026-07-25 / 08-19",

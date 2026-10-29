@@ -1,0 +1,13 @@
+Negative witnesses, 2026-10-23. Each run changes one input of reconstruct_exploit.py; the checks that read it must fail.
+
+### 1. --expect-usdt 578295907588061000526779 (one wei too many)
+CHECK FAIL H16 the last USDT log is the attack contract sending 578,295.907588061000526778 USDT to the EOA; it equals what the pair paid it (197,642,430.758745416717169252) minus what it paid the pair (197,050,771.0077087966100647
+19/20 checks passed
+
+### 2. --tx 0x0776...6a8f, the MOKE exploit transaction (another BNB Chain transaction)
+CHECK FAIL H1 the transaction succeeded in block 112655390, sent by the EOA 0x2677...a4ED (its 551st transaction, nonce 550) to the contract 0x5E50...A816, call 0x763a0e5b with 10^10 wei, 243 logs (block 113652609, nonce 163, 256 
+CHECK FAIL H2 it was mined on 2026-07-28 between 16:00 and 17:00 UTC (2026-08-02 20:50:11 UTC)
+CHECK FAIL H3 one block before and at the exploit block the EOA had no code (it was a plain account then), its nonce one block before was 550, and the contract it called held 20,864 bytes of code (EOA code ['0xef010063c0c19a282a1b
+CHECK FAIL H8 the pair is the USDT/LULA pair (token0 USDT); one block before it held 591,841.327760739761309679 USDT and 8,001,957.949148046884894543 LULA, at the block 181.576724119654205222 USDT and 4,749.054352115435255586 LULA
+CHECK FAIL H9 to H16 the receipt holds the loans, the buy, the recycle transfers, the payouts, the sale and the proceeds (the receipt of this transaction does not have them)
+6/11 checks passed
