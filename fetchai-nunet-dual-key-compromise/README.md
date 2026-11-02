@@ -223,4 +223,4 @@ verified losses.
 
 ## License
 
-MIT, Spap, 2026.
+MIT, RealSpap, 2026.

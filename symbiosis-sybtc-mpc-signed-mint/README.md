@@ -193,4 +193,4 @@ difference is scope, not substance.
 
 ## License
 
-MIT, Spap, 2026.
+MIT, RealSpap, 2026.

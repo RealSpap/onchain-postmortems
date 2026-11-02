@@ -49,7 +49,7 @@ and raw proof files.
 | Corrections made | 38 rows for 36 entries correct, reconcile, or newly surface a press or DefiLlama figure, label, date, or classification (26 corrections, 9 reconciliations, 3 discoveries not previously priced by DefiLlama at all); 3 of the 26 correction rows correct this repository's own earlier text, not the press or DefiLlama. See [Corrections to press and DefiLlama](CORRECTIONS.md). |
 | Machine-readable data | [`data/incidents.json`](data/incidents.json) and [`data/incidents.csv`](data/incidents.csv), one row per incident, regenerated from INDEX.md; cite via [`CITATION.cff`](CITATION.cff) |
 | Method | Each subfolder keeps its Python reconstruction script, its `registre_hypotheses.csv` falsification registry, and its script's raw output in `resultats_*.txt`, so each recomputed figure can be checked against the file that produced it |
-| License | MIT across all 72 entries, single author (Spap, 2026) |
+| License | MIT across all 72 entries, single author (RealSpap, 2026) |
 
 ## The 5 biggest losses
 
@@ -122,7 +122,7 @@ onchain-postmortems/
   research/                          studies that are not incident entries (no row in the Index)
   .github/workflows/                 release announcements and the README consistency check
   digests/                           one monthly roundup file per month (2026-08.md, ...)
-  LICENSE                            MIT, Spap 2026
+  LICENSE                            MIT, RealSpap 2026
   <incident-slug>/
     README.md                        full writeup, "at a glance", method, caveats
     reconstruct_exploit.py           script that queries the chain live
