@@ -8,7 +8,7 @@ GitHub releases.
 ## 2026-11-02
 
 - Added the October 2026 digest.
-- The ERC-8107 coordinator tests now live only in the authority-risk-oracle showcase; research/erc-8107-coordinator-tests keeps a pointer, and the repository is MIT throughout.
+- The ERC-8107 coordinator tests now live only in the authority-risk-oracle showcase (research/erc-8107-coordinator-tests there); this repository no longer carries the folder and is MIT throughout.
 - SECURITY.md now caps the withholding of unfixed-issue detail at 90 days from the date of the entry.
 - Republished the August and September 2026 digests with the incidents added since their first edition (August: 26 incidents, September: 26), and corrected the two digest lines of the README to match the Index.
 - 14 line locators in 7 hypothesis registries pointed one to four lines past the end of the file they cite; each range now stops at the last line (afx-bridge-validator-key-compromise, balancer-v1-rounding, coldcard-rng-seed-theft, etherfi-atomicqueue-eip7702-solver-drain, fetchai-nunet-dual-key-compromise, moonwell-mamo-oracle, symbiosis-sybtc-mpc-signed-mint).

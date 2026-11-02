@@ -119,7 +119,6 @@ onchain-postmortems/
   CITATION.cff                       how to cite this repository
   export_dataset.py                  regenerates data/incidents.json and data/incidents.csv from INDEX.md
   data/                              the dataset, machine-readable
-  research/                          a pointer to the ERC-8107 coordinator tests, now kept in the authority-risk-oracle showcase
   .github/workflows/                 release announcements and the README consistency check
   digests/                           one monthly roundup file per month (2026-08.md, ...)
   LICENSE                            MIT, RealSpap 2026
