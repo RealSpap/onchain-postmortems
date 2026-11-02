@@ -25,9 +25,9 @@ in [Corrections to press and DefiLlama](CORRECTIONS.md).
 
 Same author: [@RealSpap on X](https://x.com/RealSpap),
 [multisig-overlap-showcase](https://github.com/RealSpap/multisig-overlap-showcase)
-(who actually controls DeFi admin keys),
+(signers shared between protocols),
 [defi-admin-key-risk-showcase](https://github.com/RealSpap/defi-admin-key-risk-showcase)
-(single-key admin control, checked by hand) and
+(single-key admin cases, checked by hand) and
 [authority-risk-oracle-showcase](https://github.com/RealSpap/authority-risk-oracle-showcase)
 (who can change a contract and how fast; testnet).
 
