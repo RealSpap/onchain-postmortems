@@ -119,7 +119,7 @@ onchain-postmortems/
   CITATION.cff                       how to cite this repository
   export_dataset.py                  regenerates data/incidents.json and data/incidents.csv from INDEX.md
   data/                              the dataset, machine-readable
-  research/                          studies that are not incident entries (no row in the Index)
+  research/                          a pointer to the ERC-8107 coordinator tests, now kept in the authority-risk-oracle showcase
   .github/workflows/                 release announcements and the README consistency check
   digests/                           one monthly roundup file per month (2026-08.md, ...)
   LICENSE                            MIT, RealSpap 2026
@@ -251,7 +251,7 @@ and figures before relying on them.
 
 ## License
 
-MIT. See `LICENSE`, except `research/erc-8107-coordinator-tests/`, which is CC0-1.0 with its own `LICENSE`. Deliberately open, including every reconstruction
+MIT. See `LICENSE`. Deliberately open, including every reconstruction
 script: each is wired to one already-public historical incident, so
 anyone can rerun the same query against the same public chain data and
 get the same number, which is what makes the corrections to press and

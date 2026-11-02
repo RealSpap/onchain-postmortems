@@ -8,6 +8,8 @@ GitHub releases.
 ## 2026-11-02
 
 - Added the October 2026 digest.
+- The ERC-8107 coordinator tests now live only in the authority-risk-oracle showcase; research/erc-8107-coordinator-tests keeps a pointer, and the repository is MIT throughout.
+- SECURITY.md now caps the withholding of unfixed-issue detail at 90 days from the date of the entry.
 - Republished the August and September 2026 digests with the incidents added since their first edition (August: 26 incidents, September: 26), and corrected the two digest lines of the README to match the Index.
 - 14 line locators in 7 hypothesis registries pointed one to four lines past the end of the file they cite; each range now stops at the last line (afx-bridge-validator-key-compromise, balancer-v1-rounding, coldcard-rng-seed-theft, etherfi-atomicqueue-eip7702-solver-drain, fetchai-nunet-dual-key-compromise, moonwell-mamo-oracle, symbiosis-sybtc-mpc-signed-mint).
 - check_readme_consistency.py accepts "one of N rows in [Corrections" as well as "cases".
@@ -16,7 +18,7 @@ GitHub releases.
 ## 2026-10-29
 
 - Chainflip: the script now reads the vault's USDT transfers by account from TronGrid, not by windows of logs from a public node that no longer serves the vault's history. The new run is in `preuves/`, and its README says what was and was not compared with the old logs. The Index and the dataset are unchanged.
-- research/erc-8107-coordinator-tests: a new folder that is not an incident entry (no row in the Index, no change to any count). Executable tests of a coordinator for ERC-8107 on a fork of Ethereum mainnet, with the raw output of the run: two ENS names that resolve to the same address, and one complete coordinator whose every step is switched off in turn. The folder is CC0-1.0 with its own LICENSE; the rest of the repository stays MIT.
+- research/erc-8107-coordinator-tests: a new folder that is not an incident entry (no row in the Index, no change to any count). Executable tests of a coordinator for ERC-8107 on a fork of Ethereum mainnet, with the raw output of the run: two ENS names that resolve to the same address, and one complete coordinator whose every step is switched off in turn. The folder has since moved to the authority-risk-oracle showcase; this repository keeps a four-line pointer and is MIT throughout.
 - Added CashCowCoin (BSC, 2026-08-27).
 - Added FH Token (BSC, 2026-08-25).
 - Added Arrakis V1 G-UNI ENS/WETH vault (Ethereum, 2026-08-23).

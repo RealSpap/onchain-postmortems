@@ -27,7 +27,7 @@ The place concerned, the statement you dispute, and whatever supports your readi
 
 - Reports are read as time allows; replies are best effort, with no promised delay.
 - When a statement is shown to be wrong, it is corrected in the entry itself and the correction is recorded in [CHANGELOG.md](CHANGELOG.md). Corrections are made in public, in the files themselves.
-- When a report concerns an issue that is not yet fixed, the relevant detail is withheld from this repository until the team concerned has had the chance to fix it.
+- When a report concerns an issue that is not yet fixed, the relevant detail is withheld from this repository until the team concerned has had the chance to fix it, and for 90 days at most from the date of the entry. At that date the patch status is re-read on-chain and the detail is published.
 - Credit is given on request. There is no bug bounty.
 
 This file covers the content of this repository only. The author does not act for, or speak on behalf of, any project named here.
