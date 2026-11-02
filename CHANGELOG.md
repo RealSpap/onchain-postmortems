@@ -5,6 +5,14 @@ incident's own README carries the full detail and supersedes any earlier
 wording; this file is a short log. New incidents are also announced as
 GitHub releases.
 
+## 2026-11-02
+
+- Added the October 2026 digest.
+- Republished the August and September 2026 digests with the incidents added since their first edition (August: 26 incidents, September: 26), and corrected the two digest lines of the README to match the Index.
+- 14 line locators in 7 hypothesis registries pointed one to four lines past the end of the file they cite; each range now stops at the last line (afx-bridge-validator-key-compromise, balancer-v1-rounding, coldcard-rng-seed-theft, etherfi-atomicqueue-eip7702-solver-drain, fetchai-nunet-dual-key-compromise, moonwell-mamo-oracle, symbiosis-sybtc-mpc-signed-mint).
+- check_readme_consistency.py accepts "one of N rows in [Corrections" as well as "cases".
+- README: the Structure block now lists every top-level file and folder; "one of 38 cases" reads "one of 38 rows", as the Corrections table counts them; the author line names the two other showcases.
+
 ## 2026-10-29
 
 - Chainflip: the script now reads the vault's USDT transfers by account from TronGrid, not by windows of logs from a public node that no longer serves the vault's history. The new run is in `preuves/`, and its README says what was and was not compared with the old logs. The Index and the dataset are unchanged.

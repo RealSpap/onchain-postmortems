@@ -470,7 +470,7 @@ def check_headline(full_text: str, years: dict, all_rows: list) -> None:
         )
 
 
-CORRECTIONS_INLINE_RE = re.compile(r"one of (\d+) cases\s+in \[Corrections")
+CORRECTIONS_INLINE_RE = re.compile(r"one of (\d+) (?:cases|rows)\s+in \[Corrections")
 CORRECTIONS_GLANCE_RE = re.compile(
     r"^(\d+) (?:entries|rows)(?: for \d+ entries)? correct, reconcile.*?\((\d+) corrections, (\d+) reconciliations, (\d+) discoveries"
 )
@@ -483,7 +483,7 @@ def check_corrections_count(readme_text: str, corrections_text: str) -> None:
     source. The per-type breakdown in 'At a glance' must sum to it."""
     inline_m = CORRECTIONS_INLINE_RE.search(readme_text)
     if not inline_m:
-        fail("Could not find the 'one of N cases in [Corrections ...' sentence near the top of README.md.")
+        fail("Could not find the 'one of N rows in [Corrections ...' sentence near the top of README.md.")
     glance_section = extract_section(readme_text, "At a glance")
     glance_m = None
     for line in glance_section.splitlines():

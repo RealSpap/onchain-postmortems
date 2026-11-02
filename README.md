@@ -20,12 +20,16 @@ says so and marks it †.
 
 Example: press reported only the Ethereum leg of the Sandbox bridge
 exploit; the reconstruction finds 405.83 WETH gross across Base and
-Ethereum, about 5.2 times the press figure, one of 38 cases
+Ethereum, about 5.2 times the press figure, one of 38 rows
 in [Corrections to press and DefiLlama](CORRECTIONS.md).
 
 Same author: [@RealSpap on X](https://x.com/RealSpap),
 [multisig-overlap-showcase](https://github.com/RealSpap/multisig-overlap-showcase)
-(who actually controls DeFi admin keys).
+(who actually controls DeFi admin keys),
+[defi-admin-key-risk-showcase](https://github.com/RealSpap/defi-admin-key-risk-showcase)
+(single-key admin control, checked by hand) and
+[authority-risk-oracle-showcase](https://github.com/RealSpap/authority-risk-oracle-showcase)
+(who can change a contract and how fast; testnet).
 
 New incidents are announced as GitHub releases (Watch, then Custom, then
 Releases), or through the plain [Atom
@@ -76,8 +80,9 @@ One file per month, published once the month closes: headline loss
 total, breakdown by root-cause technique, the three biggest incidents,
 and a full linked table.
 
-- [September 2026](digests/2026-09.md): 22 incidents, at least $185.8M
-- [August 2026](digests/2026-08.md): first edition, 19 incidents, at least $47.6M
+- [October 2026](digests/2026-10.md): 6 incidents, at least $1.1M
+- [September 2026](digests/2026-09.md): 26 incidents, at least $190.0M
+- [August 2026](digests/2026-08.md): first edition, 26 incidents, at least $48.9M
 
 Full history: [`digests/`](digests/)
 
@@ -110,6 +115,12 @@ onchain-postmortems/
   SECURITY.md                        how to report an error or request a correction
   add_new_entry.py                   scaffolds a new subfolder and updates INDEX.md
   check_readme_consistency.py        checks totals, counts and links across these files
+  CONTRIBUTING.md                    how to propose an incident or a fix
+  CITATION.cff                       how to cite this repository
+  export_dataset.py                  regenerates data/incidents.json and data/incidents.csv from INDEX.md
+  data/                              the dataset, machine-readable
+  research/                          studies that are not incident entries (no row in the Index)
+  .github/workflows/                 release announcements and the README consistency check
   digests/                           one monthly roundup file per month (2026-08.md, ...)
   LICENSE                            MIT, Spap 2026
   <incident-slug>/
