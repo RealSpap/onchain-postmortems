@@ -12,7 +12,7 @@ Independent on-chain reconstruction of the access-control exploit against a lega
 | Verified independently | 14.445541086626480620 liquidETH + 7.047848 USDC drained from 11 wallets, realized as 15.453645063 ETH (~$38,151 at the ETH price DefiLlama's own oracle reports for 07:20 UTC, plus 7.05 USDC); DefiLlama's $43,260 is ~13% high |
 | The finding press missed | Every drained wallet has code; seven of the eleven are EIP-7702 delegated accounts, the other four proxy contracts. The `solve()` path calls `finishSolve()` on the named solver, which reverts on a code-less address, so plain EOAs are unreachable. The attacker skipped a code-less EOA holding 300 liquidETH to drain a 7702 account holding 0.0005 |
 | The other finding press missed | All 11 wallets were reimbursed on-chain to within dust ~9 hours after the exploit, from a Gnosis Safe multisig; press reported only the CEO's pledge, and DefiLlama still records `returnedFunds: null` |
-| What's still open | Whether the reimbursing Safe is provably ether.fi's treasury (no on-chain label). Current patch status not re-verified; details withheld pending disclosure to the team |
+| What's still open | Whether the reimbursing Safe is provably ether.fi's treasury (no on-chain label). Current patch status not re-verified; details withheld; the incident itself is public |
 
 ## The method
 
@@ -43,7 +43,7 @@ Nine hours after the exploit, between 16:28 and 16:36 UTC, a Gnosis Safe multisi
 
 ### Current status
 
-Current patch status not re-verified; details withheld pending disclosure to the team.
+Current patch status not re-verified; details withheld; the incident itself is public.
 
 ### Cash-out through Tornado Cash
 

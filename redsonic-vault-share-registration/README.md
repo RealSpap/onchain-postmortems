@@ -24,7 +24,7 @@ event log directly.
 | Window | 2026-09-05 16:03:11 UTC, one transaction, one block (25,912,201) |
 | Press/DefiLlama figure | DefiLlama: "Reddio RedSonic", $22,800, Ethereum, classification "Token & Share Accounting" / technique "Incorrect Share Accounting", dated 2026-09-05 (no source URL attached in the feed). Press (via ExVulSec's analysis, republished by several outlets) describes "9.25 ETH" net profit from a flash-loan attack exploiting a "permissionless" `registerErc20` function |
 | Verified independently | The attacker's own Ethereum address, whose nonce was 0 before this transaction (its first ever), held exactly 9.261768945208 ETH the moment the block closed. At CoinGecko's own 2026-09-05 historical price, that is **$22,747.69**, within 0.23% of DefiLlama's figure |
-| Current status | Current patch status not re-verified; details withheld pending disclosure to the team |
+| Current status | Current patch status not re-verified; details withheld; the incident itself is public |
 
 ## The method
 
@@ -215,8 +215,8 @@ Curve.
   actual exploit transaction's own block timestamp is 16:03:11 UTC the
   same calendar day, not a cross-day discrepancy like some other entries
   in this repo, just less precise.
-- Current patch status not re-verified; details withheld pending
-  disclosure to the team.
+- Current patch status not re-verified; details withheld; the incident
+  itself is public.
 
 ## License
 

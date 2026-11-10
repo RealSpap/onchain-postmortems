@@ -163,7 +163,7 @@ collateral, and the contract pays out more JPYC than was deposited. The
 observed event sequence is consistent with a collateral-accounting issue
 in the TokenVault deposit and withdrawal path rather than with any price
 manipulation. This reading was not traced opcode by opcode. Current patch
-status not re-verified; details withheld pending disclosure to the team.
+status not re-verified; details withheld; the incident itself is public.
 
 ### Where the money went: Tornado Cash, not idle
 

@@ -24,7 +24,7 @@ Drains were observed until 2026-09-28 19:18:23 UTC (block 26077995), the end of 
 | Forwarder used for the ERC-20 drains | Clone `0xb48d6af77c5e3b99876ea71b38e9c814ba5b1c8e`, a `TrustedForwarderFactory` (`0xff0000b6c4352714cce809000d0cd30a0e0c8dce`) clone |
 | Forwarder provenance | Created 2026-09-25 05:27:11 UTC (tx `0xfe776ec0ca4be969f4b50d6f137f4dd9fb2d47606526a2d7f1a4089d197525ba`); its deployer is not linked to the drains (see below) |
 | DefiLlama | `Limit Break Payment Processor`, amount null, classification Access Control / Token Approval Abuse, source field empty |
-| Status | Drains observed until 2026-09-28 19:18 UTC (end of the observation window). Blockaid and RevokeCash urged affected wallets to revoke Payment Processor approvals (Ethereum, Polygon, Base). Current patch status not re-verified; details withheld pending disclosure to the team |
+| Status | Drains observed until 2026-09-28 19:18 UTC (end of the observation window). Blockaid and RevokeCash urged affected wallets to revoke Payment Processor approvals (Ethereum, Polygon, Base). Current patch status not re-verified; details withheld; the incident itself is public |
 
 ## Fund flow
 
@@ -51,7 +51,7 @@ flowchart LR
 
 Payment Processor V2 is a monolithic router that `delegatecall`s into four modules. Its own comments say it is "designed to work both via direct calls and calls from a trusted forwarder that preserves the original msg.sender by appending an extra 20 bytes to the calldata." When the immediate caller is a factory-registered forwarder, the trading module takes the buyer from those appended bytes.
 
-The reconstruction traced the transactions that moved the tokens and compared, at each hop, the address the forwarder appended with the address the trading module used as buyer. In the largest transaction the forwarder appended `0x860bb7ce...739c8d` (the attacker's own contract), but the module read `0xede4e6d7...95a2373`, which is exactly the wallet the first fill then charged. So Payment Processor validated the attacker's maker signature on a listing of a worthless NFT, treated a victim who signed nothing as the buyer, and pulled that victim's approved WETH to pay for it. The byte-level detail of the malformed call is withheld here pending disclosure to the team.
+The reconstruction traced the transactions that moved the tokens and compared, at each hop, the address the forwarder appended with the address the trading module used as buyer. In the largest transaction the forwarder appended `0x860bb7ce...739c8d` (the attacker's own contract), but the module read `0xede4e6d7...95a2373`, which is exactly the wallet the first fill then charged. So Payment Processor validated the attacker's maker signature on a listing of a worthless NFT, treated a victim who signed nothing as the buyer, and pulled that victim's approved WETH to pay for it. The byte-level detail of the malformed call is withheld here; the incident itself is public.
 
 Two checks show this is not a coincidence of one transaction:
 
@@ -80,4 +80,4 @@ The dollar figure in the index is the WETH quantity valued once, at the first dr
 
 ## License
 
-MIT, same as the rest of this repository. The evidence files in `preuves/` are raw script output, reproduced as generated except for passages withheld pending disclosure to the team.
+MIT, same as the rest of this repository. The evidence files in `preuves/` are raw script output, reproduced as generated except for passages withheld; the incident itself is public.

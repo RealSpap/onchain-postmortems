@@ -94,7 +94,7 @@ Alongside the script, verification ran against a registry of thirteen falsifiabl
 
 **The money left in ninety seconds and the trail was salted afterwards.** The cash-out address swapped the USDT0 leg on KyberSwap for 24,317.184273 USDC, losing 15.304996 to slippage, abandoned the 0.661117 USDC.e leg on Polygon, and bridged 50,447.825983 USDC to Ethereum through LI.FI's `eco` route with `jumper.exchange` as integrator. The solver delivered on Ethereum 14 seconds later, and 84 seconds after that the full amount moved on to an unlabelled EOA holding several billion USDC, which is where attribution stops. Since September 17 that same cash-out address has been hit by 57 transfers of exactly 50,447.825983 from 45 different token contracts, every one of them named "USD Coin" with the symbol USDC, none of them the canonical USDC contract. On a block explorer the address looks like it is still moving the stolen sum around several times a day. Its real USDC balance has been zero since 23:37:35 on the night of the drain.
 
-**Five days on, the visible response was client-side.** Nimiq's own wallet repository shows it: a swap maintenance message committed 18 hours 57 minutes after the drain, and gas abstraction for sending stablecoins put under maintenance 23 hours 3 minutes after it. Both are configuration in the wallet front end. As of September 21, neither handler had emitted a single event since the drain and the drained wallet was still empty. Current patch status not re-verified; details withheld pending disclosure to the team.
+**Five days on, the visible response was client-side.** Nimiq's own wallet repository shows it: a swap maintenance message committed 18 hours 57 minutes after the drain, and gas abstraction for sending stablecoins put under maintenance 23 hours 3 minutes after it. Both are configuration in the wallet front end. As of September 21, neither handler had emitted a single event since the drain and the drained wallet was still empty. Current patch status not re-verified; details withheld; the incident itself is public.
 
 ## Caveats
 
@@ -102,4 +102,4 @@ Dollar figures assume one dollar per stablecoin unit; no oracle price is applied
 
 ## License
 
-MIT, same as the rest of this repository. The evidence files in `preuves/` are raw script output, reproduced as generated except for passages withheld pending disclosure to the team.
+MIT, same as the rest of this repository. The evidence files in `preuves/` are raw script output, reproduced as generated except for passages withheld; the incident itself is public.

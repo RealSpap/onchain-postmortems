@@ -105,7 +105,7 @@ The five payouts are the tax controller's net gain in the transaction (216,245.3
 - **The tax controller is unverified.** Its behaviour (sell the tax, return part of it, burn the pair's SKY, sync, pay out) is read from the logs, not from source code. The flash lender is identified as Moolah from the DeFiHackLabs proof of concept, not from its own source.
 - **Who held the liquidity was not traced.** The loss falls on the pair's liquidity providers; the LP token holders were not listed.
 - **Value at face.** USDT is counted one to one with the dollar; no price is applied.
-- **Current patch status not re-verified; details withheld pending disclosure to the team.** The pair held 21.81 USDT at block 125823560.
+- **Current patch status not re-verified; details withheld; the incident itself is public.** The pair held 21.81 USDT at block 125823560.
 
 ## License
 
