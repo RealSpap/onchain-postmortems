@@ -82,7 +82,7 @@ Full history: [`digests/`](digests/)
 ```
 README.md  INDEX.md  CORRECTIONS.md  CHANGELOG.md   the pitch, every incident, the corrections, the log
 SECURITY.md  CONTRIBUTING.md  CITATION.cff  LICENSE   reporting, helping, citing, MIT
-incidents/<slug>/                                    one folder per incident: write-up, script, registry, raw output
+incidents/                                           one folder per incident: write-up, script, registry, raw output
 tools/                                               add_new_entry.py, check_readme_consistency.py, check_structure.py, export_dataset.py
 data/  digests/  docs/                               machine-readable data, monthly roundups, method and limits
 ```

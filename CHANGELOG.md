@@ -8,7 +8,7 @@ GitHub releases.
 ## 2026-11-15
 
 - Reorganised the repository. Every incident folder moved from the root into `incidents/` (history kept, content unchanged) and the scripts moved to `tools/`. INDEX.md, CORRECTIONS.md, CHANGELOG.md, SECURITY.md, CONTRIBUTING.md, CITATION.cff and LICENSE stay at the root.
-- A link such as `https://github.com/RealSpap/onchain-postmortems/tree/main/cozy-v2-optimism/` now reads `.../tree/main/incidents/cozy-v2-optimism/`, in the Index, the corrections table, the digests and `data/incidents.json`. Links pinned to a commit are unchanged. Scripts are run as `python3 tools/<script>.py`.
+- A link such as `https://github.com/RealSpap/onchain-postmortems/tree/main/cozy-v2-optimism/` now reads `.../tree/main/incidents/cozy-v2-optimism/`, in the Index, the corrections table, the digests and `data/incidents.json`. Links pinned to a commit are unchanged. Scripts are run from `tools/`, for example `python3 tools/check_readme_consistency.py`.
 - The README is now one page. Its sections on falsifiable hypotheses, adding an incident, scope, limits, the disclaimer and the license moved, unchanged, to `docs/method.md` and `docs/limits.md`.
 - Added `tools/check_structure.py`, run in CI with its own tests. It refuses a file or folder at the root that `tools/structure.json` does not list, an incident folder outside `incidents/`, a resume, work or backup file, and more than 14 visible entries at the root.
 
