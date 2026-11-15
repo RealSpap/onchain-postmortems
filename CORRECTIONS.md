@@ -4,8 +4,10 @@ Back to [README](README.md#at-a-glance).
 
 ## Our own errors, by date
 
-What this repository got wrong in its own earlier text, and fixed. Each line names the date of the fix (the same date heads an entry of [CHANGELOG.md](CHANGELOG.md), which carries the full wording), the folder concerned and whether a figure changed.
+What this repository got wrong in its own earlier text, and fixed, most recent first. Each line names the date of the fix (the same date heads an entry of [CHANGELOG.md](CHANGELOG.md), which is the complete record and carries the full wording), the folder concerned and whether a figure changed. If a fix is missing here, the changelog entry of its date has it.
 
+- **2026-11-02, [afx-bridge-validator-key-compromise](incidents/afx-bridge-validator-key-compromise/) and six other folders:** 14 line locators in 7 hypothesis registries pointed one to four lines past the end of the file they cite; each range now stops at the last line. No figure changed.
+- **2026-11-02, README:** the author line described the multisig-overlap showcase with the subject of the defi-admin-key-risk showcase, and the two digest lines did not follow the Index; both were corrected. No figure changed.
 - **2026-10-23, [tectonic-cronos](incidents/tectonic-cronos/):** two block readings carried wrong hexadecimal numbers (0x56AB1FC is block 90878460, not 90896188), so the hashes and timestamps published belonged to two other blocks. Read again on three nodes; the clock conflict with Dune's index that the README drew from the wrong reading is withdrawn. No figure changed.
 - **2026-10-23, [ostium-oracle-forwarder-compromise](incidents/ostium-oracle-forwarder-compromise/):** $23,752,746 had been written as Ostium's own final figure. Among the pages read only Odaily (2026-07-19) gives it, as the loss in an Ostium update; "final" and "settled on" are withdrawn. No figure changed.
 - **2026-10-23, README and the August digest:** "each reconstructed from raw chain data" was not true of tectonic-cronos, whose chain was rolled back; the wording now counts 63 of 64 (18 of 19 in August) and names the exception. No figure changed.
@@ -18,6 +20,13 @@ What this repository got wrong in its own earlier text, and fixed. Each line nam
 - **2026-10-13, [fetchai-nunet-dual-key-compromise](incidents/fetchai-nunet-dual-key-compromise/):** the cap claim was corrected: NTX has a cap (`MAX_SUPPLY()`, 1,000,000,000 NTX) and the attacker minted the headroom to it. No figure changed.
 - **2026-10-13, [ostium-oracle-forwarder-compromise](incidents/ostium-oracle-forwarder-compromise/):** the 231-byte contract had been described as built for the attack; it was registered as a forwarder 46 days before. No figure changed.
 - **2026-10-07, [securedfinance-jpyc-tokenvault-selflend](incidents/securedfinance-jpyc-tokenvault-selflend/):** the loss was corrected to $27,860 (it was $45,445): JPYC had been priced with the CoinGecko id of an older contract. The figure changed.
+- **2026-10-05, README:** the incident count in the License row and above the largest losses was out of date; both were brought to the Index. No figure of an entry changed.
+- **2026-09-30, [wealthmanagementv2-selfowned-proxy-drain](incidents/wealthmanagementv2-selfowned-proxy-drain/):** the Index carried at least $422,251 for a figure whose source was not traced; it now carries DefiLlama's $26,414, and the earlier claim that DefiLlama's classification was contradicted was withdrawn with its row in the table below. The figure changed.
+- **2026-09-30, [tectonic-cronos](incidents/tectonic-cronos/):** the unrecovered figure was corrected from $8.3M to $9.19M, sourced from Cronos's own post-mortem. The figure changed.
+- **2026-09-30, [etherfi-atomicqueue-eip7702-solver-drain](incidents/etherfi-atomicqueue-eip7702-solver-drain/):** the loss was repriced at the 07:20 UTC oracle point ($38,151, it was $38,004), and the count of EIP-7702 wallets went from 9 to 7. The figure changed.
+- **2026-09-30, [virtue-iota-switchboard-oracle](incidents/virtue-iota-switchboard-oracle/):** the figure was corrected to $848,190 to match the script output (it was $848,457). The figure changed.
+- **2026-09-30, [limit-break-payment-processor-forwarder-spoof](incidents/limit-break-payment-processor-forwarder-spoof/):** the entry is now marked as a floor, as its own note already said. The mark changed.
+- **2026-09-19, [beatswap-vesting-slot0-reserve-drain](incidents/beatswap-vesting-slot0-reserve-drain/):** a note on repayments was corrected the day after it was written (V2 depositors are being repaid after the pause, V1's are not). No figure changed.
 
 Found a mistake we have not listed? Open the "A figure is wrong" issue form (see [CONTRIBUTING.md](CONTRIBUTING.md)).
 

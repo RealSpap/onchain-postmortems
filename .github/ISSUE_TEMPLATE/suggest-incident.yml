@@ -1,7 +1,6 @@
 name: Suggest an incident
 description: A past on-chain incident that is not covered yet.
 title: "Incident: "
-labels: ["suggestion"]
 body:
   - type: input
     id: protocol

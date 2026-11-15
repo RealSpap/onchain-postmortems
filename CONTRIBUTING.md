@@ -4,7 +4,7 @@ This repository rebuilds past incidents from public chain data. Every way of hel
 
 ## Five first tasks
 
-Each takes about an hour, needs only Python and a public RPC, and ends in something anyone can re-read. All of them defend: they check what we published.
+Most take about an hour, the fourth longer; each needs only Python and a public RPC, and ends in something anyone can re-read. All of them defend: they check what we published.
 
 1. **Replay one script on another RPC.** Pick any folder under [`incidents/`](incidents/), run its `reconstruct_exploit.py` against a different public endpoint than the one it names, and say whether the historical figures match its saved `resultats_*.txt`. A match is useful; a difference is a finding.
 2. **Re-derive one correction.** Take a row of [CORRECTIONS.md](CORRECTIONS.md), for example Cozy V2 (an on-chain total of $174,311.01, reached two ways), and rebuild its "found" figure from the transactions in its folder.

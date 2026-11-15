@@ -9,7 +9,7 @@ To find the incidents that look like your protocol: pick the question closest to
 | Type | Incidents | Loss ($) |
 |---|---|---|
 | [Access-Control](#access-control) | 20 | $310,746,282 |
-| [Rounding/Math-Bug](#rounding-math-bug) | 17 | $36,517,572 |
+| [Rounding/Math-Bug](#roundingmath-bug) | 17 | $36,517,572 |
 | [Bridge](#bridge) | 15 | $376,135,376 |
 | [Oracle](#oracle) | 9 | $25,934,793 |
 | [Key-Compromise](#key-compromise) | 5 | $169,872,625 |

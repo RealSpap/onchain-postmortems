@@ -1,6 +1,6 @@
 # On-Chain Postmortems
 
-*One question for every on-chain attack: who was able to do that, and why?*
+*One question for every on-chain incident: what made it possible, and which check was missing?*
 
 **$954.3M in DeFi and on-chain losses across 72 incidents, 71 of them reconstructed from raw chain data (the exception, tectonic-cronos, is not: per Cronos's report the chain was rolled back past it); $617.4M of it independently recomputed, the rest sourced from the protocol, press or DefiLlama.**
 
@@ -50,7 +50,7 @@ A research repository is only as good as its corrections. [CORRECTIONS.md](CORRE
 | Type of control failure | Incidents | Loss ($) | The question |
 |---|---|---|---|
 | [Access-Control](docs/by-type.md#access-control) | 20 | $310,746,282 | Who was allowed to call it? |
-| [Rounding/Math-Bug](docs/by-type.md#rounding-math-bug) | 17 | $36,517,572 | Did the arithmetic hold at the edges? |
+| [Rounding/Math-Bug](docs/by-type.md#roundingmath-bug) | 17 | $36,517,572 | Did the arithmetic hold at the edges? |
 | [Bridge](docs/by-type.md#bridge) | 15 | $376,135,376 | Who checked the message that moved the funds? |
 | [Oracle](docs/by-type.md#oracle) | 9 | $25,934,793 | Where did the price come from, and who could move it? |
 | [Key-Compromise](docs/by-type.md#key-compromise) | 5 | $169,872,625 | Who held the key, and how was it used? |
@@ -87,7 +87,7 @@ but the total is not fully recomputed here.
 
 ## Contribute
 
-Five first tasks, each doable in an hour, are in [CONTRIBUTING.md](CONTRIBUTING.md). The short version:
+Five first tasks are in [CONTRIBUTING.md](CONTRIBUTING.md). The short version:
 
 - **A figure is wrong, or a statement is unfair:** open an issue with the "A figure is wrong" form, or write privately (see [SECURITY.md](SECURITY.md)).
 - **An incident is missing:** open an issue with the "Suggest an incident" form: protocol, date, chain and, if you have it, a transaction hash.

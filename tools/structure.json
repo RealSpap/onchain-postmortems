@@ -27,11 +27,14 @@
   "forbidden_names": [
     "CONTINUE*",
     "DRAFT*",
+    "TODO*",
+    "NOTES*",
     "*.bak",
     "*.orig",
     "*.tmp",
     "*.swp",
     "*.stale*",
+    "*.log",
     "work",
     "drafts",
     "scratch"
@@ -44,21 +47,26 @@
     "incidents/*/*.py",
     "incidents/*/resultats_*.txt",
     "incidents/*/example_output.txt",
-    "incidents/*/preuves/*",
-    "incidents/*/fork/*",
+    "incidents/*/preuves/**",
+    "incidents/*/fork/**",
     "tools/*.py",
     "tools/structure.json",
     "tools/tests/*.py",
     "data/incidents.json",
     "data/incidents.csv",
     "digests/20??-??.md",
-    "docs/*.md",
-    ".github/workflows/*.yml",
-    ".github/ISSUE_TEMPLATE/*.yml"
+    "docs/method.md",
+    "docs/limits.md",
+    "docs/by-type.md",
+    ".github/workflows/auto_release.yml",
+    ".github/workflows/check_drift.yml",
+    ".github/ISSUE_TEMPLATE/figure-is-wrong.yml",
+    ".github/ISSUE_TEMPLATE/suggest-incident.yml"
   ],
   "legacy_redirects": [],
   "max_legacy_redirects": 0,
   "legacy_dir_target": "incidents",
   "legacy_file_target": "tools",
-  "legacy_max_lines": 12
+  "legacy_max_lines": 8,
+  "legacy_file_max_lines": 8
 }

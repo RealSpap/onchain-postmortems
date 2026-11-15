@@ -56,6 +56,15 @@ jobs:
           # -M keeps renames out of "added": moving a folder is not a new incident.
           NEW="$(git diff -M --name-only --diff-filter=A "$BASE" "$HEAD_SHA" \
                  | grep -E '^incidents/[^/]+/README\.md$' | cut -d/ -f2 | sort -u || true)"
+          # A folder that already held a README at the base is not new, whatever git calls the path.
+          KEEP=""
+          for SLUG in $NEW; do
+            if git cat-file -e "$BASE:incidents/$SLUG/README.md" 2>/dev/null || git cat-file -e "$BASE:$SLUG/README.md" 2>/dev/null; then
+              continue
+            fi
+            KEEP="$KEEP $SLUG"
+          done
+          NEW="$(printf '%s\n' $KEEP | sort -u | sed '/^$/d')"
           if [ -z "$NEW" ]; then
             echo "No new incident folder since $BASE; no release."
             exit 0

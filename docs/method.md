@@ -41,7 +41,7 @@ python3 tools/add_new_entry.py \
 Scaffolds a stub README, `registre_hypotheses.csv`, and
 `reconstruct_exploit.py`; inserts the row into `INDEX.md` in the right
 year/month section; recomputes every subtotal, the cumulative total, and
-this README's "At a glance" block straight from the Index data, never a
+the README's "At a glance" block straight from the Index data, never a
 hardcoded number. `add_new_entry.py --help` for the full flag reference,
 including `--loss-known-partial`, `--loss-sourced` and the controlled
 `--category` tags. It never touches `CORRECTIONS.md` or the floor table

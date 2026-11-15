@@ -1,7 +1,6 @@
 name: A figure is wrong
 description: A figure, date, label or statement in an entry, the Index or the corrections table looks wrong or unfair.
 title: "Figure: "
-labels: ["correction"]
 body:
   - type: input
     id: entry

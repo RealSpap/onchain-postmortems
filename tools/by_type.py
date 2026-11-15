@@ -35,7 +35,8 @@ def span(rows):
 
 
 def anchor(cat):
-    return re.sub(r"[^a-z0-9-]", "", cat.lower().replace("/", "-").replace(" ", "-"))
+    """GitHub's heading anchor: lower case, punctuation dropped (not replaced), spaces become hyphens."""
+    return re.sub(r"[^a-z0-9 _-]", "", cat.lower()).replace(" ", "-")
 
 
 def money(n):

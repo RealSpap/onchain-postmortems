@@ -5,7 +5,7 @@
     python3 tools/find_incidents.py --text vault
 
 Filters are case-insensitive and combine with AND; --text looks in the protocol, mechanism and note.
-Types and their questions: docs/by-type.md.
+Types and their questions: docs/by-type.md. Loss marks as in the Index: ≥ known floor, ≈ recomputed, † sourced, not recomputed.
 """
 import argparse
 import csv
@@ -39,7 +39,8 @@ def main(argv=None):
         rows = list(csv.DictReader(fh))
     hits = find(rows, a.category, a.chain, a.text)
     for r in hits:
-        print(f"{r['date']} | {r['protocol']} | {int(r['loss_usd']):,} | {r['chain']} | {r['category']} | {r['url']}")
+        mark = ("≥ " if r["floor"] == "true" else "") + ("≈ " if r["approximate"] == "true" else "") + ("† " if r["sourced"] == "true" else "")
+        print(f"{r['date']} | {r['protocol']} | {mark}{int(r['loss_usd']):,} | {r['chain']} | {r['category']} | {r['url']}")
     print(f"{len(hits)} of {len(rows)} incidents", file=sys.stderr)
     return 0 if hits else 1
 

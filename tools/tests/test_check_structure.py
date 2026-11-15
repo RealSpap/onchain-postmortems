@@ -1,6 +1,8 @@
 """The structure guard accepts the target layout and refuses each way of drifting from it (mutants)."""
 import json
+import os
 import shutil
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -13,16 +15,20 @@ REPO = Path(__file__).resolve().parent.parent.parent
 CFG = cs.load_config(REPO / "tools" / "structure.json")
 
 
+def put(root, rel, text="x\n"):
+    p = Path(root) / rel
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_text(text)
+
+
 def skeleton(root, cfg):
     for f in cfg["root_files"]:
-        (root / f).write_text("x\n")
-    for d in cfg["root_dirs"]:
-        (root / d).mkdir(exist_ok=True)
+        put(root, f)
     for slug in ("alpha-incident", "beta-incident"):
-        d = root / "incidents" / slug
-        d.mkdir(parents=True)
         for f in ("README.md", "reconstruct_exploit.py", "registre_hypotheses.csv", "resultats_2026-01-01.txt"):
-            (d / f).write_text("x\n")
+            put(root, f"incidents/{slug}/{f}")
+    for f in ("tools/check_structure.py", "data/incidents.json", "digests/2026-01.md", "docs/method.md", ".github/workflows/check_drift.yml"):
+        put(root, f)
 
 
 class Structure(unittest.TestCase):
@@ -44,8 +50,6 @@ class Structure(unittest.TestCase):
         self.assertEqual(self.errors(), [])
 
     def test_accepts_the_real_repository_checkout(self):
-        # the committed tree only: untracked tool leftovers (caches) are not part of the repository
-        import subprocess
         files = subprocess.run(["git", "-C", str(REPO), "ls-files"], capture_output=True, text=True, check=True).stdout.split("\n")
         real = self.tmp / "real"
         real.mkdir()
@@ -55,67 +59,81 @@ class Structure(unittest.TestCase):
             shutil.copy2(REPO / f, dest)
         self.assertEqual(cs.check(real, self.cfg), [])
 
-    # mutants
+    def test_accepts_proof_files_of_any_kind_under_preuves_at_any_depth(self):
+        put(self.tmp, "incidents/alpha-incident/preuves/anything.json")
+        put(self.tmp, "incidents/alpha-incident/preuves/deeper/more.txt")
+        self.assertEqual(self.errors(), [])
+
+    # mutants: the root
     def test_refuses_a_stray_file_at_the_root(self):
-        (self.tmp / "notes.md").write_text("x")
+        put(self.tmp, "notes.md")
         self.refuses("unexpected file at the root: notes.md")
 
     def test_refuses_an_unknown_folder_at_the_root(self):
-        (self.tmp / "misc").mkdir()
+        put(self.tmp, "misc/a.md")
         self.refuses("unexpected folder at the root: misc")
 
     def test_refuses_an_incident_folder_at_the_root(self):
-        d = self.tmp / "gamma-incident"
-        d.mkdir()
-        (d / "README.md").write_text("x")
-        (d / "reconstruct_exploit.py").write_text("x")
+        put(self.tmp, "gamma-incident/README.md")
+        put(self.tmp, "gamma-incident/reconstruct_exploit.py")
         self.refuses("unexpected folder at the root: gamma-incident")
         self.refuses("incident file gamma-incident/reconstruct_exploit.py is outside incidents/<slug>/")
-
-    def test_refuses_an_incident_folder_one_level_too_deep(self):
-        d = self.tmp / "incidents" / "alpha-incident" / "sub"
-        d.mkdir()
-        (d / "registre_hypotheses.csv").write_text("x")
-        self.refuses("is outside incidents/<slug>/")
-
-    def test_refuses_a_hand_over_file_at_the_root(self):
-        (self.tmp / "CONTINUE.md").write_text("x")
-        self.refuses("forbidden name 'CONTINUE.md'")
-        self.refuses("unexpected file at the root: CONTINUE.md")
-
-    def test_refuses_a_hand_over_file_inside_an_incident(self):
-        (self.tmp / "incidents" / "alpha-incident" / "DRAFT.md").write_text("x")
-        self.refuses("forbidden name 'DRAFT.md'")
-
-    def test_refuses_a_work_folder_deep_in_the_tree(self):
-        (self.tmp / "docs" / "work").mkdir()
-        self.refuses("forbidden name 'work'")
-
-    def test_refuses_a_backup_file(self):
-        (self.tmp / "incidents" / "beta-incident" / "README.md.bak").write_text("x")
-        self.refuses("forbidden name 'README.md.bak'")
-
-    def test_refuses_any_file_that_fits_no_allowed_pattern(self):
-        # whatever its name: a note, a spreadsheet, an unlisted resume file
-        for rel in ("incidents/alpha-incident/notes.md", "docs/plan.xlsx", "digests/summary.txt", "data/extra.json"):
-            (self.tmp / rel).write_text("x")
-            self.refuses(f"file outside the layout: {rel}")
-
-    def test_accepts_proof_files_of_any_kind_under_preuves(self):
-        d = self.tmp / "incidents" / "alpha-incident" / "preuves"
-        d.mkdir()
-        (d / "anything.json").write_text("x")
-        self.assertEqual(self.errors(), [])
 
     def test_refuses_too_many_visible_root_entries(self):
         for i in range(3):
             name = f"extra{i}.md"
             self.cfg["root_files"].append(name)
-            (self.tmp / name).write_text("x")
+            put(self.tmp, name)
         self.refuses("visible entries at the root, the ceiling is 14")
 
+    # mutants: inside the tree
+    def test_refuses_an_incident_folder_one_level_too_deep(self):
+        put(self.tmp, "incidents/alpha-incident/sub/registre_hypotheses.csv")
+        self.refuses("is outside incidents/<slug>/")
+        self.refuses("file outside the layout: incidents/alpha-incident/sub/registre_hypotheses.csv")
+
+    def test_refuses_a_deep_readme_and_a_deep_script(self):
+        put(self.tmp, "incidents/alpha-incident/sub/README.md")
+        put(self.tmp, "incidents/alpha-incident/sub/deep/x.py")
+        put(self.tmp, "tools/scratch2/x.py")
+        for rel in ("incidents/alpha-incident/sub/README.md", "incidents/alpha-incident/sub/deep/x.py", "tools/scratch2/x.py"):
+            self.refuses(f"file outside the layout: {rel}")
+
+    def test_refuses_a_hand_over_file_wherever_it_hides(self):
+        for rel in ("CONTINUE.md", "docs/DRAFT.md", "incidents/alpha-incident/preuves/TODO.md", "incidents/beta-incident/NOTES.txt"):
+            put(self.tmp, rel)
+        self.refuses("forbidden name 'CONTINUE.md'")
+        self.refuses("forbidden name 'DRAFT.md'")
+        self.refuses("forbidden name 'TODO.md'")
+        self.refuses("forbidden name 'NOTES.txt'")
+
+    def test_refuses_a_work_folder_deep_in_the_tree(self):
+        put(self.tmp, "docs/work/a.md")
+        self.refuses("forbidden name 'work'")
+
+    def test_refuses_a_backup_or_log_file(self):
+        put(self.tmp, "incidents/beta-incident/README.md.bak")
+        put(self.tmp, "incidents/beta-incident/preuves/run.log")
+        self.refuses("forbidden name 'README.md.bak'")
+        self.refuses("forbidden name 'run.log'")
+
+    def test_refuses_any_file_that_fits_no_allowed_pattern(self):
+        # whatever its name: a note, a spreadsheet, a summary, a file in docs that is not listed
+        for rel in ("incidents/alpha-incident/notes.md", "docs/plan.xlsx", "docs/SUMMARY.md", "digests/summary.txt", "data/extra.json", ".github/workflows/evil.yml"):
+            put(self.tmp, rel)
+            self.refuses(f"file outside the layout: {rel}")
+
+    def test_refuses_hidden_files_and_folders_nobody_listed(self):
+        for rel in ("incidents/alpha-incident/preuves/.hidden/x", "docs/.secret.md", "incidents/alpha-incident/preuves/.env"):
+            put(self.tmp, rel)
+            self.refuses(f"file outside the layout: {rel}")
+
+    def test_refuses_a_symbolic_link(self):
+        os.symlink("/etc/hostname", self.tmp / "docs" / "method2.md")
+        self.refuses("symbolic link: docs/method2.md")
+
     def test_refuses_a_loose_file_in_incidents(self):
-        (self.tmp / "incidents" / "oops.md").write_text("x")
+        put(self.tmp, "incidents/oops.md")
         self.refuses("incidents/ holds a loose file: oops.md")
 
     def test_refuses_an_incident_without_readme(self):
@@ -126,15 +144,20 @@ class Structure(unittest.TestCase):
         shutil.rmtree(self.tmp / "incidents")
         self.refuses("missing folder incidents/")
 
+    def test_a_tracked_cache_folder_is_still_checked(self):
+        # in a git checkout, what git tracks is checked even under names that .gitignore normally hides
+        subprocess.run(["git", "init", "-q"], cwd=self.tmp, check=True)
+        put(self.tmp, "docs/__pycache__/DRAFT.md")
+        subprocess.run(["git", "add", "-f", "-A"], cwd=self.tmp, check=True)
+        self.refuses("file outside the layout: docs/__pycache__/DRAFT.md")
+
     # legacy redirects
     def legacy(self, text=None, extra=None):
         self.cfg["legacy_redirects"] = ["alpha-incident"]
         self.cfg["max_legacy_redirects"] = 5
-        d = self.tmp / "alpha-incident"
-        d.mkdir()
-        (d / "README.md").write_text(text if text is not None else "Moved to [incidents/alpha-incident](incidents/alpha-incident/).\n")
+        put(self.tmp, "alpha-incident/README.md", text if text is not None else "Moved to [incidents/alpha-incident](../incidents/alpha-incident/).\n")
         if extra:
-            (d / extra).write_text("x")
+            put(self.tmp, f"alpha-incident/{extra}")
 
     def test_accepts_a_proper_legacy_redirect(self):
         self.legacy()
@@ -144,9 +167,18 @@ class Structure(unittest.TestCase):
         self.legacy(extra="reconstruct_exploit.py")
         self.refuses("must hold only a README.md")
 
-    def test_refuses_a_legacy_redirect_that_does_not_name_its_new_place(self):
-        self.legacy(text="Moved somewhere.\n")
-        self.refuses("must be short and name incidents/alpha-incident")
+    def test_refuses_a_legacy_redirect_that_links_to_the_wrong_place(self):
+        # the relative link from the old folder must climb out of it: ../incidents/<slug>/
+        self.legacy(text="Moved to [incidents/alpha-incident](incidents/alpha-incident/).\n")
+        self.refuses("must be short and name ../incidents/alpha-incident/")
+
+    def test_refuses_a_legacy_redirect_with_a_fake_target(self):
+        self.legacy(text="See [elsewhere](../incidents/alpha-incident-fake/).\n")
+        self.refuses("must be short and name ../incidents/alpha-incident/")
+
+    def test_refuses_a_long_legacy_redirect(self):
+        self.legacy(text="Moved to (../incidents/alpha-incident/).\n" + "more text\n" * 10)
+        self.refuses("must be short")
 
     def test_refuses_a_legacy_redirect_that_is_not_listed(self):
         self.legacy()
@@ -156,19 +188,19 @@ class Structure(unittest.TestCase):
     def test_accepts_a_proper_legacy_script_stub(self):
         self.cfg["legacy_redirects"] = ["check.py"]
         self.cfg["max_legacy_redirects"] = 5
-        (self.tmp / "check.py").write_text("# moved to tools/check.py\n")
+        put(self.tmp, "check.py", "# moved to tools/check.py\n")
         self.assertEqual(self.errors(), [])
 
     def test_refuses_a_legacy_script_stub_that_is_long(self):
         self.cfg["legacy_redirects"] = ["check.py"]
         self.cfg["max_legacy_redirects"] = 5
-        (self.tmp / "check.py").write_text("# moved to tools/check.py\n" + "x = 1\n" * 20)
+        put(self.tmp, "check.py", "# moved to tools/check.py\n" + "x = 1\n" * 20)
         self.refuses("legacy redirect check.py must be short and name tools/check.py")
 
     def test_refuses_a_legacy_script_stub_that_does_not_name_its_new_place(self):
         self.cfg["legacy_redirects"] = ["check.py"]
         self.cfg["max_legacy_redirects"] = 5
-        (self.tmp / "check.py").write_text("print('hi')\n")
+        put(self.tmp, "check.py", "print('hi')\n")
         self.refuses("must be short and name tools/check.py")
 
     def test_refuses_more_legacy_redirects_than_the_cap(self):
