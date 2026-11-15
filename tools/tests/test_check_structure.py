@@ -52,7 +52,7 @@ class Structure(unittest.TestCase):
         for f in filter(None, files):
             dest = real / f
             dest.parent.mkdir(parents=True, exist_ok=True)
-            dest.write_text("x\n")
+            shutil.copy2(REPO / f, dest)
         self.assertEqual(cs.check(real, self.cfg), [])
 
     # mutants
