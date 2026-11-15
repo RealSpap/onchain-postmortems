@@ -16,7 +16,7 @@ Each entry has a script that queries the chain and its saved output (`resultats_
 
 ```bash
 pip install web3
-python3 incidents/<entry-folder>/reconstruct_exploit.py
+python3 incidents/sandbox-oft-delegate-hijack/reconstruct_exploit.py
 python3 tools/check_readme_consistency.py
 python3 tools/check_structure.py
 ```
@@ -34,4 +34,4 @@ Historical figures should match the saved output. Balances and roles read today 
 
 ## Pull requests
 
-Keep them small and say what you ran. Run `python3 tools/check_readme_consistency.py` and `python3 tools/check_structure.py` before you open one; the same checks run in CI. To add an entry, `tools/add_new_entry.py` scaffolds it under `incidents/` (see [docs/method.md](docs/method.md)). A new incident goes in `incidents/<slug>/` and nowhere else; the structure check refuses anything else at the root. The maintainer decides what is included.
+Keep them small and say what you ran. Run `python3 tools/check_readme_consistency.py` and `python3 tools/check_structure.py` before you open one; the same checks run in CI. To add an entry, `tools/add_new_entry.py` scaffolds it under `incidents/` (see [docs/method.md](docs/method.md)). A new incident goes in its own folder under `incidents/` and nowhere else; the structure check refuses anything else at the root. The maintainer decides what is included.
