@@ -1,0 +1,33 @@
+name: Suggest an incident
+description: A past on-chain incident that is not covered yet.
+title: "Incident: "
+labels: ["suggestion"]
+body:
+  - type: input
+    id: protocol
+    attributes:
+      label: Protocol
+    validations:
+      required: true
+  - type: input
+    id: date
+    attributes:
+      label: Date (UTC)
+    validations:
+      required: true
+  - type: input
+    id: chain
+    attributes:
+      label: Chain
+    validations:
+      required: true
+  - type: input
+    id: tx
+    attributes:
+      label: Transaction hash or block number
+      description: These matter most. Without one, an incident cannot be reconstructed from the chain.
+  - type: textarea
+    id: sources
+    attributes:
+      label: Public sources
+      description: The protocol's own post-mortem, if any, and where you read about it.

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Export INDEX.md to machine-readable files: data/incidents.json and data/incidents.csv.
+"""Export INDEX.md to machine-readable files: data/incidents.json and data/incidents.csv,
+then the by-type index (docs/by-type.md and the by-type block of README.md, see tools/by_type.py).
 
 INDEX.md stays the single source of truth; this script only reshapes it.
 Run after every change to INDEX.md:   python3 tools/export_dataset.py
@@ -12,11 +13,16 @@ import re
 import sys
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import by_type  # noqa: E402
+
 ROOT = Path(__file__).resolve().parent.parent
 INCIDENTS = ROOT / "incidents"
 INDEX = ROOT / "INDEX.md"
 OUT_JSON = ROOT / "data" / "incidents.json"
 OUT_CSV = ROOT / "data" / "incidents.csv"
+OUT_TYPE = ROOT / "docs" / "by-type.md"
+README = ROOT / "README.md"
 REPO = "https://github.com/RealSpap/onchain-postmortems"
 FIELDS = ["slug", "protocol", "date", "loss_usd", "floor", "approximate", "sourced",
           "chain", "category", "mechanism", "url", "note"]
@@ -84,7 +90,9 @@ def main():
     self_check(rows, text)
     js, cs = render(rows)
     if sys.argv[1:] == ["--check"]:
-        stale = [p.name for p, c in ((OUT_JSON, js), (OUT_CSV, cs)) if not p.exists() or p.read_text() != c]
+        readme_now = README.read_text()
+        stale = [p.name for p, c in ((OUT_JSON, js), (OUT_CSV, cs), (OUT_TYPE, by_type.render_page(rows)), (README, by_type.splice(readme_now, by_type.render_block(rows))))
+                 if not p.exists() or p.read_text() != c]
         if stale:
             raise SystemExit(f"Stale export, rerun python3 tools/export_dataset.py: {', '.join(stale)}")
         print(f"OK: {len(rows)} incidents, export current")
@@ -92,6 +100,8 @@ def main():
     OUT_JSON.parent.mkdir(exist_ok=True)
     OUT_JSON.write_text(js)
     OUT_CSV.write_text(cs)
+    OUT_TYPE.write_text(by_type.render_page(rows))
+    README.write_text(by_type.splice(README.read_text(), by_type.render_block(rows)))
     recomputed = sum(r["loss_usd"] for r in rows if not r["sourced"])
     print(f"Wrote {len(rows)} incidents; total ${sum(r['loss_usd'] for r in rows):,}; recomputed ${recomputed:,}")
 

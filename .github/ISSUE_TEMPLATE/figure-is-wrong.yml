@@ -1,0 +1,27 @@
+name: A figure is wrong
+description: A figure, date, label or statement in an entry, the Index or the corrections table looks wrong or unfair.
+title: "Figure: "
+labels: ["correction"]
+body:
+  - type: input
+    id: entry
+    attributes:
+      label: The entry
+      description: The folder under incidents/, or the file and line.
+      placeholder: incidents/cozy-v2-optimism
+    validations:
+      required: true
+  - type: textarea
+    id: statement
+    attributes:
+      label: The statement you dispute
+      description: Quote it as written.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: What supports your reading
+      description: Something anyone can re-read, such as a transaction hash, a block number, an address with the call to make, or a public document. Never paste a private key, a seed phrase or private data.
+    validations:
+      required: true

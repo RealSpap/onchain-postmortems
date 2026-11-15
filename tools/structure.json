@@ -53,7 +53,8 @@
     "data/incidents.csv",
     "digests/20??-??.md",
     "docs/*.md",
-    ".github/workflows/*.yml"
+    ".github/workflows/*.yml",
+    ".github/ISSUE_TEMPLATE/*.yml"
   ],
   "legacy_redirects": [],
   "max_legacy_redirects": 0,

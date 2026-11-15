@@ -1,6 +1,27 @@
-# Corrections to press and DefiLlama
+# Our corrections
 
 Back to [README](README.md#at-a-glance).
+
+## Our own errors, by date
+
+What this repository got wrong in its own earlier text, and fixed. Each line names the date of the fix (the same date heads an entry of [CHANGELOG.md](CHANGELOG.md), which carries the full wording), the folder concerned and whether a figure changed.
+
+- **2026-10-23, [tectonic-cronos](incidents/tectonic-cronos/):** two block readings carried wrong hexadecimal numbers (0x56AB1FC is block 90878460, not 90896188), so the hashes and timestamps published belonged to two other blocks. Read again on three nodes; the clock conflict with Dune's index that the README drew from the wrong reading is withdrawn. No figure changed.
+- **2026-10-23, [ostium-oracle-forwarder-compromise](incidents/ostium-oracle-forwarder-compromise/):** $23,752,746 had been written as Ostium's own final figure. Among the pages read only Odaily (2026-07-19) gives it, as the loss in an Ostium update; "final" and "settled on" are withdrawn. No figure changed.
+- **2026-10-23, README and the August digest:** "each reconstructed from raw chain data" was not true of tectonic-cronos, whose chain was rolled back; the wording now counts 63 of 64 (18 of 19 in August) and names the exception. No figure changed.
+- **2026-10-23, [coinsbuy-wallet-drain](incidents/coinsbuy-wallet-drain/) and Ostium:** printed lines in recorded script outputs (Coinsbuy, one line, 2026-09-11; Ostium, two lines, 2026-09-10) were edited by hand, without replaying the script, to match changed print statements. Disclosed in the changelog. No figure changed.
+- **2026-10-22, [tectonic-cronos](incidents/tectonic-cronos/):** "recursive minting and direct donations" had been attributed to Cronos's report, which does not mention a donation; the direct transfers are in Certora's analysis of 2026-09-22. No figure changed.
+- **2026-10-22, [ostium-oracle-forwarder-compromise](incidents/ostium-oracle-forwarder-compromise/):** a compromised signer key had been written as a fact; the sources say compromised off-chain infrastructure or, reportedly, an oracle private key, and none says which credential was used. No figure changed.
+- **2026-10-22, [coinsbuy-wallet-drain](incidents/coinsbuy-wallet-drain/):** the sentence explaining the gap to the press totals was wrong (the unattributed flow cannot close a gap of $1.7M to $1.9M). No figure of the entry changed.
+- **2026-10-22, [fullsail-switchboard-vault-drain](incidents/fullsail-switchboard-vault-drain/):** the 63 deposit and 63 withdraw calls are now stated as successful calls, and the attacker address's failed transactions are listed. No figure changed.
+- **2026-10-13, [termfinance-metavault-governance](incidents/termfinance-metavault-governance/):** the mechanism was corrected: the cooldown went from 608,400 s to 0 in the execution block, it did not elapse. No figure changed.
+- **2026-10-13, [fetchai-nunet-dual-key-compromise](incidents/fetchai-nunet-dual-key-compromise/):** the cap claim was corrected: NTX has a cap (`MAX_SUPPLY()`, 1,000,000,000 NTX) and the attacker minted the headroom to it. No figure changed.
+- **2026-10-13, [ostium-oracle-forwarder-compromise](incidents/ostium-oracle-forwarder-compromise/):** the 231-byte contract had been described as built for the attack; it was registered as a forwarder 46 days before. No figure changed.
+- **2026-10-07, [securedfinance-jpyc-tokenvault-selflend](incidents/securedfinance-jpyc-tokenvault-selflend/):** the loss was corrected to $27,860 (it was $45,445): JPYC had been priced with the CoinGecko id of an older contract. The figure changed.
+
+Found a mistake we have not listed? Open the "A figure is wrong" issue form (see [CONTRIBUTING.md](CONTRIBUTING.md)).
+
+## Corrections to press and DefiLlama
 
 Every figure in [the Index](INDEX.md) comes from each subfolder's own
 source files and is checked against press and DefiLlama. The 38 rows below
