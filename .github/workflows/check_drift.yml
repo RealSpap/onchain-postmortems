@@ -24,4 +24,13 @@ jobs:
           python-version: "3.11"
 
       - name: Run README self-consistency check
-        run: python3 check_readme_consistency.py
+        run: python3 tools/check_readme_consistency.py
+
+      - name: Check the repository structure
+        run: python3 tools/check_structure.py
+
+      - name: Check the structure guard against its own mutants
+        run: python3 -m unittest discover -s tools/tests -v
+
+      - name: Check that the committed data export is current
+        run: python3 tools/export_dataset.py --check

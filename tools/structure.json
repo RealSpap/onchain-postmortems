@@ -1,0 +1,63 @@
+{
+  "root_files": [
+    "README.md",
+    "INDEX.md",
+    "CORRECTIONS.md",
+    "CHANGELOG.md",
+    "SECURITY.md",
+    "CONTRIBUTING.md",
+    "CITATION.cff",
+    "LICENSE",
+    ".gitignore"
+  ],
+  "root_dirs": [
+    "incidents",
+    "tools",
+    "data",
+    "digests",
+    "docs",
+    ".github"
+  ],
+  "max_root_entries": 14,
+  "incident_parent": "incidents",
+  "incident_markers": [
+    "reconstruct_exploit.py",
+    "registre_hypotheses.csv"
+  ],
+  "forbidden_names": [
+    "CONTINUE*",
+    "DRAFT*",
+    "*.bak",
+    "*.orig",
+    "*.tmp",
+    "*.swp",
+    "*.stale*",
+    "work",
+    "drafts",
+    "scratch"
+  ],
+  "allowed_paths": [
+    "incidents/*/README.md",
+    "incidents/*/LICENSE",
+    "incidents/*/.gitignore",
+    "incidents/*/registre_hypotheses.csv",
+    "incidents/*/*.py",
+    "incidents/*/resultats_*.txt",
+    "incidents/*/example_output.txt",
+    "incidents/*/preuves/*",
+    "incidents/*/fork/*",
+    "tools/*.py",
+    "tools/structure.json",
+    "tools/tests/*.py",
+    "data/incidents.json",
+    "data/incidents.csv",
+    "digests/20??-??.md",
+    "docs/*.md",
+    ".github/workflows/*.yml"
+  ],
+  "legacy_redirects": [],
+  "max_legacy_redirects": 0,
+  "legacy_dir_target": "incidents",
+  "legacy_file_target": "tools",
+  "legacy_max_lines": 12
+}

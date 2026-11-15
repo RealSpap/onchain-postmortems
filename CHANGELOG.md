@@ -5,6 +5,13 @@ incident's own README carries the full detail and supersedes any earlier
 wording; this file is a short log. New incidents are also announced as
 GitHub releases.
 
+## 2026-11-15
+
+- Reorganised the repository. Every incident folder moved from the root to `incidents/<slug>/` (history kept, content unchanged) and the scripts moved to `tools/`. INDEX.md, CORRECTIONS.md, CHANGELOG.md, SECURITY.md, CONTRIBUTING.md, CITATION.cff and LICENSE stay at the root.
+- Links of the form `.../tree/main/<slug>/` now read `.../tree/main/incidents/<slug>/`, in the Index, the corrections table, the digests and `data/incidents.json`. Links pinned to a commit are unchanged. Scripts are run as `python3 tools/<script>.py`.
+- The README is now one page. Its sections on falsifiable hypotheses, adding an incident, scope, limits, the disclaimer and the license moved, unchanged, to `docs/method.md` and `docs/limits.md`.
+- Added `tools/check_structure.py`, run in CI with its own tests. It refuses a file or folder at the root that `tools/structure.json` does not list, an incident folder outside `incidents/`, a resume, work or backup file, and more than 14 visible entries at the root.
+
 ## 2026-11-02
 
 - Added the October 2026 digest.

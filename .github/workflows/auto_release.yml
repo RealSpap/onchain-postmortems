@@ -53,8 +53,9 @@ jobs:
             BASE="$(git rev-parse HEAD^)"
           fi
 
-          NEW="$(git diff --name-only --diff-filter=A "$BASE" "$HEAD_SHA" \
-                 | grep -E '^[^./][^/]*/README\.md$' | cut -d/ -f1 | sort -u || true)"
+          # -M keeps renames out of "added": moving a folder is not a new incident.
+          NEW="$(git diff -M --name-only --diff-filter=A "$BASE" "$HEAD_SHA" \
+                 | grep -E '^incidents/[^/]+/README\.md$' | cut -d/ -f2 | sort -u || true)"
           if [ -z "$NEW" ]; then
             echo "No new incident folder since $BASE; no release."
             exit 0
@@ -64,8 +65,8 @@ jobs:
           : > "$NOTES"
           COUNT=0
           for SLUG in $NEW; do
-            TITLE="$(head -n 1 "$SLUG/README.md" | sed -e 's/^#* *//')"
-            printf -- '- [%s](https://github.com/%s/tree/main/%s/)\n' "$TITLE" "$GH_REPO" "$SLUG" >> "$NOTES"
+            TITLE="$(head -n 1 "incidents/$SLUG/README.md" | sed -e 's/^#* *//')"
+            printf -- '- [%s](https://github.com/%s/tree/main/incidents/%s/)\n' "$TITLE" "$GH_REPO" "$SLUG" >> "$NOTES"
             COUNT=$((COUNT + 1))
           done
           printf '\nFull index: https://github.com/%s/blob/main/INDEX.md\n' "$GH_REPO" >> "$NOTES"

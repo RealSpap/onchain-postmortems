@@ -5,7 +5,7 @@ INDEX.md (year -> month grouped) and README.md's "At a glance" block plus
 its opening headline sentence to match.
 
 Inspired by SunWeb3Sec/DeFiHackLabs's add_new_entry.py, adapted to this
-repo's layout: one subfolder per incident, each holding a Python
+repo's layout: one subfolder per incident under incidents/, each holding a Python
 reconstruction script, a registre_hypotheses.csv falsification registry,
 and raw resultats_*.txt script output.
 
@@ -24,7 +24,7 @@ It never touches CORRECTIONS.md or the "Corrections made" line: both stay
 a human judgment call.
 
 Usage:
-    python3 add_new_entry.py \\
+    python3 tools/add_new_entry.py \\
         --slug new-protocol-incident \\
         --name "New Protocol" \\
         --date 2026-10-01 \\
@@ -50,7 +50,8 @@ import re
 import sys
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parent
+REPO_ROOT = Path(__file__).resolve().parent.parent
+INCIDENTS_DIR = REPO_ROOT / "incidents"
 README_PATH = REPO_ROOT / "README.md"
 INDEX_PATH = REPO_ROOT / "INDEX.md"
 
@@ -107,13 +108,13 @@ def slugify_heading(text: str) -> str:
 
 def read_readme() -> str:
     if not README_PATH.exists():
-        sys.exit(f"README not found at {README_PATH}, this script must run from the repo root.")
+        sys.exit(f"README not found at {README_PATH}, this script lives in tools/ of the repo.")
     return README_PATH.read_text(encoding="utf-8")
 
 
 def read_index() -> str:
     if not INDEX_PATH.exists():
-        sys.exit(f"INDEX.md not found at {INDEX_PATH}, this script must run from the repo root.")
+        sys.exit(f"INDEX.md not found at {INDEX_PATH}, this script lives in tools/ of the repo.")
     return INDEX_PATH.read_text(encoding="utf-8")
 
 
@@ -258,7 +259,7 @@ def build_year_note(has_floor):
 
 
 def scaffold_subfolder(slug: str, name: str, date: str, chain: str):
-    folder = REPO_ROOT / slug
+    folder = INCIDENTS_DIR / slug
     if folder.exists():
         sys.exit(f"{folder} already exists, pick a different --slug or edit it by hand.")
     folder.mkdir(parents=True)
@@ -340,7 +341,7 @@ def main():
     p.add_argument("--category", required=True, choices=VALID_CATEGORIES,
                     help="controlled tag for the Index's Category column")
     p.add_argument("--mechanism", required=True, help="real type/mechanism, not the incident's name")
-    p.add_argument("--link", help="subfolder link in the table, defaults to '<slug>/'")
+    p.add_argument("--link", help="subfolder link in the table, defaults to 'incidents/<slug>/'")
     p.add_argument("--readme-url", default="", help="optional external URL to note in the README stub")
     p.add_argument(
         "--loss-known-partial",
@@ -360,13 +361,14 @@ def main():
         if "|" in value or "\n" in value:
             sys.exit(f"--{flag} must not contain '|' or a line break (it would break the Index table).")
 
-    link = args.link or f"{args.slug}/"
+    link = args.link or f"incidents/{args.slug}/"
+    label = args.link or f"{args.slug}/"
     target_year, target_month = parse_primary_date(args.date)
 
     if not args.skip_scaffold:
         scaffold_subfolder(args.slug, args.name, args.date, args.chain)
         if args.readme_url:
-            readme_path = REPO_ROOT / args.slug / "README.md"
+            readme_path = INCIDENTS_DIR / args.slug / "README.md"
             text = readme_path.read_text(encoding="utf-8")
             text += f"\n<!-- external source: {args.readme_url} -->\n"
             readme_path.write_text(text, encoding="utf-8")
@@ -378,7 +380,7 @@ def main():
 
     loss_cell = format_loss_cell(args.loss_usd, args.slug, args.loss_known_partial, args.loss_sourced)
     new_row = (f"| {args.name} | {args.date} | {loss_cell} | {args.chain} | "
-               f"{args.category} | {args.mechanism} | [{link}]({link}) |")
+               f"{args.category} | {args.mechanism} | [{label}]({link}) |")
 
     target = None
     for block in months:
@@ -562,7 +564,7 @@ def main():
     final_count = sum(len(rows_in_block(lines, b)) for b in months)
     final_total = sum(month_sum_and_floor(lines, b)[0] for b in months)
     print(f"INDEX.md and README.md updated: {final_count} incidents, cumulative loss ${final_total:,.0f}.")
-    print(f"Fill in the TODO in {args.slug}/README.md, {args.slug}/reconstruct_exploit.py, and the [^{args.slug}] footnote before publishing.")
+    print(f"Fill in the TODO in incidents/{args.slug}/README.md, incidents/{args.slug}/reconstruct_exploit.py, and the [^{args.slug}] footnote before publishing.")
 
 
 if __name__ == "__main__":

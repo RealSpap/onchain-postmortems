@@ -2,8 +2,8 @@
 """Export INDEX.md to machine-readable files: data/incidents.json and data/incidents.csv.
 
 INDEX.md stays the single source of truth; this script only reshapes it.
-Run after every change to INDEX.md:   python3 export_dataset.py
-Check that the committed files are current (exit 1 if not):   python3 export_dataset.py --check
+Run after every change to INDEX.md:   python3 tools/export_dataset.py
+Check that the committed files are current (exit 1 if not):   python3 tools/export_dataset.py --check
 """
 import csv
 import io
@@ -12,7 +12,8 @@ import re
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parent.parent
+INCIDENTS = ROOT / "incidents"
 INDEX = ROOT / "INDEX.md"
 OUT_JSON = ROOT / "data" / "incidents.json"
 OUT_CSV = ROOT / "data" / "incidents.csv"
@@ -32,7 +33,7 @@ def parse(text):
             continue
         protocol, date, loss, chain, category, mechanism, link = cells
         ref = re.search(r"\[\^([a-z0-9-]+)\]", loss)
-        folder = re.search(r"\(([a-z0-9-]+)/\)", link)
+        folder = re.search(r"\(incidents/([a-z0-9-]+)/\)", link)
         amount = re.search(r"([\d,]+)", re.sub(r"\[\^[^\]]+\]", "", loss))
         if not (ref and folder and amount):
             raise SystemExit(f"Unreadable INDEX.md row: {line[:80]}")
@@ -47,7 +48,7 @@ def parse(text):
             "chain": chain,
             "category": category,
             "mechanism": mechanism,
-            "url": f"{REPO}/tree/main/{folder.group(1)}/",
+            "url": f"{REPO}/tree/main/incidents/{folder.group(1)}/",
             "note": notes.get(ref.group(1), ""),
         })
     return rows
@@ -74,7 +75,7 @@ def self_check(rows, text):
     assert sum(r["loss_usd"] for r in rows) == usd, "loss total differs from INDEX.md"
     assert len({r["slug"] for r in rows}) == len(rows), "duplicate slug"
     for r in rows:
-        assert (ROOT / r["slug"]).is_dir(), f"missing folder {r['slug']}"
+        assert (INCIDENTS / r["slug"]).is_dir(), f"missing folder {r['slug']}"
 
 
 def main():
@@ -85,7 +86,7 @@ def main():
     if sys.argv[1:] == ["--check"]:
         stale = [p.name for p, c in ((OUT_JSON, js), (OUT_CSV, cs)) if not p.exists() or p.read_text() != c]
         if stale:
-            raise SystemExit(f"Stale export, rerun python3 export_dataset.py: {', '.join(stale)}")
+            raise SystemExit(f"Stale export, rerun python3 tools/export_dataset.py: {', '.join(stale)}")
         print(f"OK: {len(rows)} incidents, export current")
         return
     OUT_JSON.parent.mkdir(exist_ok=True)

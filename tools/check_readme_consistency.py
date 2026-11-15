@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Deterministic self-consistency check across README.md, INDEX.md,
-CORRECTIONS.md and the incident subfolders.
+CORRECTIONS.md, docs/limits.md and the incident subfolders (incidents/).
 
 This is NOT a re-verification against raw blockchain data. It never touches
 a chain or any external API. It only checks that the numbers and
@@ -40,10 +40,12 @@ import re
 import sys
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parent
+REPO_ROOT = Path(__file__).resolve().parent.parent
+INCIDENTS_DIR = REPO_ROOT / "incidents"
 README_PATH = REPO_ROOT / "README.md"
 INDEX_PATH = REPO_ROOT / "INDEX.md"
 CORRECTIONS_PATH = REPO_ROOT / "CORRECTIONS.md"
+LIMITS_PATH = REPO_ROOT / "docs" / "limits.md"  # the floor table lives here, not in the one-page README
 
 # Directories that are never incident subfolders even though they live at
 # repo root, e.g. VCS/CI metadata.
@@ -385,7 +387,7 @@ def check_table_rows_match_subfolders(all_rows: list) -> None:
     actual_row_count = len(all_rows)
 
     subfolders = []
-    for entry in sorted(REPO_ROOT.iterdir()):
+    for entry in sorted(INCIDENTS_DIR.iterdir()):
         if not entry.is_dir():
             continue
         if any(entry.name.startswith(prefix) for prefix in NON_INCIDENT_DIR_PREFIXES):
@@ -402,7 +404,7 @@ def check_table_rows_match_subfolders(all_rows: list) -> None:
         )
     for row in all_rows:
         m = re.match(r"^\[([^\]]+)\]\(([^)]+)\)$", row[-1])
-        target = m.group(2).rstrip("/") if m else None
+        target = m.group(2).rstrip("/").removeprefix("incidents/") if m else None
         if not m or target not in subfolders:
             fail(f"Index row {row[0]!r} links to {row[-1]!r}, not to one of the incident subfolders.")
 
@@ -516,31 +518,32 @@ def check_corrections_count(readme_text: str, corrections_text: str) -> None:
 FLOOR_COUNT_RE = re.compile(r"^- (\d+) entries report a dollar figure that is a known floor", re.MULTILINE)
 
 
-def check_floors(readme_text: str, all_rows: list) -> None:
+def check_floors(limits_text: str, all_rows: list) -> None:
+    readme_text = limits_text  # the floor sentence and table are in docs/limits.md
     index_floors = sum(1 for r in all_rows if "≥" in loss_prefix(r[2]))
     m = FLOOR_COUNT_RE.search(readme_text)
     if not m:
-        fail("Could not find '- N entries report a dollar figure that is a known floor' in README.md.")
+        fail("Could not find '- N entries report a dollar figure that is a known floor' in docs/limits.md.")
     lines = readme_text.splitlines()
     try:
         start = next(i for i, l in enumerate(lines) if l.startswith("| Protocol | Why it's a floor |"))
     except StopIteration:
-        fail("Could not find README.md's floor table ('| Protocol | Why it's a floor |').")
+        fail("Could not find the floor table ('| Protocol | Why it's a floor |') in docs/limits.md.")
     table_rows = 0
     for l in lines[start + 2:]:
         if not l.startswith("|"):
             break
         table_rows += 1
     if not int(m.group(1)) == index_floors == table_rows:
-        fail(f"Floor count mismatch: README says {m.group(1)}, the Index has {index_floors} '≥' "
-             f"cells, README's floor table has {table_rows} rows.")
+        fail(f"Floor count mismatch: docs/limits.md says {m.group(1)}, the Index has {index_floors} '≥' "
+             f"cells, its floor table has {table_rows} rows.")
 
 
 REGISTRY_HEADER = ["key", "hypothesis", "locator", "falsification_test", "evidence_confidence"]
 
 
 def check_registries() -> None:
-    for path in sorted(REPO_ROOT.glob("*/registre_hypotheses.csv")):
+    for path in sorted(INCIDENTS_DIR.glob("*/registre_hypotheses.csv")):
         with path.open(encoding="utf-8", newline="") as fh:
             rows = list(csv.reader(fh, delimiter=";"))
         if not rows or rows[0] != REGISTRY_HEADER:
@@ -579,6 +582,7 @@ def main() -> int:
         readme_text = read_file(README_PATH)
         index_text = read_file(INDEX_PATH)
         corrections_text = read_file(CORRECTIONS_PATH)
+        limits_text = read_file(LIMITS_PATH)
         years, current_month_keys = parse_index(index_text)
         all_rows = check_month_subtotals(years)
         check_year_totals(years)
@@ -588,7 +592,7 @@ def main() -> int:
         check_footnotes(index_text)
         check_headline(readme_text, years, all_rows)
         check_corrections_count(readme_text, corrections_text)
-        check_floors(readme_text, all_rows)
+        check_floors(limits_text, all_rows)
         check_written_totals(readme_text, years, all_rows)
         check_registries()
     except ConsistencyError as exc:
