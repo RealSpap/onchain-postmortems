@@ -114,6 +114,7 @@ Full history: [`digests/`](digests/)
 - **`tools/`:** replay checks, the incident finder, the dataset export, the structure check.
 - **`data/`:** the dataset, machine-readable. **`digests/`:** monthly roundups.
 - **`docs/`:** method, limits, and the by-type index.
+- **Old paths:** the old incident folders and script names at the root are short redirects to `incidents/` and `tools/`, kept so links published before the move keep working; they are listed in `tools/structure.json`.
 
 Same author: [@RealSpap on X](https://x.com/RealSpap),
 [multisig-overlap-showcase](https://github.com/RealSpap/multisig-overlap-showcase)
