@@ -2,7 +2,7 @@
 
 Thank you for taking the time. This repository publishes research on public on-chain data. It is not a service and it holds no funds, so most reports are about a statement that may be wrong, incomplete or unfair, and those are welcome.
 
-## How to reach us
+## How to reach me
 
 - **Privately**, for anything that should not be public (a fix still in progress, a secret committed by mistake, a correction you would rather not discuss in the open): write to contact@realspap.com and put `onchain-postmortems` in the subject.
 - **Publicly**: open a GitHub issue on this repository.

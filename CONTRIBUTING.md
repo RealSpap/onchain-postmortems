@@ -4,12 +4,12 @@ This repository rebuilds past incidents from public chain data. Every way of hel
 
 ## Five first tasks
 
-Most take about an hour, the fourth longer; each needs only Python and a public RPC, and ends in something anyone can re-read. All of them defend: they check what we published.
+Most take about an hour, the fourth longer; each needs only Python and a public RPC, and ends in something anyone can re-read. All of them defend: they check what I published.
 
 1. **Replay one script on another RPC.** Pick any folder under [`incidents/`](incidents/), run its `reconstruct_exploit.py` against a different public endpoint than the one it names, and say whether the historical figures match its saved `resultats_*.txt`. A match is useful; a difference is a finding.
 2. **Re-derive one correction.** Take a row of [CORRECTIONS.md](CORRECTIONS.md), for example Cozy V2 (an on-chain total of $174,311.01, reached two ways), and rebuild its "found" figure from the transactions in its folder.
 3. **Try to falsify a Medium row.** Open any `registre_hypotheses.csv` and pick a hypothesis rated Medium. Its falsification test says what would break it; run it and report.
-4. **Extend one floor.** [docs/limits.md](docs/limits.md) lists the entries whose figure is a known floor, for example Enjin (594 later transactions, $34,643, are not counted). Read one leg the entry leaves out and tell us what it adds.
+4. **Extend one floor.** [docs/limits.md](docs/limits.md) lists the entries whose figure is a known floor, for example Enjin (594 later transactions, $34,643, are not counted). Read one leg the entry leaves out and tell me what it adds.
 5. **Fix a small thing.** A broken link, a typo, a missing block number in an incident README: a small pull request, with `python3 tools/check_readme_consistency.py` and `python3 tools/check_structure.py` passing.
 
 For a figure you think is wrong or an incident you think is missing, use the issue forms: "A figure is wrong" and "Suggest an incident". This repository studies past incidents so that teams can protect themselves; it does not accept requests that aim to harm a live system.
@@ -35,7 +35,7 @@ python3 tools/check_structure.py
 
 Historical figures should match the saved output. Balances and roles read today may differ, because chains keep moving. If a historical figure differs, say which command, which block and what you got: that is a finding, and a useful one.
 
-## What we do not accept
+## What I do not accept
 
 - A change to a figure without evidence that anyone can re-read.
 - An entry that rests on press coverage alone, with no on-chain reconstruction.

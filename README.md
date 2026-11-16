@@ -16,7 +16,7 @@ This is research for defenders. Each entry rebuilds a past incident from public 
 ## Start here, in 60 seconds
 
 1. **Read one incident.** Open [`incidents/sandbox-oft-delegate-hijack/`](incidents/sandbox-oft-delegate-hijack/). Press reported only the Ethereum leg of the Sandbox bridge exploit; the reconstruction finds the gross amount across Base and Ethereum to be about five times the press figure, one of 38 rows in [Corrections to press and DefiLlama](CORRECTIONS.md).
-2. **Don't trust us. Redo it.** Every entry but one rebuilds its incident from public chain data, and its script reads the chain live. The exception is tectonic-cronos: per Cronos's report the chain was rolled back past that attack, so its README says which parts rest on Cronos's report and Certora's analysis. Try one against a public RPC:
+2. **Don't trust me. Redo it.** Every entry but one rebuilds its incident from public chain data, and its script reads the chain live. The exception is tectonic-cronos: per Cronos's report the chain was rolled back past that attack, so its README says which parts rest on Cronos's report and Certora's analysis. Try one against a public RPC:
 
    ```bash
    python3 incidents/sandbox-oft-delegate-hijack/reconstruct_exploit.py
@@ -25,12 +25,12 @@ This is research for defenders. Each entry rebuilds a past incident from public 
    It needs `web3` (`pip install web3`).
 
    The historical figures should match `incidents/sandbox-oft-delegate-hijack/resultats_reconstruction_2026-09-09.txt`; balances and roles read today may have moved since. A difference is useful: see [CONTRIBUTING.md](CONTRIBUTING.md).
-3. **See what we got wrong.** [CORRECTIONS.md](CORRECTIONS.md) opens with our own errors, dated, before it lists anyone else's.
+3. **See what I got wrong.** [CORRECTIONS.md](CORRECTIONS.md) opens with my own errors, dated, before it lists anyone else's.
 4. **Find the incidents that look like your protocol.** Pick a type below, or run `python3 tools/find_incidents.py --category Bridge --chain Ethereum`.
 
-## Our own mistakes, dated
+## My own mistakes, dated
 
-A research repository is only as good as its corrections. [CORRECTIONS.md](CORRECTIONS.md) lists what this repository got wrong in its own earlier text, with the date of each fix and the folder concerned, then the gaps found against press and DefiLlama figures. A wrong figure here is a finding, and we want to hear about it: [CONTRIBUTING.md](CONTRIBUTING.md).
+A research repository is only as good as its corrections. [CORRECTIONS.md](CORRECTIONS.md) lists what this repository got wrong in its own earlier text, with the date of each fix and the folder concerned, then the gaps found against press and DefiLlama figures. A wrong figure here is a finding, and I want to hear about it: [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## At a glance
 
