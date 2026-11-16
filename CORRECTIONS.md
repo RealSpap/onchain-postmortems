@@ -1,8 +1,8 @@
-# Our corrections
+# My corrections
 
 Back to [README](README.md#at-a-glance).
 
-## Our own errors, by date
+## My own errors, by date
 
 What this repository got wrong in its own earlier text, and fixed, most recent first. Each line names the date of the fix (the same date heads an entry of [CHANGELOG.md](CHANGELOG.md), which is the complete record and carries the full wording), the folder concerned and whether a figure changed. If a fix is missing here, the changelog entry of its date has it.
 
@@ -28,7 +28,7 @@ What this repository got wrong in its own earlier text, and fixed, most recent f
 - **2026-09-30, [limit-break-payment-processor-forwarder-spoof](incidents/limit-break-payment-processor-forwarder-spoof/):** the entry is now marked as a floor, as its own note already said. The mark changed.
 - **2026-09-19, [beatswap-vesting-slot0-reserve-drain](incidents/beatswap-vesting-slot0-reserve-drain/):** a note on repayments was corrected the day after it was written (V2 depositors are being repaid after the pause, V1's are not). No figure changed.
 
-Found a mistake we have not listed? Open the "A figure is wrong" issue form (see [CONTRIBUTING.md](CONTRIBUTING.md)).
+Found a mistake I have not listed? Open the "A figure is wrong" issue form (see [CONTRIBUTING.md](CONTRIBUTING.md)).
 
 ## Corrections to press and DefiLlama
 
