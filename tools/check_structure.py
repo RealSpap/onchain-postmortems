@@ -123,7 +123,7 @@ def check(root, cfg):
         elif Path(parent, name, "README.md") not in mine:
             errors.append(f"{parent}/{name}/ has no README.md")
 
-    # 9 (ajouté pour les dépôts publics RealSpap) : le README tient dans sa limite et ne porte ni tiret cadratin ni chevron de commande
+    # 9: the README stays within its line ceiling and holds no em dash or en dash
     readme = root / "README.md"
     limit_readme = cfg.get("readme_max_lines")
     if readme.is_file():
