@@ -1,0 +1,33 @@
+name: A replay gives a different figure
+description: You ran an incident's script and what it printed differs from what this repository publishes.
+title: "Replay: "
+body:
+  - type: input
+    id: entry
+    attributes:
+      label: The entry
+      description: The folder under incidents/.
+      placeholder: incidents/sandbox-oft-delegate-hijack
+    validations:
+      required: true
+  - type: input
+    id: command
+    attributes:
+      label: The command you ran
+      description: The exact command, from the repository root.
+    validations:
+      required: true
+  - type: input
+    id: endpoint
+    attributes:
+      label: The endpoint and the block it read
+      description: The RPC host you used and the block number the script printed.
+    validations:
+      required: true
+  - type: textarea
+    id: difference
+    attributes:
+      label: What differs
+      description: The figure printed, the figure published, and where the published one is written. A difference is useful: balances and roles read today may have moved since the block the entry names.
+    validations:
+      required: true

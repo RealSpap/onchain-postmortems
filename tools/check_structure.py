@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Refuse a repository layout that has drifted from the one written in tools/structure.json.
 
-Reusable: the rules live in the JSON file, this script only applies them.
+Reusable: the rules live in the JSON file, this script only applies them. Generic copy for the RealSpap public repositories: incident rules are skipped when incident_parent is null; README ceiling and dash check added.
 Run from anywhere:   python3 tools/check_structure.py [--root DIR] [--config FILE]
 Exit code 0 = layout accepted; 1 = at least one violation (each one is printed).
 
@@ -74,8 +74,8 @@ def check(root, cfg):
     errors = []
     legacy = set(cfg.get("legacy_redirects", []))
     allowed = set(cfg["root_files"]) | set(cfg["root_dirs"])
-    parent = cfg["incident_parent"]
-    markers = set(cfg["incident_markers"])
+    parent = cfg.get("incident_parent")          # null : pas de dossier d'incidents (profil, site, showcases)
+    markers = set(cfg.get("incident_markers", [])) if parent else set()
     patterns = [glob_re(p) for p in cfg.get("allowed_paths", [])]
 
     # 1 and 2: the root
@@ -106,15 +106,15 @@ def check(root, cfg):
         if hit:
             errors.append(f"forbidden name '{hit}' in {posix}")
         # 3: incident files in the wrong place
-        if rel.name in markers and (rel.parts[0] != parent or len(rel.parts) != 3):
+        if parent and rel.name in markers and (rel.parts[0] != parent or len(rel.parts) != 3):
             errors.append(f"incident file {posix} is outside {parent}/<slug>/")
         # 6: the written layout
         if patterns and len(rel.parts) > 1 and not any(p.match(posix) for p in patterns):
             errors.append(f"file outside the layout: {posix}")
 
     # 4: the incident parent
-    under = [rel for rel in files if rel.parts[0] == parent]
-    if not under:
+    under = [rel for rel in files if parent and rel.parts[0] == parent]
+    if parent and not under:
         errors.append(f"missing folder {parent}/")
     for name in sorted({rel.parts[1] for rel in under}):
         mine = [rel for rel in under if rel.parts[1] == name]
@@ -122,6 +122,18 @@ def check(root, cfg):
             errors.append(f"{parent}/ holds a loose file: {name}")
         elif Path(parent, name, "README.md") not in mine:
             errors.append(f"{parent}/{name}/ has no README.md")
+
+    # 9 (ajouté pour les dépôts publics RealSpap) : le README tient dans sa limite et ne porte ni tiret cadratin ni chevron de commande
+    readme = root / "README.md"
+    limit_readme = cfg.get("readme_max_lines")
+    if readme.is_file():
+        text = readme.read_text(encoding="utf-8")
+        if limit_readme and len(text.splitlines()) > limit_readme:
+            errors.append(f"README.md has {len(text.splitlines())} lines, the ceiling is {limit_readme}")
+        if "\u2014" in text or "\u2013" in text:
+            errors.append("README.md holds an em dash or an en dash")
+    elif cfg.get("readme_required", True):
+        errors.append("README.md is missing")
 
     # 8: legacy redirects
     if len(legacy) > cfg.get("max_legacy_redirects", 0):

@@ -61,7 +61,9 @@
     ".github/workflows/auto_release.yml",
     ".github/workflows/check_drift.yml",
     ".github/ISSUE_TEMPLATE/figure-is-wrong.yml",
-    ".github/ISSUE_TEMPLATE/suggest-incident.yml"
+    ".github/ISSUE_TEMPLATE/suggest-incident.yml",
+    ".github/CODEOWNERS",
+    ".github/ISSUE_TEMPLATE/replay-differs.yml"
   ],
   "legacy_redirects": [
     "across-solana-event-spoofing",
@@ -144,5 +146,7 @@
   "legacy_dir_target": "incidents",
   "legacy_file_target": "tools",
   "legacy_max_lines": 8,
-  "legacy_file_max_lines": 8
+  "legacy_file_max_lines": 8,
+  "readme_max_lines": 130,
+  "readme_required": true
 }
