@@ -133,11 +133,11 @@ address-poisoning trap the attacker fell for while moving their own
 funds, and reports the transaction only as what it verifiably is: the
 attacker's real, successful, final move of the entire drained amount.
 
-Checked live today (2026-09-10, a week after the 2026-09-03 14:00 UTC
-whitehat deadline): the designated recovery addresses hold 0.980001878
+Checked live on 2026-09-10, a week after the 2026-09-03 14:00 UTC
+whitehat deadline, and last checked then: the designated recovery addresses held 0.980001878
 SOL and 0.001550501933366716 ETH, respectively, neither remotely close to
 80% of 1000.8 ETH. No return to the designated recovery addresses was found
-as of 2026-09-10; since the destination of the 2026-09-01 transfer is
+as of 2026-09-10 (last checked that day); since the destination of the 2026-09-01 transfer is
 unidentified, a return by some other route is not excluded.
 
 ### The dollar figure, and a same-day price gap that explains the press number

@@ -11,7 +11,7 @@ Independent on-chain reconstruction of a rounding-error exploit against legacy B
 | Press figure | ~$234,000, one pool (DPI/USDC/WETH/WBTC), per DefiLlama and ~10 syndicated outlets |
 | Verified independently | The same operator wallet drained **4 distinct Balancer V1 pools**, confirmed via `BFactory.isBPool()`, each swept to a different cash-out wallet, a scope no press source reported |
 | A mechanism not supported on-chain in the transactions checked | No flashloan-token transfers appear in the pool-D exploit transaction, and the main pool's WBTC balance had already been thin for at least 7 days. This does not support the "nested flash loans used to compress reserves" framing several outlets repeated, though an earlier flashloan-funded compression is not ruled out |
-| A genuine primary-source find | An on-chain message, decoded directly from calldata, from an address claiming to represent Balancer DAO: a bounty offer with a 2026-09-08 21:00 UTC deadline. No response or fund return found on-chain as of this research (2026-09-09) |
+| A genuine primary-source find | An on-chain message, decoded directly from calldata, from an address claiming to represent Balancer DAO: a bounty offer with a 2026-09-08 21:00 UTC deadline. No response or fund return was found on-chain when I looked on 2026-09-09, and that was the last time I looked |
 
 ## The method
 

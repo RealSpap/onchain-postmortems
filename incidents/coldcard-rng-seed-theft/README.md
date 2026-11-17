@@ -121,7 +121,7 @@ single transaction spent exactly 341 of address A's 506 UTXOs
 (56,202,666,941 sats, 562.02666941 BTC, paying a 704,640-sat fee) to one new
 address, `bc1qq85v2c926eg6pgxhwp6q7lf6cnsz80qs3fcu9r`, with no change output.
 
-Querying that second address live today (2026-09-10), across two independent
+Querying that second address live on 2026-09-10 (last queried that day), across two independent
 explorers that agree byte for byte: it has received 562.02148293 BTC total
 and **spent none of it**. Address A itself still holds its own residual 165
 unspent UTXOs, 32.45061090 BTC. Added together, 594.47209383 of the original

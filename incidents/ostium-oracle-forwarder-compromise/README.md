@@ -164,7 +164,7 @@ figure. That classification says a key was compromised. Ostium's statement of 20
 ### Current state of the exploiter's addresses
 
 The beneficiary address, `0x321df194646029e7a6193ea05573d4b9c398bfd9`,
-holds 0.000160 USDC and 0.000589 ETH as of 2026-09-10 (live-queried via
+held 0.000160 USDC and 0.000589 ETH on 2026-09-10 (live-queried that day via
 `eth_call`/`eth_getBalance`), essentially dust, confirming the drained
 funds no longer sit at that address. Press (rekt.news) describes the
 attacker converting the USDC to roughly 12,084 ETH via Kyber and routing

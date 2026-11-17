@@ -38,7 +38,7 @@ flowchart TD
     E -->|"3.99601658 BTC"| J["Untraced address"]
 
     K["Source address<br/>bc1ql4mfu6…yqjlte"] -->|"3,400.00000000 BTC returned<br/>tx a6d697a252…49a46d<br/>2026-09-07 16:09:25 UTC"| D
-    K -->|"598.49955894 BTC change<br/>balance 598.50041569 BTC as of 2026-09-10"| L["598.50041569 BTC still unrecovered<br/>(floor, not full total)"]
+    K -->|"598.49955894 BTC change<br/>balance 598.50041569 BTC as of 2026-09-10, last read then"| L["598.50041569 BTC still unrecovered<br/>(floor, not full total)"]
 ```
 
 ## The method

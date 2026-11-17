@@ -106,7 +106,7 @@ The address `0x225a...dc17` is a contract that received the six transfers. Nothi
 
 The two providers are rotated with silent fallback. For the one wide-range `eth_getLogs` query, the first provider may have refused the range and the second answered, so the cross-check is only as independent as the fallback allowed.
 
-Payy had published no technical post-mortem that this reconstruction could find as of 2026-09-26. If one appears, it should be compared against the four facts this entry rests on: the zero hash, the single validator, the unchanged verifier, and the two batches.
+Payy had published no technical post-mortem that this reconstruction could find on 2026-09-26, the last day I searched. If one appears, it should be compared against the four facts this entry rests on: the zero hash, the single validator, the unchanged verifier, and the two batches.
 
 ## License
 

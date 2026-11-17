@@ -180,7 +180,7 @@ On 2026-09-10 the EOA gave the canonical Permit2 contract (`0x00000000…78ba3`)
 - "Unclaimed entitlement" counts vested and not-yet-vested BTX on records that were not withdrawn at block 120873719. The two simulated claims were run as `eth_call` from the depositors' own addresses; no transaction was sent.
 - The flash-loan counterparties (`0x8f73b65b…5d8c` for USDT, `0x238a3588…e6c4` for BTX and the 77,512.64 USDT sale) are labelled Moolah and the Pancake Infinity Vault in the DeFiHackLabs PoC; those labels were not independently checked and nothing here depends on them.
 - The source of the attacker's first 0.09975 BNB (block 120870816) arrived as an internal transfer and was not traced.
-- No BeatSwap statement was found. Balances, pause state and the DAI position are snapshots as of 2026-09-14, except where the 2026-09-18 and 2026-09-19 sections above give later readings.
+- No BeatSwap statement was found. Balances, pause state and the DAI position are snapshots as of 2026-09-14 and were last read then, except where the 2026-09-18 and 2026-09-19 sections above give later readings.
 
 ## Files
 

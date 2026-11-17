@@ -12,7 +12,7 @@ Independent on-chain reconstruction of the exploit against Zentra Finance, an Aa
 | Verified independently | 139,999.999999 ctUSD + 29.999999 USDC.e left the two reserves = 140,029.999998 stablecoin units, derived two independent ways that agree to the unit. DefiLlama's $140,030 matches to the dollar; the press's $143K does not reproduce |
 | The finding press missed | The flaw is a "safety guard" in the aToken's `_burnScaled`: after the non-zero check, the scaled burn is capped to the caller's scaled balance. With a balance of zero, the burn becomes zero, the debt is still cleared, and the `Burn` event still reports the full amount. The cap arrived with an aToken upgrade on 2026-06-25; the implementation it replaced has no cap, and by its source the same repay would have reverted |
 | The other finding press missed | The USDC.e reserve was hit by the same path in the same transaction (small, 29.999999 USDC.e), so the flaw was never ctUSD-specific. The proceeds, 55.18 ETH, went to the Ethereum wallet that funded the attacker the evening before; 55.12 ETH of it was still there on 2026-09-17 |
-| What's still open | Where the $143K figure comes from; why the attacker stopped at 140,000 ctUSD and 30 USDC.e; whether any funds come back (Zentra's recovery deadline, 2026-09-14 12:00 UTC, passed with nothing visible at its recovery address as of 2026-09-17) |
+| What's still open | Where the $143K figure comes from; why the attacker stopped at 140,000 ctUSD and 30 USDC.e; whether any funds come back (Zentra's recovery deadline, 2026-09-14 12:00 UTC, passed with nothing visible at its recovery address as of 2026-09-17, the last day I looked) |
 
 ## The method
 
@@ -56,7 +56,7 @@ Zentra's post-mortem, as relayed by press, describes an inconsistent accounting 
 - "The previous implementation would have reverted" rests on its verified source (no cap in `_burnScaled`, checked subtraction in `_burn`). A counterfactual `eth_call` replay with state overrides was attempted and reverted inside the attacker's own contract even without any implementation change, so it proves nothing either way; see `preuves/11_counterfactual_replay_attempt.txt`.
 - Calling `0x4eb55301…f56a` the attacker's own wallet is an inference from the seed-then-return pattern, not an on-chain label. It has older activity back to 2026-07-02 that was not investigated.
 - Zentra's post-mortem was not opened; its wording is known only through press summaries read after the reconstruction was complete. The $143K figure appears in those summaries and could include something this reconstruction does not see, such as off-chain valuation or costs.
-- The pause state, implementation slots and funder balance are snapshots as of 2026-09-13, re-checked on 2026-09-17 (see `preuves/13_*` to `preuves/15_*`), and can change. What `0x994bbf68…470d` is was not investigated.
+- The pause state, implementation slots and funder balance are snapshots as of 2026-09-13, re-checked on 2026-09-17 (see `preuves/13_*` to `preuves/15_*`) and last read then, and can change. What `0x994bbf68…470d` is was not investigated.
 
 ## Files
 

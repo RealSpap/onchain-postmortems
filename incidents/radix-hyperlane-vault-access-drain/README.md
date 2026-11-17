@@ -34,7 +34,7 @@ protocol update) is confirmed directly from `radixdlt`'s own GitHub repos.
 | | |
 |---|---|
 | Incident | A missing owner check on direct vault references in the Radix Engine kernel let a published blueprint call `take`/`lock_fee` on arbitrary internal vaults with no badge, proof, or other authorization primitive. The largest of 26 attack transactions used 61 functions to drain 59 accounts/components of 442,985.632108 hUSDC in one atomic call, then dispatched it through Hyperlane's own warp-route component toward Ethereum. Across all 6 Hyperlane-bridged assets on Radix (hUSDC, hUSDT, hETH, hWBTC, hSOL, hBNB), this reconstruction independently measures a combined drop of ≈$1,251,369 at theft-day prices. Radix validators halted mainnet consensus the same evening; it was still halted on 2026-09-11 while a protocol fix was validated |
-| Window | 2026-08-31, sweep 16:02-16:57 UTC (independently confirmed below); mainnet halt 21:19:06 UTC the same day, still ongoing as of this reconstruction (2026-09-11) |
+| Window | 2026-08-31, sweep 16:02-16:57 UTC (independently confirmed below); mainnet halt 21:19:06 UTC the same day, still ongoing when I wrote this reconstruction (2026-09-11), last checked then |
 | DefiLlama figure | $1,249,946, chain-level row "Radix", classification "Access Control" / "Improper Access Control" (no source URL attached in the feed) |
 | Verified independently | The exact halt point (state_version/epoch/round/timestamp) is confirmed live against Radix's own Gateway API; per-asset supply drops during the sweep are independently measured from each resource's own `total_supply` before/after, not assumed from any report; the single largest hUSDC-draining transaction is found by this project's own live filtering of the transaction stream, and its `BurnFungibleResourceEvent`/`SendRemoteTransferEvent` are decoded directly, matching the summed vault withdrawals to the cent; the theft-day USD total this project independently computes (≈$1,251,369) lands within 0.11% of DefiLlama's tracked figure |
 | What's still open | Cross-checking Ethereum mainnet for the recipient address named in the largest transaction's own `SendRemoteTransferEvent` finds no USDC delivery matching that message as of this reconstruction; the only USDC delivered matches a smaller, later hUSDC message (see below); this project did not trace the Solana- or BSC-side legs (hSOL, hBNB) at all, and prices 4 of the 6 assets using CoinGecko's daily historical close rather than a per-transaction spot rate |
@@ -259,7 +259,7 @@ confirmation, not a correction.
   (16:02-16:57 UTC); this is the same source and method other entries in
   this repo use for off-Ethereum assets, but it is not a per-transaction
   spot rate.
-- Radix mainnet was still halted as of this reconstruction (2026-09-11).
+- Radix mainnet was still halted when I wrote this reconstruction (2026-09-11); that was my last check.
   Every figure above reflects the chain's state as of the halt
   (state_version 557840622); nothing here reflects any recovery,
   clawback, or compensation action that may occur after mainnet resumes.

@@ -19,9 +19,9 @@ not been restored on two of the three chains.
 | Incident | LayerZero OFT delegate hijack via a legacy `approveAndCall` arbitrary-call primitive on The Sandbox's SAND bridge (Base, BSC, Ethereum) |
 | Window | 2026-08-21 23:41:41 UTC (genesis hijack tx) to 2026-08-22 04:45:21 UTC (last phantom mint), about 5 hours 3 minutes |
 | Press figure | About 14.75 million SAND, about 80 ETH, about 675,000 USD, all attributed to the Ethereum adapter leg only |
-| Verified independently | Total attacker proceeds across both chains: 405.828879423128923336 WETH gross, 396.60405378273106 ETH consolidated in one wallet as of 2026-09-09, about 5.2 times the press figure |
+| Verified independently | Total attacker proceeds across both chains: 405.828879423128923336 WETH gross, 396.60405378273106 ETH consolidated in one wallet when I read it on 2026-09-09 (last read that day), about 5.2 times the press figure |
 | Standout finding | The Sandbox's own on-chain bounty offer independently arrives at 396.603 ETH, matching this reconstruction's balance to within 0.00105 ETH, and was not found in any press coverage |
-| Standout finding | As of 2026-09-09 the hijacked LayerZero delegate has not been restored on Base or BSC. About 339.55 trillion phantom SAND remains outstanding, roughly 113,000 times the real 3 billion supply cap |
+| Standout finding | On 2026-09-09 the hijacked LayerZero delegate had not been restored on Base or BSC (read that day, last read then). About 339.55 trillion phantom SAND was outstanding then, roughly 113,000 times the real 3 billion supply cap |
 
 ## The method
 
@@ -137,7 +137,7 @@ re-measured and, across six deliveries in Ethereum blocks 25807119 to
 leaving the adapter at exactly 100.000000718748018388 SAND, the same dust
 figure as before. The adapter's full lifetime books close at
 18,244,705.022317718748018388 SAND locked in against 18,244,705.016758 SAND
-released, a remaining balance of 0.005559718748018388 SAND as of 2026-09-09.
+released, a remaining balance of 0.005559718748018388 SAND when I read it on 2026-09-09 (last read that day).
 
 ### Press's own phantom-mint total is close, but one widely repeated alternative figure is not
 
@@ -204,9 +204,9 @@ reconstruction's own eth_getBalance read of 396.60405378273106 ETH sitting
 in the attacker's consolidation wallet, 0xaC76B04397c9296dfc00e25c96D8e51b4edFaF29
 (nonce 3 as of the last check, so only a handful of outbound transactions
 since it began consolidating funds), within about 0.001 ETH. No press
-coverage of this transaction was found. As of 2026-09-09 the named return
-address's only lifetime inbound transaction predates the incident, dated
-2025-02-24, so nothing has been returned.
+coverage of this transaction was found. On 2026-09-09 the named return
+address's only lifetime inbound transaction predated the incident, dated
+2025-02-24, so nothing had been returned (read that day, last read then).
 
 ### A press dormancy claim that doesn't match any wallet found here
 
@@ -232,7 +232,7 @@ loss is roughly 5.2 times what was publicly disclosed.
 
 ### The hijack had not been fully remediated as of 2026-09-09
 
-As of 2026-09-09, `EndpointV2.delegates()` for the OFTSand contract
+On 2026-09-09 (read that day, last read then), `EndpointV2.delegates()` for the OFTSand contract
 returned 0xa467CD7b1200AEFeBf823B1e56FD557432b37952 on Base, a live,
 6,970-byte deployed contract rather than an EOA, and
 0x88cD1E826A7134b595eD7f2cF5A9C54607f532c6 on BSC, 4,816 bytes. Neither is
