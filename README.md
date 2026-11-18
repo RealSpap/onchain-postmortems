@@ -2,6 +2,8 @@
 
 *One question for every on-chain incident: what made it possible, and which check was missing?*
 
+[![Incidents](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2FRealSpap%2Fonchain-postmortems%2Fmain%2Fdata%2Fbadge-incidents.json)](docs/replay.md) [Replay every figure in one command](docs/replay.md)
+
 **$954.3M in DeFi and on-chain losses across 72 incidents, 71 of them reconstructed from raw chain data (the exception, tectonic-cronos, is not: per Cronos's report the chain was rolled back past it); $617.4M of it independently recomputed, the rest sourced from the protocol, press or DefiLlama.**
 
 Forensic reconstructions done on-chain. Each entry rebuilds the exploit

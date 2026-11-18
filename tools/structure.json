@@ -58,12 +58,15 @@
     "docs/method.md",
     "docs/limits.md",
     "docs/by-type.md",
+    "docs/replay.md",
+    "data/badge-incidents.json",
     ".github/workflows/auto_release.yml",
     ".github/workflows/check_drift.yml",
     ".github/ISSUE_TEMPLATE/figure-is-wrong.yml",
     ".github/ISSUE_TEMPLATE/suggest-incident.yml",
     ".github/CODEOWNERS",
-    ".github/ISSUE_TEMPLATE/replay-differs.yml"
+    ".github/ISSUE_TEMPLATE/replay-differs.yml",
+    ".github/ISSUE_TEMPLATE/config.yml"
   ],
   "legacy_redirects": [
     "across-solana-event-spoofing",

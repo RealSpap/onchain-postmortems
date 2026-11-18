@@ -22,6 +22,7 @@ INDEX = ROOT / "INDEX.md"
 OUT_JSON = ROOT / "data" / "incidents.json"
 OUT_CSV = ROOT / "data" / "incidents.csv"
 OUT_TYPE = ROOT / "docs" / "by-type.md"
+OUT_BADGE = ROOT / "data" / "badge-incidents.json"
 README = ROOT / "README.md"
 REPO = "https://github.com/RealSpap/onchain-postmortems"
 FIELDS = ["slug", "protocol", "date", "loss_usd", "floor", "approximate", "sourced",
@@ -70,6 +71,11 @@ def render(rows):
     return js, buf.getvalue()
 
 
+def render_badge(rows):
+    """Shields endpoint data: the incident count, computed from the same rows as the JSON export."""
+    return json.dumps({"schemaVersion": 1, "label": "incidents", "message": str(len(rows)), "color": "blue"}, indent=1) + "\n"
+
+
 def self_check(rows, text):
     # The export must add up to the totals INDEX.md states for itself.
     years = re.findall(r"\*\*\d{4} total: \$([\d,]+)\*\* across (\d+) incidents", text)
@@ -91,7 +97,7 @@ def main():
     js, cs = render(rows)
     if sys.argv[1:] == ["--check"]:
         readme_now = README.read_text()
-        stale = [p.name for p, c in ((OUT_JSON, js), (OUT_CSV, cs), (OUT_TYPE, by_type.render_page(rows)), (README, by_type.splice(readme_now, by_type.render_block(rows))))
+        stale = [p.name for p, c in ((OUT_JSON, js), (OUT_CSV, cs), (OUT_BADGE, render_badge(rows)), (OUT_TYPE, by_type.render_page(rows)), (README, by_type.splice(readme_now, by_type.render_block(rows))))
                  if not p.exists() or p.read_text() != c]
         if stale:
             raise SystemExit(f"Stale export, rerun python3 tools/export_dataset.py: {', '.join(stale)}")
@@ -100,6 +106,7 @@ def main():
     OUT_JSON.parent.mkdir(exist_ok=True)
     OUT_JSON.write_text(js)
     OUT_CSV.write_text(cs)
+    OUT_BADGE.write_text(render_badge(rows))
     OUT_TYPE.write_text(by_type.render_page(rows))
     README.write_text(by_type.splice(README.read_text(), by_type.render_block(rows)))
     recomputed = sum(r["loss_usd"] for r in rows if not r["sourced"])
