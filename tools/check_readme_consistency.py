@@ -8,7 +8,7 @@ a chain or any external API. It only checks that the numbers and
 cross-references these files make about EACH OTHER agree.
 
 The Index is grouped by year (### <YYYY>), then by month
-(#### <Month name> <YYYY>, optionally suffixed " (current month)"), each
+(#### <Month name> <YYYY>, optionally suffixed " (latest month)"), each
 month holding one markdown table of incident rows. Checks:
 
   1. Every month's stated subtotal equals the sum of its rows' Loss ($)
@@ -16,7 +16,7 @@ month holding one markdown table of incident rows. Checks:
   2. Every year's stated total and count equal the sum of its months'.
   3. The cumulative total, the recomputed share (rows not marked †) and the
      incident count in README's "At a glance" equal the Index's.
-  4. Exactly one month is marked "(current month)", the latest one.
+  4. Exactly one month is marked "(latest month)", the latest one.
   5. The number of Index rows equals the number of incident subfolders
      (a subfolder counts only if it has its own README.md), and every row's
      Link cell points to an existing subfolder.
@@ -57,7 +57,7 @@ MONTH_INDEX = {name: i + 1 for i, name in enumerate(MONTH_NAMES)}
 
 YEAR_HEADING_RE = re.compile(r"^### (\d{4})\s*$")
 MONTH_HEADING_RE = re.compile(
-    r"^#### (" + "|".join(MONTH_NAMES) + r") (\d{4})(?: \(current month\))?\s*$"
+    r"^#### (" + "|".join(MONTH_NAMES) + r") (\d{4})(?: \(latest month\))?\s*$"
 )
 YEAR_TOTAL_RE = re.compile(
     r"^\*\*(\d{4}) total: \$([\d,]+)\*\* across (\d+) incidents?\b"
@@ -138,7 +138,7 @@ def parse_index(index_text: str):
     """
     Walk the Index section line by line, returning:
       years: dict[int -> {"stated_total": int, "stated_count": int, "months": [MonthSection,...]}]
-      current_month_keys: list of (year, month_num) marked "(current month)"
+      current_month_keys: list of (year, month_num) marked "(latest month)"
     """
     lines = index_text.splitlines()
     years = {}
@@ -173,7 +173,7 @@ def parse_index(index_text: str):
                     f"but it sits under the '### {current_year}' section."
                 )
             month_num = MONTH_INDEX[month_name]
-            is_current = line.rstrip().endswith("(current month)")
+            is_current = line.rstrip().endswith("(latest month)")
             current_month_section = MonthSection(current_year, month_num, is_current)
             years[current_year]["months"].append(current_month_section)
             if is_current:
@@ -366,21 +366,28 @@ def check_current_month(years: dict, current_month_keys: list) -> None:
     latest = max(all_keys)
     if len(current_month_keys) == 0:
         fail(
-            "No month heading is marked '(current month)'. The month "
+            "No month heading is marked '(latest month)'. The month "
             f"{MONTH_NAMES[latest[1]-1]} {latest[0]} (the chronologically latest "
             "with a section) should be."
         )
     if len(current_month_keys) > 1:
         fail(
-            "More than one month heading is marked '(current month)': "
+            "More than one month heading is marked '(latest month)': "
             f"{[f'{MONTH_NAMES[m-1]} {y}' for (y, m) in current_month_keys]}."
         )
     marked = current_month_keys[0]
     if marked != latest:
         fail(
-            f"'(current month)' is on {MONTH_NAMES[marked[1]-1]} {marked[0]}, but the "
+            f"'(latest month)' is on {MONTH_NAMES[marked[1]-1]} {marked[0]}, but the "
             f"chronologically latest month with a section is {MONTH_NAMES[latest[1]-1]} {latest[0]}."
         )
+
+
+def check_no_old_mark(index_text: str) -> None:
+    """The mark used to be '(current month)'; no line of the Index may call it that any more."""
+    for n, line in enumerate(index_text.splitlines(), 1):
+        if "current month" in line.lower():
+            fail(f"INDEX.md line {n} says 'current month'; the mark is '(latest month)': {line[:80]!r}")
 
 
 def check_table_rows_match_subfolders(all_rows: list) -> None:
@@ -588,6 +595,7 @@ def main() -> int:
         check_year_totals(years)
         check_overall_total(readme_text, years, all_rows)
         check_current_month(years, current_month_keys)
+        check_no_old_mark(index_text)
         check_table_rows_match_subfolders(all_rows)
         check_footnotes(index_text)
         check_headline(readme_text, years, all_rows)
@@ -603,7 +611,7 @@ def main() -> int:
     print(
         f"README/INDEX/CORRECTIONS self-consistency check passed ({len(all_rows)} incidents "
         f"across {len(years)} year(s) and {total_months} month(s); month/year/overall totals, "
-        f"current-month label, subfolders and links, footnotes, headline, corrections, floors and registries all consistent)."
+        f"latest-month label, subfolders and links, footnotes, headline, corrections, floors and registries all consistent)."
     )
     return 0
 

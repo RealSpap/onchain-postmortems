@@ -16,7 +16,7 @@ month's subtotal, a year's total, and the overall cumulative total and
 incident count (in README.md's "at a glance" block AND its opening
 headline sentence), is recomputed from the Index itself every time this
 script runs, never from a stored counter, so nothing can drift out of sync
-with the table data. The script also keeps the "(current month)" label on
+with the table data. The script also keeps the "(latest month)" label on
 whichever month is chronologically latest after the new incident is
 inserted.
 
@@ -74,7 +74,7 @@ ROW_RE = re.compile(
 
 YEAR_HEADING_RE = re.compile(r"^### (\d{4})\s*$")
 MONTH_HEADING_RE = re.compile(
-    r"^#### (" + "|".join(MONTH_NAMES) + r") (\d{4})(?: \(current month\))?\s*$"
+    r"^#### (" + "|".join(MONTH_NAMES) + r") (\d{4})(?: \(latest month\))?\s*$"
 )
 YEAR_TOTAL_RE = re.compile(r"^\*\*(\d{4}) total: \$([\d,]+)\*\* across (\d+) incidents?\b(.*)$")
 MONTH_SUBTOTAL_RE = re.compile(
@@ -482,7 +482,7 @@ def main():
             f"**{year} total: ${year_total:,.0f}** across {year_count} incidents ({span_text}).{note}"
         )
 
-    # Move the "(current month)" label to whichever month is now latest.
+    # Move the "(latest month)" label to whichever month is now latest.
     index_start, index_end = find_index_bounds(lines)
     months, years = parse_index_structure(lines, index_start, index_end)
     latest_key = max(b.key for b in months)
@@ -491,7 +491,7 @@ def main():
         mm = MONTH_HEADING_RE.match(heading_line)
         month_heading_text = f"{mm.group(1)} {mm.group(2)}"
         is_current = block.key == latest_key
-        lines[block.heading_line_idx] = f"#### {month_heading_text}" + (" (current month)" if is_current else "")
+        lines[block.heading_line_idx] = f"#### {month_heading_text}" + (" (latest month)" if is_current else "")
 
     # Overall totals feed README.md's "At a glance" block and its opening
     # headline sentence (written to README.md below, not into INDEX.md).
