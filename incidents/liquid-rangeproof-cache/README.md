@@ -19,7 +19,7 @@ address) and Elements' own GitHub repository.
 | Incident | A range-proof cache key collision in Elements let a peg-out get accepted as fully backed when it was not; the federation's real multisig then genuinely authorized releasing BTC against it |
 | Window | 2026-09-06 14:28:56 to 16:48:45 UTC (3 outflow transactions, Bitcoin mainnet); partial return 2026-09-07 16:09:25 UTC |
 | Press/DefiLlama figure | DefiLlama and press both cite about $320,000,000 gross, "~4,000 BTC" |
-| Verified independently | 4,007.82220180 BTC net left the federation's own reserve address across 3 transactions on 2026-09-06, each spent with 11 valid signatures against the federation's real multisig script. 3,400.00000000 BTC came back on 2026-09-07. 598.50041569 BTC remains at the same source address, live, as of this reconstruction |
+| Verified independently | 4,007.82220180 BTC net left the federation's own reserve address across 3 transactions on 2026-09-06, each spent with 11 valid signatures against the federation's real multisig script. 3,400.00000000 BTC came back on 2026-09-07. 598.50041569 BTC remained at the same source address as of 2026-09-10; as of 2026-11-22, read at 15:50Z on Bitcoin mainnet, block 977069, the address holds 598.50468185 BTC (two nodes), with no transaction spending from it since block 966300 |
 | Timestamp note | Liquid Network's own incident report, as indexed by search engines (the post itself could not be fetched directly), gives "15:53:10 UTC" for block 4,050,336; that block's own chain-recorded timestamp, read live, is 13:53:10 UTC, two hours earlier |
 
 Fig. 1: fund flow, addresses and tx hashes truncated for display.
@@ -122,7 +122,7 @@ as the still-unrecovered loss: a floor, not a ceiling, since the two other,
 smaller destination addresses from the original drain (6.64740016 BTC
 combined) are not accounted for in it. At CoinGecko's live rate when the
 script ran (2026-09-10 11:09:20 UTC, $77,809/BTC), that floor is worth
-about **$46,568,719**. Because it is a balance still held, it is priced at
+about **$46,568,719**. Because it was a balance still held on 2026-09-10, it is priced at
 the rate of the day it was read, not at the theft-day rate; at the
 2026-09-06 rate used for the gross figure ($79,821.70/BTC) it would be
 about $47,773,000.

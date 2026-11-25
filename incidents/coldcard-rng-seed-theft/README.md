@@ -10,8 +10,7 @@ minutes. This reconstruction starts from Coinkite's own official GitHub
 repository, not a press summary, to confirm the root cause commit-for-commit,
 then independently traces one full, concrete theft chain end to end against
 live Bitcoin mainnet data: from 505 victim addresses, through a first-hop
-consolidation address, to a second address where, six weeks later, the
-entire haul is confirmed still sitting completely untouched.
+consolidation address, to a second address where, as of 2026-11-22, read at 15:50Z on Bitcoin mainnet, block 977069, 562.02148293 BTC had been received and none spent, while the first address still held 32.45061090 BTC, 594.47209383 BTC in total.
 
 ## At a glance
 
@@ -21,7 +20,7 @@ entire haul is confirmed still sitting completely untouched.
 | Window (this entry) | 2026-07-30 01:36:08-01:51:26 UTC, 4 consecutive Bitcoin blocks (960188-960191); this is wave 1 of a reported 4-wave incident spanning into early August |
 | DefiLlama / named-security-team figure | DefiLlama: "COLDCARD", $116,000,000, classification "Key Compromise", technique "Weak Key Generation". TRM Labs (named security team): "roughly 1,816 BTC (~$116 million) drained from more than 5,200 addresses" across 4 waves, explicitly stated as preliminary |
 | Verified independently (wave 1 only) | 594.47728031 BTC swept from 505 distinct victim addresses (1,331 UTXOs, 506 transactions) into one consolidation address inside a 15-minute, 4-block window; $37,996,965.32 at CoinGecko's theft-day price |
-| A primary-source root cause independently confirmed | Coinkite's own GitHub commit `ca724637` ("fixes rng", 2026-07-31) fixes exactly the bug Coinkite's own blog describes; the current live file still shows the original bad line, `mpconfigboard.h:77` |
+| A primary-source root cause independently confirmed | Coinkite's own GitHub commit `ca724637` ("fixes rng", 2026-07-31) fixes exactly the bug Coinkite's own blog describes; as of 2026-11-22, read at 15:50Z on GitHub, Coldcard/firmware master at commit fab5f64a8346e9a1d71d0792e49bb0f1ca9422a8 still shows the original line at `mpconfigboard.h:77` |
 
 ## The method
 
@@ -123,11 +122,10 @@ address, `bc1qq85v2c926eg6pgxhwp6q7lf6cnsz80qs3fcu9r`, with no change output.
 
 Querying that second address live on 2026-09-10 (last queried that day), across two independent
 explorers that agree byte for byte: it has received 562.02148293 BTC total
-and **spent none of it**. Address A itself still holds its own residual 165
+and **spent none of it**. As of 2026-11-22, read at 15:50Z on Bitcoin mainnet, block 977069, address A itself holds its own residual 165
 unspent UTXOs, 32.45061090 BTC. Added together, 594.47209383 of the original
 594.47728031 BTC (the roughly 0.005 BTC gap fully explained by the one
-mining fee plus later dust deposits) is sitting completely untouched across
-exactly these two addresses, more than six weeks after the theft. Neither
+mining fee plus later dust deposits) was unspent across exactly these two addresses as of 2026-11-22, read at 15:50Z on Bitcoin mainnet, block 977069, more than sixteen weeks after the theft. Neither
 address shows up in TRM Labs' or Coinkite's own public statements, which
 name no addresses at all.
 
@@ -179,16 +177,10 @@ Caveats.
   affiliated with Coinkite, Coldcard, TRM Labs, or any outlet cited above.
 - **The $37,996,965.32 figure is a floor, not the full incident.** It covers
   only the 2026-07-30 wave this entry independently traced end to end. The
-  broader, still-preliminary ~$116,000,000 figure DefiLlama and TRM Labs
-  track spans 3 additional waves this entry did not re-verify.
-- The BTC still sitting in the two addresses traced here (594.47 BTC
-  combined) is not "recovered" or frozen in any sense; it is simply unmoved
-  as of this reconstruction's run, and could move at any time after
-  publication.
+  broader ~$116,000,000 figure (as of 2026-11-22, read at 15:51Z and 15:53Z, listed by DefiLlama and still described by TRM Labs as preliminary) spans 3 additional waves this entry did not re-verify.
+- The BTC in the two addresses traced here (594.47 BTC combined) had not moved as of 2026-11-22, read at 15:50Z on Bitcoin mainnet, block 977069; it is not "recovered" or frozen in any sense, and could move at any time after publication.
 - As with every entry in this repo, this reflects a snapshot as of
-  2026-09-10. Whether either address has moved, or whether Coinkite or TRM
-  Labs have published a fuller, non-preliminary accounting, was not
-  re-checked after this reconstruction's run.
+  2026-09-10. As of 2026-11-22, read at 15:50Z on Bitcoin mainnet, block 977069, the two addresses still hold the same 594.47209383 BTC unspent as on 2026-09-10, and, read at 15:53Z, TRM Labs' page still describes its figures as preliminary.
 
 ## License
 

@@ -102,7 +102,7 @@ These are the zero-bid auctions of the March 2020 crash: the debt was never cove
 | 06:13:11 | Exploit, block 26131471 (nonce 2) |
 | 06:19:35 to 06:28:35 | 20 deposits of 10 ETH to the Tornado Cash router (`TornadoRouter` on Blockscout), nonces 3 to 22 |
 
-The attacker holds 0.070091 ETH at the time of this reconstruction and has sent nothing since the last deposit. The keeper proxy holds no ETH, no WETH and no Vat collateral.
+As of 2026-11-22, read at 15:51Z on Ethereum, chain ID 1, block 26471667, the attacker EOA holds 0.070091 ETH and its nonce is 23, the value it had at block 26131771 right after the last deposit (2026-10-06), so it has sent nothing since. The keeper proxy holds no ETH, no WETH and no Vat collateral.
 
 ## Caveats
 

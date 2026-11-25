@@ -40,7 +40,7 @@ The 243 logs show, in order:
 
 ## What came before and after
 
-The EOA had no code one block before and at the exploit block and its nonce was 550; its code today is an EIP-7702 delegation designator, set after the attack, though the proof of concept describes it as delegated at the time. Each of the five helpers carried a delegation designator one block before; their pending referral rewards one block before, read from Rental by hand with the function name taken from the proof of concept (not part of the script), summed to 2,895.4 LULA, much less than the 23,607.99 LULA paid, and how Rental computes what it pays was not read (it is not verified). The EOA's other 550 transactions, the attack contract, the owner and the way the 5,000 LULA reached the EOA were not examined.
+The EOA had no code one block before and at the exploit block and its nonce was 550; its code is, as of 2026-11-22, read at 15:49Z on BNB Smart Chain, chain ID 56, block 135105934, an EIP-7702 delegation designator (0xef0100 followed by 0x63c0c19a282a1b52b07dd5a65b58948a07dae32b), and it had no code at blocks 112655390 and 112655391, so the designator was set after the attack, though the proof of concept describes it as delegated at the time. Each of the five helpers carried a delegation designator one block before; their pending referral rewards one block before, read from Rental by hand with the function name taken from the proof of concept (not part of the script), summed to 2,895.4 LULA, much less than the 23,607.99 LULA paid, and how Rental computes what it pays was not read (it is not verified). The EOA's other 550 transactions, the attack contract, the owner and the way the 5,000 LULA reached the EOA were not examined.
 
 ## The method
 
@@ -64,7 +64,7 @@ Each is a numbered check printed as PASS or FAIL; `--tx <hash>` runs the script 
 - **Rental is not verified,** nor is the attack contract, the owner or the pair. What triggers the payouts, how their amount is computed and whose rewards the five helpers hold were not read.
 - **The loans' sources are listed by address only;** Moolah is the only one identified here. The WBNB and other tokens in the loan logs were not followed.
 - **About 17,930.61 LULA stayed in the attack contract,** not sold and not priced; the loss counted is the USDT at face value.
-- **The proof of concept calls the EOA "EIP-7702 delegated";** at the exploit block it had no code, and today it carries a designator.
+- **The proof of concept calls the EOA "EIP-7702 delegated";** at the exploit block it had no code, and as of 2026-11-22, read at 15:49Z on BNB Smart Chain, chain ID 56, block 135105934, it carries a designator.
 - **Why the owner address is fee-excluded and why buying was disabled** were not examined, nor whether the LULA team answered (the proof of concept mentions an on-chain bounty message, not read) or paused anything.
 - **The category is the nearest of the index's seven.** A token function that shrinks the pair's reserve and syncs it without paying anything in: Rounding/Math-Bug, as for SKYDAO, CashCowCoin and FH Token. DefiLlama says "Access Control".
 

@@ -64,7 +64,7 @@ python3 reconstruct_exploit.py
 No hardcoded press figures: every address and number below is read live,
 either from Drift's own GitHub deployment record
 (`raw.githubusercontent.com/drift-labs/protocol-v2`, the repo's `master`
-branch still resolves under the pre-rebrand org name even though the
+branch answered HTTP 200 under the pre-rebrand org name on 2026-11-22 (read at 15:51Z) even though the
 GitHub org itself was later renamed and archived to
 `velocity-exchange/protocol-v2`, confirmed via a live GitHub API call, see
 Caveats), from Solana's public RPC (`api.mainnet-beta.solana.com`), or from
@@ -287,7 +287,7 @@ signers, transaction content independently verified outside the primary
 signing interface, and enforced timelocks, a remediation plan that maps
 directly onto the mechanism this reconstruction independently found
 on-chain (durable nonces, an unreviewed multisig approval, no timelock).
-This script still fetches the program ID from the `master` branch of
+As of 2026-11-22, read at 15:52Z, this script fetches the program ID from the `master` branch of
 `drift-labs/protocol-v2`'s raw content, which GitHub continues to resolve
 correctly despite the rename.
 

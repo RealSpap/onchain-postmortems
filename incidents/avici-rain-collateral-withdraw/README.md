@@ -185,7 +185,7 @@ Ethereum, a claim this project did not independently trace).
   coverage describes a similarly-patterned, separate loss at a second
   Rain-integrated app (`Tria`, reported at $431,945 / 636 users); that
   loss is not independently reconstructed or counted in this entry's
-  total, and is not currently a separate DefiLlama-tracked row this
+  total, and is not a separate DefiLlama-tracked row as of 2026-11-22 (hacks feed read at 15:51Z, 1,373 rows, newest dated 2026-11-21) that this
   project could cross-check.
 - One public RPC (`api.mainnet-beta.solana.com`) was used for the entire
   reconstruction; no paid RPC or API key was used anywhere in this

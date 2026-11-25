@@ -2,7 +2,7 @@
 
 On September 24, 2026, between 18:31 and 21:23 UTC, three Bitget wallets on Ethereum sent 24,596.575940615 ETH, 34,751,168.12099 USDT, 12,852,046.242513 USDC and 3,000.322053 XAUt to one fresh address. Bitget says attackers fed spoofed withdrawal requests into its own signing flow; its total across four chains is $387.5M. This entry covers the Ethereum leg only, rebuilt from the chain: about $126.4M at the time, which agrees with Hypernative's $126.5M for Ethereum.
 
-What coverage does not spell out is how fast the part of the loot that could have been frozen stopped being freezable. USDT, USDC and XAUt can all be frozen by their issuers. Together they were worth about $60.4M. The attacker handed them to a second address that sold every unit for ETH through UniswapX-style signed orders, filled by third-party solvers and market makers, in 22 transactions. The first sale landed 2 minutes after the USDT reached that address; the last one 28 minutes after the last stolen token arrived. By 19:29:35 UTC nothing issuer-freezable was left on the attacker side, and today neither address is on the USDT or USDC blacklist.
+What coverage does not spell out is how fast the part of the loot that could have been frozen stopped being freezable. USDT, USDC and XAUt can all be frozen by their issuers. Together they were worth about $60.4M. The attacker handed them to a second address that sold every unit for ETH through UniswapX-style signed orders, filled by third-party solvers and market makers, in 22 transactions. The first sale landed 2 minutes after the USDT reached that address; the last one 28 minutes after the last stolen token arrived. By 19:29:35 UTC nothing issuer-freezable was left on the attacker side, and, as of 2026-11-22, read at 15:49Z on Ethereum, chain ID 1, block 26471658, neither address is on the USDT or USDC blacklist.
 
 The registry `registre_hypotheses.csv` states each fact as a falsifiable claim with its locator; `reconstruct_exploit.py` re-derives every number here live.
 
@@ -21,7 +21,7 @@ The registry `registre_hypotheses.csv` states each fact as a falsifiable claim w
 | Dollar value | $126,417,066 at block 26049341 (Chainlink ETH/USD 2682.69107541, XAU/USD 4275.82, stablecoins at par): $65,985,015 in ETH, $47,603,214 in stablecoins, $12,828,837 in XAUt |
 | Issuer-freezable share | $60,432,051 (USDT + USDC + XAUt), all sold for ETH by 19:29:35 UTC |
 | Press figures | Bitget: $351.6M first, $387.5M after adding Zcash and Tron. Hypernative: Ethereum $126.5M, XRPL $157.7M, Zcash about $29.4M, Tron $7M. DefiLlama: $387,000,000, "Key Compromise / Hot Wallet Key Compromised", source field empty |
-| Status | Funds moved on. Relay and attacker hold no stolen token today; neither is blacklisted by Tether or Circle. The roughly $318K that Circle and Tether froze on 2026-09-25 sits on another address, see Caveats |
+| Status | Funds moved on. As of 2026-11-22, read at 15:49Z on Ethereum, chain ID 1, block 26471658, the relay holds 0 USDT, 0 USDC and 0 XAUt, and the attacker holds 0.00109 USDT, 0.002613 USDC and 0.002053 XAUt (about $8.8 in total at the XAU/USD price used in this entry); neither is blacklisted by Tether or Circle. The roughly $318K that Circle and Tether froze on 2026-09-25 sits on another address, see Caveats |
 
 ## Fund flow
 
@@ -102,13 +102,13 @@ Where the tokens went:
 | `0xec4fb7e7c35c241e1138a2d8cfbb09f3ad1ccb22` (no tag) | | | 300 |
 | Relay's own 3 transactions (swaps against on-chain DEX pools) | 5,000,000 | | 600 |
 
-A second endpoint (`eth-mainnet.public.blastapi.io`), reading the 22 transaction receipts directly, gives the same totals: 34,751,168.12 USDT, 12,852,046.24 USDC, 3,000.32 XAUt. The few raw units the attacker kept were below one cent.
+A second endpoint (`eth-mainnet.public.blastapi.io`), reading the 22 transaction receipts directly, gives the same totals: 34,751,168.12 USDT, 12,852,046.24 USDC, 3,000.32 XAUt. As of 2026-11-22, read at 15:49Z on Ethereum, chain ID 1, block 26471658, the raw units the attacker kept are 1,090 of USDT, 2,613 of USDC and 2,053 of XAUt: below one cent for the two stablecoins, about $8.78 for the XAUt at the XAU/USD price of 4,275.82 used above.
 
 The consequence: every unit of the freezable $60.4M is now in the inventory of whoever filled the orders, not on an attacker address. A freeze on the attacker or the relay after 19:29:35 UTC would have frozen nothing. The window for an issuer freeze on the attacker's side was 30 minutes, from the USDT's arrival to the last sale.
 
 ### Address poisoning around the attacker
 
-The attacker's history is full of lookalike addresses: `0x7c9332f7...3e1c` next to the real relay `0x7c96279e...3e1c`, and `0xd2c2c5d3...f899`, `0x600c1d06...84b2`, `0xdc29cb3b...dc63` next to the three real ETH destinations. They send dust or fake-token transfers to bait a copy-paste mistake. Hypernative attributes them to third-party poisoning campaigns. The attacker never sent anything to one of them: all eight of its transactions go to the relay, the three ETH destinations or the token contracts.
+The attacker's history is full of lookalike addresses: `0x7c9332f7...3e1c` next to the real relay `0x7c96279e...3e1c`, and `0xd2c2c5d3...f899`, `0x600c1d06...84b2`, `0xdc29cb3b...dc63` next to the three real ETH destinations. They send dust or fake-token transfers to bait a copy-paste mistake. Hypernative attributes them to third-party poisoning campaigns. As of 2026-11-22, read at 15:49Z on Ethereum, chain ID 1, block 26471658 (nonce 8), the attacker has sent eight transactions in total and never anything to one of them: all eight go to the relay, the three ETH destinations or the token contracts.
 
 ## Caveats
 

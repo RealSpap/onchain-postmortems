@@ -9,8 +9,7 @@ team's two merged fix commits describing the root cause in detail, then
 independently re-derives every number in them from raw chain data: the
 exact 23-message transaction, the add-liquidity/withdraw pair that
 extracted the phantom credit, the ten swaps that converted it into real
-BTC, and a live check of Bitcoin mainnet itself confirming that BTC is
-still sitting untouched where the attacker sent it.
+BTC, and a Bitcoin mainnet check on 2026-09-10 that found the BTC unspent where the attacker sent it; as of 2026-11-22, read at 15:50Z on Bitcoin mainnet, block 977,069, that address has spent all of it, in one transaction at block 974,609 (2026-11-05).
 
 ## At a glance
 
@@ -19,7 +18,7 @@ still sitting untouched where the attacker sent it.
 | Incident | A voter-clobber bug inside a 23-message `MsgDeposit` got two legitimate trade-account withdrawals misclassified as theft; the resulting slash subsidy, never capped against pool depth, credited a near-empty ARB.LINK pool with tens of millions of phantom CACAO, which a single-sided liquidity add/withdraw immediately extracted |
 | Window | 2026-08-18 17:00:38 UTC (the 23-message exploit tx) to 17:07:06 UTC (the last of 10 swaps to Bitcoin), all in the same block range |
 | DefiLlama / press figure | DefiLlama: "Maya Protocol", $1,700,000, chain "Mayachain". Press (via PeckShield) cited "roughly $1.7 million," with "20 BTC ... sitting untouched in a single wallet" |
-| Verified independently | 48,869,502.5269541928 CACAO withdrawn from the inflated pool (matches MAYAChain's own GitLab RCA's "48.87 million" almost digit for digit); 20.82730682 BTC of that swapped out to a Bitcoin address, independently confirmed via Blockstream to have arrived and remain entirely unspent; $1,343,181.04 at BTC's CoinGecko theft-day price |
+| Verified independently | 48,869,502.5269541928 CACAO withdrawn from the inflated pool (matches MAYAChain's own GitLab RCA's "48.87 million" almost digit for digit); 20.82730682 BTC of that swapped out to a Bitcoin address, independently confirmed via Blockstream on 2026-09-10 to have arrived and to be entirely unspent then (as of 2026-11-22, read at 15:50Z on Bitcoin mainnet, block 977,069, all of it has been spent, see Corrections); $1,343,181.04 at BTC's CoinGecko theft-day price |
 | A primary-source figure independently re-derived | MAYAChain's own GitLab RCA states the attacker "withdrew 48.87 million CACAO" (rounded); this reconstruction re-derives 48,869,502.5269541928 CACAO to full precision straight from the raw withdrawal transaction |
 
 ## The method
@@ -120,9 +119,7 @@ Querying Bitcoin mainnet itself, independent of anything MAYAChain
 reports, confirms it: that address's `funded_txo_sum` is 2,082,731,774
 sats across 12 transactions (within 0.0001% of the MAYAChain-side total;
 Bitcoin's own UTXO batching accounts for the tiny gap and the 12-vs-10 tx
-count), and its `spent_txo_sum` is exactly 0. Every satoshi the attacker
-swapped out is still sitting in that address, unmoved, as of this
-reconstruction's run.
+count), and its `spent_txo_sum` was exactly 0 on 2026-09-10. Every satoshi the attacker swapped out was still sitting in that address, unmoved, at this reconstruction's run on that date; as of 2026-11-22, read at 15:50Z on Bitcoin mainnet, block 977,069, all of it has been spent (see Corrections).
 
 ### What didn't get cashed out
 
@@ -130,13 +127,9 @@ The 40,000,000 CACAO swapped to BTC is well short of the 48,869,502.53
 CACAO withdrawn. Paging through every action Midgard has indexed for the
 attacker's native address (54 actions total) and netting every CACAO flow
 against it gives an expected balance of 8,874,278.3052775995 CACAO; the
-address's actual live balance, queried today via mayanode's own
-`/cosmos/bank` endpoint, is **8,874,269.1052775996 CACAO**, a gap of just
+address's balance, queried on 2026-09-10 via mayanode's own `/cosmos/bank` endpoint, was **8,874,269.1052775996 CACAO**, a gap of just
 9.2 CACAO consistent with native gas fees (which draw down the balance
-without themselves being a Midgard-indexed action). That residual amount
-has not been converted to anything outside MAYAChain's own accounting the
-way the BTC has: it is inflated CACAO supply sitting in a native wallet,
-not an asset the attacker has pulled out of the protocol's reach.
+without themselves being a Midgard-indexed action). On 2026-09-10 that residual amount had not been converted to anything outside MAYAChain's own accounting the way the BTC had: it was inflated CACAO supply sitting in a native wallet, not an asset the attacker had pulled out of the protocol's reach. As of 2026-11-22, read at 15:50Z on MAYAChain mainnet (chain ID mayachain-mainnet-v1), block 19,389,137, the address holds 0 CACAO, and has held none since block 18,613,349 (2026-09-30).
 
 ### The dollar figure, and why it's lower than DefiLlama's
 
@@ -149,8 +142,7 @@ window ($64,790.82) gives $1,349,418.37, within 0.5% of the daily figure,
 so the day-level price isn't materially off from the moment of extraction.
 
 This is about 21% below DefiLlama's tracked $1,700,000 and press's
-"roughly $1.7 million." The gap is best explained by the still-unconverted
-8,874,269.11 CACAO above: if DefiLlama's or the team's own internal figure
+"roughly $1.7 million." The gap is best explained by the 8,874,269.11 CACAO above, which the address still held on 2026-09-10 and no longer holds as of 2026-11-22 (MAYAChain mainnet, chain ID mayachain-mainnet-v1, block 19,389,137, read at 15:50Z): if DefiLlama's or the team's own internal figure
 values the full phantom credit near its pre-incident market price rather
 than only the BTC actually extracted, that would produce a higher number
 than this entry's BTC-only, fully-verified floor. This entry does not
@@ -162,8 +154,7 @@ attempt to price that residual CACAO itself; see Caveats.
   affiliated with Maya Protocol, MAYAChain, or any outlet cited above.
 - **The $1,343,181.04 figure is a floor, not a ceiling.** It covers only
   the BTC the attacker has actually and irreversibly moved out of
-  MAYAChain's reach. The roughly 8.87M CACAO still sitting in the
-  attacker's own native wallet (see "What didn't get cashed out") is real,
+  MAYAChain's reach. The roughly 8.87M CACAO that sat in the attacker's own native wallet on 2026-09-10 (0 as of 2026-11-22, read at 15:50Z on MAYAChain mainnet (chain ID mayachain-mainnet-v1), block 19,389,137) (see "What didn't get cashed out") is real,
   inflated supply the protocol will likely have to absorb one way or
   another, but this entry does not convert it to a dollar figure: CoinGecko's
   historical-price endpoint returned no market data for CACAO on

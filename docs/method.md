@@ -4,7 +4,7 @@ Back to the [README](../README.md).
 
 ## How an entry is built
 
-Each entry has its own folder under [`incidents/`](../incidents/): a full write-up (`README.md`), the Python script that queries the chain live (`reconstruct_exploit.py`), the registry of falsifiable hypotheses (`registre_hypotheses.csv`) and the script's raw, unedited output (`resultats_*.txt`). Eight early entries were first published as standalone reports and later consolidated here; each still keeps its own script, hypothesis registry, and raw proof files.
+Each entry has its own folder under [`incidents/`](../incidents/): a full write-up (`README.md`), the Python script that queries the chain live (`reconstruct_exploit.py`), the registry of falsifiable hypotheses (`registre_hypotheses.csv`) and the script's raw, unedited output (`resultats_*.txt`). Eight early entries were first published as standalone reports and later consolidated here; as of 2026-11-22, read at 15:51Z on GitHub, each folder holds its own script, hypothesis registry, and raw proof files.
 
 ## Falsifiable hypotheses, not just claims
 

@@ -22,7 +22,7 @@ again on 2026-11-16 and 2026-11-19.
 | Press figure | About 14.75 million SAND, about 80 ETH, about 675,000 USD, all attributed to the Ethereum adapter leg only |
 | Verified independently | Total attacker proceeds across both chains: 405.828879423128923336 WETH gross, 396.60405378273106 ETH consolidated in one wallet when I read it on 2026-09-09 (last read that day; 200.00402406675 ETH when I read it again on 2026-11-16 and 2026-11-19, after two transfers on 2026-09-11, see [the update](#read-again-on-2026-11-16)), about 5.2 times the press figure |
 | Standout finding | The Sandbox's own on-chain bounty offer independently arrives at 396.603 ETH, matching this reconstruction's balance of 2026-09-09 to within 0.00105 ETH, and was not found in any press coverage |
-| Standout finding | On 2026-09-09 the hijacked LayerZero delegate had not been restored on Base or BSC (read that day; read again on 2026-11-16 and 2026-11-19: still not, see [the update](#read-again-on-2026-11-16)). About 339.55 trillion phantom SAND was outstanding then and still is, roughly 113,000 times the real 3 billion supply cap |
+| Standout finding | On 2026-09-09 the hijacked LayerZero delegate had not been restored on Base or BSC (read that day; read again on 2026-11-16 and 2026-11-19: still not, see [the update](#read-again-on-2026-11-16)). About 339.55 trillion phantom SAND was outstanding then, and as of 2026-11-22 it still is (read at 15:52Z on Base, chain ID 8453, block 60861926, and at 15:52Z on BSC, chain ID 56, block 135106346: 327,574,531,179,829.674712 plus 11,976,071,028,505.968108 SAND), roughly 113,000 times the real 3 billion supply cap |
 
 ## The method
 

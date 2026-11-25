@@ -167,11 +167,7 @@ currency moved, not on whether XRP was actually paid to the bridge.
 
 ### Is the bridge back?
 
-As of this reconstruction, the contract's own live config still reports
-`bridge_state: halted`, and the reserve account's balance
-(763.543911 XRP) sits only a little above the immediate post-drain
-493.544224 XRP, some small residual inflow since the halt, nowhere near
-restored.
+As of 2026-11-22, read at 15:50Z, the bridge contract's config on Coreum (coreum-mainnet-1, block 94921068) reports `bridge_state: halted`, and on the XRP Ledger (network ID 0, ledger 108499886) the reserve account's balance (763.543911 XRP) sits only a little above the immediate post-drain 493.544224 XRP, some small residual inflow since the halt, nowhere near restored.
 
 ### The independently-confirmed total
 

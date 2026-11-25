@@ -37,7 +37,7 @@ None of the CCC token, the trading proxy, its implementation, the pair or the at
 
 ## What came before and after
 
-The EOA's ten transactions are all read. At block 117800020 it approved USDT and made one 1,861-byte call to a contract. At blocks 118381838 to 118383725 it created a first contract (7,716 bytes of creation code) and called it three times; the third call, selector `0x36b3d4df`, the one it later used for the attack, reverted. It created the helper at block 118383926, called it once with `0x18cb85bd` (68 bytes), and ran the attack with `0x36b3d4df`. After it, on 2026-08-31 at 08:23 UTC, it sent 0.162901688552397264 BNB to a contract verified on Sourcify as `RelayDepository`, calling `depositNative(address,bytes32)`. Nothing since. Why the first call reverted, and what the Relay deposit was for, were not examined.
+The EOA's ten transactions are all read. At block 117800020 it approved USDT and made one 1,861-byte call to a contract. At blocks 118381838 to 118383725 it created a first contract (7,716 bytes of creation code) and called it three times; the third call, selector `0x36b3d4df`, the one it later used for the attack, reverted. It created the helper at block 118383926, called it once with `0x18cb85bd` (68 bytes), and ran the attack with `0x36b3d4df`. After it, on 2026-08-31 at 08:23 UTC, it sent 0.162901688552397264 BNB to a contract verified on Sourcify as `RelayDepository`, calling `depositNative(address,bytes32)`. As of 2026-11-22, read at 15:51Z on BNB Smart Chain, chain ID 56, block 135106090, the EOA's nonce is 10, the same as at block 119118798 where the Relay deposit was sent, so it has sent nothing since. Why the first call reverted, and what the Relay deposit was for, were not examined.
 
 ## The method
 

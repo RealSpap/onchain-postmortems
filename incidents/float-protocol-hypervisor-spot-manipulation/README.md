@@ -176,7 +176,7 @@ reconciled gap, not a correction.
 
 ### Still holding real liquidity
 
-Both vaults, deployed in November 2021, still hold real FLOAT today:
+As of 2026-11-22, read at 15:51Z on Ethereum, chain ID 1, block 26471667, both vaults, deployed in November 2021, hold real FLOAT:
 189.664448 FLOAT in VAULT1 and 871.173253 FLOAT in VAULT2 (live
 `balanceOf` calls, Step 13 of the script), confirming this was a real,
 years-old, unmonitored deployment, not an abandoned shell with nothing
@@ -216,7 +216,7 @@ left to drain.
   the 2026 timestamp specifically to avoid conflating the two.
 - The attack contract and the transaction's own outer created contract
   both self-destructed by the end of the transaction (`eth_getCode`
-  returns empty bytecode for both today); every figure in this entry
+  returns empty bytecode for both as of 2026-11-22, read at 15:51Z on Ethereum, chain ID 1, block 26471667); every figure in this entry
   comes from the transaction's own permanent event log and receipt, not
   from reading either contract's state after the fact.
 

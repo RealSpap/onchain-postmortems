@@ -14,7 +14,7 @@ Independent on-chain reconstruction of the exploit against Flamincome's legacy V
 | The finding press missed | Nothing was spot-manipulated. The pool's `virtual_price` moved 0.0045% across the block. The Strategy booked 691,647.80 LP tokens at 701,964.53 USDT, LP times `virtual_price` to the unit. The attacker paid 157,212.59 USDT for them, and when Flamincome unwound the same LP it came out as 721,614.52 USDP, which sold for 0.27 USDT each |
 | Who absorbed it | Flamincome's own governance address held 56.55% of the vault's shares. The only other large holder redeemed 11.7 hours later at the inflated price and got 46,074.88 USDT more than its shares were worth before the exploit. Governance redeemed last, at 98.35 USDT per share against 148.57 before |
 | Still true at block 26003447 (2026-09-18) | The attacker's forwarding address has sent 38 transactions and holds 0.00001148 ETH. Flamincome's strategist still holds 400,000.000014 of the 721,614.52 USDP. The vault's other side, VaultXUSDT, is still covered: 309,821.73 aUSDT against 308,520.36 XUSDT |
-| What's still open | The Strategy's implementation (`0xff20de3f…2afb`) is unverified, so the `virtual_price` reading is inferred from a unit-exact numeric match, not read from source. Who controls `0x3d920c35…ee2a`, and where the 144.15 ETH went after its first hop |
+| What's still open | As of 2026-11-22, read at 15:51Z, the Strategy's implementation (`0xff20de3f…2afb`, Ethereum, chain ID 1) has no verified source on Sourcify, Blockscout or Routescan, so the `virtual_price` reading is inferred from a unit-exact numeric match, because no source is published to read it from. Who controls `0x3d920c35…ee2a`, and where the 144.15 ETH went after its first hop |
 
 ```mermaid
 flowchart TD
@@ -61,7 +61,7 @@ So the implementation values the Convex position as LP count times `virtual_pric
 
 ### How the transaction ran
 
-The attacker's EOA (`0x83381e7F7232775735169d72D237B858fFc36871`) sent one contract-creation transaction. The created contract (`0x1C7EAceF3630E764519e6EA2E8caA2bDB7D8b486`) deployed the attack contract (`0x875da4Bd7b4a52a806A533b1cf6D6fF92365d2E6`) from its constructor and ran everything through it; neither has any code left today:
+The attacker's EOA (`0x83381e7F7232775735169d72D237B858fFc36871`, on Ethereum, chain ID 1) sent one contract-creation transaction. The created contract (`0x1C7EAceF3630E764519e6EA2E8caA2bDB7D8b486`) deployed the attack contract (`0x875da4Bd7b4a52a806A533b1cf6D6fF92365d2E6`) from its constructor and ran everything through it; neither has any code left as of 2026-11-22, read at 15:49Z on Ethereum, chain ID 1, block 26471658:
 
 1. Borrowed 18,093,111 USDT from Morpho in a flash loan.
 2. Bought 14 nUSDT for 13.883321 USDT and pushed it through the VaultXUSDT withdraw path, getting back 13.958 USDT. This is a probe of the X side; its purpose is not established, and it netted the attacker nothing.

@@ -12,7 +12,7 @@ Independent on-chain reconstruction of the exploit against Dream Health Chain's 
 | Verified independently | The award contract (`0xe2A047aA…202094`) lost 568,370.746788580565 DHC, from 568,371.829157 down to 1.082368. The attacker realised 71,851.016708262373165555 USDT, which is what DefiLlama prices |
 | The finding the public PoC missed | The claim path ran 333 times across 5 positions, not 18 times on 1. The first position alone was claimed 261 times, returning 26.1 times its own principal. "18x" is the per-position count of the other four only |
 | The other finding | 328 of the 333 participations moved no DHC into the contract at all: the re-entry is called with 2 wei, and after the token's transfer tax the contract is credited a Transfer of exactly 0. The 5 that did pay credited 84.74% of the amount the payout was then computed from |
-| Still true at block 123170916 (2026-09-21), re-checked | The implementation slot still points at the unverified `0x5abb3fe2…28ce1`; the contract still holds 1.082368461773454472 DHC and has never been refilled; the attacker EOA still holds 71,851.016708262373165555 USDT at nonce 4 |
+| True at block 123170916 (2026-09-21); re-read as of 2026-11-22, read at 15:51Z on BNB Smart Chain, chain ID 56, block 135106090 | The implementation slot points at `0x5abb3fe2…28ce1` (no verified source), the same address as at block 123170916; the contract holds exactly 1.082368461773454472 DHC, the same balance as at block 120055460; the attacker EOA held 71,851.016708262373165555 USDT at nonce 4 on 2026-09-21 and holds 0 USDT at nonce 15 on 2026-11-22 |
 | What's still open | The award contract's real function names and state machine (implementation unverified, selectors unresolvable); how many depositors held open positions; who operates the privacy pool that funded the wallet 25 minutes earlier |
 
 ```mermaid
@@ -27,8 +27,8 @@ flowchart TD
     ATK -->|"sells the drained DHC"| PAIR
     PAIR -->|"71,831.805873 USDT"| ATK
     OTHER["Second pool 0x172f...f849"] -->|"19.210835 USDT"| ATK
-    ATK -->|"71,851.016708 USDT, untouched since"| EOA
-    VIC -.->|"1.082368 DHC left, never refilled"| DEAD["Implementation 0x5abb...8ce1 never replaced"]
+    ATK -->|"71,851.016708 USDT, moved out on 2026-10-26"| EOA
+    VIC -.->|"1.082368 DHC left, same balance on 2026-11-20"| DEAD["Implementation slot unchanged on 2026-11-20"]
 ```
 
 *Fig. 1: fund flow across the four transactions of block 120055460, addresses truncated for display. The dotted line is the state left behind, not a transfer.*
@@ -86,7 +86,7 @@ The attacker sold the drained DHC into a PancakeSwap V2 pool that held 92,688.09
 
 ### Capital at risk: none
 
-The wallet (`0xD3A8D0A9F55cf679fff6F277E49AfC95B49D2B07`) was empty and unused until 05:09:41 UTC, when 0.09975 BNB reached it through a relay contract (`0xF82d00fC51F730F42A00F85E74895a2849ffF2Dd`) fed by an unshield from a privacy-pool contract (`0x590162bf4b50F6576a459B75309eE21D92178A10`), 25 minutes before the attack. It deployed its attack contract (`0x226923D34A10f3D54B57b9F4b685E82c6Cba968A`) at nonce 0 in the attack block itself. The 10,000 USDT that bought the first position's DHC was a flash loan from a DODO pool (`0x6098A5638d8D7e9Ed2f952d35B2b67c34EC6B476`, whose `version()` returns `DPP 1.0.0`), repaid inside the same call. Four transactions later, at nonce 4, the wallet held 71,851.016708 USDT. It was still at nonce 4 on 2026-09-21, and the USDT has not moved.
+The wallet (`0xD3A8D0A9F55cf679fff6F277E49AfC95B49D2B07`, on BNB Smart Chain, chain ID 56) was empty and unused until 05:09:41 UTC, when 0.09975 BNB reached it through a relay contract (`0xF82d00fC51F730F42A00F85E74895a2849ffF2Dd`) fed by an unshield from a privacy-pool contract (`0x590162bf4b50F6576a459B75309eE21D92178A10`), 25 minutes before the attack. It deployed its attack contract (`0x226923D34A10f3D54B57b9F4b685E82c6Cba968A`, on BNB Smart Chain, chain ID 56) at nonce 0 in the attack block itself. The 10,000 USDT that bought the first position's DHC was a flash loan from a DODO pool (`0x6098A5638d8D7e9Ed2f952d35B2b67c34EC6B476`, on BNB Smart Chain, chain ID 56, whose `version()` returns `DPP 1.0.0`), repaid inside the same call. Four transactions later, at nonce 4, the wallet held 71,851.016708 USDT. It was still at nonce 4 on 2026-09-21; as of 2026-11-22, read at 15:51Z on BNB Smart Chain, chain ID 56, block 135106090, the USDT has moved out and the address holds 0 USDT at nonce 15.
 
 ## Caveats
 

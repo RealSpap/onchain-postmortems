@@ -62,18 +62,15 @@ raw units. That is 2^62 plus 330, and the `+330` survives on all three chains.
 | Rootstock | 4 | 9229602, 9229604, 9229606, 9229610 | 04:28:56 | 04:32:25 |
 
 Total minted: 55,340,232,221,128,658,808 raw units, or 553,402,322,211.29
-syBTC. Still outstanding at the time of writing: 553,402,058,355.75 syBTC,
+syBTC. As of 2026-11-22, read at 15:51Z, the syBTC still outstanding is 553,402,058,355.75 syBTC (Ethereum, chain ID 1, block 26471667: 184,467,176,896.96; BNB Chain, chain ID 56, block 135106090: 184,467,440,721.70; Rootstock, chain ID 30, block 9434057: 184,467,440,737.10),
 spread almost exactly evenly across the three chains at roughly 184.47 billion
-each. Press reporting that "roughly 184.5 billion syBTC still remains on BNB
-Chain" is accurate for BNB Chain in isolation and understates the outstanding
-total by a factor of three.
+each. As of 2026-11-22, read at 15:51Z on BNB Chain, chain ID 56, block 135106090, 184,467,440,721.70 syBTC remains on BNB Chain, so press reporting that "roughly 184.5 billion syBTC still remains on BNB Chain" is accurate for BNB Chain in isolation and understates the outstanding total by a factor of three.
 
 Rootstock's supply is a tidy confirmation on its own. It sat at 195,101,329 raw
 units before the incident, took four mints, then a burn of 195,102,649 at block
 9229612 left it at 18,446,744,073,709,551,616, which is 2^64 exactly.
 
-Two of the five chains Symbiosis lists were untouched: zkSync still carries
-0.051097 syBTC and Citrea 0.00510312.
+Two of the five chains Symbiosis lists were untouched: as of 2026-11-22, read at 15:51Z, zkSync (chain ID 324, block 73064907) carries 0.051097 syBTC and Citrea (chain ID 4114, block 15630074) carries 0.00510312 syBTC.
 
 ### The bridge's own live key signed all of it
 
@@ -140,8 +137,7 @@ The beneficiary had already taken 0.00049605 WBTC out of the same venue at
 block 25951357, 03:06:23 UTC, an hour and twenty-two minutes before the first
 mint, which looks like a route test. The combined 4.38946897 WBTC left the
 beneficiary at block 25951806, 04:36:11 UTC, forty-eight seconds after the
-swap, to a contract at `0x666fedd4cdd4e890a5ad20e7b60975409435a64a` that holds
-no WBTC today.
+swap, to a contract at `0x666fedd4cdd4e890a5ad20e7b60975409435a64a` that held no WBTC as of 2026-11-22, read at 15:51Z on Ethereum, chain ID 1, block 26471667.
 
 Set against the 553.4 billion syBTC created, 4.39 WBTC realised is a ratio of
 about 1.26e+11 to one. The mint was effectively unbounded and the cash-out was

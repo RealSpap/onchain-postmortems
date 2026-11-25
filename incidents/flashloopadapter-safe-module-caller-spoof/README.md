@@ -119,7 +119,7 @@ $310,000 is the victims' loss and $305,000 (DefiLlama's figure, close to 114.09 
 | 16:46:59 | 114.030726 ETH from there into Railgun's RelayAdapt |
 | 21:03:23 | The owner writes to the attacker on-chain: keep 11.41 ETH, return 102.69 ETH before 2026-10-03 18:00 UTC |
 
-The attacker EOA and the hop have sent nothing since (nonces 5 and 1 at the time of this reconstruction). After the exit both received dust from lookalike addresses (`0x951A25c9...0f1a`, `0x951A089B...2F1A`, `0x951b4647...2f1a`), the address-poisoning pattern seen around other recent thefts.
+As of 2026-11-22, read at 15:49Z on Ethereum, chain ID 1, block 26471659, the attacker EOA and the hop have sent nothing since the 2026-10-01 exit: their nonces are 5 and 1, the values reached at block 26098748 and block 26098753 (both on 2026-10-01). After the exit both received dust from lookalike addresses (`0x951A25c9...0f1a`, `0x951A089B...2F1A`, `0x951b4647...2f1a`), the address-poisoning pattern seen around other recent thefts.
 
 ## Caveats
 

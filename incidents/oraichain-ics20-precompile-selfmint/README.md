@@ -29,7 +29,7 @@ below directly from the chain.
 | Incident | Self-referential call to the `cosmos/evm` ICS-20 precompile (`0x0000...0802`) triggered an erroneous compensating `coinbase` mint alongside the normal IBC-escrow debit, letting repeated calls double the caller's balance |
 | Window | Mint: 2026-08-08 23:07-23:33 UTC (31 txs from one address, all independently re-fetched live). Laundering: 2026-08-08 23:37 UTC to 2026-08-09 01:07 UTC. Reversal: 2026-08-09 03:56:51 UTC, one single block |
 | DefiLlama's tracked figure | "Oraichain", $1,000,000, dated 2026-08-08, "Bridge & Cross-Chain" / "Unbacked Cross-Chain Mint", empty source field |
-| Verified independently | The full 31-transaction mint sequence and its exact totals, live on Oraichain's own RPC; the ICS-20 precompile's identity from `cosmos/evm`'s own GitHub source; the cash-out address's full 17-transaction laundering trail; the two CW20 tokens drained (USDT, USDC) via their own live `token_info`; the two bridged-out IBC vouchers (ATOM, OSMO) via Oraichain's own live denom-trace endpoint; the exact single-block height where total supply was reversed; both sister-chain balances (Cosmos Hub, Osmosis) today, showing the ATOM/OSMO leg was further dispersed, not sitting recoverable |
+| Verified independently | The full 31-transaction mint sequence and its exact totals, live on Oraichain's own RPC; the ICS-20 precompile's identity from `cosmos/evm`'s own GitHub source; the cash-out address's full 17-transaction laundering trail; the two CW20 tokens drained (USDT, USDC) via their own live `token_info`; the two bridged-out IBC vouchers (ATOM, OSMO) via Oraichain's own live denom-trace endpoint; the exact single-block height where total supply was reversed; both sister-chain balances (Cosmos Hub, Osmosis) as of 2026-11-22, read at 15:52Z (Cosmos Hub, chain ID cosmoshub-4, block 33998287; Osmosis, chain ID osmosis-1, block 75827971), showing the ATOM/OSMO leg was further dispersed, not sitting recoverable |
 
 Fig. 1: fund flow, addresses truncated for display.
 
@@ -179,21 +179,18 @@ a gradual burn. The ratio at that peak (78.00x baseline) is independently
 derived here from Oraichain's own supply endpoint; it does not exactly
 match the radar note's rounder "~98x", most likely because that figure
 used a different, older baseline-supply reference (Oraichain's own 2023
-tokenomics page cites a smaller "circulating supply" figure than today's
-"total supply", and this project has not established exactly which
+tokenomics page cites a smaller "circulating supply" figure (15,078,971 ORAI) than the total supply of 19,962,073.90 ORAI as of 2026-11-22, read at 15:50Z on Oraichain (chain ID Oraichain), block 131165738, and this project has not established exactly which
 denominator the radar note used), not a claim this reconstruction can
 resolve either way.
 
 ### Post-reversal balances: what stayed reachable, and what did not
 
-Both Oraichain-side addresses are effectively empty today (the attacker's
-address holds 1.205373 dust ORAI; the cash-out address holds nothing at
-all, in any denom, native or CW20, consistent with the reversal having
+Both Oraichain-side addresses are effectively empty as of 2026-11-22, read at 15:50Z on Oraichain (chain ID Oraichain), block 131165738 (the attacker's address holds 1.205373 dust ORAI; the cash-out address holds no native or IBC denom and a zero balance of the USDT and USDC CW20 tokens, consistent with the reversal having
 reached the cash-out address's CW20 holdings too, though this project did
 not find an on-chain trace showing exactly how they left, only that they
 are gone). The two amounts that crossed onto sister chains before the
 reversal tell the opposite story: the attacker's own Cosmos Hub and
-Osmosis addresses hold, live, only 1.081869 ATOM and 0.543356 OSMO today,
+Osmosis addresses hold, as of 2026-11-22, read at 15:52Z (Cosmos Hub, chain ID cosmoshub-4, block 33998287; Osmosis, chain ID osmosis-1, block 75827971), only 1.081869 ATOM and 0.543356 OSMO,
 a small fraction of what was bridged in (3,161.08 ATOM, 5,438.20 OSMO),
 meaning the attacker moved almost all of it onward from those chains after
 the bridge, well beyond anything Oraichain's own reversal could reach.
@@ -231,8 +228,7 @@ that zeroed the native ORAI, see Caveats.
   value are unknown); and the small Ethereum-bound leg through the legacy
   bridge, not re-traced on the Ethereum side.
 - The USDT/USDC (about $6,383 combined at the time of the swaps) are
-  treated as apparently reversed, not as still-missing, because both show
-  a zero balance today with no on-chain transfer-out trace, but this
+  treated as apparently reversed, not as still-missing, because both show a zero balance as of 2026-11-22 (read at 15:50Z on Oraichain, chain ID Oraichain, block 131165738), and no on-chain transfer-out trace was found by the reconstruction of 2026-09-11, but this
   project did not find a specific transaction proving a reversal
   mechanism for CW20 balances (only the native `orai` supply reversal is
   directly proven, at the exact block above). If they in fact left by some

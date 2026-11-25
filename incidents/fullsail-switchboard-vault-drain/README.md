@@ -36,7 +36,7 @@ Block (PTB) commands and emitted events.
 | Window | 2026-08-29, first successful attacker deposit 02:33:24 UTC (02:33:24.498; its first failed deposit attempt is at 01:52:14 UTC, see Caveats; checkpoint 316174634, transaction `7so7R3S4PWVbNb2q5ZLtVCJwZdtXkWkuP3kdqcLhqPfs`), last withdraw 05:28:07 UTC (63 successful `withdraw_v2` calls and 63 successful `deposit` calls, all by one address; its failed attempts are listed in Caveats) |
 | Press figures | ~$91,000 total, "three vaults", no address, tx hash, or per-vault breakdown published (Yellow, CryptoTimes, Cointelegraph). DefiLlama tracks this as "Full Sail" / Sui / "Oracle Manipulation" / "Oracle Misconfiguration" with **no dollar amount at all** |
 | Verified independently | Attacker address, the 3 exact Port objects, the exact ~100x price ratio for each of SUI/ETH/IKA (all decoded from the attacker's own transactions), and a per-port net (withdrawn minus deposited) figure in native units, converted to USD at the chain's own restored (real) oracle price at the time: **$91,605.56 total** with the small IKA leg at the day's high (an upper bound; $91,149.73 at a matched real/fake pair price), 0.67% above the press estimate, computed independently of it |
-| What's still open | Whether Full Sail's `vault_config::GlobalConfig.max_price_deviation_bps` guard (currently 200 bps / 2%) existed and was wired into this code path at exploit time is not established here; the attack succeeded regardless. See Caveats |
+| What's still open | Whether Full Sail's `vault_config::GlobalConfig.max_price_deviation_bps` guard (200 bps / 2% as of 2026-11-22, read at 15:54Z on Sui mainnet, chain ID 35834a8a, checkpoint 348040498) existed and was wired into this code path at exploit time is not established here; the attack succeeded regardless. See Caveats |
 
 ## The method
 
@@ -63,11 +63,7 @@ for its underlying vault's `coin_a`/`coin_b` pair.
 RPC endpoint used, public, no key: `https://sui-rpc.publicnode.com`.
 Mysten Labs' own public Sui fullnode has deprecated JSON-RPC in favor of
 GraphQL/gRPC (`sui_getObject` and friends now return
-`"Method not found... migrate to gRPC or GraphQL"` there); this
-third-party node still serves the same JSON-RPC surface this repo's other
-Move-chain entries use, confirmed live via `sui_getChainIdentifier`
-(`35834a8a`) before anything else runs. It serves current state but no
-longer the history of an old event or transaction, so the three history
+`"Method not found... migrate to gRPC or GraphQL"` there); this third-party node served the same JSON-RPC surface this repo's other Move-chain entries use when the reconstruction ran on 2026-09-11, confirmed live via `sui_getChainIdentifier` (`35834a8a`) before anything else ran. As of 2026-11-22, read at 15:53Z on Sui mainnet, chain ID 35834a8a, checkpoint 348040213, it answers every JSON-RPC call with a deprecation error that points to its gRPC endpoint, so current state is now read through Mysten's public GraphQL and `sui-grpc.publicnode.com`. At the time of the reconstruction it served current state but no longer the history of an old event or transaction, so the three history
 reads (event pages, the sample transaction, the attacker's recent
 transactions) fall back to Mysten's public GraphQL
 (`graphql.mainnet.sui.io`) and are rebuilt in the JSON-RPC shape; both
@@ -184,8 +180,7 @@ computing one from the other.
 
 ### Funds no longer sit at the exploit address
 
-As of this reconstruction, `0x9104d073e1...87934cc` holds 0.00098083 SUI
-and 0.040284 USDC (dust), and zero ETH or IKA; the realized profit has
+As of 2026-11-22, read at 15:54Z on Sui mainnet, chain ID 35834a8a, checkpoint 348040463, `0x9104d073e1...87934cc` holds 0.00098083 SUI, 0.040284 USDC and 20,046.654954 oSAIL-01Oct2026, and no ETH or IKA; the realized profit has
 been moved out via the swap above and further transfers, not left
 sitting at the exploit address.
 
@@ -205,7 +200,7 @@ threshold and Full Sail's own logic should not have accepted from a
 single legitimate reporting round, given the coincident, same-transaction
 "real, then fake, then real again" pattern. Full Sail's own
 `vault_config::GlobalConfig` carries a `max_price_deviation_bps` field
-(currently 200, i.e. 2%) that, at face value, should reject a ~9,900%
+(200 as of 2026-11-22, read at 15:54Z on Sui mainnet, chain ID 35834a8a, checkpoint 348040498, i.e. 2%) that, at face value, should reject a ~9,900%
 single-step move; this project did not establish whether that field
 existed, or was wired into the `port_oracle`/`calculate_aum` path used by
 the exploit, at the time of the attack, nor whether Switchboard's own
@@ -248,18 +243,16 @@ open questions, not asserted either way; see Caveats.
   full downstream path (e.g. exactly which address ultimately received
   the SUI or IKA proceeds, or whether any of it left Sui entirely).
 - Full Sail has said (per press paraphrase) it plans to publish "a
-  detailed incident report"; as of this reconstruction, no such report,
-  and no official statement with an attacker address, transaction hash,
-  or per-vault breakdown, was found published anywhere. The independent
+  detailed incident report"; as of the reconstruction of 2026-09-11, no such report, and no official statement with an attacker address, transaction hash, or per-vault breakdown, was found published anywhere; as of 2026-11-22, read at 15:54Z, the documentation site of Full Sail (docs.fullsail.finance) lists no incident report, and reading its announcements on X is impossible because X needs an account. The independent
   reconstruction above does not depend on one existing.
 - Switchboard's own root-cause statement for the broader 4-chain
-  compromise was not published as of this reconstruction (see
+  compromise was not published as of the reconstruction of 2026-09-11; as of 2026-11-20, switchboard.xyz serves only a script shell and docs.switchboard.xyz does not answer, and reading its announcements on X is impossible because X needs an account (see
   `../virtue-iota-switchboard-oracle/README.md` Caveats for the same
   point in more detail); this entry independently confirms the
   Sui/Full-Sail-specific mechanism from the attacker's own transactions,
   not from any Switchboard statement.
 - Whether `vault_config::GlobalConfig.max_price_deviation_bps` (200 bps,
-  read live and current as of this reconstruction) existed, at what
+  as of 2026-11-22, read at 15:54Z on Sui mainnet, chain ID 35834a8a, checkpoint 348040498) existed, at what
   value, and was actually enforced on the `port_oracle`/`calculate_aum`
   path at exploit time is not established here; only that the attack
   succeeded regardless of whatever guard, if any, was live that day.

@@ -151,10 +151,7 @@ corrected figure, not merely a repetition of it.
   independently decoded.
 - The attacker's downstream handling of the 15,488,124.145039 WFLOW after
   this transaction (press: "extreme slippage" reducing the realized
-  amount to roughly $246,000) is not traced here. Both attacker addresses
-  currently hold 0 WFLOW and negligible native FLOW (101.2 and 0,
-  live-queried 2026-09-10), confirming the funds did leave these two
-  addresses, but the specific swaps or transfers that moved them out are
+  amount to roughly $246,000) is not traced here. As of 2026-11-22, read at 15:49Z on Flow EVM, chain ID 747, block 85967041, both attacker addresses hold 0 WFLOW and negligible native FLOW (101.2 and 0, the same values as the 2026-09-10 reading), confirming the funds did leave these two addresses, but the specific swaps or transfers that moved them out are
   a separate matter from the Pool-level loss this entry reconstructs, and
   were not independently retraced.
 - [The spendnode.io article](https://www.spendnode.io/blog/more-markets-flow-evm-lending-exploit-9-3-million-august-2026/)

@@ -109,7 +109,7 @@ call, not just the label.
 
 Neither the Sweeper contract nor its designated executor ever shows a
 resting native-ETH or USDC balance at any block boundary queried here
-(before the first drain, after each drain, and today): both operate as
+(before the first drain and after each drain, at blocks 25872808, 25872809, 25872841 and 25872888, and as of 2026-11-22, read at 15:49Z on Ethereum, chain ID 1, block 26471658): both operate as
 pass-through settlement contracts that pull, convert, and forward within
 a single transaction rather than holding custody between blocks, which is
 why this entry verifies the drain from the attacker's own receiving

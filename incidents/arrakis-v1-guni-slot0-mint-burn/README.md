@@ -45,7 +45,7 @@ The vault's own flows in the receipt are 4.987405217658776899 WETH in and 123.71
 
 ## What came before and after
 
-The EOA has sent five transactions in all. It created a first contract at block 25817963 (2026-08-23 12:49:35 UTC), the attack contract at block 25817966 and ran the attack in the same block. After it, it sent 2.98 ETH at block 25817982 and 0.005 ETH on 2026-10-02. Nothing since. Why the first contract was created, and who the two recipients are, were not examined.
+The EOA has sent five transactions in all. It created a first contract at block 25817963 (2026-08-23 12:49:35 UTC), the attack contract at block 25817966 and ran the attack in the same block. After it, it sent 2.98 ETH at block 25817982 and 0.005 ETH on 2026-10-02. As of 2026-11-22, read at 15:50Z on Ethereum, chain ID 1, block 26471664, the EOA's nonce is 5, reached at block 26102818 (2026-10-02, the 0.005 ETH transfer), so it has sent nothing since. Why the first contract was created, and who the two recipients are, were not examined.
 
 ## The method
 

@@ -100,7 +100,7 @@ Relay's API records the seven USDT swaps as same-chain Ethereum swaps, 593,346.8
 
 ### Lookalike addresses
 
-As in other recent hot wallet thefts, the attacker's history is surrounded by address poisoning: `0x181a69ab...a1d7`, `0x181aa86f...a1d7`, `0x181abe6c...a1d7` and `0x1813ab56...a1d7` next to the real hop `0x181a6380...a1d7`, and several `0x8db9...c306` lookalikes next to the real holder. They send dust or emit fake Transfer events from lookalike token contracts. The attacker never sent anything to one of them.
+As in other recent hot wallet thefts, the attacker's history is surrounded by address poisoning on Ethereum (chain ID 1): `0x181a69ab...a1d7`, `0x181aa86f...a1d7`, `0x181abe6c...a1d7` and `0x1813ab56...a1d7` next to the real hop `0x181a6380...a1d7`, and several `0x8db9...c306` lookalikes next to the real holder. They send dust or emit fake Transfer events from lookalike token contracts. As of 2026-11-22, read at 15:49Z on Ethereum, chain ID 1, block 26471658 (nonce 26), the attacker has sent 26 transactions in total and never anything to one of them.
 
 ## Caveats
 

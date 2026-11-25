@@ -192,8 +192,7 @@ minter role to mint`.
 first run at head block 26025495 (about 2026-09-21 11:09 UTC, 73 minutes
 before the MINTER_ROLE revocation at block 26025859, 12:22:59 UTC), and re-run at head block 26048064, 2026-09-24. The role
 revocations are settled history and cannot change. The pause itself is
-still live state: NTX is paused at head and could be unpaused by the new
-admin at any time. Re-run the script before relying on that one.
+still live state: as of 2026-11-22, read at 15:49Z on Ethereum, chain ID 1, block 26471659, NTX `paused()` returns true; PAUSER_ROLE is held by `0x2f17d7cc940124f539952641360b92f003c96079`, which also holds DEFAULT_ADMIN_ROLE, and the pause can be lifted by an account that holds the pauser role. Re-run the script before relying on that one.
 
 **The downstream path of the sold NTX is not traced here.** This entry
 establishes that the NTX left the cash-out wallet before the pause and

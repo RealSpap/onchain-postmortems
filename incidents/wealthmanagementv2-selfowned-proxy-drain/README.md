@@ -250,12 +250,11 @@ to empty.
   and a separate reward token, sampled from one transaction's own event
   log) but does not claim to know their actual function names or full
   behavior across every call.
-- The collector's current 250,000.002022 USDT balance is a live
-  snapshot (2026-09-11, 3 days after the incident), not a historical
+- The collector's 250,000.002022 USDT balance on 2026-09-11 is a live snapshot (3 days after the incident), not a historical
   event-log sum; it is reported separately from, and should not be added
   to, the $422,251.40 figure derived from the 4 decoded `withdraw()`
   events, since the two numbers describe different things (funds
-  confirmed received vs. funds still held now).
+  confirmed received vs. funds held on 2026-09-11, and 0.000281 USDT as of 2026-11-22, read at 15:49Z on BNB Smart Chain, chain ID 56, block 135105934).
 
 ## License
 

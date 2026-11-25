@@ -159,7 +159,7 @@ the table above.
 
 ### Is the money still there?
 
-As of this reconstruction, the Tron collector's own live USDT balance is
+As of 2026-11-22, read at 15:49Z on Tron mainnet, chain ID 0x2b6653dc (728126428), block 88229478, the Tron collector's own USDT balance is 10.63 USDT, which is
 at or near zero: essentially all 6,037,005 USDT was forwarded onward the
 same day (outbound transfers from the collector on 2026-08-09 sum to
 6,036,994.37 USDT, within a few dollars of the inbound total), consistent

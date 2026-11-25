@@ -57,7 +57,7 @@ The pair held 19,999.5 USDT and 200,000 FH one block before the transaction and 
 
 ## What came before and after
 
-The EOA has sent eight transactions in all, every one read. On 2026-08-10 it created a contract (`0x3f10...7f84`) and called it once; on 2026-08-17 it created a second (`0x2e52...eccb`); on 2026-08-18 at 05:18 UTC it created the attack contract, with 3,577 bytes of code, seven days before the exploit. After the exploit, on 2026-08-30 at about 09:01 UTC, it sent 100 USDT, then 0.024514079162607298 BNB, then 19,899.018126552928530404 USDT, all to `0xb4e2...05Db`. Nothing since. Why the attacker waited seven days after creating the contract, and whose address `0xb4e2...05Db` is, were not examined.
+The EOA has sent eight transactions in all, every one read. On 2026-08-10 it created a contract (`0x3f10...7f84`) and called it once; on 2026-08-17 it created a second (`0x2e52...eccb`); on 2026-08-18 at 05:18 UTC it created the attack contract, with 3,577 bytes of code, seven days before the exploit. After the exploit, on 2026-08-30 at about 09:01 UTC, it sent 100 USDT, then 0.024514079162607298 BNB, then 19,899.018126552928530404 USDT, all to `0xb4e2...05Db`. As of 2026-11-22, read at 15:51Z on BNB Smart Chain, chain ID 56, block 135106090, the EOA's nonce is 8, the value it reached at block 118932065 (2026-08-30), so it has sent nothing since. Why the attacker waited seven days after creating the contract, and whose address `0xb4e2...05Db` is, were not examined.
 
 ## The method
 

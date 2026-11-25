@@ -11,7 +11,7 @@ Independent on-chain reconstruction of the Allbridge cross-chain bridge exploit:
 | Press/DefiLlama figure | DefiLlama tracks this as "Allbridge", Base only, $191,000. SlowMist's own post-mortem: "approximately $190,000" |
 | Verified independently | The Router's own USDC balance drops by exactly 190,155.976393 USDC in one transaction; of that, the attacker keeps 189,751.554381 and 404.422012 goes to Aave as a flash-loan fee. Every one of SlowMist's own quoted numbers matches to 6 decimals |
 | A date note | SlowMist's article dates the Polygon setup call "July 26, 2026" without a time zone; the transaction found here is timestamped 2026-07-25 20:32:55 UTC, which is 04:32 on July 26 in UTC+8, so the two agree once the time zone is accounted for. Confirmed on two independent Polygon RPC endpoints |
-| A parallel-contracts finding | The Router and CCTPTokenMessenger contracts actually exploited are not the addresses Allbridge's own live API currently returns for Base USDC bridging; that pair sat idle that day |
+| A parallel-contracts finding | The Router and CCTPTokenMessenger contracts actually exploited are not the addresses Allbridge's own API returned for Base USDC bridging as of 2026-11-22, read at 15:51Z (Base, chain ID 8453); that pair sat idle on 2026-08-19 |
 
 ## The method
 
@@ -55,7 +55,7 @@ The 1,000.000000 USDC left in the Router after the attack is the exact figure Sl
 
 ### Two different CCTP integrations, only one of them exploited
 
-Allbridge's own live `api.core.allbridge.io/token-info` endpoint currently lists two CCTP-related addresses for Base USDC: a `cctpAddress` (`0x1eFE2C85989D97fEBbD0743cdd79B9F0826314f6`) and a `cctpV2Address` (`0x214D972b8c869cfcE50D55B595adC7eF336D7FAd`). Neither is the Router or CCTPTokenMessenger actually involved in this exploit: both had essentially no outgoing USDC transfers on 2026-08-19, and their own committed Solidity source in `allbridge-io/allbridge-core-evm-contracts` (`CctpBridge.sol`, `CctpV2Bridge.sol`) doesn't contain the `receivedTokenAmount`/`hookData`/`messageHash` ledger logic SlowMist's post-mortem describes at all, that logic lives only in the separate, older `Router` + `CCTPTokenMessenger` pair this project found by tracing the actual attack transaction. Allbridge appears to run (or to have run) two parallel CCTP integrations on Base at once; this project did not check whether the vulnerable pair has since been paused or deprecated.
+As of 2026-11-22, read at 15:51Z, Allbridge's `api.core.allbridge.io/token-info` endpoint lists two CCTP-related addresses for Base USDC (chain ID 8453): a `cctpAddress` (`0x1eFE2C85989D97fEBbD0743cdd79B9F0826314f6`) and a `cctpV2Address` (`0x214D972b8c869cfcE50D55B595adC7eF336D7FAd`). Neither is the Router or CCTPTokenMessenger actually involved in this exploit: both had essentially no outgoing USDC transfers on 2026-08-19, and their own committed Solidity source in `allbridge-io/allbridge-core-evm-contracts` (`CctpBridge.sol`, `CctpV2Bridge.sol`) doesn't contain the `receivedTokenAmount`/`hookData`/`messageHash` ledger logic SlowMist's post-mortem describes at all, that logic lives only in the separate, older `Router` + `CCTPTokenMessenger` pair this project found by tracing the actual attack transaction. Allbridge appears to run (or to have run) two parallel CCTP integrations on Base at once; this project did not check whether the vulnerable pair has since been paused or deprecated.
 
 ### The setup call's date, reconciled
 

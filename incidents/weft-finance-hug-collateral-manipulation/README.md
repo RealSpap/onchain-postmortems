@@ -51,8 +51,7 @@ const lendingMarket = 'component_rdx1cpy6putj5p7937clqgcgutza7k53zpha039n9u5hkk0
 ```
 
 From there the script: (1) confirms live, via the Gateway's own
-`/status/gateway-status`, that Radix mainnet has produced no new state
-since state_version 557840622, a separate, unrelated halt caused by the
+`/status/gateway-status`, that, when the script ran on 2026-09-11, Radix mainnet had produced no new state since state_version 557840622, a separate, unrelated halt caused by the
 Hyperlane-vault-access incident this project already covers in
 [`../radix-hyperlane-vault-access-drain/`](../radix-hyperlane-vault-access-drain/),
 not by this incident, and pins every later query to that state_version;
@@ -209,12 +208,7 @@ derived).
   is itself fed by a CaviarNine-side process this project did not
   independently audit, only cross-checked for plausibility against the
   days around it.
-- Radix mainnet has been offline since 2026-08-31 (a separate, unrelated
-  incident, see `../radix-hyperlane-vault-access-drain/`), so every
-  query above is pinned to the last real state before that halt
-  (state_version 557840622); whether any further liquidation or recovery
-  action against CDP `#1138` was queued but not yet executed cannot be
-  observed until mainnet resumes.
+- Radix mainnet was offline from 2026-08-31 (a separate, unrelated incident, see `../radix-hyperlane-vault-access-drain/`), so every query above is pinned to the last real state before that halt (state_version 557840622); the network has since resumed: as of 2026-11-22, read at 15:51Z on Radix mainnet (network ID 1), the official Gateway reports state_versions 571411154 and then 571411155 on two reads a few seconds apart, and a second operator's public pools API reports trading volume in the last hour on at least one pool.
 - The attacker's own account made 8 further transactions in the 45
   minutes after the attack (staking a large XRD amount to a validator,
   and routing part of the borrowed LSULP through several DEX pools); this

@@ -27,7 +27,7 @@ The earlier version of this entry described the 231-byte contract the attack was
 | Window | 2026-07-15, 14:18:23-14:23:52 UTC, 329 seconds across 8 transactions (live-timestamped, matching the "Five minutes and twenty-nine seconds" that rekt.news states and the "14:18-14:23 UTC" window it quotes from Ostium's founder) |
 | Press figures | Blockaid's first estimate "$18M"; CertiK "~$22M"; PeckShield "~$24M"; $23,752,746 USDC, the loss Odaily (2026-07-19) reports from an Ostium update; The Block, rekt.news and other outlets read round it to 23.75 million, and Ostium's own post was not read |
 | Verified independently | 8 transactions, decoded directly from the Vault contract's own USDC `Transfer` log: 7 of them (excluding a small 897.8008 USDC "test" cycle 25 seconds before the main attack) total **$23,752,641.6764**, within **$104.32 (0.0004%)** of the $23,752,746 Odaily reports from an Ostium update; DefiLlama's own tracked figure, $23,750,000, sits within 0.012% of the same number |
-| What's still open | The exact fixed-point price values inside the attacker's signed reports are not independently decoded (Ostium's `OstiumVerifier` report ABI is not public); the downstream Kyber-swap/Tornado-Cash laundering route press describes is not independently retraced. See Caveats |
+| What's still open | The downstream Kyber-swap/Tornado-Cash laundering route press describes is not independently retraced. See Caveats |
 
 ```mermaid
 flowchart LR
@@ -176,12 +176,7 @@ reconstruction, see Caveats.
 
 - This is independent research, not a security audit, and is not
   affiliated with Ostium, Immunefi, rekt.news, or any outlet cited above.
-- The exact fixed-point BTC/USD price values inside the attacker's
-  forged, signed price reports (press: opened near a fake $5,000,
-  closed near the real market price) are not independently decoded here.
-  Ostium's `OstiumVerifier.verify()` report format is not published
-  anywhere this project found, so the "report" bytes embedded in the
-  exploit transactions' calldata were not re-parsed field by field.
+- The BTC/USD price values inside the attacker's forged, signed price reports (press: opened near a fake $5,000, closed near the real market price) are given here as press reported them. The `OstiumVerifier` at `0xd456939e54F68Ef9B0BE62aBB2EC4A37397Cb814` on Arbitrum One, chain ID 42161, is verified on Sourcify, and, as of 2026-11-22, read at 15:52Z, its `verify(bytes)` decodes its `bytes` argument as `(bytes reportData, bytes32 r, bytes32 s, uint8 v)`. I withdraw the statement that its report format is not published.
   CoinGecko's own historical BTC/USD price for 2026-07-15, queried live,
   is $64,983.52, consistent with press's rounded "~$60,000" real-price
   claim, but the ~$5,000 fake-open price itself is reported here as
