@@ -1,0 +1,19 @@
+Wed Nov 25 08:03:54 UTC 2026
+
+==============================================================================
+STEP 1: Across's own GitHub deployment record for the Solana SvmSpoke program
+==============================================================================
+Solana (Across internal chainId 34268394551451) SvmSpoke: {'address': 'DLv3NggMiSaef97YCkew5xKUHDh13tVGZ7tydt3ZeAru', 'block_number': 349354195}
+Ethereum mainnet HubPool: {'address': '0xc186fA914353c44b2E33eBE05f21846F1048bEda', 'block_number': 14819537}
+
+==============================================================================
+STEP 2: The fix named by Across (PR across-protocol/sdk#1486 and Across's own post-mortem)
+==============================================================================
+PR #1486 is not served today: HTTP 404 from the GitHub API for across-protocol/sdk/pulls/1486.
+PR #1486 answered HTTP 404 from the GitHub API on 2026-11-25, so Step 2 cannot be re-run; the run of 2026-09-10 kept in this folder shows what PR #1486 said when it was read.
+Across's own post-mortem (X article published 2026-07-24) gives the same root cause (a missing check of the 8-byte Anchor event discriminator in the off-chain relayer's SvmCpiEventsClient) and the timeline of 2026-07-17: root-cause fix merged 09:37 UTC, deployed 10:26 UTC.
+
+==============================================================================
+STEP 3: Fetch the named exploit transaction live from Solana mainnet
+==============================================================================
+Wed Nov 25 08:03:56 UTC 2026

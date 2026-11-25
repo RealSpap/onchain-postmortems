@@ -14,7 +14,7 @@ The registry `registre_hypotheses.csv` states each fact as a falsifiable claim w
 | Chain | BNB Chain (BSC) |
 | Date | 2026-09-30 18:57:07 UTC (first withdrawal, 10 USDT; the first large one is at 23:54:30) to 2026-10-01 06:08:26 UTC (last); DefiLlama dates it 2026-10-01 |
 | Mechanism | `withdraw(nonce, token, receiver, amount, signature)` pays any caller whose signature recovers to the contract's `verifyAddress` over the SHA-256 of an RLP message, if the nonce is unused. It does not look at what was deposited. The seven signatures recover to `0xbcfd8381fa8148d01fd7d5cbb0efcc96ce68176c`, as does a withdrawal by another account. Why that signer signed is not established |
-| Account | `0x09fd1f5d9f185067a92493e43aa259ea4ab3ad37`, an EOA created on 2026-09-28 (77 transactions, nonce 78), named by one press report as the suspected theft address |
+| Account | `0x09fd1f5d9f185067a92493e43aa259ea4ab3ad37`, an EOA created on 2026-09-28 (77 transactions, nonce 78 after the last one, at block 125322689), named by one press report as the suspected theft address |
 | Loss | At least 3,865,021 dollars: 3,865,021 USDT at face value (800,000 + 1,200,000 + 1,500,000 + 330,000 + 35,000 + 10 + 11) |
 | Funds | Forwarded the same night to at least five addresses and not traced further: 1,500,000 USDT to CoW Protocol's settlement contract (a Sourcify match named GPv2Settlement), 1,070,031.76 to `0xc590175e458b83680867afd273527ff58f74c02b`, 930,000 to `0xde85b9599d8324ffa4ba2792ebd4d8298b576b1c`, 330,000 to `0x62eb7ae0afa102bc1252a7cd9677486bb8df98af`, 34,998.97 to `0x168f364cf8da2105b99407cf817660a8450cf3b7` (and 13.03 in small transfers to others). The press says the money went to KuCoin and was bridged to bitcoin; none of that is checked here. Nothing returned was found |
 | Press figures | DefiLlama: $3,800,000 (NEAR Intents, "Bridge & Cross-Chain", "Bridge Logic Flaw", BSC, source empty). The Block and crypto.news (2026-10-01): $3.8 million, USDT on BSC, services paused and restored after a fix within an hour, compensation promised. A search-result snippet: a BNB Chain address that collected 3.87 million USDT, about 1.5 million of it sent to CoW Protocol's settlement |
@@ -26,6 +26,7 @@ The contract is verified on Sourcify (a full match: contract `MetaWallet`, solc 
 - `deposit(...)` records `deposits[nonce] = hash` for a deposit, with a nonce of the form seconds times 10^12 plus a counter, and emits `NewTransfer`.
 - `withdraw(nonce, contract_id, receiver_id, amount, signature)` (selector `0xd9e7c316`) requires the nonce unused and `ECDSA.recover(sha256(RLP(nonce, chainId, token, receiver, amount)), signature) == verifyAddress`, then sends the token. It does not read `deposits`. Authorizing a withdrawal is entirely the signer's job.
 - The owner (`0x1affb938645fdf3d86f3f04f1d1d49d4e000ea16`) can change `verifyAddress`, withdraw tokens and change the owner.
+- The owner changed it after the incident: on BNB Chain (chain ID 56), `verifyAddress()` is `0xbcfd8381fa8148d01fd7d5cbb0efcc96ce68176c` at block 125050000 (October 1, 2026) and `0xa53fe80c49fc9e3f96c632b3909601681807b7c7` from block 129297067 (October 23, 2026) on, including at block 135707822, as read at 19:06Z on 2026-11-25 on two nodes; transaction `0xb6f4cd2a6a60505de21dfb71ccab8e1d55fd966cf28a8ac82d17b6c8a61655a1` set it, was sent to the owner address in block 129297067 and its input holds the treasury and the new signer. The script read the contract at the latest block, so its checks H1 and H4 failed when I ran it again on 2026-11-25 although the entry's facts had not changed; it now reads the contract at block 125050000, check H9 reads the change itself, and `preuves/resultats_reconstruction_2026-11-25.txt` is the output.
 
 ## The seven withdrawals
 
@@ -62,8 +63,9 @@ Standard library only, BNB Chain RPC with archive state (`bsc.rpc.sentio.xyz`, `
 5. **The nonces' counters** and their timing.
 6. **Where the USDT went**, and the delegated transfers to CoW.
 7. **DefiLlama's record.**
+8. **The change of `verifyAddress`** after the incident (H9).
 
-Each is a numbered check (H0 to H8) printed as PASS or FAIL; `--account <address>` runs the script with another account and the checks that read it fail, see `preuves/temoins_negatifs_2026-10-22.txt`.
+Each is a numbered check (H0 to H9) printed as PASS or FAIL; `--account` followed by an address runs the script with another account and the checks that read it fail, see `preuves/temoins_negatifs_2026-10-22.txt`.
 
 ## Caveats
 
