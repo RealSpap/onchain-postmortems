@@ -68,7 +68,7 @@ checked against each other), `raw.githubusercontent.com` + `api.github.com`
 
 ## What it found
 
-### The mechanism, confirmed from Across's own merged fix, not press
+### The mechanism, from Across's own fix and post-mortem, not press
 
 `across-protocol/sdk` PR #1486 (merged 2026-07-17T09:37:55Z) describes the
 bug directly: `SvmCpiEventsClient.processEventFromTx` treated any inner
@@ -218,6 +218,10 @@ Across's own HubPool address per its own deployment record: tx
   not a missing discriminator check) that was fixed before any funds were
   lost. It is unrelated to the 2026-07-17 incident this entry covers and
   is not cited as evidence for it.
+
+## Update of 2026-11-25
+
+On 2026-11-25 (read at 19:21Z) the pull request `across-protocol/sdk` #1486 and the whole `across-protocol/sdk` repository return HTTP 404, so the statements above that cite PR #1486 (merged 2026-07-17T09:37:55Z) can no longer be re-read at their source. They rest on the run of 2026-09-10 kept in this folder (`resultats_reconstruction_2026-09-10.txt`), where the PR title, its merge time and its commit message were printed when I read them. PR #1485 answers HTTP 404 as well, and the run of 2026-09-10 does not print it, so re-reading what this README says about it is impossible because the pull request is no longer served and this folder keeps no copy of it. Across's own post-mortem, an article on its official X account published 2026-07-24 at 18:30 UTC (the time encoded in the post's identifier; the page shows 20:30 in the viewer's time zone, which is UTC+2 in Geneva in July), read at 18:57Z, gives the same root cause and the same fix time: the off-chain relayer's `SvmCpiEventsClient` accepted any inner instruction sent through the event authority as an event, without checking the 8-byte Anchor event discriminator, and the root-cause fix was merged at 09:37 UTC and deployed at 10:26 UTC on 2026-07-17. The article also says that no user funds were lost, that the first forged deposit was submitted at 05:07 UTC, and that the relayer filled 581 of 1,627 forged deposits for about $4.5M of its own capital. `reconstruct_exploit.py` now prints this, instead of stopping, when the pull request is not served (Step 2), and its Step 8 keeps only DefiLlama's Solana record for Across, because DefiLlama now also lists an unrelated Across record dated 2026-11-10.
 
 ## License
 
